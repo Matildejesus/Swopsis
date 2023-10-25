@@ -1,102 +1,28 @@
 import * as React from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  Button,
-} from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-function LogoScreen({ navigation }) {
-  return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => navigation.navigate("Welcome")}
-    >
-      <Image source={require("./assets/logo.png")} style={styles.logo} />
-    </TouchableOpacity>
-  );
-}
-
-function WelcomeScreen({ navigation }) {
-  return (
-    <View styles={styles.container}>
-      <TouchableOpacity
-        // style={styles.welcomeContainer}
-        onPress={() => navigation.navigate("Aboutus")}
-      >
-        <Image
-          source={require("./assets/girls.png")}
-          style={styles.girlsImage}
-        />
-      </TouchableOpacity>
-      <Text>SWAP AND INSPIRED WITH A SHARED COMMUNITY WARDROBE</Text>
-      <Button title="REGISTER" onPress={() => navigation.navigate("Map")} />
-      <Button title="LOG IN" onPress={() => navigation.navigate("Login")} />
-    </View>
-  );
-}
-
-function AboutusScreen({ navigation }) {
-  return (
-    <View styles={styles.container}>
-      <TouchableOpacity
-        // style={styles.container}
-        onPress={() => navigation.goBack()}
-      >
-        <Image
-          source={require("./assets/img4.png")}
-          style={styles.girlsImage}
-        />
-      </TouchableOpacity>
-      <Text>SWAP</Text>
-      <Text>Impact</Text>
-      <Text>BE YOU</Text>
-      <Button title="REGISTER" onPress={() => navigation.navigate("Map")} />
-      <Button title="LOG IN" onPress={() => navigation.navigate("Login")} />
-    </View>
-  );
-}
-
-function LoginScreen({ navigation }) {
-  return (
-    <View styles={styles.container}>
-      <Text>Log in</Text>
-    </View>
-  );
-}
-
-function MapScreen({ navigation }) {
-  return (
-    <View styles={styles.container}>
-      <Text>Map</Text>
-    </View>
-  );
-}
+import WelcomeScreen from "./screens/WelcomeScreen.js";
+import AboutUsScreen from "./screens/AboutUsScreen.js";
+import LoginScreen from "./screens/LoginScreen.js";
+import MapsScreen from "./screens/MapsScreen.js";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Logo"
-          component={LogoScreen}
-          options={{ headerShown: false }}
-        />
+      <Stack.Navigator initialRouteName="Welcome">
         <Stack.Screen
           name="Welcome"
           component={WelcomeScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Aboutus"
-          component={AboutusScreen}
+          name="AboutUs"
+          component={AboutUsScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -105,8 +31,8 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Map"
-          component={MapScreen}
+          name="Maps"
+          component={MapsScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
