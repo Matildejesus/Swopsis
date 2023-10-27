@@ -1,13 +1,23 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
+import { useState } from "react";
 
 import Colors from "../constants/colors";
 
-function InputField({ text, placeholder }) {
+function InputField({ text, placeholder, onChangeText, value }) {
+  const [enteredUserDetail, setEnteredUserDetail] = useState("");
+
+  const inputStyle = value ? styles.changedText : styles.inputText;
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{text}</Text>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.inputText} placeholder={placeholder} />
+        <TextInput
+          style={inputStyle}
+          placeholder={placeholder}
+          onChangeText={onChangeText}
+          value={value}
+        />
       </View>
     </View>
   );
@@ -27,6 +37,10 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     alignSelf: "flex-end",
     marginRight: 20,
+  },
+  changedText: {
+    color: Colors.primary2,
+    opacity: 1,
   },
   inputContainer: {
     marginHorizontal: 20,

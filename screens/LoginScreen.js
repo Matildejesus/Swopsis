@@ -6,6 +6,17 @@ import Colors from "../constants/colors";
 import InputField from "../components/InputField";
 
 function LoginScreen({ navigation }) {
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+
+  function addUserNameHandler(enteredUserName) {
+    setUserName(enteredUserName);
+  }
+
+  function addPasswordHandler(enteredPassword) {
+    setPassword(enteredPassword);
+  }
+
   return (
     <View style={styles.container}>
       <Image
@@ -13,13 +24,28 @@ function LoginScreen({ navigation }) {
         style={styles.image}
       />
       <View style={styles.contentContainer}>
-        <InputField placeholder="youremail@email.com" text="Email" />
-        <InputField placeholder="password" text="Password" />
+        <InputField
+          placeholder="youremail@email.com"
+          text="Email"
+          onChangeText={addUserNameHandler}
+          value={userName}
+        />
+        <InputField
+          placeholder="password"
+          text="Password"
+          onChangeText={addPasswordHandler}
+          value={password}
+        />
         <Text style={styles.link}>Forgot your password?</Text>
         <PrimaryButton
           title="LOG IN"
           style={{ width: 200 }}
-          onPress={() => navigation.navigate("Map")}
+          onPress={() => {
+            navigation.navigate("Profile", {
+              userName: userName,
+              password: password,
+            });
+          }}
         />
       </View>
     </View>

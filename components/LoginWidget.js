@@ -72,7 +72,7 @@ function LoginWidget({ text, destination, navigation, image }) {
       <View style={styles.btnContainer}>
         <PrimaryButton
           title="REGISTER"
-          onPress={() => navigation.navigate("Map")}
+          onPress={() => navigation.navigate("Register")}
         />
         <SecondaryButton
           title="LOG IN"
