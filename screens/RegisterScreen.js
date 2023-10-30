@@ -1,18 +1,74 @@
 import { View, Text, StyleSheet, TextInput, Image } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
 import InputField from "../components/InputField";
 
-function LoginScreen({ navigation }) {
-  const [name, setName] = useState("");
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+import { useDispatch, useSelector } from "react-redux";
+import { setUserInfo } from "../store/userInfo";
+import { validate } from "validate.js";
+import { useDebounce } from "use-debounce";
 
-  function addNameHandler(enteredName) {
-    setName(enteredName);
-  }
+import constraints from "../constraints.js";
+
+function LoginScreen({ navigation }) {
+  const dispatch = useDispatch();
+
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState(null);
+  const [userNameError, setUserNameError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+
+  const [debouncedEmail] = useDebounce(email, 500);
+  const [debouncedUserName] = useDebounce(userName, 500);
+  const [debouncedPassword] = useDebounce(password, 500);
+
+  useEffect(() => {
+    if (debouncedEmail) {
+      const validationResult = validate(
+        { emailAddress: debouncedEmail },
+        constraints
+      );
+
+      if (validationResult && validationResult.emailAddress) {
+        setEmailError(validationResult.emailAddress[0]);
+      } else {
+        setEmailError(null);
+      }
+    }
+  }, [debouncedEmail]);
+
+  useEffect(() => {
+    if (debouncedPassword) {
+      const validationResult = validate(
+        { password: debouncedPassword },
+        constraints
+      );
+
+      if (validationResult && validationResult.password) {
+        setPasswordError(validationResult.password[0]);
+      } else {
+        setPasswordError(null);
+      }
+    }
+  }, [debouncedPassword]);
+  useEffect(() => {
+    if (debouncedUserName) {
+      const validationResult = validate(
+        { userName: debouncedUserName },
+        constraints
+      );
+
+      if (validationResult && validationResult.userName) {
+        setUserNameError(validationResult.userName[0]);
+      } else {
+        setUserNameError(null);
+      }
+    }
+  }, [debouncedUserName]);
 
   function addUserNameHandler(enteredUserName) {
     setUserName(enteredUserName);
@@ -21,6 +77,33 @@ function LoginScreen({ navigation }) {
   function addPasswordHandler(enteredPassword) {
     setPassword(enteredPassword);
   }
+
+  const submitHandler = () => {
+    if (!emailError && !userNameError && !passwordError) {
+      dispatch(
+        setUserInfo({
+          userName: userName,
+          email: email,
+          password: password,
+        })
+      );
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: "InApp",
+            params: {
+              screen: "Profile",
+              initial: false,
+              params: {
+                name: userName,
+              },
+            },
+          },
+        ],
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -32,44 +115,29 @@ function LoginScreen({ navigation }) {
         <InputField
           placeholder="enter your name"
           text="Name"
-          onChangeText={addNameHandler}
-          value={name}
+          onChangeText={setUserName}
+          value={userName}
         />
+        {userNameError && <Text style={{ color: "red" }}>{userNameError}</Text>}
         <InputField
           placeholder="youremail@email.com"
           text="Email"
-          onChangeText={addUserNameHandler}
-          value={userName}
+          onChangeText={setEmail}
+          value={email}
         />
+        {emailError && <Text style={{ color: "red" }}>{emailError}</Text>}
         <InputField
           placeholder="password"
           text="Password"
-          onChangeText={addPasswordHandler}
+          onChangeText={setPassword}
           value={password}
         />
+        {passwordError && <Text style={{ color: "red" }}>{passwordError}</Text>}
         <Text style={styles.link}>Forgot your password?</Text>
         <PrimaryButton
-          title="LOG IN"
+          title="REGISTER"
           style={{ width: 200 }}
-          onPress={() => {
-            navigation.reset({
-              index: 0,
-              routes: [
-                {
-                  name: "InApp",
-                  params: {
-                    screen: "Profile",
-                    params: {
-                      name: name,
-                      userName: userName,
-                      password: password,
-                    },
-                    initial: false,
-                  },
-                },
-              ],
-            });
-          }}
+          onPress={submitHandler}
         />
       </View>
     </View>

@@ -1,12 +1,16 @@
 import { View, Text, StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
 
 function ProfileScreen({ route, navigation }) {
-  const { name, userName, password } = route.params;
+  const userName = useSelector((state) => state.userInfo.userName);
+  const userEmail = useSelector((state) => state.userInfo.email);
+  const userPassword = useSelector((state) => state.userInfo.password);
+
   return (
     <View style={styles.container}>
-      <Text>Name: {name}</Text>
-      <Text>Username: {userName}</Text>
-      <Text>Password: {password}</Text>
+      <Text>Name: {userName}</Text>
+      <Text>Email: {userEmail}</Text>
+      <Text>Password: {userPassword}</Text>
     </View>
   );
 }

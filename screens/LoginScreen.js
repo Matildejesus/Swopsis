@@ -41,9 +41,20 @@ function LoginScreen({ navigation }) {
           title="LOG IN"
           style={{ width: 200 }}
           onPress={() => {
-            navigation.navigate("Profile", {
-              userName: userName,
-              password: password,
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: "InApp",
+                  params: {
+                    screen: "Profile",
+                    initial: false,
+                    params: {
+                      name: userName,
+                    },
+                  },
+                },
+              ],
             });
           }}
         />
