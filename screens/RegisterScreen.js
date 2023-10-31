@@ -5,7 +5,7 @@ import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
 import InputField from "../components/InputField";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUserInfo } from "../store/userInfo";
 import { validate } from "validate.js";
 import { useDebounce } from "use-debounce";

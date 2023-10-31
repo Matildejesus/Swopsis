@@ -4,7 +4,7 @@ function Logo() {
   return (
     <View style={{ marginRight: 28, marginBottom: 10 }}>
       <Image
-        source={require("../assets/images/simpleLogo.png")}
+        source={require("../../assets/images/simpleLogo.png")}
         style={styles.image}
       />
     </View>

@@ -7,7 +7,7 @@ export const constraints = {
       message: "^Username must be 3-30 characters long",
     },
     format: {
-      pattern: "[a-z0-9]+",
+      pattern: "[a-z0-9 ]+",
       flags: "i",
       message: "^Usernames can only contain letters and numbers",
     },

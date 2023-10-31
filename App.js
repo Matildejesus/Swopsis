@@ -18,7 +18,7 @@ import BeYouScreen from "./screens/BeYouScreen.js";
 import EventsScreen from "./screens/EventsScreen.js";
 import InboxScreen from "./screens/InboxScreen.js";
 
-import Logo from "./components/Logo.js";
+import Logo from "./components/icons/Logo.js";
 import Title from "./components/Title.js";
 
 import store from "./store/store.js";
@@ -88,6 +88,7 @@ function BottomTabNavigator() {
 export default function App() {
   return (
     <Provider store={store}>
+      <StatusBar />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Welcome" headerMode="none">
           <Stack.Screen
