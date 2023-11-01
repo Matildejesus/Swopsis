@@ -23,21 +23,15 @@ import Title from "./components/Title.js";
 
 import store from "./store/store.js";
 import { Provider } from "react-redux";
+import CalendarScreen from "./screens/CalendarScreen.js";
+import ImpactScreen from "./screens/ImpactScreen.js";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function BottomTabNavigator() {
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerTintColor: "#8E0040",
-        headerTitleStyle: {
-          fontWeight: "bold",
-          fontSize: 20,
-        },
-      }}
-    >
+    <Tab.Navigator>
       <Tab.Screen
         name="Beyou"
         component={BeYouScreen}
@@ -117,6 +111,20 @@ export default function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="Calendar" component={CalendarScreen} />
+          <Stack.Screen
+            name="Impact"
+            component={ImpactScreen}
+            options={{
+              headerTitleAlign: "left",
+              headerTransparent: true,
+              headerBackVisible: false,
+              headerTitle: (props) => (
+                <Title title="IMPACT" goBack="true" {...props} />
+              ),
+              headerRight: (props) => <Logo {...props} />,
+            }}
+          />
           <Stack.Screen
             name="InApp"
             component={BottomTabNavigator}

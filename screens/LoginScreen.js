@@ -1,13 +1,20 @@
 import { View, Text, StyleSheet, TextInput, Image } from "react-native";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../store/userInfo";
 
 import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
 import InputField from "../components/InputField";
+import { USERINFO } from "../data/dummy-data.js";
 
 function LoginScreen({ navigation }) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+
+  console.log(USERINFO);
+  console.log(USERINFO[0].userName);
+  const dispatch = useDispatch();
 
   function addUserNameHandler(enteredUserName) {
     setUserName(enteredUserName);
@@ -41,6 +48,15 @@ function LoginScreen({ navigation }) {
           title="LOG IN"
           style={{ width: 200 }}
           onPress={() => {
+            dispatch(
+              setUserInfo({
+                userName: USERINFO[0].userName,
+                email: USERINFO[0].email,
+                password: USERINFO[0].password,
+                profilePicture: USERINFO[0].profilePicture,
+                coins: USERINFO[0].coins,
+              })
+            );
             navigation.reset({
               index: 0,
               routes: [

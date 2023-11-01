@@ -1,12 +1,4 @@
-import {
-  Modal,
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Button,
-  Animated,
-} from "react-native";
+import { Modal, View, Text, StyleSheet, Image, Button } from "react-native";
 import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
@@ -18,11 +10,16 @@ import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
 import CoinIcon from "../components/icons/CoinIcon";
 import SettingsIcon from "../components/icons/SettingsIcon";
+import CalendarIcon from "../components/icons/CalendarIcon";
+import ImpactIcon from "../components/icons/ImpactIcon";
+import PicturePicker from "../components/PicturePicker";
+import AddIcon from "../components/icons/AddIcon";
 
 function ProfileScreen({ route, navigation }) {
   const dispatch = useDispatch();
   const userName = useSelector((state) => state.userInfo.userName);
   const userEmail = useSelector((state) => state.userInfo.email);
+  const userCoins = useSelector((state) => state.userInfo.coins);
   const userPassword = useSelector((state) => state.userInfo.password);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [showAppOptions, setShowAppOptions] = useState(false);
@@ -80,41 +77,35 @@ function ProfileScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <View>
-          {image ? (
-            <Image source={{ uri: image }} style={styles.profileImage} />
-          ) : (
-            <View style={styles.imageContainer} />
-          )}
-          <PictureButton onPress={requestPermission} />
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={isModalVisible}
-            onRequestClose={onModalClose}
-          >
-            <View style={styles.modalView}>
-              <View style={styles.options}>
-                <Button
-                  title="Pick an image from camera roll"
-                  onPress={pickImage}
-                />
-                <Button title="Take a picture" onPress={takeImage} />
-              </View>
-              <PrimaryButton title="Close" onPress={onModalClose} />
-            </View>
-          </Modal>
-        </View>
+        <PicturePicker
+          isModalVisible={isModalVisible}
+          onModalClose={onModalClose}
+          takeImage={takeImage}
+          pickImage={pickImage}
+          requestPermission={requestPermission}
+          image={image}
+        />
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{userName}</Text>
           <Text style={styles.userEmail}>{userEmail}</Text>
           <View style={styles.coins}>
             <CoinIcon />
-            <Text style={styles.userName}>5</Text>
+            <Text style={styles.userName}>{userCoins}</Text>
           </View>
         </View>
       </View>
-      <SettingsIcon />
+      <View style={styles.iconsContainer}>
+        <ImpactIcon />
+        <CalendarIcon />
+        <SettingsIcon />
+      </View>
+      <View style={styles.container}>
+        <View style={styles.line}></View>
+        <AddIcon />
+        <View style={styles.line}></View>
+        <Text style={styles.groupText}>MY GROUPS</Text>
+        <AddIcon />
+      </View>
     </View>
   );
 }
@@ -124,49 +115,28 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "white",
   },
   headerContainer: {
-    flex: 1,
+    // flex:  1,
     flexDirection: "row",
     marginTop: 24,
-    marginLeft: 44,
-  },
-  imageContainer: {
-    width: 112,
-    height: 114,
-    backgroundColor: "#85E0A3",
-    borderRadius: 21,
-  },
-  modalView: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    marginTop: "150%",
-    backgroundColor: Colors.popup,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 30,
-  },
-  options: {
-    marginBottom: 50,
-  },
-  profileImage: {
-    width: 112,
-    height: 114,
-    borderRadius: 21,
+    // marginLeft: 44,
   },
   userInfo: {
     margin: 20,
   },
   userName: {
-    color: "#004A0E",
+    color: Colors.primary2,
     // font-family: Raleway;
     fontSize: 20,
     fontWeight: 700,
     height: 34,
   },
   userEmail: {
-    color: "#004A0E",
+    color: Colors.primary2,
     // font-family: Raleway;
     fontSize: 15,
     fontWeight: 500,
@@ -175,5 +145,27 @@ const styles = StyleSheet.create({
   coins: {
     flexDirection: "row",
     gap: 11,
+  },
+  iconsContainer: {
+    marginHorizontal: 30,
+    gap: 45,
+    marginTop: 32,
+    // marginBottom: 330,
+    flexDirection: "row",
+  },
+  line: {
+    width: 327,
+    height: 1,
+    backgroundColor: Colors.primary2,
+    marginTop: 17,
+  },
+  groupText: {
+    color: Colors.primary2,
+    // font-family: Raleway;
+    fontSize: 20,
+    fontWeight: 700,
+    marginTop: 16,
+    marginLeft: 17,
+    alignSelf: "flex-start",
   },
 });
