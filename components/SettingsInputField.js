@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import Colors from "../constants/colors";
 
-function InputField({ text, placeholder, onChangeText, value }) {
+function SettingsInputField({ text, placeholder, onChangeText, value }) {
   const [enteredUserDetail, setEnteredUserDetail] = useState("");
 
   const inputStyle = value ? styles.changedText : styles.inputText;
@@ -22,7 +22,7 @@ function InputField({ text, placeholder, onChangeText, value }) {
     </View>
   );
 }
-export default InputField;
+export default SettingsInputField;
 
 const styles = StyleSheet.create({
   container: {

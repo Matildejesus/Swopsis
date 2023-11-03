@@ -117,5 +117,6 @@ const styles = StyleSheet.create({
     marginBottom: 31,
     color: Colors.primary2,
     fontSize: 15,
+    fontFamily: "RalewayMedium",
   },
 });

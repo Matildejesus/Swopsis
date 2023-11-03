@@ -1,12 +1,7 @@
 import { Modal, View, Text, StyleSheet, Image, Button } from "react-native";
 import { useSelector } from "react-redux";
-import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { updatePicture } from "../store/userInfo";
 
-import PictureButton from "../components/icons/PictureButton";
-import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
 import CoinIcon from "../components/icons/CoinIcon";
 import SettingsIcon from "../components/icons/SettingsIcon";
@@ -21,70 +16,11 @@ function ProfileScreen({ route, navigation }) {
   const userEmail = useSelector((state) => state.userInfo.email);
   const userCoins = useSelector((state) => state.userInfo.coins);
   const userPassword = useSelector((state) => state.userInfo.password);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [showAppOptions, setShowAppOptions] = useState(false);
-  const [image, setImage] = useState(null);
-
-  const requestPermission = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      alert("Sorry, we need camera roll permissions to make this work.");
-      return;
-    }
-    const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
-    if (cameraStatus.status !== "granted") {
-      alert("Sorry, we need camera permissions to make this work.");
-    } else {
-      setShowAppOptions(true);
-      setIsModalVisible(true);
-    }
-  };
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    console.log(result);
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      setIsModalVisible(false);
-      dispatch(updatePicture(result.assets[0].uri));
-    }
-  };
-
-  const takeImage = async () => {
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      setIsModalVisible(false);
-    }
-  };
-
-  const onModalClose = () => {
-    setIsModalVisible(false);
-  };
 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <PicturePicker
-          isModalVisible={isModalVisible}
-          onModalClose={onModalClose}
-          takeImage={takeImage}
-          pickImage={pickImage}
-          requestPermission={requestPermission}
-          image={image}
-        />
+        <PicturePicker />
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{userName}</Text>
           <Text style={styles.userEmail}>{userEmail}</Text>
@@ -101,6 +37,7 @@ function ProfileScreen({ route, navigation }) {
       </View>
       <View style={styles.container}>
         <View style={styles.line}></View>
+        <Text style={styles.groupText}>MY ITEMS</Text>
         <AddIcon />
         <View style={styles.line}></View>
         <Text style={styles.groupText}>MY GROUPS</Text>
@@ -130,14 +67,14 @@ const styles = StyleSheet.create({
   },
   userName: {
     color: Colors.primary2,
-    // font-family: Raleway;
+    fontFamily: "RalewayBold",
     fontSize: 20,
     fontWeight: 700,
     height: 34,
   },
   userEmail: {
     color: Colors.primary2,
-    // font-family: Raleway;
+    fontFamily: "RalewayMedium",
     fontSize: 15,
     fontWeight: 500,
     marginBottom: 11,
@@ -152,6 +89,7 @@ const styles = StyleSheet.create({
     marginTop: 32,
     // marginBottom: 330,
     flexDirection: "row",
+    // fontFamily: "RalewayBold",
   },
   line: {
     width: 327,

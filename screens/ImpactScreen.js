@@ -1,10 +1,48 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
+
+import ImpactWidget from "../components/ImpactWidget";
 
 function ImpactScreen() {
   return (
-    <View style={styles.container}>
-      <Text>This is the impact screen</Text>
-    </View>
+    <ScrollView bounces={false}>
+      <View style={styles.container}>
+        <Image
+          source={require("../assets/images/swap.png")}
+          style={styles.mainImage}
+        />
+        <Text style={styles.mainText}>
+          EVERY LITTLE BIT COUNTS WHEN IT COMES TO HELPING THE PLANET AND YOUR
+          COMMUNITY! THATS WHY WE GIVE TOU METRICS ON YOUR POSITIVE IMPACT.
+        </Text>
+        <View style={styles.swappedContainer}>
+          <Text style={styles.numberText}>0</Text>
+          <Text style={styles.itemText}>ITEM SWAPPED</Text>
+        </View>
+        <View style={styles.widget}>
+          <ImpactWidget
+            number={0}
+            label={"KG OF TEXTILE OUT OF LANDFILL"}
+            source={require("../assets/images/garb.png")}
+            color={"#00CCCB"}
+            count={1}
+          />
+          <ImpactWidget
+            number={0}
+            label={"L OF FRESH WATER SAVE"}
+            source={require("../assets/images/water.png")}
+            color={"#0080FB"}
+            count={2}
+          />
+          <ImpactWidget
+            number={0}
+            label={"TONNES OF CO2 EMMISSIONS SAVED"}
+            source={require("../assets/images/gas.png")}
+            color={"#FFA330"}
+            count={3}
+          />
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -14,5 +52,45 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFE6EA",
+  },
+  mainImage: {
+    alignSelf: "flex-end",
+    marginRight: 45,
+    marginTop: 5,
+    width: 222,
+    height: 222,
+  },
+  mainText: {
+    marginHorizontal: 23,
+    marginTop: 13,
+    fontSize: 20,
+    color: "#FF6780",
+    fontWeight: 700,
+    fontFamily: "RalewayBold",
+  },
+  swappedContainer: {
+    flexDirection: "row",
+    width: 328,
+    height: 74,
+    backgroundColor: "#FF6780",
+    padding: 22,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 23,
+    gap: 11,
+    marginTop: 22,
+  },
+  itemText: {
+    fontSize: 20,
+    fontFamily: "RalewayRegular",
+  },
+  numberText: {
+    fontSize: 20,
+    fontFamily: "RalewayRegular",
+  },
+  widget: {
+    marginBottom: 37,
+    marginTop: 33,
+    // backgroundColor: "#00CCCB",
   },
 });

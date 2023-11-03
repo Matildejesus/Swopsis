@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary1,
     borderWidth: 2,
     width: 141,
+    fontFamily: "RalewayMedium",
   },
   text: {
     textAlign: "center",

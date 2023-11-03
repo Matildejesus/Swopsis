@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 import { useState, useEffect } from "react";
+import * as Font from "expo-font";
 
 import PrimaryButton from "./PrimaryButton";
 import SecondaryButton from "./SecondaryButton.js";
@@ -116,9 +117,11 @@ const styles = StyleSheet.create({
     color: Colors.primary1,
     textAlign: "center",
     fontSize: 25,
-    fontWeight: 700,
+    fontWeight: "bold",
     marginBottom: 30,
     marginTop: 30,
+    fontFamily: "RalewayBold",
+    // fontFamily: "Raleway",
   },
   bulletItem: {
     textAlign: "center",

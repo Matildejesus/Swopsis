@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     borderRadius: 27.5,
     backgroundColor: Colors.primary1,
     width: 141,
+    fontFamily: "RalewayMedium",
   },
   text: {
     color: "white",
