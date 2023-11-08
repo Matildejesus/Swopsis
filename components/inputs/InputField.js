@@ -1,15 +1,9 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
-import { useState } from "react";
+import { Text, View, TextInput, StyleSheet } from "react-native";
+import Colors from "../../constants/colors";
 
-import Colors from "../constants/colors";
-
-function InputField({ text, placeholder, onChangeText, value }) {
-  const [enteredUserDetail, setEnteredUserDetail] = useState("");
-
-  const inputStyle = value ? styles.changedText : styles.inputText;
-
+function InputField({ inputStyle, placeholder, onChangeText, value, text }) {
   return (
-    <View style={styles.container}>
+    <>
       <Text style={styles.text}>{text}</Text>
       <View style={styles.inputContainer}>
         <TextInput
@@ -19,18 +13,13 @@ function InputField({ text, placeholder, onChangeText, value }) {
           value={value}
         />
       </View>
-    </View>
+    </>
   );
 }
+
 export default InputField;
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 13,
-  },
   text: {
     color: Colors.primary2,
     fontSize: 15,
@@ -38,11 +27,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginRight: 20,
     fontFamily: "RalewayMedium",
-  },
-  changedText: {
-    color: Colors.primary2,
-    opacity: 1,
-    fontFamily: "RalewayRegular",
   },
   inputContainer: {
     marginHorizontal: 20,
@@ -54,10 +38,5 @@ const styles = StyleSheet.create({
     opacity: 0.76,
     paddingHorizontal: 13,
     paddingVertical: 16,
-  },
-  inputText: {
-    color: Colors.primary2,
-    opacity: 0.6,
-    fontFamily: "RalewayRegular",
   },
 });

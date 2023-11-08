@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 
 import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
-import InputField from "../components/InputField";
 
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../store/userInfo";
@@ -11,6 +10,7 @@ import { validate } from "validate.js";
 import { useDebounce } from "use-debounce";
 
 import constraints from "../constraints.js";
+import InputForm from "../components/InputForm";
 
 function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -112,27 +112,17 @@ function LoginScreen({ navigation }) {
         style={styles.image}
       />
       <View style={styles.contentContainer}>
-        <InputField
-          placeholder="enter your name"
-          text="Name"
-          onChangeText={setUserName}
-          value={userName}
+        <InputForm
+          setUserName={setUserName}
+          userName={userName}
+          userNameError={userNameError}
+          setEmail={setEmail}
+          email={email}
+          emailError={emailError}
+          setPassword={setPassword}
+          password={password}
+          passwordError={passwordError}
         />
-        {userNameError && <Text style={{ color: "red" }}>{userNameError}</Text>}
-        <InputField
-          placeholder="youremail@email.com"
-          text="Email"
-          onChangeText={setEmail}
-          value={email}
-        />
-        {emailError && <Text style={{ color: "red" }}>{emailError}</Text>}
-        <InputField
-          placeholder="password"
-          text="Password"
-          onChangeText={setPassword}
-          value={password}
-        />
-        {passwordError && <Text style={{ color: "red" }}>{passwordError}</Text>}
         <Text style={styles.link}>Forgot your password?</Text>
         <PrimaryButton
           title="REGISTER"

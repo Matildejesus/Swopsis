@@ -5,7 +5,7 @@ import { setUserInfo } from "../store/userInfo";
 
 import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
-import InputField from "../components/InputField";
+import RegisterContainer from "../components/inputs/RegisterContainer";
 import { USERINFO } from "../data/dummy-data.js";
 
 function LoginScreen({ navigation }) {
@@ -31,13 +31,13 @@ function LoginScreen({ navigation }) {
         style={styles.image}
       />
       <View style={styles.contentContainer}>
-        <InputField
+        <RegisterContainer
           placeholder="youremail@email.com"
           text="Email"
           onChangeText={addUserNameHandler}
           value={userName}
         />
-        <InputField
+        <RegisterContainer
           placeholder="password"
           text="Password"
           onChangeText={addPasswordHandler}

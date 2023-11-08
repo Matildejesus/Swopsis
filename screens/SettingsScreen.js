@@ -15,7 +15,11 @@ function SettingsScreen() {
     <View style={styles.container}>
       <PicturePicker />
       <Text>Info</Text>
-      <SettingsInputField placeholder={userName} text={"Username"} onChangeText={onChangeText}/>
+      <SettingsInputField
+        placeholder={userName}
+        text={"Username"}
+        onChangeText={onChangeText}
+      />
       <Text>Change Password</Text>
     </View>
   );
