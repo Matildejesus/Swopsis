@@ -39,9 +39,24 @@ import { Provider } from "react-redux";
 import CalendarScreen from "./screens/CalendarScreen.js";
 import ImpactScreen from "./screens/ImpactScreen.js";
 import Colors from "./constants/colors.js";
+import { AppRegistry } from "react-native";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Toast from "react-native-toast-message";
+
+AppRegistry.registerComponent("main", () => App);
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+    },
+  },
+});
 
 function BottomTabNavigator() {
   return (
@@ -241,73 +256,76 @@ export default function App() {
     console.log("Fonts loaded and splash screen hidden");
   }
   return (
-    <Provider store={store}>
-      {/* <Provider store={store}> */}
-      <StatusBar />
-      <NavigationContainer onLayout={onLayoutRootView}>
-        <Stack.Navigator initialRouteName="Welcome" headerMode="none">
-          <Stack.Screen
-            name="Welcome"
-            component={WelcomeScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="AboutUs"
-            component={AboutUsScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Register"
-            component={RegisterScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Maps"
-            component={MapsScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
-          <Stack.Screen
-            name="Calendar"
-            component={CalendarScreen}
-            options={{
-              headerTitleAlign: "left",
-              // headerTransparent: true,
-              headerBackVisible: false,
-              headerTitle: (props) => (
-                <Title title="CALENDAR" goBack="true" {...props} />
-              ),
-              headerRight: (props) => <Logo {...props} />,
-            }}
-          />
-          <Stack.Screen
-            name="Impact"
-            component={ImpactScreen}
-            options={{
-              headerTitleAlign: "left",
-              headerStyle: {
-                backgroundColor: Colors.impact,
-              },
-              // headerTransparent: true,
-              headerBackVisible: false,
-              headerTitle: (props) => (
-                <Title title="IMPACT" goBack="true" {...props} />
-              ),
-              headerRight: (props) => <Logo {...props} />,
-            }}
-          />
-          <Stack.Screen
-            name="InApp"
-            component={BottomTabNavigator}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <Provider store={store}>
+        <StatusBar />
+        <NavigationContainer onLayout={onLayoutRootView}>
+          <Stack.Navigator initialRouteName="Welcome" headerMode="none">
+            <Stack.Screen
+              name="Welcome"
+              component={WelcomeScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AboutUs"
+              component={AboutUsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={RegisterScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Maps"
+              component={MapsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Screen
+              name="Calendar"
+              component={CalendarScreen}
+              options={{
+                headerTitleAlign: "left",
+                // headerTransparent: true,
+                headerBackVisible: false,
+                headerTitle: (props) => (
+                  <Title title="CALENDAR" goBack="true" {...props} />
+                ),
+                headerRight: (props) => <Logo {...props} />,
+              }}
+            />
+            <Stack.Screen
+              name="Impact"
+              component={ImpactScreen}
+              options={{
+                headerTitleAlign: "left",
+                headerStyle: {
+                  backgroundColor: Colors.impact,
+                },
+                // headerTransparent: true,
+                headerBackVisible: false,
+                headerTitle: (props) => (
+                  <Title title="IMPACT" goBack="true" {...props} />
+                ),
+                headerRight: (props) => <Logo {...props} />,
+              }}
+            />
+            <Stack.Screen
+              name="InApp"
+              component={BottomTabNavigator}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+      <Toast />
+    </QueryClientProvider>
   );
 }

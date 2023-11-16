@@ -9,6 +9,8 @@ import CalendarIcon from "../components/icons/CalendarIcon";
 import ImpactIcon from "../components/icons/ImpactIcon";
 import PicturePicker from "../components/PicturePicker";
 import AddIcon from "../components/icons/AddIcon";
+import { useQuery } from "@tanstack/react-query";
+import { getUsers } from "../services/apiUsers";
 
 function ProfileScreen({ route, navigation }) {
   const dispatch = useDispatch();
@@ -16,11 +18,12 @@ function ProfileScreen({ route, navigation }) {
   const userEmail = useSelector((state) => state.userInfo.email);
   const userCoins = useSelector((state) => state.userInfo.coins);
   const userPassword = useSelector((state) => state.userInfo.password);
+  const userPicture = useSelector((state) => state.userInfo.profilePicture);
 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <PicturePicker />
+        <PicturePicker userPicture={userPicture} />
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{userName}</Text>
           <Text style={styles.userEmail}>{userEmail}</Text>

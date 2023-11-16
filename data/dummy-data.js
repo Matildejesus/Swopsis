@@ -5,7 +5,7 @@ export const USERINFO = [
     "Jane Doe",
     "janedoe@gmail.com",
     "ff2223333",
-    "./assets/images/Image-60.png",
+    "https://ubohapcfavgltukxiirg.supabase.co/storage/v1/object/public/avatars/Image-60.png",
     "4"
   ),
 ];

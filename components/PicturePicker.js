@@ -7,10 +7,10 @@ import PictureButton from "../components/icons/PictureButton";
 import PrimaryButton from "../components/PrimaryButton";
 import ModalItemWidget from "./ModalItemWidget";
 
-function PicturePicker({}) {
+function PicturePicker({ userPicture }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [showAppOptions, setShowAppOptions] = useState(false);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(userPicture);
   const requestPermission = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {

@@ -1,4 +1,4 @@
-import RegisterContainer from "./inputs/RegisterContainer";
+import RegisterContainer from "./authentication/RegisterContainer";
 import ErrorMessage from "./ErrorMessage";
 
 function InputForm(props) {

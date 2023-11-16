@@ -1,7 +1,14 @@
 import { Text, View, TextInput, StyleSheet } from "react-native";
 import Colors from "../../constants/colors";
 
-function InputField({ inputStyle, placeholder, onChangeText, value, text }) {
+function InputField({
+  inputStyle,
+  placeholder,
+  onChangeText,
+  value,
+  text,
+  secureTextEntry,
+}) {
   return (
     <>
       <Text style={styles.text}>{text}</Text>
@@ -11,6 +18,7 @@ function InputField({ inputStyle, placeholder, onChangeText, value, text }) {
           placeholder={placeholder}
           onChangeText={onChangeText}
           value={value}
+          secureTextEntry={secureTextEntry}
         />
       </View>
     </>

@@ -1,27 +1,39 @@
-import { View, Text, StyleSheet, TextInput, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../store/userInfo";
+import Toast from "react-native-toast-message";
 
 import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
-import RegisterContainer from "../components/inputs/RegisterContainer";
+import RegisterContainer from "../components/authentication/RegisterContainer.js";
 import { USERINFO } from "../data/dummy-data.js";
+import { useLogin } from "../components/authentication/useLogin";
+import ErrorMessage from "../components/ErrorMessage";
+import { changePassword } from "../services/apiPassword";
+import { useUser } from "../components/authentication/useUser";
 
 function LoginScreen({ navigation }) {
-  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login, isLoading, error } = useLogin();
 
-  console.log(USERINFO);
-  console.log(USERINFO[0].userName);
   const dispatch = useDispatch();
 
-  function addUserNameHandler(enteredUserName) {
-    setUserName(enteredUserName);
+  function addEmailHandler(enteredEmail) {
+    setEmail(enteredEmail);
   }
 
   function addPasswordHandler(enteredPassword) {
     setPassword(enteredPassword);
+  }
+
+  function handlePasswordReset() {
+    if (email) {
+      changePassword(email);
+      console.log(email);
+      console.log("email sent");
+    }
   }
 
   return (
@@ -34,44 +46,35 @@ function LoginScreen({ navigation }) {
         <RegisterContainer
           placeholder="youremail@email.com"
           text="Email"
-          onChangeText={addUserNameHandler}
-          value={userName}
+          onChangeText={addEmailHandler}
+          value={email}
         />
         <RegisterContainer
           placeholder="password"
           text="Password"
           onChangeText={addPasswordHandler}
           value={password}
+          secureTextEntry={true}
         />
-        <Text style={styles.link}>Forgot your password?</Text>
+        <ErrorMessage error={error} />
+        <TouchableOpacity onPress={() => handlePasswordReset()}>
+          <Text style={styles.link}>Forgot your Password?</Text>
+        </TouchableOpacity>
+
         <PrimaryButton
           title="LOG IN"
           style={{ width: 200 }}
           onPress={() => {
-            dispatch(
-              setUserInfo({
-                userName: USERINFO[0].userName,
-                email: USERINFO[0].email,
-                password: USERINFO[0].password,
-                profilePicture: USERINFO[0].profilePicture,
-                coins: USERINFO[0].coins,
-              })
-            );
-            navigation.reset({
-              index: 0,
-              routes: [
-                {
-                  name: "InApp",
-                  params: {
-                    screen: "Profile",
-                    initial: false,
-                    params: {
-                      name: userName,
-                    },
-                  },
+            if (!email || !password) return;
+            login(
+              { email, password },
+              {
+                onSettled: () => {
+                  setEmail("");
+                  setPassword("");
                 },
-              ],
-            });
+              }
+            );
           }}
         />
       </View>

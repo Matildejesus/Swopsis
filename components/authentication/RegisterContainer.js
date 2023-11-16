@@ -4,7 +4,13 @@ import { useState } from "react";
 import Colors from "../../constants/colors";
 import InputField from "./InputField";
 
-function RegisterContainer({ text, placeholder, onChangeText, value }) {
+function RegisterContainer({
+  text,
+  placeholder,
+  onChangeText,
+  value,
+  secureTextEntry,
+}) {
   const inputStyle = value ? styles.changedText : styles.inputText;
 
   return (
@@ -15,6 +21,7 @@ function RegisterContainer({ text, placeholder, onChangeText, value }) {
         onChangeText={onChangeText}
         value={value}
         text={text}
+        secureTextEntry={secureTextEntry}
       />
     </View>
   );
