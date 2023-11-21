@@ -1,6 +1,6 @@
 import supabase from "./supabase";
 
-export async function getUsers() {
+export async function random() {
   const { data, error } = await supabase.from("User").select("*");
 
   if (error) {

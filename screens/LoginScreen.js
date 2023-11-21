@@ -10,15 +10,12 @@ import RegisterContainer from "../components/authentication/RegisterContainer.js
 import { USERINFO } from "../data/dummy-data.js";
 import { useLogin } from "../components/authentication/useLogin";
 import ErrorMessage from "../components/ErrorMessage";
-import { changePassword } from "../services/apiPassword";
 import { useUser } from "../components/authentication/useUser";
 
 function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("janedoe@gmail.com");
+  const [password, setPassword] = useState("Test12345");
   const { login, isLoading, error } = useLogin();
-
-  const dispatch = useDispatch();
 
   function addEmailHandler(enteredEmail) {
     setEmail(enteredEmail);
@@ -26,14 +23,6 @@ function LoginScreen({ navigation }) {
 
   function addPasswordHandler(enteredPassword) {
     setPassword(enteredPassword);
-  }
-
-  function handlePasswordReset() {
-    if (email) {
-      changePassword(email);
-      console.log(email);
-      console.log("email sent");
-    }
   }
 
   return (
@@ -57,7 +46,7 @@ function LoginScreen({ navigation }) {
           secureTextEntry={true}
         />
         <ErrorMessage error={error} />
-        <TouchableOpacity onPress={() => handlePasswordReset()}>
+        <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")}>
           <Text style={styles.link}>Forgot your Password?</Text>
         </TouchableOpacity>
 

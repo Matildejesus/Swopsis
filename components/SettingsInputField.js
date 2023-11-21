@@ -3,20 +3,29 @@ import { useState } from "react";
 
 import Colors from "../constants/colors";
 
-function SettingsInputField({ text, placeholder, onChangeText, value }) {
+function SettingsInputField({
+  text,
+  placeholder,
+  onChangeText,
+  value,
+  editable,
+}) {
   const [enteredUserDetail, setEnteredUserDetail] = useState("");
 
   const inputStyle = value ? styles.changedText : styles.inputText;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{text}</Text>
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>{text}</Text>
+      </View>
       <View style={styles.inputContainer}>
         <TextInput
           style={inputStyle}
           placeholder={placeholder}
           onChangeText={onChangeText}
           value={value}
+          editable={editable}
         />
       </View>
     </View>
@@ -27,6 +36,7 @@ export default SettingsInputField;
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 13,
@@ -35,7 +45,7 @@ const styles = StyleSheet.create({
     color: Colors.primary2,
     fontSize: 15,
     fontWeight: 500,
-    alignSelf: "flex-end",
+    alignSelf: "flex-start",
     marginRight: 20,
     fontFamily: "RalewayMedium",
   },
@@ -43,21 +53,26 @@ const styles = StyleSheet.create({
     color: Colors.primary2,
     opacity: 1,
     fontFamily: "RalewayRegular",
+    paddingLeft: 17,
+  },
+  textContainer: {
+    width: 95,
   },
   inputContainer: {
     marginHorizontal: 20,
     borderRadius: 10,
     borderColor: Colors.primary2,
     borderWidth: 1,
-    width: 243,
+    width: 223,
     backgroundColor: "white",
-    opacity: 0.76,
-    paddingHorizontal: 13,
+    // opacity: 0.76,
+    // paddingHorizontal: 13,
     paddingVertical: 16,
   },
   inputText: {
     color: Colors.primary2,
-    opacity: 0.6,
+    // opacity: 0.6,
     fontFamily: "RalewayRegular",
+    paddingLeft: 17,
   },
 });

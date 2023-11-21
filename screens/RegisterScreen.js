@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, TextInput, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { useState, useEffect } from "react";
 
 import PrimaryButton from "../components/PrimaryButton";
@@ -11,8 +18,10 @@ import { useDebounce } from "use-debounce";
 
 import constraints from "../constraints.js";
 import InputForm from "../components/InputForm";
+import { useRegister } from "../components/authentication/useRegister";
 
 function LoginScreen({ navigation }) {
+  const { register, isLoading } = useRegister();
   const dispatch = useDispatch();
 
   const [userName, setUserName] = useState("");
@@ -80,13 +89,7 @@ function LoginScreen({ navigation }) {
 
   const submitHandler = () => {
     if (!emailError && !userNameError && !passwordError) {
-      dispatch(
-        setUserInfo({
-          userName: userName,
-          email: email,
-          password: password,
-        })
-      );
+      register({ userName, email, password });
       navigation.reset({
         index: 0,
         routes: [
@@ -123,7 +126,11 @@ function LoginScreen({ navigation }) {
           password={password}
           passwordError={passwordError}
         />
-        <Text style={styles.link}>Forgot your password?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text style={styles.link}>
+            Already a user?<Text style={styles.signIn}> Sign in</Text>
+          </Text>
+        </TouchableOpacity>
         <PrimaryButton
           title="REGISTER"
           style={{ width: 200 }}
@@ -172,5 +179,8 @@ const styles = StyleSheet.create({
     marginBottom: 31,
     color: Colors.primary2,
     fontSize: 15,
+  },
+  signIn: {
+    fontFamily: "RalewayBold",
   },
 });

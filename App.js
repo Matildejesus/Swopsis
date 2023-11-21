@@ -30,6 +30,7 @@ import SettingsScreen from "./screens/SettingsScreen.js";
 import BeYouScreen from "./screens/BeYouScreen.js";
 import EventsScreen from "./screens/EventsScreen.js";
 import InboxScreen from "./screens/InboxScreen.js";
+import ResetPasswordScreen from "./screens/ResetPasswordScreen.js";
 
 import Logo from "./components/icons/Logo.js";
 import Title from "./components/Title.js";
@@ -285,6 +286,11 @@ export default function App() {
             <Stack.Screen
               name="Maps"
               component={MapsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ResetPassword"
+              component={ResetPasswordScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen name="Settings" component={SettingsScreen} />
