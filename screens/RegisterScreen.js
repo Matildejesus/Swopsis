@@ -17,7 +17,7 @@ import { validate } from "validate.js";
 import { useDebounce } from "use-debounce";
 
 import constraints from "../constraints.js";
-import InputForm from "../components/InputForm";
+import InputForm from "../components/authentication/InputForm";
 import { useRegister } from "../components/authentication/useRegister";
 
 function LoginScreen({ navigation }) {

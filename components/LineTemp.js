@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 1,
     backgroundColor: Colors.primary2,
-    marginTop: 17,
+    // marginTop: 17,
     alignItems: "center",
   },
 });

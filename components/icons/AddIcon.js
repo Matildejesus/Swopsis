@@ -33,8 +33,10 @@ export default AddIcon;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
+    // paddingTop: 100,
     // flexDirection: "row",
     alignSelf: "flex-end",
+    paddingBottom: 20,
+    // opacity : 0,
   },
 });

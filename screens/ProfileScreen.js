@@ -1,4 +1,4 @@
-import { Modal, View, Text, StyleSheet, Image, Button } from "react-native";
+import { Modal, View, Text, StyleSheet, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
@@ -11,6 +11,9 @@ import PicturePicker from "../components/PicturePicker";
 import AddIcon from "../components/icons/AddIcon";
 import { useUser } from "../components/authentication/useUser";
 import Line from "../components/LineTemp";
+import ProfileItemWidget from "../components/ProfileItemWidget";
+import ArrowDown from "../components/icons/ArrowDown";
+import GroupWidget from "../components/GroupWidget";
 
 function ProfileScreen({ route, navigation }) {
   const dispatch = useDispatch();
@@ -32,32 +35,35 @@ function ProfileScreen({ route, navigation }) {
   console.log(email);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <PicturePicker userPicture={userPicture} />
-        <View style={styles.userInfo}>
-          <Text style={styles.userName}>{userName}</Text>
-          <Text style={styles.userEmail}>{email}</Text>
-          <View style={styles.coins}>
-            <CoinIcon />
-            <Text style={styles.userName}>{coins}</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <PicturePicker userPicture={userPicture} />
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>{userName}</Text>
+            <Text style={styles.userEmail}>{email}</Text>
+            <View style={styles.coins}>
+              <CoinIcon />
+              <Text style={styles.userName}>{coins}</Text>
+            </View>
           </View>
         </View>
+        <View style={styles.iconsContainer}>
+          <ImpactIcon />
+          <CalendarIcon />
+          <SettingsIcon />
+        </View>
+        <View style={styles.container}>
+          <Line />
+          <ProfileItemWidget />
+          <AddIcon />
+          <Line />
+          <Text style={styles.groupText}>MY GROUPS</Text>
+          <GroupWidget />
+          <AddIcon />
+        </View>
       </View>
-      <View style={styles.iconsContainer}>
-        <ImpactIcon />
-        <CalendarIcon />
-        <SettingsIcon />
-      </View>
-      <View style={styles.container}>
-        <Line />
-        <Text style={styles.groupText}>MY ITEMS</Text>
-        <AddIcon />
-        <Line />
-        <Text style={styles.groupText}>MY GROUPS</Text>
-        <AddIcon />
-      </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -101,6 +107,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     gap: 45,
     marginTop: 32,
+    marginBottom: 17,
     // marginBottom: 330,
     flexDirection: "row",
     // fontFamily: "RalewayBold",
@@ -113,11 +120,11 @@ const styles = StyleSheet.create({
   },
   groupText: {
     color: Colors.primary2,
-    // font-family: Raleway;
     fontSize: 20,
     fontWeight: 700,
     marginTop: 16,
     marginLeft: 17,
     alignSelf: "flex-start",
+    fontFamily: "RalewayBold",
   },
 });

@@ -45,6 +45,7 @@ import { AppRegistry } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Toast from "react-native-toast-message";
+import ItemScreen from "./screens/ItemScreen.js";
 
 AppRegistry.registerComponent("main", () => App);
 
@@ -65,7 +66,7 @@ function BottomTabNavigator() {
       screenOptions={{
         tabBarShowLabel: false,
         tabBarInactiveTintColor: Colors.primary1,
-        tabBarStyle: { height: 95, backgroundColor: "#DACFD4" },
+        tabBarStyle: { height: 71, backgroundColor: "#DACFD4" },
         headerStyle: {
           height: 100,
         },
@@ -105,7 +106,7 @@ function BottomTabNavigator() {
           tabBarIcon: (props) => {
             return (
               <Image
-                style={{ width: 42, height: 42 }}
+                style={{ width: 35, height: 35 }}
                 source={require("./assets/images/user2.png")}
               />
             );
@@ -124,7 +125,7 @@ function BottomTabNavigator() {
               <View
                 style={{
                   position: "absolute",
-                  bottom: 19,
+                  bottom: 10,
                   alignItems: "center",
                   alignSelf: "center",
                   width: 109,
@@ -178,8 +179,8 @@ function BottomTabNavigator() {
           tabBarIcon: (props) => {
             return (
               <Svg
-                width="37"
-                height="32"
+                width="32"
+                height="27"
                 viewBox="0 0 37 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -206,7 +207,7 @@ function BottomTabNavigator() {
           tabBarIcon: (props) => {
             return (
               <Image
-                style={{ width: 42, height: 42 }}
+                style={{ width: 35, height: 35 }}
                 source={require("./assets/images/events.png")}
               />
             );
@@ -294,6 +295,14 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Screen
+              name="Item"
+              component={ItemScreen}
+              options={{
+                headerTitle: "",
+                headerRight: (props) => <Logo {...props} />,
+              }}
+            />
             <Stack.Screen
               name="Calendar"
               component={CalendarScreen}
