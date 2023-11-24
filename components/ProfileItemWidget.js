@@ -9,18 +9,6 @@ function ProfileItemWidget() {
     { id: "4", source: require("../assets/images/jacket.png") },
     { id: "5", source: require("../assets/images/jacket.png") },
     { id: "6", source: require("../assets/images/jacket.png") },
-    // { id: "7", source: require("../assets/images/jacket.png") },
-    // { id: "8", source: require("../assets/images/jacket.png") },
-    // { id: "9", source: require("../assets/images/jacket.png") },
-    // { id: "10", source: require("../assets/images/jacket.png") },
-    // { id: "11", source: require("../assets/images/jacket.png") },
-    // { id: "12", source: require("../assets/images/jacket.png") },
-    // { id: "13", source: require("../assets/images/jacket.png") },
-    // { id: "14", source: require("../assets/images/jacket.png") },
-    // { id: "15", source: require("../assets/images/jacket.png") },
-    // { id: "16", source: require("../assets/images/jacket.png") },
-    // { id: "17", source: require("../assets/images/jacket.png") },
-    // { id: "18", source: require("../assets/images/jacket.png") },
   ];
 
   return (

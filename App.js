@@ -66,7 +66,7 @@ function BottomTabNavigator() {
       screenOptions={{
         tabBarShowLabel: false,
         tabBarInactiveTintColor: Colors.primary1,
-        tabBarStyle: { height: 71, backgroundColor: "#DACFD4" },
+        tabBarStyle: { height: 90, backgroundColor: "#DACFD4" },
         headerStyle: {
           height: 100,
         },
@@ -118,8 +118,8 @@ function BottomTabNavigator() {
         component={WardrobeScreen}
         options={{
           headerTitleAlign: "left",
-          headerTitle: (props) => <Title title="Wardrobe" {...props} />,
-          headerRight: (props) => <Logo {...props} />,
+          headerTitle: "",
+          headerLeft: (props) => <Logo {...props} />,
           tabBarIcon: (props) => {
             return (
               <View
@@ -300,6 +300,7 @@ export default function App() {
               component={ItemScreen}
               options={{
                 headerTitle: "",
+
                 headerRight: (props) => <Logo {...props} />,
               }}
             />

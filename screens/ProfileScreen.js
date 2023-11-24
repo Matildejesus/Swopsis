@@ -54,10 +54,10 @@ function ProfileScreen({ route, navigation }) {
           <SettingsIcon />
         </View>
         <View style={styles.container}>
-          <Line />
+          <Line style={styles.line} />
           <ProfileItemWidget />
           <AddIcon />
-          <Line />
+          <Line style={styles.line} />
           <Text style={styles.groupText}>MY GROUPS</Text>
           <GroupWidget />
           <AddIcon />
@@ -126,5 +126,12 @@ const styles = StyleSheet.create({
     marginLeft: 17,
     alignSelf: "flex-start",
     fontFamily: "RalewayBold",
+  },
+  line: {
+    width: 327,
+    height: 1,
+    backgroundColor: Colors.primary2,
+    // marginTop: 17,
+    alignItems: "center",
   },
 });

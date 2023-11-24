@@ -4,7 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { updatePicture } from "../store/userInfo";
 import PictureButton from "../components/icons/PictureButton";
-import PrimaryButton from "../components/PrimaryButton";
+import PopupButton from "./PopupButton";
 import ModalItemWidget from "./ModalItemWidget";
 
 function PicturePicker({ userPicture }) {
@@ -76,13 +76,10 @@ function PicturePicker({ userPicture }) {
       >
         <View style={styles.modalView}>
           <View style={styles.options}>
-            <ModalItemWidget
-              title={"Pick an image from camera roll"}
-              onPress={pickImage}
-            />
-            <ModalItemWidget title={"Take a picture"} onPress={takeImage} />
+            <ModalItemWidget title={"TAKE A PHOTO"} onPress={pickImage} />
+            <ModalItemWidget title={"UPLOAD A PHOTO"} onPress={takeImage} />
           </View>
-          <PrimaryButton title="Close" onPress={onModalClose} />
+          <PopupButton title="CANCEL" onPress={onModalClose} />
         </View>
       </Modal>
     </View>
@@ -96,14 +93,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
-    marginTop: "150%",
-    backgroundColor: Colors.popup,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    // marginTop: "150%",
+    backgroundColor: "rgba(0,0,0,0.5)",
     padding: 30,
   },
   options: {
-    marginBottom: 50,
+    marginBottom: 8,
   },
   profileImage: {
     width: 112,

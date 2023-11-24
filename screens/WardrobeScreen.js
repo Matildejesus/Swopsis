@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet } from "react-native";
+import UserInfoBar from "../components/UserInfoBar";
 
 function WardrobeScreen() {
   return (
     <View style={styles.container}>
-      <Text>WARDROBE</Text>
+      <UserInfoBar screen={"wardrobe"} />
     </View>
   );
 }
@@ -15,5 +16,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "white",
   },
 });
