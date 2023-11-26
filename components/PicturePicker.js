@@ -6,6 +6,7 @@ import { updatePicture } from "../store/userInfo";
 import PictureButton from "../components/icons/PictureButton";
 import PopupButton from "./PopupButton";
 import ModalItemWidget from "./ModalItemWidget";
+import ArrowModal from "./icons/ArrowModal";
 
 function PicturePicker({ userPicture }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -76,8 +77,16 @@ function PicturePicker({ userPicture }) {
       >
         <View style={styles.modalView}>
           <View style={styles.options}>
-            <ModalItemWidget title={"TAKE A PHOTO"} onPress={pickImage} />
-            <ModalItemWidget title={"UPLOAD A PHOTO"} onPress={takeImage} />
+            <ModalItemWidget
+              title={"TAKE A PHOTO"}
+              elements={<ArrowModal />}
+              onPress={pickImage}
+            />
+            <ModalItemWidget
+              title={"UPLOAD A PHOTO"}
+              elements={<ArrowModal />}
+              onPress={takeImage}
+            />
           </View>
           <PopupButton title="CANCEL" onPress={onModalClose} />
         </View>

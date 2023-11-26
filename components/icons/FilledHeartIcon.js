@@ -1,12 +1,12 @@
 import Svg, { Path, G } from "react-native-svg";
 
-function HeartIcon() {
+function FilledHeartIcon() {
   return (
     <Svg
       width="33"
       height="30"
       viewBox="0 0 33 30"
-      fill="none"
+      fill="#8E0040"
       xmlns="http://www.w3.org/2000/svg"
     >
       <G id="&#240;&#159;&#166;&#134; icon &#34;heart&#34;">
@@ -23,4 +23,4 @@ function HeartIcon() {
   );
 }
 
-export default HeartIcon;
+export default FilledHeartIcon;

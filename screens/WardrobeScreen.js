@@ -1,10 +1,16 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import UserInfoBar from "../components/UserInfoBar";
+import ViewIcon from "../components/icons/ViewIcon";
+import HeartIcon from "../components/icons/HeartIcon";
+import MessageIcon from "../components/icons/MessageIcon";
+import { DebugInstructions } from "react-native/Libraries/NewAppScreen";
+import WardrobeItem from "../components/WardrobeItem";
+import Colors from "../constants/colors";
 
 function WardrobeScreen() {
   return (
     <View style={styles.container}>
-      <UserInfoBar screen={"wardrobe"} />
+      <WardrobeItem />
     </View>
   );
 }
@@ -14,8 +20,7 @@ export default WardrobeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "center",
     backgroundColor: "white",
   },
 });
