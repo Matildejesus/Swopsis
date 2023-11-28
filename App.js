@@ -31,6 +31,7 @@ import BeYouScreen from "./screens/BeYouScreen.js";
 import EventsScreen from "./screens/EventsScreen.js";
 import InboxScreen from "./screens/InboxScreen.js";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen.js";
+import PostItemScreen from "./screens/PostItemScreen.js";
 
 import Logo from "./components/icons/Logo.js";
 import Title from "./components/Title.js";
@@ -201,9 +202,8 @@ function BottomTabNavigator() {
         name="Events"
         component={EventsScreen}
         options={{
-          headerTitleAlign: "left",
-          headerTitle: (props) => <Title title="Events" {...props} />,
-          headerRight: (props) => <Logo {...props} />,
+          headerTitle: "",
+          headerLeft: (props) => <Logo {...props} />,
           tabBarIcon: (props) => {
             return (
               <Image
@@ -294,13 +294,36 @@ export default function App() {
               component={ResetPasswordScreen}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{
+                headerTitleAlign: "left",
+                // headerTransparent: true,
+                headerBackVisible: false,
+                headerTitle: (props) => (
+                  <Title title="SETTINGS" goBack="true" {...props} />
+                ),
+                headerRight: (props) => <Logo {...props} />,
+              }}
+            />
             <Stack.Screen
               name="Item"
               component={ItemScreen}
               options={{
                 headerTitle: "",
 
+                headerRight: (props) => <Logo {...props} />,
+              }}
+            />
+            <Stack.Screen
+              name="PostItem"
+              component={PostItemScreen}
+              options={{
+                headerTitleAlign: "left",
+                // headerTransparent: true,
+                headerBackVisible: false,
+                headerTitle: (props) => <Title goBack="true" {...props} />,
                 headerRight: (props) => <Logo {...props} />,
               }}
             />

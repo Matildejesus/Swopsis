@@ -13,7 +13,6 @@ import { useState } from "react";
 import { useUpdateUser } from "../components/authentication/useUpdateUser";
 
 function SettingsScreen() {
-  const dispatch = useDispatch();
   const userPassword = useSelector((state) => state.userInfo.password);
   const { logout, isLoading } = useLogout();
 
@@ -40,7 +39,7 @@ function SettingsScreen() {
 
   function handleSubmit() {
     if (!userName) return;
-    updateUser({ userName, password });
+    updateUser({ userName });
   }
 
   return (

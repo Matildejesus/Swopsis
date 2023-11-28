@@ -19,7 +19,7 @@ function GroupWidget() {
       <View style={styles.group}>
         <Text style={styles.text}>UNI MELB GENIUS</Text>
         <TouchableOpacity onPress={toggleDropdown}>
-          {isDropdownOpen ? <ArrowDown /> : <ArrowUp />}
+          {isDropdownOpen ? <ArrowUp /> : <ArrowDown />}
         </TouchableOpacity>
       </View>
       {isDropdownOpen && (

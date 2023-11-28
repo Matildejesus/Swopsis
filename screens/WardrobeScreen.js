@@ -11,6 +11,7 @@ function WardrobeScreen() {
   return (
     <View style={styles.container}>
       <WardrobeItem />
+      <WardrobeItem />
     </View>
   );
 }

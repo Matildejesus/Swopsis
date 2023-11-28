@@ -8,7 +8,7 @@ function Title(props) {
   return (
     <View style={styles.container}>
       {props.goBack ? (
-        <PinkBackArrow onPress={() => navigation.navigate("Profile")} />
+        <PinkBackArrow onPress={() => navigation.goBack()} />
       ) : null}
       <Text style={{ fontWeight: "bold", fontSize: 20, color: "#8E0040" }}>
         {props.title}

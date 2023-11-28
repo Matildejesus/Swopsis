@@ -16,7 +16,7 @@ function AddIcon() {
           cx="25.5"
           cy="25.5"
           r="25"
-          fill="#357738"
+          fill={Colors.impact}
           fill-opacity="1"
           stroke="#071425"
         />

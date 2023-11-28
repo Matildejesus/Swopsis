@@ -1,4 +1,6 @@
-import supabase from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
+import * as FileSystem from "expo-file-system";
+import { decode } from "base64-arraybuffer";
 
 export async function register({ userName, email, password }) {
   const { data, error } = await supabase.auth.signUp({
@@ -45,29 +47,41 @@ export async function logout() {
     throw new Error(error.message);
   }
 }
+
 export async function updateUser({ password, userName, avatar }) {
   let updateData;
-  if (password) updateData = { password };
   if (userName) updateData = { data: { userName } };
 
   const { data, error } = await supabase.auth.updateUser(updateData);
 
   if (error) throw new Error(error.message);
+  if (!avatar) return data;
 
-  // const fileName = `avatar-${data.user.id}-${Math.random()}`;
+  const fileName = `avatar-${data.user.id}-${Math.random()}`;
 
-  // const { error: storageError } = await supabase.storage
-  //   .from("avatars")
-  //   .upload(fileName, avatar);
+  const base64 = await FileSystem.readAsStringAsync(avatar, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+  console.log("Base64 String: ", base64.substring(0, 50));
 
-  // if (storageError) throw new Error(storageError.message);
+  const base64Data = `data:image/png;base64,${base64}`;
 
-  // const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
-  //   data: {
-  //     avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
-  //   },
-  // });
+  const { error: storageError } = await supabase.storage
+    .from("avatars")
+    .upload(fileName, base64Data, {
+      contentType: "image/png",
+    });
 
-  // if (error2) throw new Error(error2.message);
-  // return updatedUser;
+  // console.log("Decode: " + decode(base64));
+
+  if (storageError) throw new Error(storageError.message);
+
+  const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
+    data: {
+      avatar: `https://ubohapcfavgltukxiirg.supabase.co/storage/v1/object/public/avatars/${fileName}`,
+    },
+  });
+
+  if (error2) throw new Error(error2.message);
+  return updatedUser;
 }

@@ -1,16 +1,26 @@
-import { Text, StyleSheet, View, Image } from "react-native";
+import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import Colors from "../constants/colors";
+import { useNavigation } from "@react-navigation/native";
 
-function PostItem() {
+function PostItem({ type }) {
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.container}>
-      <Image style={styles.image} />
-      <View style={styles.contentContainer}>
-        <Text style={styles.title}>Title</Text>
-        <Text style={styles.link}>Read more...</Text>
-        <Text style={styles.date}>updated at: 20xx-xx-xx</Text>
+    <TouchableOpacity
+      onPress={() => navigation.navigate("PostItem", { type: type })}
+    >
+      <View style={styles.container}>
+        <Image
+          style={styles.image}
+          source={require("../assets/images/postImage.png")}
+        />
+        <View style={styles.contentContainer}>
+          <Text style={styles.title}>Title</Text>
+          <Text style={styles.link}>Read more...</Text>
+          <Text style={styles.date}>updated at: 20xx-xx-xx</Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

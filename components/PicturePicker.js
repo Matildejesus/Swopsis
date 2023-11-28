@@ -7,11 +7,15 @@ import PictureButton from "../components/icons/PictureButton";
 import PopupButton from "./PopupButton";
 import ModalItemWidget from "./ModalItemWidget";
 import ArrowModal from "./icons/ArrowModal";
+import { useUpdateUser } from "./authentication/useUpdateUser";
 
 function PicturePicker({ userPicture }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [showAppOptions, setShowAppOptions] = useState(false);
-  const [image, setImage] = useState(userPicture);
+  const [avatar, setAvatar] = useState(userPicture);
+
+  const { updateUser, isUpdating } = useUpdateUser();
+
   const requestPermission = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -35,12 +39,12 @@ function PicturePicker({ userPicture }) {
       aspect: [4, 3],
       quality: 1,
     });
-    console.log(result);
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setAvatar(result.assets[0].uri);
       setIsModalVisible(false);
-      dispatch(updatePicture(result.assets[0].uri));
+      updateUser({ avatar: result.assets[0].uri });
+      console.log("avatar: " + result.assets[0].uri);
     }
   };
 
@@ -52,8 +56,10 @@ function PicturePicker({ userPicture }) {
       quality: 1,
     });
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setAvatar(result.assets[0].uri);
+      updateUser({ avatar: result.assets[0].uri });
       setIsModalVisible(false);
+      console.log("avatar :" + result.assets[0].uri);
     }
   };
 
@@ -63,8 +69,8 @@ function PicturePicker({ userPicture }) {
 
   return (
     <View>
-      {image ? (
-        <Image source={{ uri: image }} style={styles.profileImage} />
+      {avatar ? (
+        <Image source={{ uri: avatar }} style={styles.profileImage} />
       ) : (
         <View style={styles.imageContainer} />
       )}
@@ -80,12 +86,12 @@ function PicturePicker({ userPicture }) {
             <ModalItemWidget
               title={"TAKE A PHOTO"}
               elements={<ArrowModal />}
-              onPress={pickImage}
+              onPress={takeImage}
             />
             <ModalItemWidget
               title={"UPLOAD A PHOTO"}
               elements={<ArrowModal />}
-              onPress={takeImage}
+              onPress={pickImage}
             />
           </View>
           <PopupButton title="CANCEL" onPress={onModalClose} />
