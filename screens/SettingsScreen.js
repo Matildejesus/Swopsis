@@ -7,7 +7,7 @@ import SettingsInputField from "../components/SettingsInputField";
 import { useDispatch, useSelector } from "react-redux";
 import { useLogout } from "../components/authentication/useLogout";
 import Colors from "../constants/colors";
-import Line from "../components/LineTemp";
+import Line from "../components/Line";
 import { useUser } from "../components/authentication/useUser";
 import { useState } from "react";
 import { useUpdateUser } from "../components/authentication/useUpdateUser";

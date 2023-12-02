@@ -13,13 +13,16 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.swopsis"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "package": "com.anonymous.swopsis"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -29,6 +32,12 @@
         "expo-image-picker",
         {
           "photosPermission": "The app needs access to your photos to upload images."
+        }
+      ],
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
         }
       ]
     ]

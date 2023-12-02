@@ -47,6 +47,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Toast from "react-native-toast-message";
 import ItemScreen from "./screens/ItemScreen.js";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 AppRegistry.registerComponent("main", () => App);
 
@@ -258,113 +259,115 @@ export default function App() {
     console.log("Fonts loaded and splash screen hidden");
   }
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-      <Provider store={store}>
-        <StatusBar />
-        <NavigationContainer onLayout={onLayoutRootView}>
-          <Stack.Navigator initialRouteName="Welcome" headerMode="none">
-            <Stack.Screen
-              name="Welcome"
-              component={WelcomeScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="AboutUs"
-              component={AboutUsScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Register"
-              component={RegisterScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Maps"
-              component={MapsScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ResetPassword"
-              component={ResetPasswordScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Settings"
-              component={SettingsScreen}
-              options={{
-                headerTitleAlign: "left",
-                // headerTransparent: true,
-                headerBackVisible: false,
-                headerTitle: (props) => (
-                  <Title title="SETTINGS" goBack="true" {...props} />
-                ),
-                headerRight: (props) => <Logo {...props} />,
-              }}
-            />
-            <Stack.Screen
-              name="Item"
-              component={ItemScreen}
-              options={{
-                headerTitle: "",
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <Provider store={store}>
+          <StatusBar />
+          <NavigationContainer onLayout={onLayoutRootView}>
+            <Stack.Navigator initialRouteName="Welcome" headerMode="none">
+              <Stack.Screen
+                name="Welcome"
+                component={WelcomeScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="AboutUs"
+                component={AboutUsScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Register"
+                component={RegisterScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Maps"
+                component={MapsScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ResetPassword"
+                component={ResetPasswordScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Settings"
+                component={SettingsScreen}
+                options={{
+                  headerTitleAlign: "left",
+                  // headerTransparent: true,
+                  headerBackVisible: false,
+                  headerTitle: (props) => (
+                    <Title title="SETTINGS" goBack="true" {...props} />
+                  ),
+                  headerRight: (props) => <Logo {...props} />,
+                }}
+              />
+              <Stack.Screen
+                name="Item"
+                component={ItemScreen}
+                options={{
+                  headerTitle: "",
 
-                headerRight: (props) => <Logo {...props} />,
-              }}
-            />
-            <Stack.Screen
-              name="PostItem"
-              component={PostItemScreen}
-              options={{
-                headerTitleAlign: "left",
-                // headerTransparent: true,
-                headerBackVisible: false,
-                headerTitle: (props) => <Title goBack="true" {...props} />,
-                headerRight: (props) => <Logo {...props} />,
-              }}
-            />
-            <Stack.Screen
-              name="Calendar"
-              component={CalendarScreen}
-              options={{
-                headerTitleAlign: "left",
-                // headerTransparent: true,
-                headerBackVisible: false,
-                headerTitle: (props) => (
-                  <Title title="CALENDAR" goBack="true" {...props} />
-                ),
-                headerRight: (props) => <Logo {...props} />,
-              }}
-            />
-            <Stack.Screen
-              name="Impact"
-              component={ImpactScreen}
-              options={{
-                headerTitleAlign: "left",
-                headerStyle: {
-                  backgroundColor: Colors.impact,
-                },
-                // headerTransparent: true,
-                headerBackVisible: false,
-                headerTitle: (props) => (
-                  <Title title="IMPACT" goBack="true" {...props} />
-                ),
-                headerRight: (props) => <Logo {...props} />,
-              }}
-            />
-            <Stack.Screen
-              name="InApp"
-              component={BottomTabNavigator}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Provider>
-      <Toast />
-    </QueryClientProvider>
+                  headerRight: (props) => <Logo {...props} />,
+                }}
+              />
+              <Stack.Screen
+                name="PostItem"
+                component={PostItemScreen}
+                options={{
+                  headerTitleAlign: "left",
+                  // headerTransparent: true,
+                  headerBackVisible: false,
+                  headerTitle: (props) => <Title goBack="true" {...props} />,
+                  headerRight: (props) => <Logo {...props} />,
+                }}
+              />
+              <Stack.Screen
+                name="Calendar"
+                component={CalendarScreen}
+                options={{
+                  headerTitleAlign: "left",
+                  // headerTransparent: true,
+                  headerBackVisible: false,
+                  headerTitle: (props) => (
+                    <Title title="CALENDAR" goBack="true" {...props} />
+                  ),
+                  headerRight: (props) => <Logo {...props} />,
+                }}
+              />
+              <Stack.Screen
+                name="Impact"
+                component={ImpactScreen}
+                options={{
+                  headerTitleAlign: "left",
+                  headerStyle: {
+                    backgroundColor: Colors.impact,
+                  },
+                  // headerTransparent: true,
+                  headerBackVisible: false,
+                  headerTitle: (props) => (
+                    <Title title="IMPACT" goBack="true" {...props} />
+                  ),
+                  headerRight: (props) => <Logo {...props} />,
+                }}
+              />
+              <Stack.Screen
+                name="InApp"
+                component={BottomTabNavigator}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </Provider>
+        <Toast />
+      </QueryClientProvider>
+    </SafeAreaProvider>
   );
 }

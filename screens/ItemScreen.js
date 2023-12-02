@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import ProfileItem from "../components/ProfileItem";
 import HeartIcon from "../components/icons/HeartIcon";
 import Colors from "../constants/colors";
-import LineTemp from "../components/LineTemp";
+import LineTemp from "../components/Line";
 import UserInfoBar from "../components/UserInfoBar";
 import PinkNextArrow from "../components/icons/PinkNextArrow";
 import DetailsIcon from "../components/icons/DetailsIcon";

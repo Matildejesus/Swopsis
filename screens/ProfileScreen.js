@@ -10,7 +10,7 @@ import ImpactIcon from "../components/icons/ImpactIcon";
 import PicturePicker from "../components/PicturePicker";
 import AddIcon from "../components/icons/AddIcon";
 import { useUser } from "../components/authentication/useUser";
-import Line from "../components/LineTemp";
+import Line from "../components/Line";
 import ProfileItemWidget from "../components/ProfileItemWidget";
 import ArrowDown from "../components/icons/ArrowDown";
 import GroupWidget from "../components/GroupWidget";

@@ -1,17 +1,13 @@
-import { View, Modal, Button, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import Colors from "../constants/colors";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
-import { updatePicture } from "../store/userInfo";
 import PictureButton from "../components/icons/PictureButton";
-import PopupButton from "./PopupButton";
-import ModalItemWidget from "./ModalItemWidget";
-import ArrowModal from "./icons/ArrowModal";
 import { useUpdateUser } from "./authentication/useUpdateUser";
+import ModalWidget from "./ModalWidget";
 
 function PicturePicker({ userPicture }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [showAppOptions, setShowAppOptions] = useState(false);
   const [avatar, setAvatar] = useState(userPicture);
 
   const { updateUser, isUpdating } = useUpdateUser();
@@ -26,7 +22,6 @@ function PicturePicker({ userPicture }) {
     if (cameraStatus.status !== "granted") {
       alert("Sorry, we need camera permissions to make this work.");
     } else {
-      setShowAppOptions(true);
       setIsModalVisible(true);
     }
   };
@@ -75,28 +70,12 @@ function PicturePicker({ userPicture }) {
         <View style={styles.imageContainer} />
       )}
       <PictureButton onPress={requestPermission} />
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <ModalWidget
         visible={isModalVisible}
         onRequestClose={onModalClose}
-      >
-        <View style={styles.modalView}>
-          <View style={styles.options}>
-            <ModalItemWidget
-              title={"TAKE A PHOTO"}
-              elements={<ArrowModal />}
-              onPress={takeImage}
-            />
-            <ModalItemWidget
-              title={"UPLOAD A PHOTO"}
-              elements={<ArrowModal />}
-              onPress={pickImage}
-            />
-          </View>
-          <PopupButton title="CANCEL" onPress={onModalClose} />
-        </View>
-      </Modal>
+        takeImage={takeImage}
+        pickImage={pickImage}
+      />
     </View>
   );
 }
@@ -104,14 +83,6 @@ function PicturePicker({ userPicture }) {
 export default PicturePicker;
 
 const styles = StyleSheet.create({
-  modalView: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    // marginTop: "150%",
-    backgroundColor: "rgba(0,0,0,0.5)",
-    padding: 30,
-  },
   options: {
     marginBottom: 8,
   },

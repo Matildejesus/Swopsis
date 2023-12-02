@@ -1,6 +1,7 @@
 import supabase, { supabaseUrl } from "./supabase";
+import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
-import { decode } from "base64-arraybuffer";
+import base64 from "base-64";
 
 export async function register({ userName, email, password }) {
   const { data, error } = await supabase.auth.signUp({
@@ -48,40 +49,56 @@ export async function logout() {
   }
 }
 
-export async function updateUser({ password, userName, avatar }) {
-  let updateData;
-  if (userName) updateData = { data: { userName } };
+export async function updateUser({ userName, avatar }) {
+  let updateData = {};
+  if (userName) updateData.data = { userName };
 
   const { data, error } = await supabase.auth.updateUser(updateData);
-
   if (error) throw new Error(error.message);
+
   if (!avatar) return data;
 
-  const fileName = `avatar-${data.user.id}-${Math.random()}`;
+  try {
+    console.log("Avatar URI:", avatar);
 
-  const base64 = await FileSystem.readAsStringAsync(avatar, {
-    encoding: FileSystem.EncodingType.Base64,
-  });
-  console.log("Base64 String: ", base64.substring(0, 50));
+    // Fetch and upload the image blob
+    const response = await fetch(avatar);
+    const blob = await response.blob();
 
-  const base64Data = `data:image/png;base64,${base64}`;
+    const fileExt = avatar.split(".").pop();
+    const filePath = `avatars/${Math.random()}.${fileExt}`;
+    console.log("File Path:", filePath);
 
-  const { error: storageError } = await supabase.storage
-    .from("avatars")
-    .upload(fileName, base64Data, {
-      contentType: "image/png",
-    });
+    const { error: storageError } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, blob, {
+        contentType: "image/jpeg",
+        upsert: false,
+      });
 
-  // console.log("Decode: " + decode(base64));
+    if (storageError) {
+      console.error("Storage Error:", storageError);
+      throw new Error(storageError.message);
+    }
 
-  if (storageError) throw new Error(storageError.message);
+    // Update user's avatar URL
+    const avatarUrl = `https://ubohapcfavgltukxiirg.supabase.co/storage/v1/object/public/avatars/${filePath}`;
+    const { data: updatedUser, error: error2 } = await supabase.auth.updateUser(
+      {
+        data: {
+          avatar: avatarUrl,
+        },
+      }
+    );
 
-  const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
-    data: {
-      avatar: `https://ubohapcfavgltukxiirg.supabase.co/storage/v1/object/public/avatars/${fileName}`,
-    },
-  });
+    if (error2) {
+      console.error("Update User Error:", error2);
+      throw new Error(error2.message);
+    }
 
-  if (error2) throw new Error(error2.message);
-  return updatedUser;
+    return updatedUser;
+  } catch (generalError) {
+    console.error("General Error:", generalError);
+    throw generalError;
+  }
 }

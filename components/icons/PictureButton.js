@@ -2,9 +2,9 @@ import React from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
-function PictureButton({ onPress }) {
+function PictureButton({ onPress, style }) {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.button}>
+    <TouchableOpacity onPress={onPress} style={style ? style : styles.button}>
       <Svg
         xmlns="http://www.w3.org/2000/svg"
         width="36"

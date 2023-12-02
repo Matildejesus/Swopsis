@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import Colors from "../constants/colors";
 
-function PopupButton({ title, onPress, style }) {
+function ModalButton({ title, onPress, style }) {
   return (
     <View style={[styles.container, style]}>
       <Pressable onPress={onPress}>
@@ -11,13 +11,15 @@ function PopupButton({ title, onPress, style }) {
   );
 }
 
-export default PopupButton;
+export default ModalButton;
 
 const styles = StyleSheet.create({
   container: {
-    width: 350,
-    height: 40,
-    borderRadius: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 52,
+    borderRadius: 27,
+    borderColor: Colors.primary2,
+    borderWidth: 2,
     backgroundColor: Colors.popup,
     justifyContent: "center",
     alignItems: "center",
@@ -25,6 +27,6 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.primary2,
     fontSize: 14,
-    fontFamily: "RalewaySemiBold",
+    fontFamily: "RalewayBold",
   },
 });
