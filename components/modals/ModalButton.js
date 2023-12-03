@@ -1,9 +1,13 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import Colors from "../constants/colors";
+import Colors from "../../constants/colors";
 
-function ModalButton({ title, onPress, style }) {
+function ModalButton({ title, onPress, style, removeContainer }) {
   return (
-    <View style={[styles.container, style]}>
+    <View
+      style={
+        !removeContainer ? [styles.container, style] : styles.simpleContainer
+      }
+    >
       <Pressable onPress={onPress}>
         <Text style={styles.text}>{title}</Text>
       </Pressable>
@@ -28,5 +32,9 @@ const styles = StyleSheet.create({
     color: Colors.primary2,
     fontSize: 14,
     fontFamily: "RalewayBold",
+  },
+  simpleContainer: {
+    paddingVertical: 14,
+    paddingRight: 11,
   },
 });

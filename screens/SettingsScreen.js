@@ -19,7 +19,7 @@ function SettingsScreen() {
   const {
     user: {
       email,
-      user_metadata: { userName: currentUserName },
+      user_metadata: { userName: currentUserName, avatar: currentAvatar },
     },
   } = useUser();
 
@@ -27,7 +27,7 @@ function SettingsScreen() {
 
   const [userName, setUserName] = useState(currentUserName);
   const [userEmail, setUserEmail] = useState(email);
-  const [avatar, setAvatar] = useState(null);
+  const [userAvatar, setUserAvatar] = useState(currentAvatar);
 
   function updateUserNameHandler(enteredUserName) {
     setUserName(enteredUserName);
@@ -45,7 +45,7 @@ function SettingsScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.center}>
-        <PicturePicker />
+        <PicturePicker userPicture={userAvatar} />
       </View>
       <View style={styles.groupContainer}>
         <Text style={styles.header}>Info</Text>

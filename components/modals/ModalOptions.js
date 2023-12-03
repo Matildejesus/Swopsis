@@ -1,6 +1,6 @@
 import Svg, { Line } from "react-native-svg";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import Colors from "../constants/colors";
+import Colors from "../../constants/colors";
 function ModalOptions({ text, onPress }) {
   return (
     <TouchableOpacity onPress={onPress}>

@@ -242,29 +242,33 @@ export default function App() {
     InterThin: require("./assets/fonts/Inter-Thin.ttf"),
     InterLight: require("./assets/fonts/Inter-Light.ttf"),
   });
+  console.log("App Rendered. Fonts loaded:", fontsLoaded);
 
-  const onLayoutRootView = useCallback(async () => {
-    console.log("onLayoutRootView called");
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
+  // const onLayoutRootView = useCallback(async () => {
+  //   console.log("onLayoutRootView called. Fonts loaded:", fontsLoaded);
+
+  //   if (fontsLoaded) {
+  //     console.log("Hiding Splash Screen");
+  //     await SplashScreen.hideAsync();
+  //     console.log("Splash Screen Hidden");
+  //   }
+  // }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     console.log("Fonts are still loading...");
     return null;
   }
-  if (fontsLoaded) {
-    SplashScreen.hideAsync();
-    console.log("Fonts loaded and splash screen hidden");
-  }
+
+  console.log("Fonts loaded, hiding splash screen");
+  SplashScreen.hideAsync();
+
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         <Provider store={store}>
           <StatusBar />
-          <NavigationContainer onLayout={onLayoutRootView}>
+          <NavigationContainer>
             <Stack.Navigator initialRouteName="Welcome" headerMode="none">
               <Stack.Screen
                 name="Welcome"

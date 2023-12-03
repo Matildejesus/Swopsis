@@ -4,7 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import PictureButton from "../components/icons/PictureButton";
 import { useUpdateUser } from "./authentication/useUpdateUser";
-import ModalWidget from "./ModalWidget";
+import ModalPhotoWidget from "./modals/ModalPhotoWidget";
 
 function PicturePicker({ userPicture }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -70,7 +70,7 @@ function PicturePicker({ userPicture }) {
         <View style={styles.imageContainer} />
       )}
       <PictureButton onPress={requestPermission} />
-      <ModalWidget
+      <ModalPhotoWidget
         visible={isModalVisible}
         onRequestClose={onModalClose}
         takeImage={takeImage}

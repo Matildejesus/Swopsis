@@ -1,7 +1,6 @@
 import supabase, { supabaseUrl } from "./supabase";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
-import base64 from "base-64";
 
 export async function register({ userName, email, password }) {
   const { data, error } = await supabase.auth.signUp({
@@ -61,18 +60,21 @@ export async function updateUser({ userName, avatar }) {
   try {
     console.log("Avatar URI:", avatar);
 
-    // Fetch and upload the image blob
-    const response = await fetch(avatar);
-    const blob = await response.blob();
-
     const fileExt = avatar.split(".").pop();
-    const filePath = `avatars/${Math.random()}.${fileExt}`;
-    console.log("File Path:", filePath);
+    const fileName = `avatars/${Math.random()}.${fileExt}`;
+
+    let formData = new FormData();
+    formData.append("file", {
+      uri: avatar,
+      name: fileName,
+      type: `image/${fileExt}`,
+    });
+    console.log(formData);
 
     const { error: storageError } = await supabase.storage
       .from("avatars")
-      .upload(filePath, blob, {
-        contentType: "image/jpeg",
+      .upload(fileName, formData, {
+        contentType: "image/jpg",
         upsert: false,
       });
 
@@ -82,7 +84,7 @@ export async function updateUser({ userName, avatar }) {
     }
 
     // Update user's avatar URL
-    const avatarUrl = `https://ubohapcfavgltukxiirg.supabase.co/storage/v1/object/public/avatars/${filePath}`;
+    const avatarUrl = `https://ubohapcfavgltukxiirg.supabase.co/storage/v1/object/public/avatars/${fileName}`;
     const { data: updatedUser, error: error2 } = await supabase.auth.updateUser(
       {
         data: {

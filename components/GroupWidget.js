@@ -4,15 +4,21 @@ import Colors from "../constants/colors";
 import { useState } from "react";
 import ArrowDown from "./icons/ArrowDown";
 import GroupDropdownItem from "./GroupDropdownItem";
+import ModalLeaveWidget from "./modals/ModalLeaveWidget";
 
 function GroupWidget() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   function toggleDropdown() {
     setIsDropdownOpen(!isDropdownOpen);
   }
 
   const containerHeight = isDropdownOpen ? 130 : 83;
+
+  const onModalClose = () => {
+    setIsModalVisible(false);
+  };
 
   return (
     <View style={[styles.groupContainer, { height: containerHeight }]}>
@@ -26,7 +32,13 @@ function GroupWidget() {
         <View style={styles.dropdown}>
           <GroupDropdownItem text={"IMPACT"} />
           <GroupDropdownItem text={"WARDROBE"} />
-          <GroupDropdownItem text={"LEAVE"} />
+          <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+            <GroupDropdownItem text={"LEAVE"} />
+          </TouchableOpacity>
+          <ModalLeaveWidget
+            visible={isModalVisible}
+            onRequestClose={onModalClose}
+          />
         </View>
       )}
     </View>
