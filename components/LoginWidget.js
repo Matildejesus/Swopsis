@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   bulletList: {
     flexDirection: "column", // This ensures a vertical column layout
-    marginTop: 55,
+    marginTop: 30,
     marginBottom: 33,
   },
 });

@@ -19,6 +19,7 @@ import { useDebounce } from "use-debounce";
 import constraints from "../constraints.js";
 import InputForm from "../components/authentication/InputForm";
 import { useRegister } from "../components/authentication/useRegister";
+import { useLogin } from "../components/authentication/useLogin.js";
 
 function LoginScreen({ navigation }) {
   const { register, isLoading } = useRegister();
@@ -34,6 +35,7 @@ function LoginScreen({ navigation }) {
   const [debouncedEmail] = useDebounce(email, 500);
   const [debouncedUserName] = useDebounce(userName, 500);
   const [debouncedPassword] = useDebounce(password, 500);
+
 
   useEffect(() => {
     if (debouncedEmail) {
@@ -89,22 +91,15 @@ function LoginScreen({ navigation }) {
 
   const submitHandler = () => {
     if (!emailError && !userNameError && !passwordError) {
-      register({ userName, email, password });
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: "InApp",
-            params: {
-              screen: "Profile",
-              initial: false,
-              params: {
-                name: userName,
-              },
-            },
+      register({ userName, email, password }
+,
+        {
+          onSettled: () => {
+            setEmail("");
+            setPassword("");
           },
-        ],
-      });
+        }
+      );
     }
   };
 
