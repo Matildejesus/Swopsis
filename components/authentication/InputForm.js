@@ -23,6 +23,7 @@ function InputForm(props) {
         text="Password"
         onChangeText={props.setPassword}
         value={props.password}
+        secureTextEntry={true}
       />
       <ErrorMessage error={props.passwordError} />
     </>

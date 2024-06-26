@@ -12,16 +12,14 @@ import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
 
 import { useDispatch } from "react-redux";
-import { setUserInfo } from "../store/userInfo";
 import { validate } from "validate.js";
 import { useDebounce } from "use-debounce";
 
 import constraints from "../constraints.js";
 import InputForm from "../components/authentication/InputForm";
 import { useRegister } from "../components/authentication/useRegister";
-import { useLogin } from "../components/authentication/useLogin.js";
 
-function LoginScreen({ navigation }) {
+function RegisterScreen({ navigation }) {
   const { register, isLoading } = useRegister();
   const dispatch = useDispatch();
 
@@ -136,7 +134,7 @@ function LoginScreen({ navigation }) {
   );
 }
 
-export default LoginScreen;
+export default RegisterScreen;
 
 const styles = StyleSheet.create({
   container: {

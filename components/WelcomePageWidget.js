@@ -1,34 +1,24 @@
-import {
-  View,
-  TouchableOpacity,
-  Image,
-  Text,
-  Button,
-  StyleSheet,
-} from "react-native";
-import Svg, { Circle } from "react-native-svg";
-import { useState, useEffect } from "react";
-import * as Font from "expo-font";
-
+import {View, Image, Text, StyleSheet, ScrollView} from "react-native";
+import Svg, {Circle} from "react-native-svg";
+import {useState} from "react";
 import PrimaryButton from "./PrimaryButton";
 import SecondaryButton from "./SecondaryButton.js";
 import Colors from "../constants/colors.js";
 
-function LoginWidget({ text, destination, navigation, image }) {
-  const [page, setPage] = useState(1);
+function WelcomePageWidget({text1, text2, navigation, image1, image2}) {
+  const [page, setPage] = useState(0);
 
-  useEffect(() => {
-    if (text.includes("/n")) {
-      setPage(2);
-    } else {
-      setPage(1);
-    }
-  }, [text]);
+  const handleScroll = (event) => {
+    const contentOffsetX = event.nativeEvent.contentOffset.x;
+    const viewWidth = event.nativeEvent.layoutMeasurement.width;
+    const newPage = Math.round(contentOffsetX / viewWidth);
+    setPage(newPage);
+  };
 
   const renderText = () => {
-    if (text.includes("/n")) {
-      const items = text.split(" /n ");
-
+    const displayedText = page === 0 ? text1 : text2;
+    if (displayedText.includes("/n")) {
+      const items = displayedText.split(" /n ");
       return (
         <View style={styles.bulletList}>
           {items.map((item, index) => (
@@ -39,17 +29,24 @@ function LoginWidget({ text, destination, navigation, image }) {
         </View>
       );
     } else {
-      return <Text style={styles.text}>{text}</Text>;
+      return <Text style={styles.text}>{displayedText}</Text>;
     }
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate(destination)}>
-        <Image source={image} style={styles.girlsImage} />
-      </TouchableOpacity>
+      <ScrollView
+        horizontal={true}
+        pagingEnabled={true}
+        showsHorizontalScrollIndicator={false}
+        onMomentumScrollEnd={handleScroll}
+        decelerationRate="fast"
+      >
+        <Image source={image1} style={styles.girlsImage} />
+        <Image source={image2} style={styles.girlsImage} />
+      </ScrollView>
       <View style={styles.navbar}>
-        {page === 1 ? (
+        {page === 0 ? (
           <>
             <Svg height="10" width="10" viewBox="0 0 10 10">
               <Circle cx="5" cy="5" r="5" fill="#FB5099" />
@@ -69,7 +66,9 @@ function LoginWidget({ text, destination, navigation, image }) {
           </>
         )}
       </View>
+
       {renderText()}
+
       <View style={styles.btnContainer}>
         <PrimaryButton
           title="REGISTER"
@@ -84,12 +83,15 @@ function LoginWidget({ text, destination, navigation, image }) {
   );
 }
 
-export default LoginWidget;
+export default WelcomePageWidget;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    //justifyContent: "center",
+    // alignItems: "center",
     backgroundColor: "#fff",
+    // gap: 10,
   },
   girlsImage: {
     width: 390,
@@ -99,19 +101,14 @@ const styles = StyleSheet.create({
   navbar: {
     flexDirection: "row",
     justifyContent: "center",
-    paddingTop: 20.5,
+    //  marginBottom: 50,
     gap: 6,
   },
   btnContainer: {
     flexDirection: "row",
     justifyContent: "center",
     gap: 19,
-  },
-  background: {
-    width: 375,
-    height: 309.5,
-    marginTop: 357.5,
-    marginLeft: 0,
+    marginBottom: 50,
   },
   text: {
     color: Colors.primary1,
@@ -121,16 +118,15 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     marginTop: 30,
     fontFamily: "RalewayBold",
-    // fontFamily: "Raleway",
   },
   bulletItem: {
     textAlign: "center",
     color: Colors.primary1,
     fontSize: 25,
-    fontWeight: 700,
+    fontWeight: "700",
   },
   bulletList: {
-    flexDirection: "column", // This ensures a vertical column layout
+    flexDirection: "column",
     marginTop: 30,
     marginBottom: 33,
   },

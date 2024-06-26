@@ -31,7 +31,7 @@ export function useRegister() {
           {
             name: "InApp",
             params: {
-              screen: "Profile",
+              screen: "Maps",
               initial: false,
               // params: {
               //   name: email,

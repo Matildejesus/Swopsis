@@ -1,12 +1,13 @@
-import LoginWidget from "../components/LoginWidget";
+import WelcomePageWidget from "../components/WelcomePageWidget";
 
 function WelcomeScreen({ navigation }) {
   return (
-    <LoginWidget
-      text="SWAP AND INSPIRED WITH A SHARED COMMUNITY WARDROBE"
-      destination="AboutUs"
+    <WelcomePageWidget
+      text1="SWAP AND INSPIRED WITH A SHARED COMMUNITY WARDROBE"
+      text2="Swap /n Impact /n BE YOU"
       navigation={navigation}
-      image={require("../assets/images/girls.png")}
+      image1={require("../assets/images/girls.png")}
+      image2={require("../assets/images/img4.png")}
     />
   );
 }
