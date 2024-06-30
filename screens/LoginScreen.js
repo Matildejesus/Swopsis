@@ -1,10 +1,72 @@
-import React from "react";
-import {StyleSheet, Text, View} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useState } from "react";
 
-function LoginScreen() {
+import PrimaryButton from "../components/PrimaryButton";
+import Colors from "../constants/colors";
+import RegisterContainer from "../components/authentication/RegisterContainer.js";
+import { useLogin } from "../components/authentication/useLogin";
+import ErrorMessage from "../components/ErrorMessage";
+
+function LoginScreen({ navigation }) {
+  const [email, setEmail] = useState("janedoe@gmail.com");
+  const [password, setPassword] = useState("Test12345");
+  const { login, isLoading, error } = useLogin();
+
+  function addEmailHandler(enteredEmail) {
+    setEmail(enteredEmail);
+  }
+
+  function addPasswordHandler(enteredPassword) {
+    setPassword(enteredPassword);
+  }
+
   return (
     <View style={styles.container}>
-      <Text>This is login screen.</Text>
+      <Image
+        source={require("../assets/images/simpleLogo.png")}
+        style={styles.image}
+      />
+      <View style={styles.contentContainer}>
+        <RegisterContainer
+          placeholder="youremail@email.com"
+          text="Email"
+          onChangeText={addEmailHandler}
+          value={email}
+        />
+        <RegisterContainer
+          placeholder="password"
+          text="Password"
+          onChangeText={addPasswordHandler}
+          value={password}
+          secureTextEntry={true}
+        />
+        <View style={styles.linkContainer}>
+        <ErrorMessage error={error} />
+        <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")}>
+          <Text style={styles.link}>Forgot your Password?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <Text style={styles.link}>Not a user? <Text style={styles.register}>Register</Text></Text>
+        </TouchableOpacity>
+        </View>
+
+        <PrimaryButton
+          title="LOG IN"
+          style={{ width: 200 }}
+          onPress={() => {
+            if (!email || !password) return;
+            login(
+              { email, password },
+              {
+                onSettled: () => {
+                  setEmail("");
+                  setPassword("");
+                },
+              }
+            );
+          }}
+        />
+      </View>
     </View>
   );
 }
@@ -13,8 +75,46 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
-    fontSize: 50,
+    flex: 1,
+    backgroundColor: Colors.impact,
     justifyContent: "center",
-    marginTop: 70,
+    alignItems: "center",
+    position: "relative",
+  },
+  contentContainer: {
+    borderRadius: 51,
+    backgroundColor: "white",
+    opacity: 0.9,
+    shadowColor: "black",
+    shadowOpacity: 0.24,
+    shadowRadius: 8.5,
+    shadowOffset: { width: 4, height: 5 },
+    height: 370,
+    width: 283,
+    zIndex: 1,
+    paddingTop: 114,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: {
+    width: 137,
+    height: 160,
+    left: 207,
+    top: 160,
+    position: "absolute",
+    zIndex: 2,
+  },
+  link: {
+    color: Colors.primary2,
+    fontSize: 15,
+    fontFamily: "RalewayMedium",
+  },
+  linkContainer: {
+    marginTop: 20,
+    marginBottom: 31,
+    gap: 7,
+  },
+  register: {
+    fontFamily: "RalewayBold",
   },
 });

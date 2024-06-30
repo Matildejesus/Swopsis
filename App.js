@@ -5,11 +5,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 import WelcomeScreen from "./screens/WelcomeScreen.js";
 import MapsScreen from "./screens/MapsScreen.js";
 import RegisterScreen from "./screens/RegisterScreen.js";
 import LoginScreen from "./screens/LoginScreen.js";
+import ProfileScreen from "./screens/ProfileScreen.js";
+import ResetPasswordScreen from "./screens/ResetPasswordScreen.js";
 
 import store from "./store/store.js";
 import { Provider } from "react-redux";
@@ -64,6 +67,7 @@ export default function App() {
   SplashScreen.hideAsync();
 
   return (
+    <RootSiblingParent>
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
@@ -90,10 +94,21 @@ export default function App() {
                 component={LoginScreen}
                 options={{ headerShown: false }}
               />
+              <Stack.Screen
+                name="ResetPassword"
+                component={ResetPasswordScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Profile"
+                component={ProfileScreen}
+                options={{ headerShown: false }}
+              />
             </Stack.Navigator>
           </NavigationContainer>
         </Provider>
       </QueryClientProvider>
     </SafeAreaProvider>
+    </RootSiblingParent>
   );
 }
