@@ -11,9 +11,16 @@ export function useLogin() {
   const queryClient = useQueryClient();
 
   const { mutate: login, isLoading } = useMutation({
-    mutationFn: ({ email, password }) => loginApi({ email, password }),
+    mutationFn: ({ email, password}) => loginApi({ email, password}),
     onSuccess: (user) => {
       queryClient.setQueriesData(["user"], user);
+      console.log(user.group);
+      if (!user.group){
+        navigation.navigate("Postcode");
+      }
+      else {
+        navigation.navigate("Profile");
+      }
    //   navigation.reset({
      //   index: 0,
    //     routes: [
@@ -26,7 +33,7 @@ export function useLogin() {
         //  },
       //  ],
      // });
-     navigation.navigate("Profile");
+     
     },
     onError: (err) => {
       console.log("ERROR", err);

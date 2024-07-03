@@ -6,6 +6,7 @@ export const userInfoSlice = createSlice({
     userName: null,
     email: null,
     password: null,
+    group: null,
     profilePicture: null,
     coins: null,
   },
@@ -14,7 +15,8 @@ export const userInfoSlice = createSlice({
       state.userName = action.payload.userName;
       state.email = action.payload.email;
       state.password = action.payload.password;
-      state.coins = 0;
+      state.group = action.payload.group;
+      state.coins = action.payload.coins;
       state.profilePicture = action.payload.profilePicture;
     },
     updateEmail: (state, action) => {
@@ -28,6 +30,9 @@ export const userInfoSlice = createSlice({
     },
     updatePicture: (state, action) => {
       state.profilePicture = action.payload;
+    },
+    updateGroup: (state, action) => {
+      state.group = action.payload;
     },
     updateCoins: (state, action) => {
       state.coins = action.payload;

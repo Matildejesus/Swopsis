@@ -1,3 +1,5 @@
+//import Constants from 'expo-constants';
+
 {
   "expo": {
     "name": "swopsis",
@@ -14,7 +16,10 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.swopsis"
+      "bundleIdentifier": "com.anonymous.swopsis",
+      "config": {
+          "googleMapsApiKey": "REPLACE_FOR_API_KEY"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,7 +27,12 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": ["android.permission.RECORD_AUDIO"],
-      "package": "com.anonymous.swopsis"
+      "package": "com.anonymous.swopsis",
+      "config": {
+        "googleMaps": {
+          "apiKey": "REPLACE_FOR_API_KEY"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

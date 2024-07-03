@@ -56,7 +56,7 @@ function LoginScreen({ navigation }) {
           onPress={() => {
             if (!email || !password) return;
             login(
-              { email, password },
+              { email, password},
               {
                 onSettled: () => {
                   setEmail("");
@@ -92,17 +92,17 @@ const styles = StyleSheet.create({
     height: 370,
     width: 283,
     zIndex: 1,
-    paddingTop: 114,
+   // paddingTop: 114,
     justifyContent: "center",
     alignItems: "center",
   },
   image: {
-    width: 137,
-    height: 160,
-    left: 207,
-    top: 160,
-    position: "absolute",
-    zIndex: 2,
+    width: 173,
+   height: 200,
+   // left: 207,
+   // top: 160,
+   // position: "absolute",
+   // zIndex: 2,
   },
   link: {
     color: Colors.primary2,

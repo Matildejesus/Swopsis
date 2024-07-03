@@ -13,6 +13,7 @@ import RegisterScreen from "./screens/RegisterScreen.js";
 import LoginScreen from "./screens/LoginScreen.js";
 import ProfileScreen from "./screens/ProfileScreen.js";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen.js";
+import PostcodeScreen from "./screens/PostcodeScreen.js";
 
 import store from "./store/store.js";
 import { Provider } from "react-redux";
@@ -103,6 +104,11 @@ export default function App() {
                 name="Profile"
                 component={ProfileScreen}
                 options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Postcode"
+                component={PostcodeScreen}
+                options={{ headerShown: false}}
               />
             </Stack.Navigator>
           </NavigationContainer>
