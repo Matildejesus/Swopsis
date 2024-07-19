@@ -1,11 +1,17 @@
 import { StyleSheet, View, Text, Image } from "react-native";
+import { useState } from "react";
 
 import Colors from "../constants/colors";
 import PinIcon from "../components/icons/PinIcon";
 import RegisterContainer from "../components/authentication/RegisterContainer";
 import PrimaryButton from "../components/PrimaryButton";
 
+
+// missing function: postcode must be entered and must be a valid aus postcode ***
+
 function PostcodeScreen({navigation}) {
+
+  const [postcode, setPostcode] = useState("");
     return (
         <View style={styles.container}>
           <Image
@@ -15,7 +21,11 @@ function PostcodeScreen({navigation}) {
           <View style={styles.contentContainer}>
             <PinIcon/>
             <Text style={styles.title}> Find groups near you!</Text>
-            <RegisterContainer placeholder={"Enter your postcode"}/>
+            <RegisterContainer 
+              placeholder={"Enter your postcode"} 
+              onChangeText={setPostcode}
+              value={postcode}
+            />
             <View style={styles.linkContainer}>
             <Text style={styles.text}>To register your account, request to join a group first</Text>
             </View>
@@ -23,9 +33,10 @@ function PostcodeScreen({navigation}) {
             title="Search"
             style={{ width: 200 }}
             onPress={() => {
-                navigation.navigate("Maps");
-            }
-                
+              if (!postcode) return;
+              console.log("postcode: " + postcode);
+              navigation.navigate("Maps", {postcode: postcode});
+            }  
             } />
        </View>
         </View>

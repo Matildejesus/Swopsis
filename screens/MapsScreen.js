@@ -2,7 +2,9 @@ import React from "react";
 import MapView from "react-native-maps";
 import { StyleSheet, View } from "react-native";
 
-function MapsScreen() {
+function MapsScreen({route}) {
+  const { postcode } = route.params;
+  console.log("postcode: " + postcode);
   return (
     <View style={styles.container}>
       <MapView style={styles.map} />

@@ -37,6 +37,18 @@ export const constraints = {
         "^Your password must contain at least one lowercase letter, one uppercase letter, and one number",
     },
   },
+  loginEmail: {
+    presence: {
+      allowEmpty: false,
+      message: "^Please enter an email address",
+    },
+  },
+  loginPassword: {
+    presence: {
+      allowEmpty: false,
+      message: "^Please enter a password",
+    },
+  },
 };
 
 export default constraints;

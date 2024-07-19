@@ -11,7 +11,6 @@ import { useState, useEffect } from "react";
 import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/colors";
 
-import { useDispatch } from "react-redux";
 import { validate } from "validate.js";
 import { useDebounce } from "use-debounce";
 
@@ -21,7 +20,6 @@ import { useRegister } from "../components/authentication/useRegister";
 
 function RegisterScreen({ navigation }) {
   const { register, isLoading } = useRegister();
-  const dispatch = useDispatch();
 
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
@@ -64,6 +62,7 @@ function RegisterScreen({ navigation }) {
       }
     }
   }, [debouncedPassword]);
+
   useEffect(() => {
     if (debouncedUserName) {
       const validationResult = validate(
@@ -89,8 +88,7 @@ function RegisterScreen({ navigation }) {
 
   const submitHandler = () => {
     if (!emailError && !userNameError && !passwordError) {
-      register({ userName, email, password }
-,
+      register({ userName, email, password },
         {
           onSettled: () => {
             setEmail("");

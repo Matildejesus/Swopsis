@@ -7,9 +7,22 @@ import RegisterContainer from "../components/authentication/RegisterContainer.js
 import { useLogin } from "../components/authentication/useLogin";
 import ErrorMessage from "../components/ErrorMessage";
 
+import { validate } from "validate.js";
+import { useDebounce } from "use-debounce";
+import constraints from "../constraints.js";
+
 function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState("janedoe@gmail.com");
-  const [password, setPassword] = useState("Test12345");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+   // const [email, setEmail] = useState("janedoe@gmail.com");
+    //const [password, setPassword] = useState("Test12345");
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [loginError, setLoginError] = useState(null);
+
+  const [debouncedEmail] = useDebounce(email, 500);
+  const [debouncedPassword] = useDebounce(password, 500);
+
   const { login, isLoading, error } = useLogin();
 
   function addEmailHandler(enteredEmail) {
@@ -19,6 +32,39 @@ function LoginScreen({ navigation }) {
   function addPasswordHandler(enteredPassword) {
     setPassword(enteredPassword);
   }
+
+  const submitHandler = () => {
+    const validationResult = validate(
+      { loginEmail: debouncedEmail, loginPassword: debouncedPassword },
+      constraints
+    );
+
+    if (validationResult) {
+      if (validationResult.loginEmail) {
+        setEmailError(validationResult.loginEmail[0]);
+      } else {
+        setEmailError(null);
+      }
+
+      if (validationResult.loginPassword) {
+        setPasswordError(validationResult.loginPassword[0]);
+      } else {
+        setPasswordError(null);
+      }
+
+      if (!validationResult.loginEmail && !validationResult.loginPassword) {
+        login({ email, password }, {
+          onSettled: () => {
+            setEmail("");
+            setPassword("");
+          },
+          onError: (error) => {
+            setError("Invalid email or password. Please try again.");
+          },
+        });
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -33,6 +79,7 @@ function LoginScreen({ navigation }) {
           onChangeText={addEmailHandler}
           value={email}
         />
+        <ErrorMessage error={emailError} />
         <RegisterContainer
           placeholder="password"
           text="Password"
@@ -40,32 +87,23 @@ function LoginScreen({ navigation }) {
           value={password}
           secureTextEntry={true}
         />
+        <ErrorMessage error={passwordError} />
         <View style={styles.linkContainer}>
-        <ErrorMessage error={error} />
-        <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")}>
-          <Text style={styles.link}>Forgot your Password?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text style={styles.link}>Not a user? <Text style={styles.register}>Register</Text></Text>
-        </TouchableOpacity>
+          <ErrorMessage error={error} />
+          <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")}>
+            <Text style={styles.link}>Forgot your Password?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+            <Text style={styles.link}>Not a user? <Text style={styles.register}>Register</Text></Text>
+          </TouchableOpacity>
         </View>
 
         <PrimaryButton
           title="LOG IN"
           style={{ width: 200 }}
-          onPress={() => {
-            if (!email || !password) return;
-            login(
-              { email, password},
-              {
-                onSettled: () => {
-                  setEmail("");
-                  setPassword("");
-                },
-              }
-            );
-          }}
+          onPress={submitHandler}
         />
+        <ErrorMessage error={loginError} />
       </View>
     </View>
   );
