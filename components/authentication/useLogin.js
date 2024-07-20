@@ -14,12 +14,44 @@ export function useLogin() {
     mutationFn: ({ email, password}) => loginApi({ email, password}),
     onSuccess: (user) => {
       queryClient.setQueriesData(["user"], user);
-      console.log(user.group);
-      if (!user.group){
+      console.log(user);
+      console.log(user.user.user_metadata.email);
+      if (user.user.user_metadata.email == "janedoe@gmail.com") {
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: "InApp",
+              params: {
+                screen: "Profile",
+                initial: false,
+                // params: {
+                //   name: email,
+                // },
+              },
+            },
+          ],
+        });
+      }
+      else if (!user.user.user_metadata.group){
         navigation.navigate("Postcode");
       }
       else {
-        navigation.navigate("Profile");
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: "InApp",
+              params: {
+                screen: "Profile",
+                initial: false,
+                // params: {
+                //   name: email,
+                // },
+              },
+            },
+          ],
+        });
       }
    //   navigation.reset({
      //   index: 0,

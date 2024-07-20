@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@babel/helper-validator-identifier": "^7.24.7",
-    "@react-navigation/bottom-tabs": "^6.5.11",
+    "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/native-stack": "^6.9.14",
     "@reduxjs/toolkit": "^1.9.7",
@@ -32,7 +32,7 @@
     "path-key": "^4.0.0",
     "react": "18.2.0",
     "react-native": "0.72.10",
-    "react-native-calendars": "^1.1302.0",
+    "react-native-calendars": "^1.1305.0",
     "react-native-elements": "^3.4.3",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.12.0",

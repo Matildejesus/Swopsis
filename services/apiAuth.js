@@ -6,7 +6,7 @@ export async function register({ userName, email, password }) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { userName, avatar: "", coins: 0 } },
+    options: { data: { userName, avatar: "", group: "", coins: 0 } },
   });
 
   if (error) {

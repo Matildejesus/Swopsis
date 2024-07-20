@@ -47,6 +47,7 @@ export const {
   updateUserName,
   updatePassword,
   updatePicture,
+  updateGroup,
   updateCoins,
 } = userInfoSlice.actions;
 
