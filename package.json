@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@babel/helper-validator-identifier": "^7.24.7",
+    "@here/maps-api-for-javascript": "^1.56.0",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/native-stack": "^6.9.14",
@@ -19,6 +20,7 @@
     "@supabase/supabase-js": "^2.38.4",
     "@tanstack/react-query": "^5.8.3",
     "@tanstack/react-query-devtools": "^5.8.3",
+    "axios": "^1.7.2",
     "base64-arraybuffer": "^1.0.2",
     "expo": "~49.0.13",
     "expo-app-loading": "^2.1.1",
