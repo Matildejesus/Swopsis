@@ -25,17 +25,19 @@ export function useLogin() {
               params: {
                 screen: "Profile",
                 initial: false,
-                // params: {
-                //   name: email,
-                // },
               },
             },
           ],
         });
+       
+      }
+      else if (user.user.user_metadata.email == "admin@gmail.com") {
+        navigation.navigate("GroupManagement");
       }
       else if (!user.user.user_metadata.group){
         navigation.navigate("Postcode");
       }
+ 
       else {
         navigation.reset({
           index: 0,

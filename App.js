@@ -24,6 +24,7 @@ import EventsScreen from "./screens/EventsScreen.js";
 import InboxScreen from "./screens/InboxScreen.js";
 import WardrobeScreen from "./screens/WardrobeScreen.js";
 import CalendarScreen from "./screens/CalendarScreen.js";
+import GroupManagementScreen from "./screens/GroupManagementScreen";
 
 import Logo from "./components/icons/Logo.js";
 import Title from "./components/Title.js";
@@ -324,6 +325,11 @@ export default function App() {
                 name="InApp"
                 component={BottomTabNavigator}
                 options={{ headerShown: false }}
+              />
+             <Stack.Screen
+                name="GroupManagement"
+                component={GroupManagementScreen}
+                options={{ title: 'Manage Groups' }}
               />
             </Stack.Navigator>
           </NavigationContainer>

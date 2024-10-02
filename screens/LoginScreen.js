@@ -24,7 +24,7 @@ function LoginScreen({ navigation }) {
   const [debouncedPassword] = useDebounce(password, 500);
 
   const { login, isLoading, error } = useLogin();
-
+  
   function addEmailHandler(enteredEmail) {
     setEmail(enteredEmail);
   }
