@@ -1,4 +1,4 @@
-import { Modal, View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { useDispatch } from "react-redux";
 
 import Colors from "../constants/colors";

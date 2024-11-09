@@ -1,11 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 
-function ProfileItem({ style, source }) {
+function ProfileItem({ style, source, itemID }) {
   const navigation = useNavigation();
-
   return (
-    <TouchableOpacity onPress={() => navigation.navigate("Item")}>
+    <TouchableOpacity onPress={() => navigation.navigate("ProfileItem", { id: itemID})}>
       <View style={style}>
         <Image source={source} style={styles.image} resizeMode="contain" />
       </View>

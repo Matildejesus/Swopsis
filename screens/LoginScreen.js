@@ -12,10 +12,10 @@ import { useDebounce } from "use-debounce";
 import constraints from "../constraints.js";
 
 function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-   // const [email, setEmail] = useState("janedoe@gmail.com");
-    //const [password, setPassword] = useState("Test12345");
+ // const [email, setEmail] = useState("");
+  //const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("janedoe@gmail.com");
+  const [password, setPassword] = useState("Test12345");
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
   const [loginError, setLoginError] = useState(null);

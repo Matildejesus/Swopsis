@@ -16,7 +16,7 @@ function ProfileItemWidget() {
       data={items}
       numColumns={3}
       renderItem={({ item }) => (
-        <ProfileItem style={styles.itemContainer} source={item.source} />
+        <ProfileItem style={styles.itemContainer} source={item.source} itemID={item.id}  />
       )}
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}

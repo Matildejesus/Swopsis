@@ -47,27 +47,11 @@ export function useLogin() {
               params: {
                 screen: "Profile",
                 initial: false,
-                // params: {
-                //   name: email,
-                // },
               },
             },
           ],
         });
-      }
-   //   navigation.reset({
-     //   index: 0,
-   //     routes: [
-     //     {
-       //     name: "InApp",
-         //   params: {
-           //   screen: "Profile",
-             // initial: false,
-      //      },
-        //  },
-      //  ],
-     // });
-     
+      }     
     },
     onError: (err) => {
       console.log("ERROR", err);

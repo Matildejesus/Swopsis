@@ -25,6 +25,7 @@ import InboxScreen from "./screens/InboxScreen.js";
 import WardrobeScreen from "./screens/WardrobeScreen.js";
 import CalendarScreen from "./screens/CalendarScreen.js";
 import GroupManagementScreen from "./screens/GroupManagementScreen";
+import ProfileItemScreen from "./screens/ProfileItemScreen.js";
 
 import Logo from "./components/icons/Logo.js";
 import Title from "./components/Title.js";
@@ -330,6 +331,17 @@ export default function App() {
                 name="GroupManagement"
                 component={GroupManagementScreen}
                 options={{ title: 'Manage Groups' }}
+              />
+              <Stack.Screen 
+                name="ProfileItem"
+                component={ProfileItemScreen}
+                options={{
+                  headerBackVisible: false,
+                  headerTitle: (props) => (
+                    <Title goBack="true" {...props} />
+                  ),
+                  headerRight: (props) => <Logo {...props} />,
+                }}
               />
             </Stack.Navigator>
           </NavigationContainer>
