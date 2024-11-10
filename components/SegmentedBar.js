@@ -1,9 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Colors from "../constants/colors";
 import SegmentedControlTabs from 'react-native-segmented-control-tabs';
-import {useState} from "react";
-import { fonts } from "@rneui/base";
-import ReviewStar from "./icons/ReviewStar";
 
 function SegmentedBar( {option1, option2, selectedIndex, onChange } ) {
     return (

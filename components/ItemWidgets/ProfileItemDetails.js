@@ -1,31 +1,26 @@
 import { View, Text, Image, StyleSheet } from "react-native";
-import HeartIcon from "./icons/HeartIcon";
+import HeartIcon from "../icons/HeartIcon";
 import { Divider } from "@rneui/themed";
-import { useUser } from "./authentication/useUser";
-import { useRoute } from "@react-navigation/native";
-import Colors from "../constants/colors";
-import PinkNextArrow from "./icons/PinkNextArrow";
+import { useUser } from "../authentication/useUser";
+import Colors from "../../constants/colors";
+import PinkNextArrow from "../icons/PinkNextArrow";
+import HeartSwitch from "../HeartSwitch";
 
 function ProfileItemDetails( {itemID} ) {
     const { user } = useUser();
     const { userName, avatar } = user.user_metadata;
     const email = user.email; 
 
-    // const route = useRoute();
-    // const { itemID } = route.params;
-    console.log(itemID);
-
     return (
     <View style={styles.container}>
         <View>
-            <Text>Item has id: {itemID}</Text>
-            <Image source={require("../assets/images/jacket.png")} resizeMode="contain" />
+            <Image source={require("../../assets/images/jacket.png")} resizeMode="contain" />
         </View>
         <View style={styles.header}>
             <Text style={styles.itemName}>
                 {"Hooded Jacket"}
             </Text>
-            <HeartIcon />
+            <HeartSwitch/>
         </View>
         <Divider style={{ height: 4, backgroundColor: "#efeeee", width: "80%"}} />
         <View style={styles.row3}>
@@ -59,7 +54,6 @@ export default ProfileItemDetails;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "white",
@@ -75,13 +69,6 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 6,
         marginRight: 4,
-    },
-    column2: {
-        alignItems: "flex-start",
-        marginHorizontal: 60,
-        justifyContent: "flex-end",
-        flex: 1,
-        marginBottom: 110, 
     },
     header: {
         flexDirection: "row",
