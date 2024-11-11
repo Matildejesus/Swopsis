@@ -5,7 +5,7 @@ function ModalButton({ title, onPress, style, removeContainer }) {
   return (
     <View
       style={
-        !removeContainer ? [styles.container, style] : styles.simpleContainer
+        !removeContainer ? [styles.container, style] : removeContainer
       }
     >
       <Pressable onPress={onPress}>
@@ -32,9 +32,5 @@ const styles = StyleSheet.create({
     color: Colors.primary2,
     fontSize: 14,
     fontFamily: "RalewayBold",
-  },
-  simpleContainer: {
-    paddingVertical: 14,
-    paddingRight: 11,
   },
 });

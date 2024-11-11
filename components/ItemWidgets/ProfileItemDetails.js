@@ -1,15 +1,23 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import HeartIcon from "../icons/HeartIcon";
 import { Divider } from "@rneui/themed";
 import { useUser } from "../authentication/useUser";
 import Colors from "../../constants/colors";
 import PinkNextArrow from "../icons/PinkNextArrow";
 import HeartSwitch from "../HeartSwitch";
+import DescriptionDisplay from "../DescriptionDisplay";
+import { useState } from "react";
 
 function ProfileItemDetails( {itemID} ) {
     const { user } = useUser();
     const { userName, avatar } = user.user_metadata;
     const email = user.email; 
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const displayModal = async () => {
+        setIsModalVisible(true);
+    };
 
     return (
     <View style={styles.container}>
@@ -41,11 +49,16 @@ function ProfileItemDetails( {itemID} ) {
             <Text style={styles.description}>
                 {"Description"}
             </Text>
-            <PinkNextArrow />
+                <PinkNextArrow onPress={displayModal}/>
         </View>
         <Text style={styles.text6}>
             {"Lorem ipsum dolor sit amet consectetur."}
         </Text>
+        <DescriptionDisplay
+                visible={isModalVisible}
+                onRequestClose={() => setIsModalVisible(false)}
+
+      />
     </View>
     );
 }
