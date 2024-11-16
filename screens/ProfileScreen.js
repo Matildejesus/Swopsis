@@ -20,13 +20,13 @@ function ProfileScreen({ route, navigation }) {
     // Render a loading state or handle the undefined case
     return <Text>Loading user data...</Text>; // Example loading state
   }
+
   console.log("user:", JSON.stringify(user, null, 2));
   const { userName, avatar, coins } = user.user_metadata;
   const email = user.email; // Access email directly from user object
   console.log("avatar on profile: " + avatar);
 
   return (
-    // <ScrollView>
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Image style={styles.image} source={avatar ? { uri: avatar } : null} />
@@ -44,11 +44,9 @@ function ProfileScreen({ route, navigation }) {
         <CalendarIcon />
         <SettingsIcon />
       </View>
-      <View style={styles.container}>
         <Line style={styles.line} />
         <ProfileItemWidget />
         <AddIcon />
-      </View>
     </View>
     // </ScrollView>
   );
@@ -85,7 +83,6 @@ const styles = StyleSheet.create({
     fontFamily: "RalewayBold",
     fontSize: 20,
     fontWeight: 700,
-    // height: 34,
   },
   userEmail: {
     color: Colors.primary2,

@@ -8,17 +8,21 @@ function InputField({
   value,
   text,
   secureTextEntry,
+  containerStyle,
+  multiline,
+  textStyle
 }) {
   return (
     <>
-      <Text style={styles.text}>{text}</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
+    {text && <Text style={ textStyle ? textStyle : styles.text}>{text}</Text>}
+    <View style={containerStyle ? containerStyle : styles.inputContainer}>
+      <TextInput
           style={inputStyle}
           placeholder={placeholder}
           onChangeText={onChangeText}
           value={value}
           secureTextEntry={secureTextEntry}
+          multiline={multiline}
         />
       </View>
     </>
@@ -32,7 +36,7 @@ const styles = StyleSheet.create({
     color: Colors.primary2,
     fontSize: 15,
     fontWeight: 500,
-    alignSelf: "flex-end",
+   // alignSelf: "flex-end",
     marginRight: 20,
     fontFamily: "RalewayMedium",
   },

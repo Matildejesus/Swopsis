@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary1,
     width: 141,
     fontFamily: "RalewayMedium",
+
   },
   text: {
     color: "white",

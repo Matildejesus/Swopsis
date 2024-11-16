@@ -12,6 +12,7 @@ function ProfileItemWidget() {
   ];
 
   return (
+    <View style={styles.container}>
     <FlatList
       data={items}
       numColumns={3}
@@ -22,6 +23,7 @@ function ProfileItemWidget() {
       showsVerticalScrollIndicator={false}
       bounce={false}
     />
+    </View>
   );
 }
 
@@ -31,13 +33,11 @@ const styles = StyleSheet.create({
   itemContainer: {
     width: 95,
     height: 96,
-    // shadowColor: "black",
-    // shadowOpacity: 0.25,
-    // shadowRadius: 4,
-    // shadowOffset: { width: 4, height: 4 },
     backgroundColor: "white",
-    // marginLeft: 21,
     gap: 5,
     marginTop: 21,
   },
+  container: {
+    height: "65%",
+  }
 });

@@ -3,14 +3,11 @@ import Colors from "../constants/colors";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import PictureButton from "../components/icons/PictureButton";
-import { useUpdateUser } from "./authentication/useUpdateUser";
 import ModalPhotoWidget from "./modals/ModalPhotoWidget";
 
-function PicturePicker({ userPicture }) {
+function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [avatar, setAvatar] = useState(userPicture);
-
-  const { updateUser, isUpdating } = useUpdateUser();
 
   const requestPermission = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -38,7 +35,7 @@ function PicturePicker({ userPicture }) {
     if (!result.canceled) {
       setAvatar(result.assets[0].uri);
       setIsModalVisible(false);
-      updateUser({ avatar: result.assets[0].uri });
+      onImageSelected(result.assets[0].uri);
       console.log("avatar: " + result.assets[0].uri);
     }
   };
@@ -52,7 +49,7 @@ function PicturePicker({ userPicture }) {
     });
     if (!result.canceled) {
       setAvatar(result.assets[0].uri);
-      updateUser({ avatar: result.assets[0].uri });
+      onImageSelected(result.assets[0].uri);
       setIsModalVisible(false);
       console.log("avatar :" + result.assets[0].uri);
     }
@@ -64,12 +61,13 @@ function PicturePicker({ userPicture }) {
 
   return (
     <View>
-      {avatar ? (
-        <Image source={{ uri: avatar }} style={styles.profileImage} />
-      ) : (
-        <View style={styles.imageContainer} />
-      )}
-      <PictureButton onPress={requestPermission} />
+  {avatar ? (
+  <Image source={{ uri: avatar }} style={imageStyle} />
+) : (
+  <View style={style ? style : styles.imageContainer} />
+)}
+
+      <PictureButton onPress={requestPermission} style={style ? styles.camera : undefined} /> 
       <ModalPhotoWidget
         visible={isModalVisible}
         onRequestClose={onModalClose}
@@ -97,4 +95,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondary2,
     borderRadius: 21,
   },
+  camera: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+  }
 });

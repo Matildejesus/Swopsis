@@ -29,6 +29,11 @@ function SettingsScreen() {
   const [userEmail, setUserEmail] = useState(email);
   const [userAvatar, setUserAvatar] = useState(currentAvatar);
 
+  const handleImageSelected = (newAvatarUri) => {
+    setUserAvatar(newAvatarUri);
+    updateUser({ avatar: newAvatarUri });
+  };
+
   function updateUserNameHandler(enteredUserName) {
     setUserName(enteredUserName);
   }
@@ -45,7 +50,10 @@ function SettingsScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.center}>
-        <PicturePicker userPicture={userAvatar} />
+        <PicturePicker 
+            userPicture={userAvatar} 
+            onImageSelected={handleImageSelected} 
+            imageStyle={styles.profileImage}/>
       </View>
       <View style={styles.groupContainer}>
         <Text style={styles.header}>Info</Text>
@@ -114,5 +122,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 50,
     alignSelf: "center",
+  },
+  profileImage: {
+    width: 112,
+    height: 114,
+    borderRadius: 21,
   },
 });

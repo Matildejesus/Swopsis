@@ -26,6 +26,8 @@ import WardrobeScreen from "./screens/WardrobeScreen.js";
 import CalendarScreen from "./screens/CalendarScreen.js";
 import GroupManagementScreen from "./screens/GroupManagementScreen";
 import ProfileItemScreen from "./screens/ProfileItemScreen.js";
+import CreateItemScreen from "./screens/createItem/CreateItemScreen.js";
+import ItemDescriptionInputScreen from "./screens/createItem/ItemDescriptionInputScreen.js";
 
 import Logo from "./components/icons/Logo.js";
 import Title from "./components/Title.js";
@@ -327,7 +329,7 @@ export default function App() {
                 component={BottomTabNavigator}
                 options={{ headerShown: false }}
               />
-             <Stack.Screen
+              <Stack.Screen
                 name="GroupManagement"
                 component={GroupManagementScreen}
                 options={{ title: 'Manage Groups' }}
@@ -341,6 +343,28 @@ export default function App() {
                     <Title goBack="true" {...props} />
                   ),
                   headerRight: (props) => <Logo {...props} />,
+                }}
+              />
+               <Stack.Screen
+                name="CreateItem"
+                component={CreateItemScreen}
+                options={{
+                  headerTitleAlign: "left",
+                  headerBackVisible: false,
+                  headerTitle: (props) => (
+                    <Title title="" goBack="true" {...props} />
+                  ),
+                }}
+              />
+               <Stack.Screen
+                name="ItemDescriptionInput"
+                component={ItemDescriptionInputScreen}
+                options={{
+                  headerTitleAlign: "left",
+                  headerBackVisible: false,
+                  headerTitle: (props) => (
+                    <Title title="" goBack="true" {...props} />
+                  ),
                 }}
               />
             </Stack.Navigator>

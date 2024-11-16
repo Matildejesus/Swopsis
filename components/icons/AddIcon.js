@@ -1,31 +1,35 @@
 import Svg, { Path, Circle } from "react-native-svg";
 import Colors from "../../constants/colors";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 function AddIcon() {
+  const navigation = useNavigation();
   return (
-    <View style={styles.container}>
-      <Svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="40"
-        height="40"
-        viewBox="0 0 51 51"
-        fill="none"
-      >
-        <Circle
-          cx="25.5"
-          cy="25.5"
-          r="25"
-          fill={Colors.impact}
-          fill-opacity="1"
-          stroke="#071425"
-        />
-        <Path
-          d="M22.5 12V22.5H12V29.5H22.5V40H29.5V29.5H40V22.5H29.5V12H22.5Z"
-          fill={Colors.primary2}
-        />
-      </Svg>
-    </View>
+    <TouchableOpacity onPress={() => navigation.navigate("CreateItem")}>
+      <View style={styles.container}>
+        <Svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="40"
+          height="40"
+          viewBox="0 0 51 51"
+          fill="none"
+        >
+          <Circle
+            cx="25.5"
+            cy="25.5"
+            r="25"
+            fill={Colors.impact}
+            fill-opacity="1"
+            stroke="#071425"
+          />
+          <Path
+            d="M22.5 12V22.5H12V29.5H22.5V40H29.5V29.5H40V22.5H29.5V12H22.5Z"
+            fill={Colors.primary2}
+          />
+        </Svg>
+      </View>
+    </TouchableOpacity>
   );
 }
 
@@ -33,10 +37,6 @@ export default AddIcon;
 
 const styles = StyleSheet.create({
   container: {
-    // paddingTop: 100,
-    // flexDirection: "row",
-    alignSelf: "flex-end",
-    paddingBottom: 20,
-    // opacity : 0,
+    marginLeft: "75%",
   },
 });
