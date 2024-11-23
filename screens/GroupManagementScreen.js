@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { View, Button, TextInput, Text } from 'react-native';
 import { createGroup } from '../services/groupService';  // Adjust the import path as needed
 import { View, Text, TextInput, Button, Alert, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { createGroup } from '../services/groupService';  
@@ -52,7 +51,8 @@ const GroupManagementScreen = ({ navigation, userId }) => {
   
 
   return (
-    <View>
+     <>
+     <View> 
       <Text>Name:</Text>
       <TextInput onChangeText={(value) => handleChange('name', value)} />
       <Text>Description:</Text>
@@ -108,6 +108,7 @@ const GroupManagementScreen = ({ navigation, userId }) => {
         />
       </View>
     </ScrollView>
+    </>
   );
 };
 
@@ -145,4 +146,4 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
-export default GroupManagementScreen;
+
