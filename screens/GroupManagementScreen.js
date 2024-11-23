@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { createGroup } from '../services/groupService';  // Adjust the import path as needed
 import { View, Text, TextInput, Button, Alert, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
-import { createGroup } from '../services/groupService';  
 import Colors from '../constants/colors';  
 import { useFonts } from 'expo-font';
 
@@ -17,13 +16,7 @@ const GroupManagementScreen = ({ navigation, userId }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [fontsLoaded] = useFonts({
-    RalewayBold: require('../assets/fonts/Raleway-Bold.ttf'),
-    RalewayRegular: require('../assets/fonts/Raleway-Regular.ttf'),
-  });
-  if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color={Colors.primary1} />;
-  }
+  
   const handleChange = (name, value) => {
     setGroupDetails(prev => ({ ...prev, [name]: value }));
     setGroupDetails((prev) => ({ ...prev, [name]: value }));
