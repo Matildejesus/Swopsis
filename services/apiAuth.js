@@ -1,6 +1,4 @@
-import supabase, { supabaseUrl } from "./supabase";
-import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
+import supabase from "./supabase";
 
 export async function register({ userName, email, password }) {
   const { data, error } = await supabase.auth.signUp({

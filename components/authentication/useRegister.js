@@ -16,7 +16,7 @@ export function useRegister() {
       // Assuming the registration API returns the user data
       queryClient.setQueryData(["user"], user);
       // You can navigate to the login screen or any other screen after successful registration
-      Toast.show("Account Created Succesfully");
+      Toast.show("Account Created uccesfully");
       navigation.navigate("Login");
     },
     onError: (err) => {

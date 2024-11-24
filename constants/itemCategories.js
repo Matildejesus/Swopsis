@@ -1,23 +1,16 @@
 const Categories = {
-    Tops: {
+    Clothes: {
         fields: ["size", "weight(kg)", "fabric", "condition", "color"],
-        subcategories: ["Jacket", "Coat", "Fur", "Shirt", "Jumper", "Knitwear", "Vest"]
+        subcategories: ["Jeans", "Activewear", "Coat", "Dress", "Fur", 
+            "Jacket - Sports/denim", "Jacket - Blazer", "Jacket - Leather",
+             "Jacket - Other", "T-Shirt", "Jumper", "Jumpsuit", "Knitwear", 
+             "Overalls", "Pant", "Set", "Shirt-Button Up(Long)", 
+             "Shirt-Button Up(Short)", "Skirt", "Sleepwear", "Suit", "Swimwear", 
+             "Vest"]
     }, 
-    Bottoms: {
-        fields: ["size", "weight(kg)", "fabric", "condition", "color"],
-        subcategories: ["Pants", "Skirts", "Jeans"]
-    },
-    OnePiece: {
-        fields: ["size", "weight(kg)", "fabric", "condition", "color"],
-        subcategories: ["Activewear", "Jumpsuit", "Overall", "Set", "Sleepwear", "Suit", "Dress"]
-    },
-    Swimwear: {
-        fields: ["size", "weight(kg)", "fabric", "condition", "color"],
-        subcategories: ["Bikini", "One-piece"]
-    },
     Shoes: {
-        fields: ["size", "weight(kg)", "fabric", "condition", "color"],
-        subcategories: ["Casual", "Heals", "Boots", "Flats", "Sandals", "Loafers", "Sneakers"]
+        fields: ["size", "weight(kg)", "fabric", "length", "condition", "color"],
+        subcategories: ["Heals", "Boots", "Flats", "Sandals", "Loafers", "Sneakers"]
     },
     Accessories: {
         fields: ["size", "weight(kg)", "material", "condition", "color"],

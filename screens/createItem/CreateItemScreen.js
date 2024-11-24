@@ -7,23 +7,51 @@ import { useState } from "react";
 import DropDownMenu from "../../components/DropDownMenu.js";
 import { useNavigation } from "@react-navigation/native";
 import Categories from "../../constants/itemCategories.js";
+import { useMemo } from "react";
+import RadioGroup from 'react-native-radio-buttons-group';
+import { addItem } from "../../services/apiItems.js";
+import { useUser } from "../../components/authentication/useUser.js";
 
 function CreateItemScreen() {
     const [title, setTitle] = useState("Black Heals");
     const [description, setDescription] = useState("YSL HEALS!!! red bottoms");
     const [category, setCategory] = useState();
     const [avatar, setAvatar] = useState();
+    const [selectedId, setSelectedId] = useState();
+
+    const {
+        user: {
+            id: userId,
+        },
+    } = useUser();
+   
+    const radioButtons = useMemo(() => ([
+        { id: '1', label: "SWAP", value: "SWAP"},
+        {id: '2', label: "LOAN", value: "LOAN"}
+    ]), []);
 
     const handleImageSelected = (newAvatarUri) => {
         setAvatar(newAvatarUri);
       };
-
     const navigation = useNavigation();
+
+    const submitHandler = () => {
+        console.log("submitting!!!");
+        if (!title && !description && !category && !avatar && !selectedId) {
+            console.log("yaya");
+
+        } else {
+            console.log(userId);
+            addItem({ 
+                item: {
+                    userId, category: category.value, image: avatar, title, description, method: selectedId } })
+    
+        }
+    }
 
     return (
         <View style={styles.container}>
             <PicturePicker 
-             //   style={styles.picturePicker} 
                 onImageSelected={handleImageSelected} 
                 imageStyle={styles.imageStyle} 
                 userPicture={avatar}
@@ -59,13 +87,13 @@ function CreateItemScreen() {
 		        <Text style={styles.label}>Category</Text>
                 <DropDownMenu value={category} data={Object.keys(Categories)} addCategoryHandler={setCategory}/>
 	        </View>
+            <RadioGroup 
+            radioButtons={radioButtons} 
+            onPress={setSelectedId}
+            selectedId={selectedId}
+        />
             <View style={styles.buttonContainer}>
-                <PrimaryButton title={"NEXT"} style={styles.button} onPress={() => navigation.navigate("ItemDescriptionInput", {
-        avatar: avatar,
-        title: title,
-        description: description,
-        category: category
-    })}/>
+                <PrimaryButton title={"NEXT"} style={styles.button} onPress={submitHandler}/>
             </View>
         </View>
     )

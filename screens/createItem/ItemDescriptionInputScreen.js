@@ -3,24 +3,31 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import Colors from "../../constants/colors";
 import InputField from "../../components/authentication/InputField";
 import { useState } from "react";
+import { useItem } from "../../components/itemlogic/useItem";
 
 function ItemDescriptionInputScreen() {
     const route = useRoute();
-    const {avatar, title, description, category} = route.params;
-    const [Rtitle, setTitle] = useState();
+   // const {avatar, title, description, category} = route.params;
+    const [title, setTitle] = useState();
+
+    const { item } = useItem();
+    console.log(item);
+
+    
+
 
     return (
         <View style={styles.container}> 
-            <View style={styles.titleContainer}>
+       {/*   <View style={styles.titleContainer}> */}
                 {/* <Image style={styles.image} source={ {uri: avatar} } /> */}
-                <Image style={styles.image} source={require("../../assets/images/jacket.png")} />
+                {/* <Image style={styles.image} source={require("../../assets/images/jacket.png")} />
                 <View style={styles.textContainer}>
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.description}>{description}</Text>
                 </View>
-            </View>
+            </View> */}
             {/* <Text style={styles.label}>Title</Text> */}
-            <View style={styles.input}>
+            {/* <View style={styles.input}>
                 <InputField 
                     text="Size"
                     textStyle={styles.textStyle}
@@ -31,7 +38,8 @@ function ItemDescriptionInputScreen() {
                     value={Rtitle}
                     secureTextEntry={false}
                 />
-            </View>
+            </View> */}
+            <Text>NEW PAGE</Text>
         </View>
     )
 }
