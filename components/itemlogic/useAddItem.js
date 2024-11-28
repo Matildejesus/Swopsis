@@ -12,15 +12,15 @@ export function useAddItem() {
 
     const { mutate: addItem, isLoading } = useMutation({
         mutationFn: addItemApi,
-        onSuccess: (user) => {
+        onSuccess: (item) => {
+            console.log("Mutation succeeded with item:", item);
             queryClient.setQueryData(["item"], item);
-            navigation.navigate("ItemDescriptionInput", {
-                
-            });
         },
         onError: (err) => {
             console.log("ERROR", err);
             Toast.show(err);
         }
-    })
+    });
+
+    return { addItem, isLoading, error };
 }

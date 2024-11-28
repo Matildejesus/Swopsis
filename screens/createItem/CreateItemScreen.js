@@ -9,43 +9,53 @@ import { useNavigation } from "@react-navigation/native";
 import Categories from "../../constants/itemCategories.js";
 import { useMemo } from "react";
 import RadioGroup from 'react-native-radio-buttons-group';
-import { addItem } from "../../services/apiItems.js";
-import { useUser } from "../../components/authentication/useUser.js";
+import ErrorMessage from "../../components/ErrorMessage.js";
 
 function CreateItemScreen() {
     const [title, setTitle] = useState("Black Heals");
     const [description, setDescription] = useState("YSL HEALS!!! red bottoms");
-    const [category, setCategory] = useState();
-    const [avatar, setAvatar] = useState();
+    const [category, setCategory] = useState(null);
+    const [avatar, setAvatar] = useState("");
     const [selectedId, setSelectedId] = useState();
-
-    const {
-        user: {
-            id: userId,
-        },
-    } = useUser();
+    const [inputError, setInputError] = useState(null);
+    let method = "";
    
     const radioButtons = useMemo(() => ([
         { id: '1', label: "SWAP", value: "SWAP"},
         {id: '2', label: "LOAN", value: "LOAN"}
     ]), []);
 
+    console.log(Object.keys(Categories));
+
     const handleImageSelected = (newAvatarUri) => {
         setAvatar(newAvatarUri);
-      };
+    };
+    
     const navigation = useNavigation();
 
     const submitHandler = () => {
         console.log("submitting!!!");
-        if (!title && !description && !category && !avatar && !selectedId) {
-            console.log("yaya");
-
+        if (!title || !description || !category || !avatar || !selectedId) {
+            setInputError("Missing inputs");
+            console.log(inputError);
         } else {
-            console.log(userId);
-            addItem({ 
-                item: {
-                    userId, category: category.value, image: avatar, title, description, method: selectedId } })
-    
+            {if (selectedId == 1) {
+                method = "swap";
+            } else {
+                method = "loan";
+            }}
+            // addItem({ 
+            //     item: {
+            //         userId, category: category.value, image: avatar, title, description, method: selectedId 
+            //     }
+            // });
+            navigation.navigate("ItemDescriptionInput", {
+                title: title, 
+                description: description, 
+                category: category.value,
+                avatar: avatar, 
+                method: method
+            }); 
         }
     }
 
@@ -55,6 +65,7 @@ function CreateItemScreen() {
                 onImageSelected={handleImageSelected} 
                 imageStyle={styles.imageStyle} 
                 userPicture={avatar}
+                style={styles.picturePicker}
             />
             <View style={styles.row}>
                 <InputField 
@@ -88,10 +99,14 @@ function CreateItemScreen() {
                 <DropDownMenu value={category} data={Object.keys(Categories)} addCategoryHandler={setCategory}/>
 	        </View>
             <RadioGroup 
-            radioButtons={radioButtons} 
-            onPress={setSelectedId}
-            selectedId={selectedId}
-        />
+                radioButtons={radioButtons} 
+                onPress={setSelectedId}
+                selectedId={selectedId}
+                layout="row" 
+            />
+            <View style={styles.error}>
+                <ErrorMessage error={inputError} />
+            </View>
             <View style={styles.buttonContainer}>
                 <PrimaryButton title={"NEXT"} style={styles.button} onPress={submitHandler}/>
             </View>
@@ -107,7 +122,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         alignItems: "center",
         paddingTop: 40,
-        gap: 30,
+        gap: 15,
     },
     picturePicker: {
         width: 240,
@@ -140,9 +155,6 @@ const styles = StyleSheet.create({
         paddingTop: 38,
     },
     label: {
-        alignItems: "flex-start",
-        alignContent: "flex-start",
-        alignItems: "flex-start",
         color: Colors.primary1,
         fontSize: 15,
         fontFamily: "RalewayBold",
@@ -168,20 +180,12 @@ const styles = StyleSheet.create({
         height: 75,
         marginHorizontal: 20,
         borderRadius: 10,
-       //justifyContent: "center",
         borderColor: Colors.primary2,
         borderWidth: 1,
         paddingHorizontal: 13,
         paddingTop: 5,
     },
-    categoryField: {
-        width: 204,
-        height: 37,
-        paddingHorizontal: 13,
-        marginHorizontal: 20,
-        borderRadius: 10,
-        justifyContent: "center",
-        borderColor: Colors.primary2,
-        borderWidth: 1,
+    error: {
+        height: 30,
     }
 })

@@ -54,7 +54,6 @@ export function useLogin() {
       }     
     },
     onError: (err) => {
-      console.log("ERROR", err);
       Toast.show(err.message);
     },
   });

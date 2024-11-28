@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import Colors from "../constants/colors";
 
-function DropDownMenu( {value, data, addCategoryHandler} ) {
+function DropDownMenu( {value, data, addCategoryHandler, dropDownStyle} ) {
  // console.log("data", data);
   const formattedData = data.map((item) => ({
       label: item, 
@@ -10,7 +10,7 @@ function DropDownMenu( {value, data, addCategoryHandler} ) {
   }))
     return (
         <Dropdown
-        style={styles.dropdown}
+        style={dropDownStyle ? dropDownStyle : styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
