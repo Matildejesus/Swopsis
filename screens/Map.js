@@ -1,52 +1,44 @@
 import React, { useEffect, useState } from "react";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import { StyleSheet, View } from "react-native";
+import supabase from '../services/supabase';
 
-const Map = ({ apikey, postcode }) => {
-  const [region, setRegion] = useState(null);
+const Map = () => {
+  const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    const fetchGeocode = async () => {
-      try {
-        const response = await fetch(
-          `https://geocode.search.hereapi.com/v1/geocode?q=$Australia+Victoria+{postcode}&apiKey=${apikey}`
-        );
-        const data = await response.json();
-        if (data.items && data.items.length > 0) {
-          const position = data.items[0].position;
-          setRegion({
-            latitude: position.lat,
-            longitude: position.lng,
-            latitudeDelta: 0.0922, // Adjust as needed
-            longitudeDelta: 0.0421, // Adjust as needed
-          });
-          console.log('Geocode fetched:', position); // Debugging log
-        }
-      } catch (error) {
-        console.error('Error fetching geocode data:', error);
+    const fetchGroups = async () => {
+      const { data, error } = await supabase.from('Groups').select('*');
+      if (error) {
+        console.error('Error fetching groups:', error);
+      } else {
+        setGroups(data);
       }
     };
 
-    if (postcode) {
-      fetchGeocode();
-    }
-  }, [apikey, postcode]);
-
-  useEffect(() => {
-    if (region) {
-      console.log('Region updated:', region); // Debugging log
-    }
-  }, [region]);
+    fetchGroups();
+  }, []);
 
   return (
     <View style={styles.container}>
-      {region && (
-        <MapView
-          style={styles.map}
-          region={region}
-          onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
-        />
-      )}
+      <MapView style={styles.map} initialRegion={{
+        latitude: -37.8136, // Melbourne, Australia
+        longitude: 144.9631,
+        latitudeDelta: 0.5,
+        longitudeDelta: 0.5,
+      }}>
+        {groups.map((group) => (
+          <Marker
+            key={group.id}
+            coordinate={{
+              latitude: parseFloat(group.latitude),
+              longitude: parseFloat(group.longitude),
+            }}
+            title={group.name}
+            description={group.description}
+          />
+        ))}
+      </MapView>
     </View>
   );
 };
