@@ -1,0 +1,42 @@
+1. Admin: 
+   Username: adminUser
+   Password: admin123
+   Role: Admin
+
+2. User 1: 
+   Username: user1
+   Password: user12
+   Role: Normal
+
+3. User 2: 
+   Username: user2
+   Password: user34
+   Role: Normal
+
+4. User 3: 
+   Username: user3
+   Password: user56
+   Role: Normal
+
+5. User 4: 
+   Username: user4
+   Password: user78
+   Role: Normal
+
+
+Group A: 
+  Name: Hawthorn Swap Group
+  Description: Clothes swapping group for women living the Hawthorn suburb.
+  Location: Hawthorn 3122
+  Members:
+    - user1
+    - user2
+
+Group B: 
+  Name: Richmond Swap Group
+  Description: Clothes swapping group for women living the Richmond suburb.
+  Location: Richmond 3121
+  Members:
+    - user3
+    - user4
+
