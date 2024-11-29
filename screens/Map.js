@@ -1,27 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, View } from 'react-native';
+import MapView, { Marker, Callout } from 'react-native-maps';
+import { StyleSheet, View, Button, Text } from 'react-native';
+import supabase from '../services/supabase'; 
 
-const MapComponent = ({ groups }) => {
+const MapComponent = ({ userId }) => {
   const [region, setRegion] = useState({
-    latitude: -37.8136, // Default to Melbourne
+    latitude: -37.8136,  // Default to Melbourne
     longitude: 144.9631,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
 
-  const renderMarkers = () => {
-    return groups.map((group, index) => (
-      <Marker
-        key={index}
-        coordinate={{
-          latitude: group.latitude,
-          longitude: group.longitude,
-        }}
-        title={group.name}
-        description={group.description}
-      />
-    ));
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      const { data, error } = await supabase.from('groups').select('*');
+      if (error) {
+        console.error('Error fetching groups:', error.message);
+      } else {
+        setGroups(data);
+      }
+    };
+    fetchGroups();
+  }, []);
+
+  const handleJoinGroup = async (groupId) => {
+    const { error } = await supabase.from('group_memberships').insert([
+      { user_id: userId, group_id: groupId, role: 'Member' }
+    ]);
+
+    if (error) {
+      alert('Error joining group: ' + error.message);
+    } else {
+      alert('Successfully joined the group!');
+    }
   };
 
   return (
@@ -31,11 +44,31 @@ const MapComponent = ({ groups }) => {
         region={region}
         onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
       >
-        {renderMarkers()}
+        {groups.map((group, index) => (
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: group.latitude,
+              longitude: group.longitude,
+            }}
+            title={group.name}
+            description={group.description}
+          >
+            <Callout>
+              <View>
+                <Text>{group.name}</Text>
+                <Text>{group.description}</Text>
+                <Button title="Join Group" onPress={() => handleJoinGroup(group.id)} />
+              </View>
+            </Callout>
+          </Marker>
+        ))}
       </MapView>
     </View>
   );
 };
+
+export default MapComponent;
 
 const styles = StyleSheet.create({
   container: {
@@ -46,5 +79,3 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 });
-
-export default MapComponent;
