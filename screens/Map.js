@@ -1,81 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import MapView, { Marker, Callout } from 'react-native-maps';
-import { StyleSheet, View, Button, Text } from 'react-native';
-import supabase from '../services/supabase'; 
-
-const MapComponent = ({ userId }) => {
-  const [region, setRegion] = useState({
-    latitude: -37.8136,  // Default to Melbourne
-    longitude: 144.9631,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
-
-  const [groups, setGroups] = useState([]);
-
+import React, { useEffect, useState } from "react";
+import MapView from "react-native-maps";
+import { StyleSheet, View } from "react-native";
+const Map = ({ apikey, postcode }) => {
+  const [region, setRegion] = useState(null);
   useEffect(() => {
-    const fetchGroups = async () => {
-      const { data, error } = await supabase.from('groups').select('*');
-      if (error) {
-        console.error('Error fetching groups:', error.message);
-      } else {
-        setGroups(data);
+    const fetchGeocode = async () => {
+      try {
+        const response = await fetch(
+          `https://geocode.search.hereapi.com/v1/geocode?q=$Australia+Victoria+{postcode}&apiKey=${apikey}`
+        );
+        const data = await response.json();
+        if (data.items && data.items.length > 0) {
+          const position = data.items[0].position;
+          setRegion({
+            latitude: position.lat,
+            longitude: position.lng,
+            latitudeDelta: 0.0922, // Adjust as needed
+            longitudeDelta: 0.0421, // Adjust as needed
+          });
+          console.log('Geocode fetched:', position); // Debugging log
+        }
+      } catch (error) {
+        console.error('Error fetching geocode data:', error);
       }
     };
-    fetchGroups();
-  }, []);
-
-  const handleJoinGroup = async (groupId) => {
-    const { error } = await supabase.from('group_memberships').insert([
-      { user_id: userId, group_id: groupId, role: 'Member' }
-    ]);
-
-    if (error) {
-      alert('Error joining group: ' + error.message);
-    } else {
-      alert('Successfully joined the group!');
+    if (postcode) {
+      fetchGeocode();
     }
-  };
-
+  }, [apikey, postcode]);
+  useEffect(() => {
+    if (region) {
+      console.log('Region updated:', region); // Debugging log
+    }
+  }, [region]);
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        region={region}
-        onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
-      >
-        {groups.map((group, index) => (
-          <Marker
-            key={index}
-            coordinate={{
-              latitude: group.latitude,
-              longitude: group.longitude,
-            }}
-            title={group.name}
-            description={group.description}
-          >
-            <Callout>
-              <View>
-                <Text>{group.name}</Text>
-                <Text>{group.description}</Text>
-                <Button title="Join Group" onPress={() => handleJoinGroup(group.id)} />
-              </View>
-            </Callout>
-          </Marker>
-        ))}
-      </MapView>
+      {region && (
+        <MapView
+          style={styles.map}
+          region={region}
+          onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
+        />
+      )}
     </View>
   );
 };
-
-export default MapComponent;
-
+export default Map;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   map: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
 });
