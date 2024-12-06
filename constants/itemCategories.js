@@ -7,7 +7,7 @@ const Categories = {
              "Overalls", "Pant", "Set", "Shirt-Button Up(Long)", 
              "Shirt-Button Up(Short)", "Skirt", "Sleepwear", "Suit", "Swimwear", 
              "Vest"],
-        size: ["XXS, XS, S, M, L, XL, XXL"]
+        size: ["XXS", "XS", "S", "M", "L", "XL", "XXL"]
     }, 
     Shoes: {
         fields: ["fabric", "length", "size"],
@@ -21,5 +21,21 @@ const Categories = {
 } 
 
 const Conditions = ["brand-new", "rarely-worn", "fairly-worn", "worn-out"]
+const Colors = [
+    {hex: "#000000", name: "Black"}, 
+    {hex: "#FFFFFF", name: "White"}, 
+    {hex: "#FFFF00", name: "Yellow"}, 
+    {hex: "#FF0000", name: "Red"}, 
+    {hex: "#FFC0CB", name: "Pink"}, 
+    {hex: "#0075FF", name: "Blue"}, 
+    {hex: "#04CE00", name: "Green"}, 
+    {hex: "#8F00FF", name: "Purple"}, 
+    {hex: "#FFA500", name: "Orange"}, 
+    {hex: "#A52A2A", name: "Brown"}, 
+    {hex: "#F5F5DC", name: "Beige"}, 
+    {hex: "#FFD700", name: "Gold"}, 
+    {hex: "#C0C0C0", name: "Silver"}, 
+    {hex: "#808080", name: "Grey"}, 
+]
 export default Categories; 
-export { Conditions };
+export { Conditions, Colors };

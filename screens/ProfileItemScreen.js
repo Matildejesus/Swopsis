@@ -7,6 +7,7 @@ import ProfileItemDetails from "../components/itemwidgets/ProfileItemDetails";
 import ProfileItemReviews from "../components/itemwidgets/ProfileItemReviews";
 import ContactButton from "../components/itemwidgets/ContactButton";
 import ReviewButton from "../components/itemwidgets/ReviewButton";
+import { useUser } from "../components/authentication/useUser";
 
 function ProfileItemScreen( ) {
     const [selectedOption, setSelectedOption] = useState(0); 
@@ -16,11 +17,14 @@ function ProfileItemScreen( ) {
     };
 
     const route = useRoute();
-    const { id } = route.params;
+    const { itemData } = route.params;
+
+    console.log(itemData.id);
+    console.log(itemData.title);
 
     return (
         <View style={styles.container}>
-            {selectedOption === 0 ? ( <ProfileItemDetails itemID={id} />) :
+            {selectedOption === 0 ? ( <ProfileItemDetails itemData={itemData} />) :
             (<ProfileItemReviews/>)}
             
             <View style={styles.column2}>

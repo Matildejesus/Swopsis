@@ -44,11 +44,7 @@ function CreateItemScreen() {
             } else {
                 method = "loan";
             }}
-            // addItem({ 
-            //     item: {
-            //         userId, category: category.value, image: avatar, title, description, method: selectedId 
-            //     }
-            // });
+
             navigation.navigate("ItemDescriptionInput", {
                 title: title, 
                 description: description, 

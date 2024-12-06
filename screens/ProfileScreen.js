@@ -10,21 +10,45 @@ import AddIcon from "../components/icons/AddIcon";
 import { useUser } from "../components/authentication/useUser";
 import Line from "../components/Line";
 import ProfileItemWidget from "../components/ProfileItemWidget";
+import { getItems } from "../services/apiItems";
+import { useState, useEffect } from "react";
 
 function ProfileScreen({ route, navigation }) {
   const dispatch = useDispatch();
-  // const userName = useSelector((state) => state.userInfo.userName);
-
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState();
   const { user } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      const fetchItems = async () => {
+        try {
+          const fetchedItems = await getItems({ userId: user.id });
+          setItems(fetchedItems); 
+        } catch (error) {
+          console.error("Error fetching items: ", error);
+        } finally {
+          setLoading(false); 
+        }
+      };
+
+      fetchItems(); 
+    }
+  }, [user]); 
+
+    
   if (!user) {
-    // Render a loading state or handle the undefined case
-    return <Text>Loading user data...</Text>; // Example loading state
+    return <Text>Loading user data...</Text>;
   }
 
+  //const { items } = getItems({userId: user.id});
   console.log("user:", JSON.stringify(user, null, 2));
   const { userName, avatar, coins } = user.user_metadata;
-  const email = user.email; // Access email directly from user object
+  const email = user.email; 
   console.log("avatar on profile: " + avatar);
+
+  console.log(user.id);
+  console.log("THE ITEMS: ", items);
 
   return (
     <View style={styles.container}>
@@ -45,7 +69,7 @@ function ProfileScreen({ route, navigation }) {
         <SettingsIcon />
       </View>
         <Line style={styles.line} />
-        <ProfileItemWidget />
+        <ProfileItemWidget items={items}/>
         <AddIcon />
     </View>
     // </ScrollView>

@@ -1,31 +1,38 @@
 import { Dialog } from "@rneui/themed";
-import { View, Text } from "react-native";
 import { StyleSheet } from "react-native";
 import ModalButton from "./modals/ModalButton";
 import Colors from "../constants/colors";
 import DescriptionTextWidget from "./DescriptionTextWidget";
 import ColorCircle from "./icons/ColorCircle";
+import { View, Text } from "react-native";
 
 
-function DescriptionDisplay( {visible, onRequestClose} ) {
+function DescriptionDisplay( {visible, onRequestClose, data, category} ) {
+  console.log("Description display: ", data);
+  console.log(visible);
+
     return (
         <Dialog
       isVisible={visible}
       onBackdropPress={onRequestClose}
       overlayStyle={styles.container}
         >
-            <DescriptionTextWidget category={"Category"} text={"Jacket"} />
-            <DescriptionTextWidget category={"Fabric"} text={"Cashmere"} />
-            <DescriptionTextWidget category={"Color"} color={<ColorCircle color={"white"} />} />
-            <DescriptionTextWidget category={"Size"} text={"M"} />
-            <DescriptionTextWidget category={"Weight"} text={"1.00"} />
-            <DescriptionTextWidget category={"Condition"} text={"New"} />
+            <DescriptionTextWidget category={"Category"} text={category} />
+            <DescriptionTextWidget category={"Subcategory"} text={data.subcategory} />
+            {category === "Accessories" ? (<DescriptionTextWidget category={"Material"} text={data.material} />) : (<DescriptionTextWidget category={"Fabric"} text={data.fabric} />)
+            }
+            <DescriptionTextWidget category={"Color"} color={<ColorCircle color={data.color} />} />
+            {category != "Accessories" && <DescriptionTextWidget category={"Size"} text={data.size} />}
+            {category === "Shoes" && <DescriptionTextWidget category={"Length"} text={data.shoelength} />}
+            <DescriptionTextWidget category={"Weight"} text={data.weight} />
+            <DescriptionTextWidget category={"Condition"} text={data.condition} />
             <Dialog.Actions>
                 <ModalButton title="CANCEL" onPress={onRequestClose} removeContainer={styles.button} />
             </Dialog.Actions>
         </Dialog>
     )
-}
+  
+  };
 
 export default DescriptionDisplay;
 
@@ -36,7 +43,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         bottom: 20,
         width: 340,
-        height: 366,
+      //  height: 366,
         paddingTop: 35,
         borderRadius: 20,
       },

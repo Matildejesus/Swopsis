@@ -6,27 +6,57 @@ import Colors from "../../constants/colors";
 import PinkNextArrow from "../icons/PinkNextArrow";
 import HeartSwitch from "../HeartSwitch";
 import DescriptionDisplay from "../DescriptionDisplay";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import dateFormatting from "../dateFormatting";
+import { getItemsInfo } from "../../services/apiItems";
 
-function ProfileItemDetails( {itemID} ) {
+function ProfileItemDetails( {itemData} ) {
     const { user } = useUser();
     const { userName, avatar } = user.user_metadata;
     const email = user.email; 
-
+    const [itemDetails, setItemDetails] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const displayModal = async () => {
+    const displayModal = () => {
+        console.log("displaying");
         setIsModalVisible(true);
+        console.log(isModalVisible);
     };
+    console.log(itemData.image);
+
+    useEffect(() => {
+        console.log("isModalVisible:", isModalVisible);
+    }, [isModalVisible]);
+    
+
+    const date = dateFormatting(itemData.created_at);
+   // const date = dateFormatting('2024-08-02T09:57:41.071086+00:00');
+   console.log(itemData.category, itemData.id);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                console.log("running");
+                const details = await getItemsInfo({ category: itemData.category, itemId: itemData.id });
+                setItemDetails(details);
+            } catch (error) {
+                console.error("Error fetching item details:", error);
+            }
+        };
+
+        fetchData();
+    }, [itemData]);
+   
+    console.log("itemdetails: ", itemDetails);
 
     return (
     <View style={styles.container}>
         <View>
-            <Image source={require("../../assets/images/jacket.png")} resizeMode="contain" />
+            <Image source={{uri: itemData.image}} style={styles.image} resizeMode="contain" />
         </View>
         <View style={styles.header}>
             <Text style={styles.itemName}>
-                {"Hooded Jacket"}
+                {itemData.title}
             </Text>
             <HeartSwitch/>
         </View>
@@ -42,7 +72,7 @@ function ProfileItemDetails( {itemID} ) {
                 </Text>
             </View>
             <Text style={styles.text4}>
-                {"Just now"}
+                {date}
             </Text>
         </View>
         <View style={styles.row4}>
@@ -52,13 +82,18 @@ function ProfileItemDetails( {itemID} ) {
                 <PinkNextArrow onPress={displayModal}/>
         </View>
         <Text style={styles.text6}>
-            {"Lorem ipsum dolor sit amet consectetur."}
+            {itemData.description}
         </Text>
-        <DescriptionDisplay
+        {itemDetails && (
+                <DescriptionDisplay
                 visible={isModalVisible}
                 onRequestClose={() => setIsModalVisible(false)}
+                data={itemDetails}
+                category={itemData.category}
 
-      />
+            />
+        )}
+        
     </View>
     );
 }
@@ -111,6 +146,7 @@ const styles = StyleSheet.create({
         fontFamily: "RalewayBold",
         fontSize: 20,
         fontWeight: 700,
+        width: 150,
     },
     userName: {
         color: Colors.primary2,
@@ -142,6 +178,11 @@ const styles = StyleSheet.create({
         marginBottom: 45,
         marginHorizontal: 54,
         width: 267,
+        height: 80,
     },
-
+    image: {
+        width: 287,
+        height: 287,
+        marginBottom: 20,
+    }
 });
