@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Map from "./Map"; // Assuming Map is the component that handles the map view
+import Map from "../screens/Map";
 import RegisterContainer from "../components/authentication/RegisterContainer";
 import PrimaryButton from "../components/PrimaryButton";
 

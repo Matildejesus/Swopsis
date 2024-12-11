@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 20,
-    fontWeight: 500,
+    fontWeight: '500',
     // fontFamily: Raleway,
   },
 });

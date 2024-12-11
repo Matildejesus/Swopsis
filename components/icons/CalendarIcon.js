@@ -38,6 +38,6 @@ const styles = StyleSheet.create({
     color: "#004A0E",
     // font-family: Raleway;
     fontSize: 12,
-    fontWeight: 600,
+    fontWeight: '600',
   },
 });

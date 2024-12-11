@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.primary2,
     fontSize: 15,
-    fontWeight: 500,
+    fontWeight: '500',
    // alignSelf: "flex-end",
     marginRight: 20,
     fontFamily: "RalewayMedium",

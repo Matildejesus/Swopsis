@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     marginTop: 13,
     fontSize: 20,
     color: "#FF6780",
-    fontWeight: 700,
+    fontWeight: '700',
     fontFamily: "RalewayBold",
   },
   swappedContainer: {

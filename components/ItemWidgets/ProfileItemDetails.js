@@ -1,188 +1,150 @@
-import { View, Text, Image, StyleSheet, Pressable, TouchableOpacity } from "react-native";
-import HeartIcon from "../icons/HeartIcon";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { Divider } from "@rneui/themed";
+import HeartSwitch from "../HeartSwitch";
+import PinkNextArrow from "../icons/PinkNextArrow";
+import DescriptionDisplay from "../DescriptionDisplay";
 import { useUser } from "../authentication/useUser";
 import Colors from "../../constants/colors";
-import PinkNextArrow from "../icons/PinkNextArrow";
-import HeartSwitch from "../HeartSwitch";
-import DescriptionDisplay from "../DescriptionDisplay";
-import { useState, useEffect } from "react";
 import dateFormatting from "../dateFormatting";
 import { getItemsInfo } from "../../services/apiItems";
 
-function ProfileItemDetails( {itemData} ) {
-    const { user } = useUser();
-    const { userName, avatar } = user.user_metadata;
-    const email = user.email; 
-    const [itemDetails, setItemDetails] = useState([]);
-    const [isModalVisible, setIsModalVisible] = useState(false);
+const ProfileItemDetails = ({ itemData }) => {
+  const { user } = useUser();
+  const { userName, avatar } = user.user_metadata;
+  const email = user.email;
 
-    const displayModal = () => {
-        console.log("displaying");
-        setIsModalVisible(true);
-        console.log(isModalVisible);
+  const [itemDetails, setItemDetails] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const displayModal = () => setIsModalVisible(true);
+
+  const date = dateFormatting(itemData.created_at);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const details = await getItemsInfo({
+          category: itemData.category,
+          itemId: itemData.id,
+        });
+        setItemDetails(details);
+      } catch (error) {
+        console.error("Error fetching item details:", error);
+      }
     };
-    console.log(itemData.image);
 
-    useEffect(() => {
-        console.log("isModalVisible:", isModalVisible);
-    }, [isModalVisible]);
-    
+    fetchData();
+  }, [itemData]);
 
-    const date = dateFormatting(itemData.created_at);
-   // const date = dateFormatting('2024-08-02T09:57:41.071086+00:00');
-   console.log(itemData.category, itemData.id);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                console.log("running");
-                const details = await getItemsInfo({ category: itemData.category, itemId: itemData.id });
-                setItemDetails(details);
-            } catch (error) {
-                console.error("Error fetching item details:", error);
-            }
-        };
-
-        fetchData();
-    }, [itemData]);
-   
-    console.log("itemdetails: ", itemDetails);
-
-    return (
+  return (
     <View style={styles.container}>
-        <View>
-            <Image source={{uri: itemData.image}} style={styles.image} resizeMode="contain" />
+      <Image source={{ uri: itemData.image }} style={styles.image} resizeMode="contain" />
+      <View style={styles.header}>
+        <Text style={styles.itemName}>{itemData.title}</Text>
+        <HeartSwitch />
+      </View>
+      <Divider style={styles.divider} />
+      <View style={styles.row3}>
+        <Image style={styles.avatar} source={avatar ? { uri: avatar } : null} />
+        <View style={styles.column}>
+          <Text style={styles.userName}>{userName}</Text>
+          <Text style={styles.userEmail}>{email}</Text>
         </View>
-        <View style={styles.header}>
-            <Text style={styles.itemName}>
-                {itemData.title}
-            </Text>
-            <HeartSwitch/>
-        </View>
-        <Divider style={{ height: 4, backgroundColor: "#efeeee", width: "80%"}} />
-        <View style={styles.row3}>
-            <Image style={styles.avatar} source={avatar ? { uri: avatar } : null} />
-            <View style={styles.column}>
-                <Text style={styles.userName}>
-                    {userName}
-                </Text>
-                <Text style={styles.userEmail}>
-                    {email}
-                </Text>
-            </View>
-            <Text style={styles.text4}>
-                {date}
-            </Text>
-        </View>
-        <View style={styles.row4}>
-            <Text style={styles.description}>
-                {"Description"}
-            </Text>
-                <PinkNextArrow onPress={displayModal}/>
-        </View>
-        <Text style={styles.text6}>
-            {itemData.description}
-        </Text>
-        {itemDetails && (
-                <DescriptionDisplay
-                visible={isModalVisible}
-                onRequestClose={() => setIsModalVisible(false)}
-                data={itemDetails}
-                category={itemData.category}
-
-            />
-        )}
-        
+        <Text style={styles.text4}>{date}</Text>
+      </View>
+      <View style={styles.row4}>
+        <Text style={styles.description}>Description</Text>
+        <PinkNextArrow onPress={displayModal} />
+      </View>
+      <Text style={styles.text6}>{itemData.description}</Text>
+      {itemDetails && (
+        <DescriptionDisplay
+          visible={isModalVisible}
+          onRequestClose={() => setIsModalVisible(false)}
+          data={itemDetails}
+          category={itemData.category}
+        />
+      )}
     </View>
-    );
-}
+  );
+};
 
 export default ProfileItemDetails;
 
 const styles = StyleSheet.create({
-    container: {
-        justifyContent: "flex-start",
-        alignItems: "center",
-        backgroundColor: "white",
-      },
-    avatar: {
-        width: 40,
-        height: 40,
-        backgroundColor: "#85E0A3",
-        borderRadius: 30,
-        marginRight: 8,
-    },
-    column: {
-        flex: 1,
-        marginTop: 6,
-        marginRight: 4,
-    },
-    header: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        gap: "120",
-        marginBottom: 19,
-        marginHorizontal: 33,
-    },
-    row3: {
-        flexDirection: "row",
-        alignItems: "flex-start",
-        marginBottom: 15,
-        marginHorizontal: 24,
-        marginTop: 15,
-    },
-    row4: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        gap: 185,
-        marginBottom: 16,
-        marginHorizontal: 41,
-    },
-    itemName: {
-        color: Colors.primary2,
-        fontFamily: "RalewayBold",
-        fontSize: 20,
-        fontWeight: 700,
-        width: 150,
-    },
-    userName: {
-        color: Colors.primary2,
-        fontFamily: "RalewayBold",
-        fontSize: 15,
-        fontWeight: 700,
-        // height: 34,
-      },
-    userEmail: {
-        color: Colors.primary2,
-        fontFamily: "RalewayMedium",
-        fontSize: 12,
-        fontWeight: 500,
-        marginBottom: 11,
-      },
-    text4: {
-        color: "#004A0E",
-        fontSize: 12,
-        marginTop: 7,
-    },
-    description: {
-        color: Colors.primary2,
-        fontFamily: "RalewayBold",
-        fontSize: 18,
-    },
-    text6: {
-        color: "#004A0E",
-        fontSize: 15,
-        marginBottom: 45,
-        marginHorizontal: 54,
-        width: 267,
-        height: 80,
-    },
-    image: {
-        width: 287,
-        height: 287,
-        marginBottom: 20,
-    }
+  container: {
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "white",
+    padding: 16,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 8,
+  },
+  column: {
+    flex: 1,
+    marginTop: 6,
+    marginRight: 4,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 19,
+  },
+  row3: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 15,
+  },
+  row4: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  itemName: {
+    color: Colors.primary2,
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  userName: {
+    color: Colors.primary2,
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  userEmail: {
+    color: Colors.primary2,
+    fontSize: 12,
+  },
+  text4: {
+    color: "#004A0E",
+    fontSize: 12,
+  },
+  description: {
+    color: Colors.primary2,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  text6: {
+    color: "#004A0E",
+    fontSize: 15,
+    marginBottom: 45,
+    width: "90%",
+  },
+  image: {
+    width: 250,
+    height: 250,
+    marginBottom: 20,
+  },
+  divider: {
+    height: 2,
+    backgroundColor: "#efeeee",
+    width: "80%",
+    marginVertical: 10,
+  },
 });

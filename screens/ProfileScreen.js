@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from "react-native";
 import { useDispatch } from "react-redux";
-
 import Colors from "../constants/colors";
 import CoinIcon from "../components/icons/CoinIcon";
 import SettingsIcon from "../components/icons/SettingsIcon";
@@ -11,44 +11,43 @@ import { useUser } from "../components/authentication/useUser";
 import Line from "../components/Line";
 import ProfileItemWidget from "../components/ProfileItemWidget";
 import { getItems } from "../services/apiItems";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
-function ProfileScreen({ route, navigation }) {
+function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState();
   const { user } = useUser();
+  
+  // State to show/hide modal:
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (user) {
       const fetchItems = async () => {
         try {
           const fetchedItems = await getItems({ userId: user.id });
-          setItems(fetchedItems); 
+          setItems(fetchedItems);
         } catch (error) {
           console.error("Error fetching items: ", error);
         } finally {
-          setLoading(false); 
+          setLoading(false);
         }
       };
-
-      fetchItems(); 
+      fetchItems();
     }
-  }, [user]); 
+  }, [user]);
 
-    
   if (!user) {
     return <Text>Loading user data...</Text>;
   }
 
-  //const { items } = getItems({userId: user.id});
-  console.log("user:", JSON.stringify(user, null, 2));
   const { userName, avatar, coins } = user.user_metadata;
   const email = user.email; 
-  console.log("avatar on profile: " + avatar);
 
-  console.log(user.id);
-  console.log("THE ITEMS: ", items);
+  const handleAddIconPress = () => {
+    setModalVisible(true);
+  };
 
   return (
     <View style={styles.container}>
@@ -68,11 +67,58 @@ function ProfileScreen({ route, navigation }) {
         <CalendarIcon />
         <SettingsIcon />
       </View>
-        <Line style={styles.line} />
-        <ProfileItemWidget items={items}/>
+      <Line style={styles.line} />
+      <ProfileItemWidget items={items} />
+
+      {/* AddIcon now opens a modal */}
+      <TouchableOpacity onPress={handleAddIconPress} style={styles.addIconContainer}>
         <AddIcon />
+      </TouchableOpacity>
+
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Choose an option</Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setModalVisible(false);
+                navigation.navigate('MyGroups'); // Will create this screen next
+              }}
+            >
+              <Text style={styles.modalButtonText}>My Groups</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setModalVisible(false);
+                navigation.navigate('Postcode', { joinGroup: true });
+              }}
+            >
+              <Text style={styles.modalButtonText}>Join New Group</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setModalVisible(false);
+                navigation.navigate('Postcode', { creatingGroup: true });
+              }}
+            >
+              <Text style={styles.modalButtonText}>Create New Group</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
     </View>
-    // </ScrollView>
   );
 }
 
@@ -81,17 +127,12 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
     backgroundColor: "white",
   },
   headerContainer: {
-    // flex:  1,
     flexDirection: "row",
     marginTop: 24,
     marginLeft: 44,
-    alignSelf: "flex-start",
-    // marginLeft: 44,
   },
   userInfo: {
     marginLeft: 16,
@@ -106,13 +147,13 @@ const styles = StyleSheet.create({
     color: Colors.primary2,
     fontFamily: "RalewayBold",
     fontSize: 20,
-    fontWeight: 700,
+    fontWeight: '700',
   },
   userEmail: {
     color: Colors.primary2,
     fontFamily: "RalewayMedium",
     fontSize: 15,
-    fontWeight: 500,
+    fontWeight: '500',
     marginBottom: 11,
   },
   coins: {
@@ -124,30 +165,53 @@ const styles = StyleSheet.create({
     gap: 45,
     marginTop: 15,
     marginBottom: 17,
-    // marginBottom: 330,
     flexDirection: "row",
-    // fontFamily: "RalewayBold",
   },
   line: {
     width: 327,
     height: 1,
     backgroundColor: Colors.primary2,
-    marginTop: 17,
   },
-  groupText: {
-    color: Colors.primary2,
-    fontSize: 20,
-    fontWeight: 700,
-    marginTop: 16,
-    marginLeft: 17,
-    alignSelf: "flex-start",
-    fontFamily: "RalewayBold",
+  addIconContainer: {
+    position: 'absolute',
+    bottom: 30,
+    alignSelf: 'center'
   },
-  line: {
-    width: 327,
-    height: 1,
-    backgroundColor: Colors.primary2,
-    // marginTop: 17,
-    alignItems: "center",
+  modalOverlay: {
+    flex:1,
+    backgroundColor:'rgba(0,0,0,0.5)',
+    justifyContent:'center',
+    alignItems:'center'
   },
+  modalContainer:{
+    backgroundColor:'white',
+    width:'80%',
+    borderRadius:10,
+    padding:20
+  },
+  modalTitle:{
+    fontSize:18,
+    fontWeight:'bold',
+    marginBottom:20,
+    textAlign:'center'
+  },
+  modalButton:{
+    backgroundColor: Colors.primary1,
+    padding:10,
+    borderRadius:5,
+    marginVertical:5,
+    alignItems:'center'
+  },
+  modalButtonText:{
+    color:'white',
+    fontWeight:'bold'
+  },
+  closeButton:{
+    marginTop:10,
+    alignItems:'center'
+  },
+  closeButtonText:{
+    color:Colors.primary1,
+    fontWeight:'bold'
+  }
 });

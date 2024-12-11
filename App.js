@@ -28,6 +28,7 @@ import GroupManagementScreen from "./screens/GroupManagementScreen";
 import ProfileItemScreen from "./screens/ProfileItemScreen.js";
 import CreateItemScreen from "./screens/createItem/CreateItemScreen.js";
 import ItemDescriptionInputScreen from "./screens/createItem/ItemDescriptionInputScreen.js";
+import MyGroupsScreen from './screens/MyGroupsScreen';
 
 import Logo from "./components/icons/Logo.js";
 import Title from "./components/Title.js";
@@ -367,6 +368,17 @@ export default function App() {
                   ),
                 }}
               />
+              <Stack.Screen
+              name="MyGroups"
+              component={MyGroupsScreen}
+              options={{ headerTitle: "My Groups" }}
+              />
+<Stack.Screen
+  name="Wardrobe"
+  component={WardrobeScreen}
+  options={{ title: 'Wardrobe' }}
+/>
+
             </Stack.Navigator>
           </NavigationContainer>
         </Provider>

@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     color: Colors.primary1,
     // font-family: Raleway;
     fontSize: 20,
-    fontWeight: 500,
+    fontWeight: '500',
     // lineHeight: "150%",
     // letterSpacing: -0.38,
   },

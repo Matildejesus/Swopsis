@@ -6,13 +6,21 @@ const AdminPageScreen = ({ groupId }) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await fetch(`/api/groups/${groupId}/users`);
-      const data = await response.json();
-      setUsers(data);
+      try {
+        const response = await fetch(`/api/groups/${groupId}/users`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
     };
-
+  
     fetchUsers();
   }, [groupId]);
+  
 
   const renderItem = ({ item }) => (
     <View style={styles.userItem}>
@@ -26,7 +34,7 @@ const AdminPageScreen = ({ groupId }) => {
       <Text style={styles.title}>Group Members</Text>
       <FlatList
         data={users}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => item.id?.toString() || index.toString()}
         renderItem={renderItem}
       />
     </View>

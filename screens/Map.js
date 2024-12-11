@@ -7,8 +7,9 @@ const Map = ({ apikey, postcode }) => {
     const fetchGeocode = async () => {
       try {
         const response = await fetch(
-          `https://geocode.search.hereapi.com/v1/geocode?q=$Australia+Victoria+{postcode}&apiKey=${apikey}`
+          `https://geocode.search.hereapi.com/v1/geocode?q=Australia+Victoria+${postcode}&apiKey=${apikey}`
         );
+        
         const data = await response.json();
         if (data.items && data.items.length > 0) {
           const position = data.items[0].position;
