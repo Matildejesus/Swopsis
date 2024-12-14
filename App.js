@@ -29,6 +29,8 @@ import ProfileItemScreen from "./screens/ProfileItemScreen.js";
 import CreateItemScreen from "./screens/createItem/CreateItemScreen.js";
 import ItemDescriptionInputScreen from "./screens/createItem/ItemDescriptionInputScreen.js";
 import MyGroupsScreen from './screens/MyGroupsScreen';
+import GroupDetailsScreen from './screens/GroupDetailsScreen';
+import AdminPageScreen from './screens/AdminPageScreen';
 
 import Logo from "./components/icons/Logo.js";
 import Title from "./components/Title.js";
@@ -295,6 +297,15 @@ export default function App() {
                   ),
                   headerRight: (props) => <Logo {...props} />,
                 }}
+              <Stack.Screen 
+                name="GroupDetails" 
+                component={GroupDetailsScreen} 
+                options={{ title: 'Group Details' }} 
+              />
+              <Stack.Screen 
+              name="AdminPage" 
+              component={AdminPageScreen} 
+              options={{ title: 'Manage Group' }}
               />
               <Stack.Screen
                 name="Impact"
