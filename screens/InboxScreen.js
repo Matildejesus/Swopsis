@@ -86,7 +86,6 @@ export default function InboxScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Inbox</Text>
       <View style={styles.threadsContainer}>
         <FlatList
           data={mockThreads}

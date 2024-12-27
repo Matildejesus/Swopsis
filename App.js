@@ -18,19 +18,22 @@ import ProfileScreen from "./screens/ProfileScreen.js";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen.js";
 import PostcodeScreen from "./screens/PostcodeScreen.js";
 import ImpactScreen from "./screens/ImpactScreen.js";
-import BeYouScreen from "./screens/BeYouScreen.js";
+import BeYouScreen from "./screens/BeYouScreen.js";``
 import SettingsScreen from "./screens/SettingsScreen.js";
 import EventsScreen from "./screens/EventsScreen.js";
 import InboxScreen from "./screens/InboxScreen.js";
 import WardrobeScreen from "./screens/WardrobeScreen.js";
 import CalendarScreen from "./screens/CalendarScreen.js";
-import GroupManagementScreen from "./screens/GroupManagementScreen";
+import GroupCreateScreen from "./screens/admin/GroupCreateScreen.js";
 import ProfileItemScreen from "./screens/ProfileItemScreen.js";
 import CreateItemScreen from "./screens/createItem/CreateItemScreen.js";
 import ItemDescriptionInputScreen from "./screens/createItem/ItemDescriptionInputScreen.js";
 import MyGroupsScreen from './screens/MyGroupsScreen';
 import GroupDetailsScreen from './screens/GroupDetailsScreen';
 import AdminPageScreen from './screens/AdminPageScreen';
+import AdminProfileScreen from './screens/AdminProfileScreen';
+import GroupsScreen from "./screens/admin/GroupsScreen.js";
+
 
 import Logo from "./components/icons/Logo.js";
 import Title from "./components/Title.js";
@@ -297,15 +300,6 @@ export default function App() {
                   ),
                   headerRight: (props) => <Logo {...props} />,
                 }}
-              <Stack.Screen 
-                name="GroupDetails" 
-                component={GroupDetailsScreen} 
-                options={{ title: 'Group Details' }} 
-              />
-              <Stack.Screen 
-              name="AdminPage" 
-              component={AdminPageScreen} 
-              options={{ title: 'Manage Group' }}
               />
               <Stack.Screen
                 name="Impact"
@@ -342,9 +336,15 @@ export default function App() {
                 options={{ headerShown: false }}
               />
               <Stack.Screen
-                name="GroupManagement"
-                component={GroupManagementScreen}
-                options={{ title: 'Manage Groups' }}
+                name="GroupCreate"
+                component={GroupCreateScreen}
+                options={{
+                  headerTitleAlign: "left",
+                  headerBackVisible: false,
+                  headerTitle: (props) => (
+                    <Title title="" goBack="true" {...props} />
+                  ),
+                }}
               />
               <Stack.Screen 
                 name="ProfileItem"
@@ -379,16 +379,48 @@ export default function App() {
                   ),
                 }}
               />
+                  <Stack.Screen
+              name="AdminProfile"
+              component={AdminProfileScreen}
+              option={{ headerTitle: "Dashboard" }}
+              />
+              <Stack.Screen
+                name="Wardrobe"
+                component={WardrobeScreen}
+                options={{ title: 'Wardrobe' }}
+              />
+              <Stack.Screen
+                name="Groups"
+                component={GroupsScreen}
+                options={{
+                  headerShown: false
+                }}
+              />
+               <Stack.Screen 
+                name="GroupDetails" 
+                component={GroupDetailsScreen} 
+                options={{
+                  headerTitleAlign: "left",
+                  headerBackVisible: false,
+                  headerTitle: (props) => (
+                    <Title title="" goBack="true" {...props} />
+                  ),
+                }} 
+              />
+              {/* WHAT THE HELL ARE THESE */}
+              {/* <Stack.Screen 
+              name="AdminPage" 
+              component={AdminPageScreen} 
+              options={{ 
+                headerRight: (props) => <Logo {...props} />,
+               }}
+              />
+              
               <Stack.Screen
               name="MyGroups"
               component={MyGroupsScreen}
               options={{ headerTitle: "My Groups" }}
-              />
-<Stack.Screen
-  name="Wardrobe"
-  component={WardrobeScreen}
-  options={{ title: 'Wardrobe' }}
-/>
+              /> */}
 
             </Stack.Navigator>
           </NavigationContainer>

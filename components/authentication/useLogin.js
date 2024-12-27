@@ -15,6 +15,7 @@ export function useLogin() {
     onSuccess: (user) => {
       queryClient.setQueriesData(["user"], user);
       console.log(user);
+      console.log(user.user.email);
       console.log(user.user.user_metadata.email);
       if (user.user.user_metadata.email == "janedoe@gmail.com") {
         navigation.reset({
@@ -31,8 +32,18 @@ export function useLogin() {
         });
        
       }
-      else if (user.user.user_metadata.email == "admin@gmail.com") {
-        navigation.navigate("GroupManagement");
+      else if (user.user.email == "admin@gmail.com") {
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: "AdminProfile",
+              params: {
+                initial: false,
+              }
+            }
+          ]
+        });
       }
       else if (!user.user.user_metadata.group){
         navigation.navigate("Postcode");

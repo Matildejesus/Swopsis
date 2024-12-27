@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+  //  alignItems: "center",
   },
   headerContainer: {
     flexDirection: "row",
@@ -171,6 +172,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 1,
     backgroundColor: Colors.primary2,
+    marginLeft: 25,
   },
   addIconContainer: {
     position: 'absolute',

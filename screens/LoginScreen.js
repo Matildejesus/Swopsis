@@ -14,7 +14,10 @@ import constraints from "../constraints.js";
 function LoginScreen({ navigation }) {
  // const [email, setEmail] = useState("");
   //const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("janedoe@gmail.com");
+  // janedoe@gmail.com  Test12345
+  // test@gmail.com Test12345
+  // admin@gmail.com admin
+  const [email, setEmail] = useState("test@gmail.com");
   const [password, setPassword] = useState("Test12345");
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);

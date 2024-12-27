@@ -3,10 +3,10 @@ import { StyleSheet } from "react-native";
 import SegmentedBar from "../components/SegmentedBar";
 import { useState } from "react";
 import { useRoute } from "@react-navigation/native";
-import ProfileItemDetails from "../components/ItemWidgets/ProfileItemDetails";
-import ProfileItemReviews from "../components/ItemWidgets/ProfileItemReviews";
-import ContactButton from "../components/ItemWidgets/ContactButton";
-import ReviewButton from "../components/ItemWidgets/ReviewButton";
+import ProfileItemDetails from "../components/itemwidgets/ProfileItemDetails";
+import ProfileItemReviews from "../components/itemwidgets/ProfileItemReviews";
+import ContactButton from "../components/itemwidgets/ContactButton";
+import ReviewButton from "../components/itemwidgets/ReviewButton";
 import { useUser } from "../components/authentication/useUser";
 
 function ProfileItemScreen( ) {

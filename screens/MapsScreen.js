@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Map from "../screens/Map";
+import Map from "../components/Map"; 
 import RegisterContainer from "../components/authentication/RegisterContainer";
 import PrimaryButton from "../components/PrimaryButton";
 
@@ -17,10 +17,8 @@ function MapsScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      {/* Map component */}
       <Map apikey={'FjRYhw4teVr0pkKgzacHIVAyEXKoDe_G4jBNQhILcsQ'} postcode={postcode} />
       
-      {/* Text input on top of the map */}
       <View style={styles.inputContainer}>
         <RegisterContainer
           placeholder={"Enter your postcode"}
@@ -29,7 +27,7 @@ function MapsScreen({ route }) {
         />
         <PrimaryButton 
           title="Search"
-          style={{ width: 200 }}
+          style={{ width: 100 }}
           onPress={handleSearch}
         />
       </View>
@@ -50,10 +48,10 @@ const styles = StyleSheet.create({
   inputContainer: {
     position: 'absolute',
     flexDirection: 'row',
-    bottom: 10, // Adjust as needed
-    left: 10, // Adjust as needed
-    right: 10, // Adjust as needed
+    bottom: 10, 
+    left: 10, 
+    right: 10,
     padding: 10,
-    zIndex: 1, // Ensure the input is on top of the map
+    zIndex: 1, 
   },
 });

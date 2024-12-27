@@ -4,7 +4,7 @@ export async function register({ userName, email, password }) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { userName, avatar: "", group: "", coins: 0 } },
+    options: { data: { userName, avatar: "", group: "", coins: 0, ambassador: false } },
   });
 
   if (error) {
@@ -37,10 +37,22 @@ export async function getUser() {
   return data?.user;
 }
 
-export async function logout() {
-  const { error } = await supabase.auth.signOut();
-  if (error) {
-    throw new Error(error.message);
+export async function updateGroup({ group }) {
+  try {
+    let updateGroup = {};
+    if (group) updateGroup.group = { group };
+
+    const { data, error } = await supabase.auth.updateUser(updateGroup);
+
+    if (error) {
+      console.error("Update Group Error:", error);
+      throw new Error(error.message);
+    }
+
+    return data; 
+  } catch (generalError) {
+    console.error("General Error in updateGroup:", generalError);
+    throw generalError;
   }
 }
 

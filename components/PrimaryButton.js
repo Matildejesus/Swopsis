@@ -2,11 +2,12 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 
 import Colors from "../constants/colors";
 
-function PrimaryButton({ title, onPress, style }) {
+function PrimaryButton({ title, onPress, style, textStyle }) {
+  console.log("haha");
   return (
     <View style={[styles.container, style]}>
       <Pressable onPress={onPress}>
-        <Text style={styles.text}>{title}</Text>
+        <Text style={[styles.text, textStyle]}>{title}</Text>
       </Pressable>
     </View>
   );

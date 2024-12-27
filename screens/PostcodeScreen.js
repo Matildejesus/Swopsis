@@ -32,17 +32,12 @@ function PostcodeScreen({navigation}) {
           <PrimaryButton 
             title="Search"
             style={{ width: 200 }}
-            // On Search press
             onPress={() => {
               if (!postcode) return;
-              if (route.params?.creatingGroup) {
-                navigation.navigate("Maps", { postcode, creatingGroup: true });
-            } else if (route.params?.joinGroup) {
-              navigation.navigate("Maps", { postcode, joinGroup: true });
-            }
-          }}
-
-            />
+              console.log("postcode: " + postcode);
+              navigation.navigate("Maps", {postcode: postcode});
+            }  
+            } />
        </View>
         </View>
       );
@@ -88,7 +83,6 @@ const styles = StyleSheet.create({
     paddingTop: 18,
   }, 
   linkContainer: {
-  //  marginTop: 20,
     marginBottom: 31,
     gap: 7,
   },
