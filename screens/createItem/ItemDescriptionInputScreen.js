@@ -11,6 +11,8 @@ import { addItem } from "../../services/apiItems.js";
 import ErrorMessage from "../../components/ErrorMessage.js";
 import ColorSwitch from "../../components/ColorSwitch.js";
 import ColorCircle from "../../components/icons/ColorCircle.js";
+import { updateUserData } from "../../services/apiAuth.js";
+import { getSubcategoryDetails } from "../../services/apiItemConvert.js";
 
 function ItemDescriptionInputScreen() {
     const route = useRoute();
@@ -24,33 +26,31 @@ function ItemDescriptionInputScreen() {
     const [length, setLength] = useState();
     const [selectedColor, setSelectedColor] = useState("");
     const [inputError, setInputError] = useState(null);
+    const [subcategoryDetails, setSubcategoryDetails] = useState();
 
     const navigation = useNavigation();
 
     let fields = [];
-    let subcategories = [];
     let sizeList = [];
 
     const {
         user: {
             id: userId,
+            user_metadata: { coins, totalWeight, totalLitres, totalCarbon, itemsSwapped },
         },
     } = useUser();
 
     switch (category) {
         case "Clothing":
             fields = Categories.Clothing.fields;
-            subcategories = Categories.Clothing.subcategories;
             sizeList = Categories.Clothing.size;
             break;
         case "Shoes":
             fields = Categories.Shoes.fields;
-            subcategories = Categories.Shoes.subcategories;
             sizeList = Categories.Shoes.size;
             break;
         case "Accessories":
             fields = Categories.Accessories.fields;
-            subcategories = Categories.Accessories.subcategories;
             break;
     }
 
@@ -77,7 +77,32 @@ function ItemDescriptionInputScreen() {
                     ...(category == "Shoes" && {length}), 
                 }
             });
+            
+            const retrieveSubcategoryDetails = async () => {
+                try {
+                    const itemConversion = await getSubcategoryDetails({ item: subcategory.value });
+                    setSubcategoryDetails(itemConversion);
+                } catch (error) {
+                    console.error("Error fetching subcategory details:", error);
+                    setSubcategoryDetails(null);
+                }
+            };
 
+            retrieveSubcategoryDetails();
+
+            console.log("itemconversion: ", subcategoryDetails.carbon);
+            const litresSaved = totalLitres + subcategoryDetails.litres;
+            const carbonSaved = totalCarbon;
+            if (subcategoryDetails.scalable == "true") {
+                carbonSaved += subcategoryDetails.carbon * weight;
+            } else {
+                carbonSaved += subcategoryDetails.carbon;
+            }
+            const weightSaved = totalWeight + weight;
+            const itemsSaved = itemsSwapped + 1;
+            const newCoins = coins + 1;
+            console.log(newCoins);
+            updateUserData({ newCoins, totalLitres: litresSaved, totalCarbon: carbonSaved, totalWeight: weightSaved, itemsSwapped: itemsSaved });
             navigation.navigate("Profile"); 
         }
     }
@@ -93,7 +118,7 @@ function ItemDescriptionInputScreen() {
             </View> 
             <View style={styles.row}>
 		        <Text style={styles.textStyle}>Subcategory</Text>
-                <DropDownMenu value={subcategory} data={subcategories} addCategoryHandler={setSubcategory} dropDownStyle={styles.dropDownStyle}/>
+                <DropDownMenu value={subcategory} category={category} addCategoryHandler={setSubcategory} dropDownStyle={styles.dropDownStyle}/>
 	        </View>
             {/* <View style={styles.rowContainer}> */}
             <View style={styles.input}>

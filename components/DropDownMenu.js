@@ -1,12 +1,35 @@
 import { StyleSheet } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import Colors from "../constants/colors";
+import { getItemsNames } from "../services/apiItemConvert";
+import { useEffect, useState } from "react";
 
-function DropDownMenu( {value, data, addCategoryHandler, dropDownStyle} ) {
- // console.log("data", data);
-  const formattedData = data.map((item) => ({
+function DropDownMenu( {value, category, data, addCategoryHandler, dropDownStyle} ) {
+
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    // Run only if category is provided and data is not directly passed
+    if (category && !data) {
+        const fetchData = async () => {
+            try {
+                const items = await getItemsNames({ category });
+                setItems(items);
+            } catch (error) {
+                console.error("Error fetching items:", error);
+            }
+        };
+
+        fetchData();
+    } else if (data) {
+        // If data is directly provided, use it
+        setItems(data);
+    }
+}, [category, data]);
+
+  const formattedData = items.map((item) => ({
       label: item, 
-      value: item 
+      value: item
   }))
     return (
         <Dropdown

@@ -15,6 +15,9 @@ export function useLogout() {
         routes: [{ name: "Welcome" }],
       });
     },
+    onError: (error) => {
+      console.error("Logout error:", error);
+    },
   });
   console.log("logout");
   return { logout, isLoading };

@@ -9,6 +9,10 @@ export const userInfoSlice = createSlice({
     group: null,
     profilePicture: null,
     coins: null,
+    totalWeight: null,
+    totalLitres: null,
+    totalCarbon: null,
+    itemsSwapped: null,
   },
   reducers: {
     setUserInfo: (state, action) => {
@@ -18,6 +22,10 @@ export const userInfoSlice = createSlice({
       state.group = action.payload.group;
       state.coins = action.payload.coins;
       state.profilePicture = action.payload.profilePicture;
+      state.totalWeight = action.payload.totalWeight;
+      state.totalCarbon = action.payload.totalCarbon;
+      state.totalLitres = action.payload.totalLitres;
+      state.itemsSwapped = action.payload.itemsSwapped;
     },
     updateEmail: (state, action) => {
       state.email = action.payload;
@@ -37,7 +45,19 @@ export const userInfoSlice = createSlice({
     updateCoins: (state, action) => {
       state.coins = action.payload;
     },
-  },
+    updateLitres: (state, action) => {
+      state.totalLitres = action.payload;
+    },
+    updateCarbon: (state, action) => {
+      state.totalCarbon = action.payload;
+    },
+    updateWeight: (state, action) => {
+      state.totalWeight = action.payload;
+    },
+    updateItemsSwapped: (state, action) => {
+      state.itemsSwapped = action.payload;
+    }
+  }
 });
 
 // Action creators are generated for each case reducer function
@@ -49,6 +69,10 @@ export const {
   updatePicture,
   updateGroup,
   updateCoins,
+  updateLitres,
+  updateCarbon,
+  updateWeight,
+  itemsSwapped,
 } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

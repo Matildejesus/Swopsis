@@ -17,7 +17,7 @@ export function useLogin() {
       console.log(user);
       console.log(user.user.email);
       console.log(user.user.user_metadata.email);
-      if (user.user.user_metadata.email == "janedoe@gmail.com") {
+      if (user.user.user_metadata.group) {
         navigation.reset({
           index: 0,
           routes: [

@@ -13,7 +13,10 @@ function GroupDetailsScreen({ route }) {
 
   const submitHandler = async () => {
       console.log("submitting!!!");
-      updateGroup("Pending");
+      const group = "Pending";
+      console.log("GROUP: ", group);
+      const data = updateGroup({group});
+      console.log(data);
       navigation.reset({
         index: 0,
         routes: [

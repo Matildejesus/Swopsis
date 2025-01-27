@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback} from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from "react-native";
 import { useDispatch } from "react-redux";
 import Colors from "../constants/colors";
@@ -11,7 +11,9 @@ import { useUser } from "../components/authentication/useUser";
 import Line from "../components/Line";
 import ProfileItemWidget from "../components/ProfileItemWidget";
 import { getItems } from "../services/apiItems";
-import { useEffect } from "react";
+import AnimatedEnvelope from "../components/AnimatedEnvelope";
+import { useFocusEffect } from "@react-navigation/native";
+import { getSubcategoryDetails } from "../services/apiItemConvert";
 
 function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -22,27 +24,37 @@ function ProfileScreen({ navigation }) {
   // State to show/hide modal:
   const [modalVisible, setModalVisible] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      const fetchItems = async () => {
-        try {
-          const fetchedItems = await getItems({ userId: user.id });
-          setItems(fetchedItems);
-        } catch (error) {
-          console.error("Error fetching items: ", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchItems();
+  const fetchItems = useCallback(async () => {
+    if (!user) return;
+    setLoading(true); 
+    try {
+      const fetchedItems = await getItems({ userId: user.id });
+      setItems(fetchedItems);
+    } catch (error) {
+      console.error("Error fetching items: ", error);
+    } finally {
+      setLoading(false); 
     }
   }, [user]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        await fetchItems();
+      };
+  
+      fetchData();
+  
+      // No cleanup function is needed here, so we return nothing.
+    }, [fetchItems])
+  );
+  
 
   if (!user) {
     return <Text>Loading user data...</Text>;
   }
 
-  const { userName, avatar, coins } = user.user_metadata;
+  const { userName, avatar, coins, group } = user.user_metadata;
   const email = user.email; 
 
   const handleAddIconPress = () => {
@@ -68,55 +80,19 @@ function ProfileScreen({ navigation }) {
         <SettingsIcon />
       </View>
       <Line style={styles.line} />
-      <ProfileItemWidget items={items} />
-
-      {/* AddIcon now opens a modal */}
-      <TouchableOpacity onPress={handleAddIconPress} style={styles.addIconContainer}>
-        <AddIcon />
-      </TouchableOpacity>
-
-      <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Choose an option</Text>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setModalVisible(false);
-                navigation.navigate('MyGroups'); // Will create this screen next
-              }}
-            >
-              <Text style={styles.modalButtonText}>My Groups</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setModalVisible(false);
-                navigation.navigate('Postcode', { joinGroup: true });
-              }}
-            >
-              <Text style={styles.modalButtonText}>Join New Group</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setModalVisible(false);
-                navigation.navigate('Postcode', { creatingGroup: true });
-              }}
-            >
-              <Text style={styles.modalButtonText}>Create New Group</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
+      {group === "Pending" ? (
+        <View style={styles.pendingContainer}>
+          <AnimatedEnvelope /> 
+          <Text style={styles.userName}>WAITING TO BE ACCEPTED...</Text>
         </View>
-      </Modal>
+      ) : ( 
+        <>
+          <ProfileItemWidget items={items} />
+          <TouchableOpacity onPress={handleAddIconPress} style={styles.addIconContainer}>
+            <AddIcon />
+          </TouchableOpacity>
+        </> 
+      )}
 
     </View>
   );
@@ -128,7 +104,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-  //  alignItems: "center",
+  },
+  pendingContainer: {
+    gap: 56,
+    alignItems: "center",
+    marginTop: 70,
   },
   headerContainer: {
     flexDirection: "row",

@@ -4,7 +4,7 @@ export async function register({ userName, email, password }) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { userName, avatar: "", group: "", coins: 0, ambassador: false } },
+    options: { data: { userName, avatar: "", group: "", coins: 10, ambassador: false, totalWeight: 0, totalLitres: 0, totalCarbon: 0, itemsSwapped: 0 } },
   });
 
   if (error) {
@@ -24,6 +24,13 @@ export async function login({ email, password }) {
   return data;
 }
 
+export async function logout() {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
 export async function getUser() {
   const { data: session } = await supabase.auth.getSession();
 
@@ -38,27 +45,32 @@ export async function getUser() {
 }
 
 export async function updateGroup({ group }) {
-  try {
-    let updateGroup = {};
-    if (group) updateGroup.group = { group };
+  console.log("Group to update:", group);
+  let updateData = {};
+  if (group) updateData.data = { group };
+  console.log(updateData);
 
-    const { data, error } = await supabase.auth.updateUser(updateGroup);
+  const { data, error } = await supabase.auth.updateUser(updateData);
+  if (error) throw new Error(error.message);
 
-    if (error) {
-      console.error("Update Group Error:", error);
-      throw new Error(error.message);
-    }
+  return data;
+}
 
-    return data; 
-  } catch (generalError) {
-    console.error("General Error in updateGroup:", generalError);
-    throw generalError;
-  }
+export async function updateUserData({ newCoins, totalLitres, totalCarbon, totalWeight, itemsSwapped }) {
+  let updateData = {};
+  updateData.data = { coins: newCoins, totalWeight, totalLitres, totalCarbon, itemsSwapped };
+  console.log(updateData);
+
+  const { data, error } = await supabase.auth.updateUser(updateData);
+  if (error) throw new Error(error.message);
+
+  return data;
 }
 
 export async function updateUser({ userName, avatar }) {
   let updateData = {};
   if (userName) updateData.data = { userName };
+  console.log(updateData);
 
   const { data, error } = await supabase.auth.updateUser(updateData);
   if (error) throw new Error(error.message);

@@ -20,6 +20,7 @@ export async function addItem({ item, itemDetails}) {
     const itemId = insertedItem[0].id;
     const chosenCategory = item.category;
 
+    console.log(insertedItem);
     const { data: insertedItemDetails, errorItemDetails } = await supabase
         .from(chosenCategory)
         .insert([
@@ -36,6 +37,7 @@ export async function addItem({ item, itemDetails}) {
         ])
         .select();
 
+    console.log(insertedItemDetails);
     if (errorItemDetails || errorItem) {
         throw new Error(errorItemDetails.message);
     }
