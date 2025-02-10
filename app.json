@@ -6,31 +6,38 @@
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "userInterfaceStyle": "light",
+    "jsEngine": "hermes",
     "splash": {
       "image": "./assets/images/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.swopsis",
       "config": {
-          "googleMapsApiKey": "AIzaSyDsuQsscuJJ5wqftyf8G-p6O6xL4s6Zoaw"
-      }
+        "googleMapsApiKey": "AIzaSyDsuQsscuJJ5wqftyf8G-p6O6xL4s6Zoaw"
+      },
+      "newArchEnabled": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["android.permission.RECORD_AUDIO"],
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
       "package": "com.anonymous.swopsis",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDsuQsscuJJ5wqftyf8G-p6O6xL4s6Zoaw"
         }
-      }
+      },
+      "newArchEnabled": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -47,7 +54,8 @@
         {
           "iCloudContainerEnvironment": "Production"
         }
-      ]
+      ],
+      "expo-font"
     ]
   }
 }

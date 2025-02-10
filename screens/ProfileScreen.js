@@ -14,6 +14,7 @@ import { getItems } from "../services/apiItems";
 import AnimatedEnvelope from "../components/AnimatedEnvelope";
 import { useFocusEffect } from "@react-navigation/native";
 import { getSubcategoryDetails } from "../services/apiItemConvert";
+import DashboardIcon from "../components/icons/DashboardIcon";
 
 function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -45,7 +46,6 @@ function ProfileScreen({ navigation }) {
   
       fetchData();
   
-      // No cleanup function is needed here, so we return nothing.
     }, [fetchItems])
   );
   
@@ -71,6 +71,13 @@ function ProfileScreen({ navigation }) {
           <View style={styles.coins}>
             <CoinIcon />
             <Text style={styles.userName}>{coins}</Text>
+            {(user.user_metadata.ambassador) && <DashboardIcon location={{
+              name: "AdminApp",
+              // params: {
+              //   screen: "AdminProfile",
+              //   initial: false,
+              // },
+            }}/>}
           </View>
         </View>
       </View>

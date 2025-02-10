@@ -3,7 +3,9 @@ import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createDrawerNavigator} from "@react-navigation/drawer";
 import "react-native-gesture-handler";
+
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { RootSiblingParent } from 'react-native-root-siblings';
@@ -33,7 +35,10 @@ import GroupDetailsScreen from './screens/GroupDetailsScreen';
 import AdminPageScreen from './screens/AdminPageScreen';
 import AdminProfileScreen from './screens/AdminProfileScreen';
 import GroupsScreen from "./screens/admin/GroupsScreen.js";
-
+import ItemsScreen from "./screens/admin/ItemsScreen.js";
+import LmsScreen from "./screens/admin/LmsScreen.js";
+import MemberScreen from "./screens/admin/MemberScreen.js";
+import FeedbacksScreen from "./screens/admin/FeedbacksScreen.js";
 
 import Logo from "./components/icons/Logo.js";
 import Title from "./components/Title.js";
@@ -50,6 +55,7 @@ AppRegistry.registerComponent("main", () => App);
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -70,6 +76,7 @@ function BottomTabNavigator() {
           height: 100,
         },
       }}
+      initialRouteName="Profile"
     >
       <Tab.Screen
         name="Beyou"
@@ -216,6 +223,44 @@ function BottomTabNavigator() {
   );
 }
 
+console.log(ItemsScreen);
+
+function DrawerNavigator() {
+  return (
+    <Drawer.Navigator
+      initialRouteName="AdminProfile"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Drawer.Screen
+        name="AdminProfile"
+        component={AdminProfileScreen}
+        options={{ drawerLabel: "Dashboard" }}
+      />
+      <Drawer.Screen
+        name="Groups"
+        component={GroupsScreen}
+        options={{ drawerLabel: "Groups" }}
+      />
+      <Drawer.Screen
+        name="Items"
+        component={ItemsScreen}
+        options={{ drawerLabel: "Items" }}
+      />
+      <Drawer.Screen
+        name="Feedback"
+        component={FeedbacksScreen}
+        options={{ drawerLabel: "Feedbacks" }}
+      />
+      <Drawer.Screen
+        name="Lms"
+        component={LmsScreen}
+        options={{ drawerLabel: "Lms" }}
+      />
+    </Drawer.Navigator>
+  );
+}
 
 SplashScreen.preventAutoHideAsync();
 
@@ -261,6 +306,16 @@ export default function App() {
               <Stack.Screen
                 name="Welcome"
                 component={WelcomeScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="InApp"
+                component={BottomTabNavigator}
+                options={{ headerShown: false}}
+              />
+              <Stack.Screen
+                name="AdminApp"
+                component={DrawerNavigator} 
                 options={{ headerShown: false }}
               />
               <Stack.Screen
@@ -331,11 +386,6 @@ export default function App() {
                 }}
               />
               <Stack.Screen
-                name="InApp"
-                component={BottomTabNavigator}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
                 name="GroupCreate"
                 component={GroupCreateScreen}
                 options={{
@@ -379,22 +429,10 @@ export default function App() {
                   ),
                 }}
               />
-                  <Stack.Screen
-              name="AdminProfile"
-              component={AdminProfileScreen}
-              option={{ headerTitle: "Dashboard" }}
-              />
               <Stack.Screen
                 name="Wardrobe"
                 component={WardrobeScreen}
                 options={{ title: 'Wardrobe' }}
-              />
-              <Stack.Screen
-                name="Groups"
-                component={GroupsScreen}
-                options={{
-                  headerShown: false
-                }}
               />
                <Stack.Screen 
                 name="GroupDetails" 
@@ -407,21 +445,7 @@ export default function App() {
                   ),
                 }} 
               />
-              {/* WHAT THE HELL ARE THESE */}
-              {/* <Stack.Screen 
-              name="AdminPage" 
-              component={AdminPageScreen} 
-              options={{ 
-                headerRight: (props) => <Logo {...props} />,
-               }}
-              />
-              
-              <Stack.Screen
-              name="MyGroups"
-              component={MyGroupsScreen}
-              options={{ headerTitle: "My Groups" }}
-              /> */}
-
+             
             </Stack.Navigator>
           </NavigationContainer>
         </Provider>

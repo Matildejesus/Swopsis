@@ -5,18 +5,37 @@ import { useNavigation } from '@react-navigation/native';
 import MemberIcon from '../components/icons/MemberIcon';
 import SmallPinIcon from '../components/icons/SmallPinIcon';
 import { updateGroup } from '../services/apiAuth';
+import { useState } from 'react';
+import MessageModal from '../components/MessageModel';
+import { addJoinRequest } from '../services/apiJoinRequests';
+import { useUser } from '../components/authentication/useUser';
 
 function GroupDetailsScreen({ route }) {
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [message, setMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigation = useNavigation();
   const { group } = route.params;
 
+  const { user } = useUser();
+  //console.log("USER: ", user.session.user.id);
+  //const { id }  = user.user_metadata;
+
   const submitHandler = async () => {
-      console.log("submitting!!!");
-      const group = "Pending";
-      console.log("GROUP: ", group);
-      const data = updateGroup({group});
-      console.log(data);
+    if (!message) {
+      setErrorMessage("Please write a message to introduce yourself.");
+      return;
+    } 
+
+    try {
+      setErrorMessage('');
+      setIsModalVisible(false);
+      await updateGroup({group: "Pending"});
+      console.log(user.id, group.id, message)
+      const data = await addJoinRequest({ userId: user.id, groupId: group.id, message})
+      console.log("yes");
+      console.log("DATA: ", data);
       navigation.reset({
         index: 0,
         routes: [
@@ -29,12 +48,12 @@ function GroupDetailsScreen({ route }) {
           },
         ],
       });
+    } catch (error) {
+      setErrorMessage("Something went wrong. Please try again later.")
+    }
   }
 
   return (
-  // const isAdmin = user && user.id === group.adminId;
-  // console.log("group: ", group);
-  // return (
     <View style={styles.container}>
       <Image style={styles.image} source={{uri: group.avatar}} />
       <Text style={styles.title}>{group.name}</Text>
@@ -49,7 +68,7 @@ function GroupDetailsScreen({ route }) {
       </ScrollView>
       </View>
       <View style={styles.buttonContainer}>
-        <PrimaryButton title="REQUEST TO JOIN" onPress={submitHandler}/>
+      <PrimaryButton title="REQUEST TO JOIN" onPress={() => setIsModalVisible(true)}/>
       </View>
       <View style={styles.infoContainer}>
         <View style={styles.row}> 
@@ -64,13 +83,12 @@ function GroupDetailsScreen({ route }) {
         </View>
         
       </View>
-
-       {/* {isAdmin && (
-  //       <Button 
-  //         title="Manage Group" 
-  //         onPress={() => navigation.navigate('AdminPage', { groupId: groupId })}
-  //       />
-  //     )} */}
+      <MessageModal 
+        visible={isModalVisible}
+        onRequestClose={submitHandler}
+        errorMessage={errorMessage}
+        onMessageChange={setMessage}
+        />
       </View>
    
   );

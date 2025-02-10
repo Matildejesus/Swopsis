@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from "react-native";
 import { useDispatch } from "react-redux";
 import Colors from "../constants/colors";
-import CoinIcon from "../components/icons/CoinIcon";
 import SettingsIcon from "../components/icons/SettingsIcon";
-import AddIcon from "../components/icons/AddIcon";
 import { useUser } from "../components/authentication/useUser";
 import Line from "../components/Line";
-import ProfileItemWidget from "../components/ProfileItemWidget";
 import { getItems } from "../services/apiItems";
 import { useEffect } from "react";
 import RectangleButton from "../components/RectangleButton";
@@ -17,6 +14,7 @@ import GroupIcon from "../components/icons/adminicons/GroupIcon";
 import FeedbackIcon from "../components/icons/adminicons/FeedbackIcon";
 import LmsIcon from "../components/icons/adminicons/LmsIcon";
 import RequestStatistic from "../components/RequestStatistic";
+import DashboardIcon from "../components/icons/DashboardIcon";
 
 function AdminProfileScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -61,6 +59,18 @@ function AdminProfileScreen({ navigation }) {
                 </View>
             </View>
             <View style={styles.iconsContainer}>
+            {user.user_metadata.ambassador && (
+              <DashboardIcon
+                location={{
+                  name: "InApp",
+                  // params: {
+                  //   screen: "Profile",
+                  //   initial: false,
+                  // },
+                }}
+              />
+            )}
+
                 <SettingsIcon />
             </View>
             <Line style={styles.line} />
@@ -124,7 +134,7 @@ const styles = StyleSheet.create({
   },
   iconsContainer: {
     marginHorizontal: 50,
-    gap: 45,
+    gap: 30,
     marginTop: 15,
     marginBottom: 17,
     flexDirection: "row",

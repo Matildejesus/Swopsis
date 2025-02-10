@@ -1,14 +1,15 @@
 import supabase from "./supabase";
 
-export async function addJoinRequest({ details }) {
+export async function addJoinRequest({ userId, groupId, message }) {
+    console.log("addJoinRequests: ");
     const { data, error} = await supabase
         .from("JoinRequests")
         .insert([
             {
-                userId: details.userId,
-                groupId: details.groupId,
-                message: details.message,
-                status: details.status,
+                userId,
+                groupId,
+                message,
+                status: "Pending",
             }
         ])
         .select();
@@ -17,7 +18,7 @@ export async function addJoinRequest({ details }) {
         throw new Error(error.message);
     }
 
-    return data[0];
+    return data;
 }
 
 export async function getJoinRequests({ groupId }) {

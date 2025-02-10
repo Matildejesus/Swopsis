@@ -18,47 +18,52 @@ export function useLogin() {
       console.log(user.user.email);
       console.log(user.user.user_metadata.email);
       if (user.user.user_metadata.group) {
+        console.log("LOGINNNN 1");
         navigation.reset({
           index: 0,
           routes: [
             {
               name: "InApp",
-              params: {
-                screen: "Profile",
-                initial: false,
-              },
+              // params: {
+              //   screen: "Profile",
+              //   initial: false,
+              // },
             },
           ],
         });
        
       }
       else if (user.user.email == "admin@gmail.com") {
+        console.log("LOGINNNN 2");
         navigation.reset({
           index: 0,
           routes: [
             {
-              name: "AdminProfile",
-              params: {
-                initial: false,
-              }
+              name: "AdminApp",
+              // params: {
+              //   screen: "AdminProfile",
+              //   initial: false,
+              // }
             }
           ]
         });
+        
       }
       else if (!user.user.user_metadata.group){
         navigation.navigate("Postcode");
       }
  
       else {
+        console.log("LOGINNNN 3");
         navigation.reset({
           index: 0,
           routes: [
             {
               name: "InApp",
-              params: {
-                screen: "Profile",
-                initial: false,
-              },
+              // params: {
+              //   screen: "Profile",
+              //   initial: false,
+              // },
             },
           ],
         });

@@ -7,7 +7,7 @@ podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties
 ENV['RCT_NEW_ARCH_ENABLED'] = podfile_properties['newArchEnabled'] == 'true' ? '1' : '0'
 ENV['EX_DEV_CLIENT_NETWORK_INSPECTOR'] = podfile_properties['EX_DEV_CLIENT_NETWORK_INSPECTOR']
 
-platform :ios, podfile_properties['ios.deploymentTarget'] || '13.0'
+platform :ios, '14.0'
 install! 'cocoapods',
   :deterministic_uuids => false
 
@@ -24,7 +24,7 @@ prepare_react_native_project!
 #   }
 # }
 # ```
-flipper_config = FlipperConfiguration.disabled
+# flipper_config = FlipperConfiguration.disabled
 if ENV['NO_FLIPPER'] == '1' then
   # Explicitly disabled through environment variables
   flipper_config = FlipperConfiguration.disabled
@@ -39,6 +39,9 @@ end
 
 target 'swopsis' do
   use_expo_modules!
+# @generated begin react-native-maps - expo prebuild (DO NOT MODIFY) sync-e9cc66c360abe50bc66d89fffb3c55b034d7d369
+  pod 'react-native-google-maps', path: File.dirname(`node --print "require.resolve('react-native-maps/package.json')"`)
+# @generated end react-native-maps
   config = use_native_modules!
 
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
@@ -54,7 +57,7 @@ target 'swopsis' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
     # Note that if you have use_frameworks! enabled, Flipper will not work if enabled
-    :flipper_configuration => flipper_config
+   
   )
 
   post_install do |installer|
