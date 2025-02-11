@@ -25,8 +25,22 @@ export async function getJoinRequests({ groupId }) {
     const { data, error } = await supabase
         .from("JoinRequests")
         .select("*")
+        .eq("groupId", groupId)
         .order("created_at", { ascending: false });
     
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
+}
+
+export async function getAllJoinRequests() {
+    const { data, error } = await supabase
+        .from("JoinRequests")
+        .select("*")
+        .order("created_at", { ascending: false });
+
     if (error) {
         throw new Error(error.message);
     }

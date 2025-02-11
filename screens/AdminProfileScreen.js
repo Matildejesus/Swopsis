@@ -15,35 +15,77 @@ import FeedbackIcon from "../components/icons/adminicons/FeedbackIcon";
 import LmsIcon from "../components/icons/adminicons/LmsIcon";
 import RequestStatistic from "../components/RequestStatistic";
 import DashboardIcon from "../components/icons/DashboardIcon";
+import { getAllJoinRequests, getJoinRequests } from "../services/apiJoinRequests";
+import CoinIcon from "../components/icons/adminicons/CoinIcon";
+import NewsIcon from "../components/icons/adminicons/NewsIcon";
+import { getAllUsers, getGroupMembers } from "../services/apiAdmin";
 
 function AdminProfileScreen({ navigation }) {
   const dispatch = useDispatch();
   const [items, setItems] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [requestCount, setRequestCount] = useState();
+  const [membersCount, setMembersCount] = useState();
   const [loading, setLoading] = useState();
   const { user } = useUser();
+  const [userName, setUsername] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [ambassador, setAmbassador] = useState(null);
+  const [group, setGroup] = useState("");
+  const [email, setEmail] = useState("");
+ // console.log(user.app_metadata);
   
   useEffect(() => {
-    if (user) {
-      const fetchItems = async () => {
+    if (!user) return; 
+
+    if (user.app_metadata?.role == "super-admin") {  
+      console.log("USER: ", user);
+      setUsername("Super Admin");
+    } else {
+      setUsername(user.user_metadata.userName);
+      setAvatar(user.user_metadata.avatar);
+      setGroup(user.user_metadata.group);
+      setAmbassador(user.user_metadata.ambassador);
+    }
+    setEmail(user.email);
+    setRequests(null);
+    setRequestCount(0);
+    setMembers(null);
+    setMembersCount(0);
+    console.log(group);
+    if (group) {
+      const fetchRequests = async () => {
         try {
-          const fetchedItems = await getItems({ userId: user.id });
-          setItems(fetchedItems);
+          const fetchedRequests = await getJoinRequests({ groupId: group });
+          const fetchedMembers = await getGroupMembers({groupId: group, id: user.id});
+          setRequests(fetchedRequests);
+          setRequestCount(fetchedRequests.length);
+          setMembers(fetchedMembers);
+          console.log("FETCHED MEMBERS: ", fetchedMembers);
+          setMembersCount(fetchedMembers.length);
         } catch (error) {
-          console.error("Error fetching items: ", error);
-        } finally {
-          setLoading(false);
+          console.error("Error fetching requests: ", error);
         }
       };
-      fetchItems();
+      fetchRequests();
+    } else {
+      const fetchRequests = async () => {
+        try {
+          const fetchedRequests = await getAllJoinRequests();
+          const fetchedMembers = await getAllUsers();
+         // setRequests(fetchedRequests);
+          setRequestCount(fetchedRequests.length);
+          setMembers(fetchedMembers);
+          setMembersCount(fetchedMembers.users.length);
+        } catch (error) {
+          console.error("Error fetching requests: ", error);
+        }
+      };
+      fetchRequests();
     }
-  }, [user]);
+  }, [user, group]);
 
-  if (!user) {
-    return <Text>Loading user data...</Text>;
-  }
-
-  const { userName, avatar } = user.user_metadata;
-  const email = user.email; 
 
   const handleAddIconPress = () => {
     setModalVisible(true);
@@ -59,14 +101,10 @@ function AdminProfileScreen({ navigation }) {
                 </View>
             </View>
             <View style={styles.iconsContainer}>
-            {user.user_metadata.ambassador && (
-              <DashboardIcon
+            {ambassador && (
+              <DashboardIcon text="Profile"
                 location={{
                   name: "InApp",
-                  // params: {
-                  //   screen: "Profile",
-                  //   initial: false,
-                  // },
                 }}
               />
             )}
@@ -75,18 +113,27 @@ function AdminProfileScreen({ navigation }) {
             </View>
             <Line style={styles.line} />
             <View style={styles.iconContainer}>
-                <RectangleButton icon={<ItemIcon />} text="Total Items" color="#FB5099" number="0"/>
-                <RectangleButton icon={<MemberIcon />} text="Members" color="#31CE36" number="0"/>
-                <RectangleButton icon={<FeedbackIcon />} text="Feedback" color="#F25961" number="0"/>
-                <RectangleButton icon={<GroupIcon />} text="Groups" color="#FFAD46" number="0"/>
-                <RectangleButton icon={<LmsIcon />} text="LMS" color="#357738" number="0"/>
+                <RectangleButton icon={<ItemIcon />} text="Total Items" color="#FB5099" number="0" location="Items"/>
+                <RectangleButton icon={<MemberIcon />} text="Members" color="#31CE36" number={membersCount} location="Members" data={members} requests={requests}/>
+                <RectangleButton icon={<FeedbackIcon />} text="Feedback" color="#F25961" number="0" location="Feedback"/>
+                {ambassador ? (
+                  <>
+                    <RectangleButton icon={<CoinIcon />} text="Total Coins" color="#357738" number="0" location="Coins" />
+                    <RectangleButton icon={<NewsIcon />} text="News" color="#FFAD46" number="0" location="News" />
+                  </>
+                ) : (
+                  <>
+                    <RectangleButton icon={<GroupIcon />} text="Groups" color="#FFAD46" number="0" location="Groups" />
+                    <RectangleButton icon={<LmsIcon />} text="LMS" color="#357738" number="0" location="Lms" />
+                  </>
+                )}
             </View>
             <Text style={styles.title}>Overall Statistics</Text>
             <Text style={styles.subtitle}>Daily information about statistics in system</Text>
             <Line style={styles.line} />
             <View style={styles.layout}>
                 <RequestStatistic number="0" text="Accepted Requests" />
-                <RequestStatistic number="0" text="Pending Requests" />
+                <RequestStatistic number={requestCount} text="Pending Requests" />
                 <RequestStatistic number="0" text="Rejected Requests" />
             </View>
         </View>
@@ -99,7 +146,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-  //  alignItems: "center",
+   // alignItems: "center",
+    justifyContent: "center"
   },
   headerContainer: {
     flexDirection: "row",

@@ -71,7 +71,7 @@ function ProfileScreen({ navigation }) {
           <View style={styles.coins}>
             <CoinIcon />
             <Text style={styles.userName}>{coins}</Text>
-            {(user.user_metadata.ambassador) && <DashboardIcon location={{
+            {(user.user_metadata.ambassador) && <DashboardIcon text="Dashboard" location={{
               name: "AdminApp",
               // params: {
               //   screen: "AdminProfile",
@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
     fontFamily: "RalewayBold",
     fontSize: 20,
     fontWeight: '700',
+    marginRight: 70,
   },
   userEmail: {
     color: Colors.primary2,

@@ -9,7 +9,7 @@ import Colors from "../../constants/colors";
 import dateFormatting from "../dateFormatting";
 import { getItemsInfo } from "../../services/apiItems";
 
-const ProfileItemDetails = ({ itemData }) => {
+function ProfileItemDetails({ itemData }) {
   const { user } = useUser();
   const { userName, avatar } = user.user_metadata;
   const email = user.email;

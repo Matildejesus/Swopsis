@@ -2,9 +2,8 @@ import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, View, StyleSheet, Text } from "react-native";
 import Svg, { G, Path } from "react-native-svg";
 
-function DashboardIcon({ location }) {
+function DashboardIcon({ location, text }) {
     const navigation = useNavigation();
-    console.log(location);
     return (
         <TouchableOpacity onPress={() => navigation.reset({
             index: 0,
@@ -17,7 +16,8 @@ function DashboardIcon({ location }) {
             <Path d="M0 0 C2.97 0 5.94 0 9 0 C9 2.31 9 4.62 9 7 C6.03 7 3.06 7 0 7 C0 4.69 0 2.38 0 0 Z M2 2 C2 2.99 2 3.98 2 5 C3.65 5 5.3 5 7 5 C7 4.01 7 3.02 7 2 C5.35 2 3.7 2 2 2 Z " fill="#004A0E" transform="translate(2,15)"/>
             <Path d="M0 0 C2.97 0 5.94 0 9 0 C9 2.31 9 4.62 9 7 C6.03 7 3.06 7 0 7 C0 4.69 0 2.38 0 0 Z M2 2 C2 2.99 2 3.98 2 5 C3.65 5 5.3 5 7 5 C7 4.01 7 3.02 7 2 C5.35 2 3.7 2 2 2 Z " fill="#004A0E" transform="translate(13,2)"/>
         </Svg>
-        <Text style={styles.text}>Dashboard</Text>
+        {text ? <Text style={styles.text}>{text}</Text> : null}
+        {/* <Text style={styles.text}>Dashboard</Text> */}
         </View>
         </TouchableOpacity>
     )
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     flexDirection: "row",
     gap: 4,
-    paddingLeft: 70,
+    //paddingLeft: 70,
   },
   text: {
     paddingTop: 13,

@@ -17,7 +17,7 @@ function ModalLeaveWidget({ visible, onRequestClose }) {
         title="You are about to leave the group"
         titleStyle={styles.title}
       />
-      <TrashIcon style={styles.image} />
+      <TrashIcon style={styles.image} width="60" height="69" />
       <Dialog.Actions>
         <View style={styles.buttonContainer}>
           <ModalButton

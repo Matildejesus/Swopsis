@@ -1,18 +1,18 @@
 import { useNavigation } from "@react-navigation/native";
-import { View, StyleSheet, Text } from "react-native";
-import { TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
-function RectangleButton({ icon, text, color, number }) {
-
+function RectangleButton({ icon, text, color, number, location, data, requests }) {
     const navigation = useNavigation();
+    const ButtonWrapper = location ? TouchableOpacity : View;
+    console.log(number);
     return (
-        <TouchableOpacity onPress={() => navigation.navigate("Groups")}>
+        <ButtonWrapper onPress={location ? () => navigation.navigate(location, { membersList: data, membersCount: number, requests: requests}) : null}>
             <View style={styles.container}>
                 <View style={styles.iconContainer}>{icon}</View>
                 <Text style={[styles.numText, { color }]}>{number}</Text>
                 <Text style={[styles.text, { color }]}>{text}</Text>
             </View>
-        </TouchableOpacity>
+        </ButtonWrapper>
     );
 }
 

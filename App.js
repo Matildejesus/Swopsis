@@ -39,6 +39,7 @@ import ItemsScreen from "./screens/admin/ItemsScreen.js";
 import LmsScreen from "./screens/admin/LmsScreen.js";
 import MemberScreen from "./screens/admin/MemberScreen.js";
 import FeedbacksScreen from "./screens/admin/FeedbacksScreen.js";
+import CoinsScreen from "./screens/admin/CoinsScreen.js";
 
 import Logo from "./components/icons/Logo.js";
 import Title from "./components/Title.js";
@@ -50,6 +51,14 @@ import Colors from "./constants/colors.js";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import GroupIcon from "./components/icons/adminicons/GroupIcon.js";
+import ItemIcon from "./components/icons/adminicons/ItemIcon.js";
+import FeedbackIcon from "./components/icons/adminicons/FeedbackIcon.js";
+import LmsIcon from "./components/icons/adminicons/LmsIcon.js";
+import DashboardIcon from "./components/icons/DashboardIcon.js";
+import MemberIcon from "./components/icons/adminicons/MemberIcon.js";
+import CoinIcon from "./components/icons/adminicons/CoinIcon.js";
+
 
 AppRegistry.registerComponent("main", () => App);
 
@@ -223,8 +232,6 @@ function BottomTabNavigator() {
   );
 }
 
-console.log(ItemsScreen);
-
 function DrawerNavigator() {
   return (
     <Drawer.Navigator
@@ -236,27 +243,53 @@ function DrawerNavigator() {
       <Drawer.Screen
         name="AdminProfile"
         component={AdminProfileScreen}
-        options={{ drawerLabel: "Dashboard" }}
+        options={{ 
+          drawerLabel: "Dashboard",
+          drawerIcon: () => <DashboardIcon />
+         }}
       />
       <Drawer.Screen
         name="Groups"
         component={GroupsScreen}
-        options={{ drawerLabel: "Groups" }}
+        options={{ 
+          drawerLabel: "Groups",
+          drawerIcon: () => <GroupIcon />
+         }}
       />
       <Drawer.Screen
         name="Items"
         component={ItemsScreen}
-        options={{ drawerLabel: "Items" }}
+        options={{ 
+          drawerLabel: "Items",
+          drawerIcon: () => <ItemIcon /> }}
       />
       <Drawer.Screen
         name="Feedback"
         component={FeedbacksScreen}
-        options={{ drawerLabel: "Feedbacks" }}
+        options={{ drawerLabel: "Feedbacks",
+          drawerIcon: () => <FeedbackIcon />
+         }}
       />
       <Drawer.Screen
         name="Lms"
         component={LmsScreen}
-        options={{ drawerLabel: "Lms" }}
+        options={{ drawerLabel: "Lms",
+          drawerIcon: () => <LmsIcon />
+         }}
+      />
+      <Drawer.Screen
+        name="Members"
+        component={MemberScreen}
+        options={{ drawerLabel: "Members",
+          drawerIcon: () => <MemberIcon />
+         }}
+      />
+      <Drawer.Screen
+        name="Coins"
+        component={CoinsScreen}
+        options={{ drawerLabel: "Total Coins",
+          drawerIcon: () => <CoinIcon />
+        }}
       />
     </Drawer.Navigator>
   );

@@ -1,11 +1,11 @@
 import Svg, { Path } from "react-native-svg";
 
-function TrashIcon() {
+function TrashIcon({width, height}) {
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
-      width="60"
-      height="69"
+      width={width}
+      height={height}
       viewBox="0 0 60 69"
       fill="none"
     >
