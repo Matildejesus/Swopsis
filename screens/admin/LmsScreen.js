@@ -1,11 +1,11 @@
 import { Text, View } from "react-native";
 
 function LmsScreen() {
-    return(
+    return (
         <View>
             <Text>Items Screen</Text>
         </View>
-    )
+    );
 }
 
 export default LmsScreen;

@@ -8,7 +8,6 @@ export function useItem({ userId }) {
     });
     console.log(userId);
     console.log("actual: ", item);
-    
-    return {isLoading, item};
-}
 
+    return { isLoading, item };
+}

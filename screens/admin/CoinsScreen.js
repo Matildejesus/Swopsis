@@ -1,11 +1,11 @@
 import { Text, View } from "react-native";
 
 function CoinsScreen() {
-    return( 
+    return (
         <View>
             <Text>Coins Screen</Text>
         </View>
-    )
+    );
 }
 
 export default CoinsScreen;

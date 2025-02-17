@@ -1,18 +1,19 @@
 import { View, StyleSheet, Text } from "react-native";
+import UnderConstruction from "../components/UnderConstruction";
 
 function BeYouScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>This is Be You screen.</Text>
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            <UnderConstruction />
+        </View>
+    );
 }
 
 export default BeYouScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+    },
 });

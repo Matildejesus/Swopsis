@@ -13,8 +13,8 @@ export async function addGroup({ group }) {
                 rules: group.rules,
                 numberOfMem: group.numberOfMem,
                 avatar: group.avatar,
-                ambassadorId: group.ambassador
-            }
+                ambassadorId: group.ambassador,
+            },
         ])
         .select();
 
@@ -30,11 +30,11 @@ export async function getGroups() {
     const { data: groups, error: fetchError } = await supabase
         .from("Groups")
         .select("*")
-        .order("created_at", { ascending: false });  
+        .order("created_at", { ascending: false });
 
     if (fetchError) {
         throw new Error(fetchError.message);
     }
     console.log("data: ", groups[0].location);
-    return groups;  
-} 
+    return groups;
+}

@@ -2,77 +2,60 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { login as loginApi } from "../../services/apiAuth";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import Toast from 'react-native-root-toast';
+import Toast from "react-native-root-toast";
 
 export function useLogin() {
-  const navigation = useNavigation();
-  const [error, setError] = useState("");
+    const navigation = useNavigation();
+    const [error, setError] = useState("");
 
-  const queryClient = useQueryClient();
+    const queryClient = useQueryClient();
 
-  const { mutate: login, isLoading } = useMutation({
-    mutationFn: ({ email, password}) => loginApi({ email, password}),
-    onSuccess: (user) => {
-      queryClient.setQueriesData(["user"], user);
-      console.log(user);
-      console.log(user.user.email);
-      console.log(user.user.user_metadata.email);
-      if (user.user.user_metadata.group) {
-        console.log("LOGINNNN 1");
-        navigation.reset({
-          index: 0,
-          routes: [
-            {
-              name: "InApp",
-              // params: {
-              //   screen: "Profile",
-              //   initial: false,
-              // },
-            },
-          ],
-        });
-       
-      }
-      else if (user.user.email == "admin@gmail.com") {
-        console.log("LOGINNNN 2");
-        navigation.reset({
-          index: 0,
-          routes: [
-            {
-              name: "AdminApp",
-              // params: {
-              //   screen: "AdminProfile",
-              //   initial: false,
-              // }
+    const { mutate: login, isLoading } = useMutation({
+        mutationFn: ({ email, password }) => loginApi({ email, password }),
+        onSuccess: (user) => {
+            queryClient.setQueriesData(["user"], user);
+            queryClient.invalidateQueries(["user"]);
+            console.log(user);
+            console.log(user.user.email);
+            console.log(user.user.user_metadata.email);
+            if (user.user.user_metadata.group) {
+                console.log("LOGINNNN 1");
+                navigation.reset({
+                    index: 0,
+                    routes: [
+                        {
+                            name: "InApp",
+                        },
+                    ],
+                });
+            } else if (user.user.email == "admin@gmail.com") {
+                console.log("LOGINNNN 2");
+                navigation.reset({
+                    index: 0,
+                    routes: [
+                        {
+                            name: "AdminApp",
+                        },
+                    ],
+                });
+            } else if (!user.user.user_metadata.group) {
+                navigation.navigate("Postcode");
+            } else {
+                console.log("LOGINNNN 3");
+                navigation.reset({
+                    index: 0,
+                    routes: [
+                        {
+                            name: "InApp",
+                        },
+                    ],
+                });
             }
-          ]
-        });
-        
-      }
-      else if (!user.user.user_metadata.group){
-        navigation.navigate("Postcode");
-      }
- 
-      else {
-        console.log("LOGINNNN 3");
-        navigation.reset({
-          index: 0,
-          routes: [
-            {
-              name: "InApp",
-              // params: {
-              //   screen: "Profile",
-              //   initial: false,
-              // },
-            },
-          ],
-        });
-      }     
-    },
-    onError: (err) => {
-      Toast.show(err.message);
-    },
-  });
+        },
+        onError: (err) => {
+            Toast.show(err.message);
+        },
+    });
 
-  return { login, isLoading, error };
+    return { login, isLoading, error };
 }

@@ -9,33 +9,45 @@ import { getGroupMembers } from "../../services/apiAdmin";
 import MemberWidget from "../../components/MemberWidget";
 
 function MemberScreen() {
-
     const navigation = useNavigation();
     const route = useRoute();
     const { membersList, membersCount, requests } = route.params;
     //console.log("MEMBERSLIST: ", membersList.users);
     console.log("REQUESTS: ", membersList);
 
-    return(
+    return (
         <View style={styles.container}>
             <View style={styles.navbar}>
-              <SideBarNav navigation={navigation}/>
+                <SideBarNav navigation={navigation} />
             </View>
-            <FlatList 
-                data={requests}
-                renderItem={({item}) => <MemberWidget requests={item}/>}
-                keyExtractor={item => item.id}
-            />
-            <FlatList 
-                data={membersList.users}
-                renderItem={({item}) => <MemberWidget user={item}/>}
-                keyExtractor={item => item.id}
-            />
+            <View style={styles.middle}>
+                {requests && (
+                    <FlatList
+                        data={requests}
+                        renderItem={({ item }) => (
+                            <MemberWidget requests={item} />
+                        )}
+                        keyExtractor={(item) => item.id}
+                    />
+                )}
+                {/* <Text>Help</Text>
+                <FlatList 
+                    data={membersList.users}
+                    renderItem={({item}) => <MemberWidget user={item}/>}
+                    keyExtractor={item => item.id}
+                />
+                <Text>Yay</Text> */}
+            </View>
             <View style={styles.bottom}>
-                <RectangleButton icon={<MemberIcon />} text="Members" color="#FFAD46" number={membersCount}/>
+                <RectangleButton
+                    icon={<MemberIcon />}
+                    text="Members"
+                    color="#31CE36"
+                    number={membersCount}
+                />
             </View>
         </View>
-    )
+    );
 }
 
 export default MemberScreen;
@@ -47,13 +59,13 @@ const styles = StyleSheet.create({
         paddingTop: 40,
     },
     navbar: {
-        flex: 1,
+        //  flex: 1,
         flexDirection: "row",
         paddingTop: 20,
-       // alignItems: "center",
+        // alignItems: "center",
         justifyContent: "space-between",
         paddingHorizontal: 20,
-        marginBottom:42,
+        marginBottom: 42,
     },
     bottom: {
         alignItems: "flex-end",
@@ -62,4 +74,12 @@ const styles = StyleSheet.create({
         paddingRight: 20,
         paddingTop: 20,
     },
-})
+    middle: {
+        // flex: 1,
+        // alignContent: "flex-start",
+        // alignItems: "flex-start",
+        //   alignSelf: "flex-start",
+        flex: 1,
+        //  height: 500,
+    },
+});

@@ -8,7 +8,7 @@ import DropDownMenu from "../../components/DropDownMenu.js";
 import { useNavigation } from "@react-navigation/native";
 import Categories from "../../constants/itemCategories.js";
 import { useMemo } from "react";
-import RadioGroup from 'react-native-radio-buttons-group';
+import RadioGroup from "react-native-radio-buttons-group";
 import ErrorMessage from "../../components/ErrorMessage.js";
 
 function CreateItemScreen() {
@@ -19,11 +19,14 @@ function CreateItemScreen() {
     const [selectedId, setSelectedId] = useState();
     const [inputError, setInputError] = useState(null);
     let method = "";
-   
-    const radioButtons = useMemo(() => ([
-        { id: '1', label: "SWAP", value: "SWAP"},
-        {id: '2', label: "LOAN", value: "LOAN"}
-    ]), []);
+
+    const radioButtons = useMemo(
+        () => [
+            { id: "1", label: "SWAP", value: "SWAP" },
+            { id: "2", label: "LOAN", value: "LOAN" },
+        ],
+        [],
+    );
 
     console.log(Object.keys(Categories));
     console.log();
@@ -31,7 +34,7 @@ function CreateItemScreen() {
     const handleImageSelected = (newAvatarUri) => {
         setAvatar(newAvatarUri);
     };
-    
+
     const navigation = useNavigation();
 
     const submitHandler = () => {
@@ -40,75 +43,85 @@ function CreateItemScreen() {
             setInputError("Missing inputs");
             console.log(inputError);
         } else {
-            {if (selectedId == 1) {
-                method = "swap";
-            } else {
-                method = "loan";
-            }}
+            {
+                if (selectedId == 1) {
+                    method = "swap";
+                } else {
+                    method = "loan";
+                }
+            }
 
             navigation.navigate("ItemDescriptionInput", {
-                title: title, 
-                description: description, 
+                title: title,
+                description: description,
                 category: category.value,
-                avatar: avatar, 
-                method: method
-            }); 
+                avatar: avatar,
+                method: method,
+            });
         }
-    }
+    };
 
     return (
         <View style={styles.container}>
-            <PicturePicker 
-                onImageSelected={handleImageSelected} 
-                imageStyle={styles.imageStyle} 
+            <PicturePicker
+                onImageSelected={handleImageSelected}
+                imageStyle={styles.imageStyle}
                 userPicture={avatar}
                 style={styles.picturePicker}
             />
             <View style={styles.row}>
-                <InputField 
+                <InputField
                     text="Title"
                     textStyle={styles.label}
-                    containerStyle={styles.titleField} 
-                    placeholder="Write a post caption..." 
+                    containerStyle={styles.titleField}
+                    placeholder="Write a post caption..."
                     inputStyle={styles.text}
                     onChangeText={setTitle}
                     value={title}
                     secureTextEntry={false}
                 />
-	        </View>
-            <View>
-	        <View style={styles.view2}>
-                <InputField 
-                    text="Description"
-                    textStyle={styles.label}
-                    containerStyle={styles.descriptionField} 
-                    multiline={true}
-                    placeholder="Tell us the brand and more..." 
-                    inputStyle={styles.text}
-                    onChangeText={setDescription}
-                    value={description}
-                    secureTextEntry={false}
-                />
-	        </View>
             </View>
-	        <View style={styles.row}>
-		        <Text style={styles.label}>Category</Text>
-                <DropDownMenu value={category} data={Object.keys(Categories)} addCategoryHandler={setCategory}/>
-	        </View>
-            <RadioGroup 
-                radioButtons={radioButtons} 
+            <View>
+                <View style={styles.view2}>
+                    <InputField
+                        text="Description"
+                        textStyle={styles.label}
+                        containerStyle={styles.descriptionField}
+                        multiline={true}
+                        placeholder="Tell us the brand and more..."
+                        inputStyle={styles.text}
+                        onChangeText={setDescription}
+                        value={description}
+                        secureTextEntry={false}
+                    />
+                </View>
+            </View>
+            <View style={styles.row}>
+                <Text style={styles.label}>Category</Text>
+                <DropDownMenu
+                    value={category}
+                    data={Object.keys(Categories)}
+                    addCategoryHandler={setCategory}
+                />
+            </View>
+            <RadioGroup
+                radioButtons={radioButtons}
                 onPress={setSelectedId}
                 selectedId={selectedId}
-                layout="row" 
+                layout="row"
             />
             <View style={styles.error}>
                 <ErrorMessage error={inputError} />
             </View>
             <View style={styles.buttonContainer}>
-                <PrimaryButton title={"NEXT"} style={styles.button} onPress={submitHandler}/>
+                <PrimaryButton
+                    title={"NEXT"}
+                    style={styles.button}
+                    onPress={submitHandler}
+                />
             </View>
         </View>
-    )
+    );
 }
 
 export default CreateItemScreen;
@@ -126,7 +139,7 @@ const styles = StyleSheet.create({
         height: 244,
         backgroundColor: Colors.secondary2,
         borderRadius: 21,
-    }, 
+    },
     imageStyle: {
         width: 245,
         height: 244,
@@ -144,7 +157,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-
     },
     scrollView: {
         alignItems: "flex-start",
@@ -184,5 +196,5 @@ const styles = StyleSheet.create({
     },
     error: {
         height: 30,
-    }
-})
+    },
+});

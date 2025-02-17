@@ -1,5 +1,13 @@
 class Item {
-    constructor(category, image, title, description, method, available, userId) {
+    constructor(
+        category,
+        image,
+        title,
+        description,
+        method,
+        available,
+        userId,
+    ) {
         this.category = category;
         this.image = image;
         this.title = title;
@@ -8,6 +16,7 @@ class Item {
         this.available = available;
         this.userId = userId;
     }
-}c
+}
+c;
 
 export default Item;

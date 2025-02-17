@@ -6,22 +6,22 @@ export async function getItemsNames({ category }) {
     const { data: items, error: fetchError } = await supabase
         .from("ItemConversions")
         .select("name")
-        .eq("category", category);  
+        .eq("category", category);
 
     if (fetchError) {
         throw new Error(fetchError.message);
     }
-    const itemNames = items.map(item => item.name);
+    const itemNames = items.map((item) => item.name);
     console.log("data: ", itemNames);
     return itemNames;
-} 
+}
 
 export async function getSubcategoryDetails({ item }) {
     console.log("item", item);
     const { data: items, error: fetchError } = await supabase
         .from("ItemConversions")
         .select("*")
-        .eq("name", item);  
+        .eq("name", item);
 
     if (fetchError) {
         throw new Error(fetchError.message);

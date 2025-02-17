@@ -28,9 +28,9 @@
 //         <Text>You are not a member of any groups.</Text>
 //       ) : (
 //         groups.map(group => (
-//           <TouchableOpacity 
-//             key={group.id} 
-//             style={styles.groupButton} 
+//           <TouchableOpacity
+//             key={group.id}
+//             style={styles.groupButton}
 //             onPress={() => navigation.navigate('Wardrobe', { groupId: group.id })}
 //           >
 //             <Text style={styles.groupText}>{group.name}</Text>

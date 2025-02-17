@@ -9,7 +9,7 @@ function ReviewButton() {
             <Text style={styles.label}>REVIEW</Text>
             <PenIcon />
         </View>
-    )
+    );
 }
 
 export default ReviewButton;
@@ -31,5 +31,5 @@ const styles = StyleSheet.create({
         fontFamily: "RalewayMedium",
         fontSize: 15,
         color: Colors.primary1,
-    }
-})
+    },
+});

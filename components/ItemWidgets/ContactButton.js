@@ -9,7 +9,7 @@ function ContactButton() {
             <Text style={styles.label}>CONTACT</Text>
             <ContactIcon />
         </View>
-    )
+    );
 }
 
 export default ContactButton;
@@ -31,5 +31,5 @@ const styles = StyleSheet.create({
         fontFamily: "RalewayMedium",
         fontSize: 15,
         color: Colors.primary1,
-    }
-})
+    },
+});

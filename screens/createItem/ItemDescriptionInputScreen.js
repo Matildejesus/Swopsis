@@ -5,7 +5,10 @@ import InputField from "../../components/authentication/InputField";
 import { useState } from "react";
 import { useUser } from "../../components/authentication/useUser.js";
 import DropDownMenu from "../../components/DropDownMenu.js";
-import Categories, { Conditions, Colors as ColorsList } from "../../constants/itemCategories.js";
+import Categories, {
+    Conditions,
+    Colors as ColorsList,
+} from "../../constants/itemCategories.js";
 import PrimaryButton from "../../components/PrimaryButton";
 import { addItem } from "../../services/apiItems.js";
 import ErrorMessage from "../../components/ErrorMessage.js";
@@ -16,7 +19,7 @@ import { getSubcategoryDetails } from "../../services/apiItemConvert.js";
 
 function ItemDescriptionInputScreen() {
     const route = useRoute();
-    const {title, description, category, avatar, method} = route.params;
+    const { title, description, category, avatar, method } = route.params;
     const [size, setSize] = useState();
     const [weight, setWeight] = useState();
     const [fabric, setFabric] = useState("");
@@ -36,7 +39,13 @@ function ItemDescriptionInputScreen() {
     const {
         user: {
             id: userId,
-            user_metadata: { coins, totalWeight, totalLitres, totalCarbon, itemsSwapped },
+            user_metadata: {
+                coins,
+                totalWeight,
+                totalLitres,
+                totalCarbon,
+                itemsSwapped,
+            },
         },
     } = useUser();
 
@@ -59,28 +68,42 @@ function ItemDescriptionInputScreen() {
     const submitHandler = () => {
         console.log("Selected Color:", selectedColor);
         console.log("submitting!!!");
-        if (!subcategory || !weight || !condition || !selectedColor || (category != "Accessories" ? (!size || !fabric) : !material) || (category == "Shoes" && !length)) {
+        if (
+            !subcategory ||
+            !weight ||
+            !condition ||
+            !selectedColor ||
+            (category != "Accessories" ? !size || !fabric : !material) ||
+            (category == "Shoes" && !length)
+        ) {
             setInputError("Missing inputs");
             console.log(inputError);
         } else {
-            addItem({ 
+            addItem({
                 item: {
-                    userId, category, image: avatar, title, description, method 
+                    userId,
+                    category,
+                    image: avatar,
+                    title,
+                    description,
+                    method,
                 },
                 itemDetails: {
-                    subcategory: subcategory.value, 
-                    ...(category != "Accessories" && {size: size.value}), 
-                    weight, 
-                    ...(category == "Accessories" ? {material} : {fabric}), 
-                    condition: condition.value, 
+                    subcategory: subcategory.value,
+                    ...(category != "Accessories" && { size: size.value }),
+                    weight,
+                    ...(category == "Accessories" ? { material } : { fabric }),
+                    condition: condition.value,
                     color: selectedColor,
-                    ...(category == "Shoes" && {length}), 
-                }
+                    ...(category == "Shoes" && { length }),
+                },
             });
-            
+
             const retrieveSubcategoryDetails = async () => {
                 try {
-                    const itemConversion = await getSubcategoryDetails({ item: subcategory.value });
+                    const itemConversion = await getSubcategoryDetails({
+                        item: subcategory.value,
+                    });
                     setSubcategoryDetails(itemConversion);
                 } catch (error) {
                     console.error("Error fetching subcategory details:", error);
@@ -102,31 +125,42 @@ function ItemDescriptionInputScreen() {
             const itemsSaved = itemsSwapped + 1;
             const newCoins = coins + 1;
             console.log(newCoins);
-            updateUserData({ newCoins, totalLitres: litresSaved, totalCarbon: carbonSaved, totalWeight: weightSaved, itemsSwapped: itemsSaved });
-            navigation.navigate("Profile"); 
+            updateUserData({
+                newCoins,
+                totalLitres: litresSaved,
+                totalCarbon: carbonSaved,
+                totalWeight: weightSaved,
+                itemsSwapped: itemsSaved,
+            });
+            navigation.navigate("Profile");
         }
-    }
+    };
 
     return (
-        <View style={styles.container}> 
-            <View style={styles.titleContainer}> 
-            <Image  style={styles.image} source={{ uri: avatar }} />
+        <View style={styles.container}>
+            <View style={styles.titleContainer}>
+                <Image style={styles.image} source={{ uri: avatar }} />
                 <View style={styles.textContainer}>
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.description}>{description}</Text>
                 </View>
-            </View> 
+            </View>
             <View style={styles.row}>
-		        <Text style={styles.textStyle}>Subcategory</Text>
-                <DropDownMenu value={subcategory} category={category} addCategoryHandler={setSubcategory} dropDownStyle={styles.dropDownStyle}/>
-	        </View>
+                <Text style={styles.textStyle}>Subcategory</Text>
+                <DropDownMenu
+                    value={subcategory}
+                    category={category}
+                    addCategoryHandler={setSubcategory}
+                    dropDownStyle={styles.dropDownStyle}
+                />
+            </View>
             {/* <View style={styles.rowContainer}> */}
             <View style={styles.input}>
-                <InputField 
+                <InputField
                     text="Weight(kg)"
                     textStyle={styles.inputTextStyle}
-                    containerStyle={styles.inputField} 
-                    placeholder="1.5" 
+                    containerStyle={styles.inputField}
+                    placeholder="1.5"
                     inputStyle={styles.text}
                     onChangeText={setWeight}
                     value={weight}
@@ -134,68 +168,85 @@ function ItemDescriptionInputScreen() {
                 />
             </View>
             {/* </View> */}
-            
-           <View style={styles.row}>
-		        <Text style={styles.textStyle}>Condition</Text>
-                <DropDownMenu value={condition} data={Conditions} addCategoryHandler={setCondition}  dropDownStyle={styles.dropDownStyle}/>
-	        </View>
+
+            <View style={styles.row}>
+                <Text style={styles.textStyle}>Condition</Text>
+                <DropDownMenu
+                    value={condition}
+                    data={Conditions}
+                    addCategoryHandler={setCondition}
+                    dropDownStyle={styles.dropDownStyle}
+                />
+            </View>
             <View style={styles.input}>
-                <InputField 
-                    text={fields[0].charAt(0).toUpperCase() + fields[0].slice(1)}
+                <InputField
+                    text={
+                        fields[0].charAt(0).toUpperCase() + fields[0].slice(1)
+                    }
                     textStyle={styles.inputTextStyle}
-                    containerStyle={styles.inputField} 
-                    placeholder= "made of" 
+                    containerStyle={styles.inputField}
+                    placeholder="made of"
                     inputStyle={styles.text}
-                    onChangeText={fields[0] == "fabric" ? setFabric : setMaterial}
+                    onChangeText={
+                        fields[0] == "fabric" ? setFabric : setMaterial
+                    }
                     value={fields[0] === "fabric" ? fabric : material}
                     secureTextEntry={false}
                 />
             </View>
-            {category == "Shoes" && 
+            {category == "Shoes" && (
                 <View style={styles.input}>
-                    <InputField 
+                    <InputField
                         text="Length"
                         textStyle={styles.inputTextStyle}
-                        containerStyle={styles.inputField} 
-                        placeholder="short" 
+                        containerStyle={styles.inputField}
+                        placeholder="short"
                         inputStyle={styles.text}
                         onChangeText={setLength}
                         value={length}
                         secureTextEntry={false}
                     />
                 </View>
-            }
-           {category != "Accessories" && (
-               <View style={styles.row}>
-               <Text style={styles.textStyle}>Size</Text>
-               <DropDownMenu value={size} data={sizeList} addCategoryHandler={setSize}  dropDownStyle={styles.dropDownStyle}/>
-           </View>
-                
+            )}
+            {category != "Accessories" && (
+                <View style={styles.row}>
+                    <Text style={styles.textStyle}>Size</Text>
+                    <DropDownMenu
+                        value={size}
+                        data={sizeList}
+                        addCategoryHandler={setSize}
+                        dropDownStyle={styles.dropDownStyle}
+                    />
+                </View>
             )}
             <Text style={styles.colorStyle}>Color</Text>
             <FlatList
-            data={ColorsList}
-            numColumns={7}
-            renderItem={({ item }) => (
-                <>
-            {/* <Text>{item.hex}</Text> */}
-            <ColorSwitch
-                color={item.hex}
-                isSelected={selectedColor === item.hex}
-                onPress={setSelectedColor} 
-        />
-        </>
-    )}
-    keyExtractor={(item) => item.name}
-/>
+                data={ColorsList}
+                numColumns={7}
+                renderItem={({ item }) => (
+                    <>
+                        {/* <Text>{item.hex}</Text> */}
+                        <ColorSwitch
+                            color={item.hex}
+                            isSelected={selectedColor === item.hex}
+                            onPress={setSelectedColor}
+                        />
+                    </>
+                )}
+                keyExtractor={(item) => item.name}
+            />
             <View style={styles.error}>
                 <ErrorMessage error={inputError} />
             </View>
             <View style={styles.buttonContainer}>
-                <PrimaryButton title={"UPLOAD"} style={styles.button} onPress={submitHandler}/>
+                <PrimaryButton
+                    title={"UPLOAD"}
+                    style={styles.button}
+                    onPress={submitHandler}
+                />
             </View>
         </View>
-    )
+    );
 }
 
 export default ItemDescriptionInputScreen;
@@ -207,7 +258,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingTop: 40,
         gap: 10,
-       
     },
     image: {
         width: 95,
@@ -225,18 +275,19 @@ const styles = StyleSheet.create({
         fontFamily: "RalewayRegular",
         fontSize: 15,
         color: Colors.primary2,
-    }, 
+        height: 70,
+        width: 230,
+    },
     titleContainer: {
         flexDirection: "row",
         gap: 12,
-        paddingRight: 40,
         alignContent: "center",
     },
     textContainer: {
         marginTop: 8,
         flexDirection: "column",
         gap: 11,
-    }, 
+    },
     text: {
         color: Colors.primary2,
         fontFamily: "InterRegular",
@@ -254,14 +305,14 @@ const styles = StyleSheet.create({
     },
     input: {
         flexDirection: "row",
-      //  paddingLeft: 16,
+        //  paddingLeft: 16,
     },
     textStyle: {
         fontFamily: "RalewayBold",
         fontSize: 15,
         color: Colors.primary1,
         width: 100,
-    }, 
+    },
     inputTextStyle: {
         fontFamily: "RalewayBold",
         fontSize: 15,
@@ -269,7 +320,7 @@ const styles = StyleSheet.create({
         marginTop: 7,
         marginLeft: 22,
         width: 100,
-    }, 
+    },
     row: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -278,7 +329,6 @@ const styles = StyleSheet.create({
     },
     rowContainer: {
         flexDirection: "row",
-
     },
     button: {
         width: 141,
@@ -303,5 +353,5 @@ const styles = StyleSheet.create({
         fontFamily: "RalewayBold",
         fontSize: 15,
         color: Colors.primary1,
-    }
-})
+    },
+});
