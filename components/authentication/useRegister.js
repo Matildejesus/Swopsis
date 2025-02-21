@@ -18,7 +18,6 @@ export function useRegister() {
             navigation.navigate("Login");
         },
         onError: (err) => {
-            console.log("ERROR", err);
             Toast.show("error");
         },
     });

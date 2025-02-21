@@ -14,11 +14,10 @@ export async function addItemToWishlist({ userId, itemId }) {
     if (error) {
         throw new Error(error.message);
     }
-    console.log("hehe", data[0]);
     return data;
 }
 
-export async function getWishlistItems({ userId }) {
+export async function getWishlist({ userId }) {
     const { data, error } = await supabase
         .from("Wishlist")
         .select("*")
@@ -28,14 +27,29 @@ export async function getWishlistItems({ userId }) {
     if (error) {
         throw new Error(error.message);
     }
-    console.log("data: ", groups);
-    return groups;
+    return data;
 }
 
 export async function removeWishlistItem({ id }) {
-    const { error } = await supabase.from("Wishlist").delete().eq("id", id);
+    const { error } = await supabase
+        .from("Wishlist")
+        .delete()
+        .eq("id", id);
 
     if (error) {
         throw new Error(error.message);
     }
+}
+
+export async function getWishListItem({ userId, itemId }) {
+    const { data, error } = await supabase
+        .from("Wishlist")
+        .select("*")
+        .eq("userId", userId)
+        .eq("itemId", itemId);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+    return data;
 }

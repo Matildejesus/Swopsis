@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Divider } from "@rneui/themed";
 import HeartSwitch from "../HeartSwitch";
 import PinkNextArrow from "../icons/PinkNextArrow";
@@ -7,16 +7,22 @@ import DescriptionDisplay from "../DescriptionDisplay";
 import { useUser } from "../authentication/useUser";
 import Colors from "../../constants/colors";
 import dateFormatting from "../dateFormatting";
-import { getItemsInfo } from "../../services/apiItems";
+import { deleteItems, getItemsInfo } from "../../services/apiItems";
+import TrashIcon from "../icons/TrashIcon";
+import { getSubcategoryDetails } from "../../services/apiItemConvert";
+import { useNavigation } from "@react-navigation/native";
+import { updateUserData } from "../../services/apiAuth";
 
-function ProfileItemDetails({ itemData, user }) {
+function ProfileItemDetails({ itemData, user, owner }) {
     const { user: currentUser } = useUser();
 
     const [userName, setUserName] = useState("");
     const [avatar, setAvatar] = useState("");
     const [email, setEmail] = useState("");
+    const [id, setId] = useState("");
 
-    console.log("ITEM DATA: ", itemData);
+    const navigation = useNavigation();
+
     useEffect(() => {
         if (!user) user = currentUser; // Use authenticated user if none is passed
 
@@ -24,13 +30,13 @@ function ProfileItemDetails({ itemData, user }) {
             setUserName(user.user_metadata.userName);
             setAvatar(user.user_metadata.avatar);
             setEmail(user.email);
+            setId(user.id);
         }
     }, [user]);
 
     const [itemDetails, setItemDetails] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const displayModal = () => setIsModalVisible(true);
     const date = dateFormatting(itemData.created_at);
 
     useEffect(() => {
@@ -50,14 +56,64 @@ function ProfileItemDetails({ itemData, user }) {
         fetchData();
     }, [itemData]);
 
-    console.log(itemData.image);
+    const handleDeletion = async () => {
+        console.log("Deleting");
+        let { totalLitres, totalCarbon, totalWeight, itemsSwapped, coins } = currentUser.user_metadata;
+        console.log("0");
+        try {
+            console.log("1");
+            if (itemData.tradeCount == 0) {
+                console.log("2");
+               // const [ subcategoryDetails, setSubcategoryDetails ] = useState();
+                itemsSwapped -= 1;
+                try {
+                    console.log("3");
+                    const itemConversion = await getSubcategoryDetails({
+                        item: itemDetails.subcategory,
+                    });
+                    console.log("ITEMCONVERSION: ", itemConversion);
+                    totalLitres -= itemConversion.litres;
+                    if (itemConversion.scalable === "true") {
+                        totalCarbon -= itemConversion.carbon * itemDetails.weight;
+                    } else {
+                        totalCarbon -= itemConversion.carbon;
+                    }
+                    coins -= 1;
+                    totalWeight -= itemDetails.weight;
+                    console.log("4");
+                    console.log(coins, totalLitres, totalCarbon, totalWeight, itemsSwapped);
+                    await updateUserData({ newCoins: coins, totalLitres, totalCarbon, totalWeight, itemsSwapped});
+                } catch (error) {
+                    console.error("Error fetching conversion details: ", error);
+                }
+
+            }
+            console.log("5");
+            await deleteItems({ itemId: itemData.id });
+            navigation.reset({
+            index: 0,
+            routes: [
+                {
+                    name: "InApp",
+                },
+            ],
+        });
+        } catch (error) {
+            console.error("Error deleting item: ", error);
+        }
+ 
+    };
 
     return (
         <View style={styles.container}>
             <Image source={{ uri: itemData.image }} style={styles.image} />
             <View style={styles.header}>
                 <Text style={styles.itemName}>{itemData.title}</Text>
-                <HeartSwitch />
+                { !owner ? <HeartSwitch /> :  
+                    <TouchableOpacity onPress={handleDeletion}>
+                        <TrashIcon width={26} height={33}/>
+                    </TouchableOpacity>
+                }
             </View>
             <Divider style={styles.divider} />
             <View style={styles.row3}>
@@ -73,7 +129,7 @@ function ProfileItemDetails({ itemData, user }) {
             </View>
             <View style={styles.row4}>
                 <Text style={styles.description}>Description</Text>
-                <PinkNextArrow onPress={displayModal} />
+                <PinkNextArrow onPress={() => setIsModalVisible(true)} />
             </View>
             <Text style={styles.text6}>{itemData.description}</Text>
             {itemDetails && (

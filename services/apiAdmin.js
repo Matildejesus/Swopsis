@@ -3,34 +3,21 @@ import supabase, { supabaseAdmin } from "./supabase";
 export async function findUserByEmail(email) {
     const { data, error } = await supabaseAdmin.auth.admin.listUsers();
 
-    console.log(email);
-    console.log("DATA: ", data.users);
-
     const user = data.users.find((u) => u.email === email);
-
-    console.log("User: ", user);
 
     return user;
 }
 
 export async function findUserById(id) {
-    try {
-        const { data, error } = await supabaseAdmin.auth.admin.getUserById(
-            id.id,
-        );
-        console.log("Fetching user with ID:", id);
-        console.log("Response Data:", data);
-        console.log("Error:", error);
+    const { data, error } = await supabaseAdmin.auth.admin.getUserById(
+        id.id,
+    );
 
-        if (error) {
-            throw new Error(error.message);
-        }
-
-        return data?.user || null;
-    } catch (err) {
-        console.error("findUserById Error:", err);
-        return null;
+    if (error) {
+        throw new Error(error.message);
     }
+
+    return data;
 }
 
 export async function getAllUsers() {

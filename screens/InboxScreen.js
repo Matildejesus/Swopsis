@@ -12,66 +12,52 @@ import {
 } from "react-native";
 import Colors from "../constants/colors";
 import { useUser } from "../components/authentication/useUser";
+import { useRoute } from "@react-navigation/native";
+import { getAllConversation, getMessagesForConvo, sendMessage } from "../services/apiChat";
+import InboxUserWidget from "../components/InboxUserWidget";
 
-// Dummy data
-const mockThreads = [
-    { id: "u1", name: "User1" },
-    { id: "u2", name: "User2" },
-    { id: "u3", name: "User3" },
-];
-
-// Mock messages
-const mockMessages = {
-    u1: [
-        { id: "m1", senderId: "u1", text: "Hi there!" },
-        { id: "m2", senderId: "currentUser", text: "Hey, how are you?" },
-    ],
-    u2: [{ id: "m3", senderId: "u2", text: "Got that jacket for swap?" }],
-    u3: [{ id: "m4", senderId: "u3", text: "Any dresses to borrow?" }],
-};
-
-export default function InboxScreen() {
+function InboxScreen() {
     const { user } = useUser(); // Current user info
+    const route = useRoute();
+    const conversationId = route.params?.conversationId ?? null;
     const currentUserId = user ? user.id : "currentUser"; // Fallback if no user data
     const [selectedThread, setSelectedThread] = useState(null);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
 
+    const [ threads, setThreads ] = useState([]);
+
     useEffect(() => {
-        if (selectedThread) {
-            // Load messages for the selected thread
-            setMessages(mockMessages[selectedThread.id] || []);
-        }
-    }, [selectedThread]);
+        const fetchConversations = async () => {
+            try {
+                const conversations = await getAllConversation({ userId: user.id });
+             //   console.log("Conversations: ", conversations);
+                setThreads(conversations);
 
-    const handleSend = () => {
-        if (!newMessage.trim()) return;
-
-        const newMsgObj = {
-            id: "m" + Date.now(),
-            senderId: currentUserId,
-            text: newMessage.trim(),
+            } catch (error) {
+                console.error("Error fetching conversations:", error.message);
+            }
         };
-        setMessages((prev) => [...prev, newMsgObj]);
-        setNewMessage("");
-
-        // In a real app:
-        // Send this message to the server, which updates the thread for both parties.
+        fetchConversations();
+    }, [user, conversationId]);
+    
+    const handleSend = async () => {
+        if (!newMessage.trim()) return;
+    
+        try {
+            const sentMessage = await sendMessage({
+                senderId: user.id,
+                text: newMessage.trim(),
+                itemId: null,
+                conversationId
+            });
+    
+            setMessages((prev) => [...prev, sentMessage]); // Append new message
+            setNewMessage("");
+        } catch (error) {
+            console.error("Error sending message:", error.message);
+        }
     };
-
-    const renderThreadItem = ({ item }) => (
-        <TouchableOpacity
-            style={[
-                styles.threadItem,
-                selectedThread &&
-                    selectedThread.id === item.id &&
-                    styles.selectedThread,
-            ]}
-            onPress={() => setSelectedThread(item)}
-        >
-            <Text style={styles.threadName}>{item.name}</Text>
-        </TouchableOpacity>
-    );
 
     const renderMessageItem = ({ item }) => {
         const isMe = item.senderId === currentUserId;
@@ -88,69 +74,28 @@ export default function InboxScreen() {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.threadsContainer}>
+            <View style={styles.container}>
                 <FlatList
-                    data={mockThreads}
-                    horizontal
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderThreadItem}
-                    showsHorizontalScrollIndicator={false}
-                />
+                data={threads}
+                renderItem={({ item }) => (
+                    <InboxUserWidget thread={item}/>
+                )}
+                keyExtractor={(item) => item.id}
+                showsVerticalScrollIndicator={false}
+                bounce={false}
+            />
             </View>
-
-            {selectedThread ? (
-                <>
-                    <View style={styles.selectedThreadHeader}>
-                        <Text style={styles.selectedThreadTitle}>
-                            Chat with {selectedThread.name}
-                        </Text>
-                    </View>
-                    <FlatList
-                        data={messages}
-                        keyExtractor={(item) => item.id}
-                        renderItem={renderMessageItem}
-                        style={styles.messagesList}
-                        inverted
-                        // `inverted` so newest messages appear at the bottom
-                        contentContainerStyle={{
-                            flexGrow: 1,
-                            justifyContent: "flex-end",
-                        }}
-                    />
-
-                    <KeyboardAvoidingView
-                        behavior={Platform.OS === "ios" ? "padding" : "height"}
-                        keyboardVerticalOffset={80}
-                        style={styles.inputContainer}
-                    >
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Type a message..."
-                            value={newMessage}
-                            onChangeText={setNewMessage}
-                        />
-                        <TouchableOpacity
-                            onPress={handleSend}
-                            style={styles.sendButton}
-                        >
-                            <Text style={styles.sendButtonText}>Send</Text>
-                        </TouchableOpacity>
-                    </KeyboardAvoidingView>
-                </>
-            ) : (
-                <View style={styles.noThreadSelected}>
-                    <Text>Select a conversation to start chatting.</Text>
-                </View>
-            )}
-        </SafeAreaView>
     );
 }
+
+export default InboxScreen;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "white",
+       // alignItems: "center",
+       paddingLeft: 40,
     },
     title: {
         fontSize: 20,

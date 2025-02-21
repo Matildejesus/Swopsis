@@ -11,6 +11,8 @@ function InputField({
     containerStyle,
     multiline,
     textStyle,
+    numberOfLines,
+    maxLength
 }) {
     return (
         <>
@@ -27,6 +29,9 @@ function InputField({
                     value={value}
                     secureTextEntry={secureTextEntry}
                     multiline={multiline}
+                    numberOfLines={numberOfLines}
+                    maxLength={maxLength}
+                    scrollEnabled={false}
                 />
             </View>
         </>

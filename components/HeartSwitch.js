@@ -1,14 +1,43 @@
 import HeartIcon from "./icons/HeartIcon";
 import FilledHeartIcon from "./icons/FilledHeartIcon";
 import { TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { addItemToWishlist, removeWishlistItem } from "../services/apiWishlist";
 
-function HeartSwitch({ onClick }) {
+function HeartSwitch({ itemId, userId, wishList, refreshWishlist }) {
     const [isFilled, setIsFilled] = useState(false);
+    const [wishListId, setWishListId ] = useState();
 
-    const handleToggle = () => {
-        setIsFilled(!isFilled);
+    useEffect(() => {
+        if (wishList) {
+            setIsFilled(true);
+            setWishListId(wishList.id); 
+        } else {
+            setIsFilled(false);
+            setWishListId(null);
+        }
+    }, [wishList]);
+
+
+    const handleToggle = async () => {
+        const newIsFilled = !isFilled;  // New state after toggle
+        setIsFilled(newIsFilled);
+
+        if (newIsFilled) {
+            // Remove from wishlist
+            console.log("adding new wishlist item");
+            await addItemToWishlist({ userId, itemId });
+            
+        } else {
+            // Add to wishlist 
+            console.log("removing wishlist item");
+            await removeWishlistItem({ id: wishListId });
+           
+        }
+
+        refreshWishlist();
     };
+    
     return (
         <TouchableOpacity onPress={handleToggle}>
             {!isFilled ? <HeartIcon /> : <FilledHeartIcon />}

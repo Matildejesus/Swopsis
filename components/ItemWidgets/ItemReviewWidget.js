@@ -4,7 +4,6 @@ import Colors from "../../constants/colors";
 
 function ItemReviewWidget({ review }) {
     const { id, name, avatar, text, rating } = review;
-    console.log(id, name);
     const currentDate = Date.now();
 
     return (

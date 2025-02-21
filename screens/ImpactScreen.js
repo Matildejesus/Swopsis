@@ -1,8 +1,14 @@
 import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
 
 import ImpactWidget from "../components/ImpactWidget";
+import { useUser } from "../components/authentication/useUser";
+import { useState } from "react";
 
 function ImpactScreen() {
+
+    const { user } = useUser();
+    const { coins, itemsSwapped, totalCarbon, totalLitres, totalWeight } = user.user_metadata 
+ 
     return (
         <ScrollView bounces={false}>
             <View style={styles.container}>
@@ -16,26 +22,26 @@ function ImpactScreen() {
                     POSITIVE IMPACT.
                 </Text>
                 <View style={styles.swappedContainer}>
-                    <Text style={styles.numberText}>0</Text>
+                    <Text style={styles.numberText}>{user.user_metadata.itemsSwapped}</Text>
                     <Text style={styles.itemText}>ITEM SWAPPED</Text>
                 </View>
                 <View style={styles.widget}>
                     <ImpactWidget
-                        number={0}
+                        number={parseFloat(user.user_metadata.totalWeight.toFixed(2))}
                         label={"KG OF TEXTILE OUT OF LANDFILL"}
                         source={require("../assets/images/garb.png")}
                         color={"#00CCCB"}
                         count={1}
                     />
                     <ImpactWidget
-                        number={0}
+                        number={user.user_metadata.totalLitres}
                         label={"L OF FRESH WATER SAVE"}
                         source={require("../assets/images/water.png")}
                         color={"#0080FB"}
                         count={2}
                     />
                     <ImpactWidget
-                        number={0}
+                        number={user.user_metadata.totalCarbon}
                         label={"TONNES OF CO2 EMMISSIONS SAVED"}
                         source={require("../assets/images/gas.png")}
                         color={"#FFA330"}
@@ -88,6 +94,7 @@ const styles = StyleSheet.create({
     numberText: {
         fontSize: 20,
         fontFamily: "RalewayRegular",
+        paddingBottom: 10,
     },
     widget: {
         marginBottom: 37,

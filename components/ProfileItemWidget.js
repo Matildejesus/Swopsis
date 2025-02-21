@@ -2,7 +2,6 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import ProfileItem from "./ProfileItem";
 
 function ProfileItemWidget({ items }) {
-    // console.log("items: ", items);
     return (
         <View style={styles.container}>
             <FlatList

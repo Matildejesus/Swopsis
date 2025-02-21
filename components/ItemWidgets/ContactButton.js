@@ -1,14 +1,16 @@
-import { Button } from "react-native-elements";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Colors from "../../constants/colors";
 import ContactIcon from "../icons/ContactIcon";
 
-function ContactButton() {
+function ContactButton({ handleContact }) {
+
     return (
-        <View style={styles.button}>
-            <Text style={styles.label}>CONTACT</Text>
-            <ContactIcon />
-        </View>
+        <TouchableOpacity onPress={handleContact}>
+            <View style={styles.button}>
+                <Text style={styles.label}>CONTACT</Text>
+                <ContactIcon />
+            </View>
+        </TouchableOpacity>
     );
 }
 

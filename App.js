@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StatusBar } from "expo-status-bar";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -9,7 +9,7 @@ import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { RootSiblingParent } from "react-native-root-siblings";
-import { Text, Image, View } from "react-native";
+import { Text, Image, View, TouchableOpacity } from "react-native";
 import Svg, { G, Path, Circle } from "react-native-svg";
 
 import WelcomeScreen from "./screens/WelcomeScreen.js";
@@ -21,7 +21,6 @@ import ResetPasswordScreen from "./screens/ResetPasswordScreen.js";
 import PostcodeScreen from "./screens/PostcodeScreen.js";
 import ImpactScreen from "./screens/ImpactScreen.js";
 import BeYouScreen from "./screens/BeYouScreen.js";
-``;
 import SettingsScreen from "./screens/SettingsScreen.js";
 import EventsScreen from "./screens/EventsScreen.js";
 import InboxScreen from "./screens/InboxScreen.js";
@@ -60,6 +59,8 @@ import LmsIcon from "./components/icons/adminicons/LmsIcon.js";
 import DashboardIcon from "./components/icons/DashboardIcon.js";
 import MemberIcon from "./components/icons/adminicons/MemberIcon.js";
 import CoinIcon from "./components/icons/adminicons/CoinIcon.js";
+import FilledHeartIcon from "./components/icons/FilledHeartIcon.js";
+import ChatScreen from "./screens/ChatScreen.js";
 
 AppRegistry.registerComponent("main", () => App);
 
@@ -148,6 +149,17 @@ function BottomTabNavigator() {
                     headerTitleAlign: "left",
                     headerTitle: "",
                     headerLeft: (props) => <Logo {...props} />,
+                    headerRight: (props) => {
+                      const navigation = useNavigation();
+                      return(
+                      <View style={{
+                        paddingRight: 30
+                    }}>
+                      <TouchableOpacity  onPress={() => navigation.navigate("WishList")}>
+                          <FilledHeartIcon {...props} />
+                        </TouchableOpacity>
+                      </View>
+                  )},
                     tabBarIcon: (props) => {
                         return (
                             <View
@@ -343,7 +355,6 @@ export default function App() {
         InterThin: require("./assets/fonts/Inter-Thin.ttf"),
         InterLight: require("./assets/fonts/Inter-Light.ttf"),
     });
-    console.log("App Rendered. Fonts loaded:", fontsLoaded);
 
     if (!fontsLoaded) {
         console.log("Fonts are still loading...");
@@ -362,7 +373,6 @@ export default function App() {
                         <NavigationContainer>
                             <Stack.Navigator
                                 initialRouteName="Welcome"
-                                headerMode="none"
                             >
                                 <Stack.Screen
                                     name="Welcome"
@@ -523,11 +533,6 @@ export default function App() {
                                     }}
                                 />
                                 <Stack.Screen
-                                    name="Wardrobe"
-                                    component={WardrobeScreen}
-                                    options={{ title: "Wardrobe" }}
-                                />
-                                <Stack.Screen
                                     name="GroupDetails"
                                     component={GroupDetailsScreen}
                                     options={{
@@ -545,6 +550,29 @@ export default function App() {
                                 <Stack.Screen
                                     name="WishList"
                                     component={WishListScreen}
+                                    options={{
+                                      headerTitleAlign: "left",
+                                      headerBackVisible: false,
+                                      headerTitle: (props) => (
+                                          <Title
+                                              title="WISHLIST"
+                                              goBack="true"
+                                              {...props}
+                                          />
+                                      ),
+                                      headerRight: (props) => (
+                                          <Logo {...props} />
+                                      ),
+                                  }}
+                                    
+                                />
+                                <Stack.Screen
+                                    name="Chat"
+                                    component={ChatScreen}
+                                    options={{
+                                        headerTitleAlign: "left",
+                                        headerBackVisible: false,
+                                    }}
                                 />
                             </Stack.Navigator>
                         </NavigationContainer>

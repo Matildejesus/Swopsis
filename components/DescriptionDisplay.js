@@ -7,8 +7,6 @@ import ColorCircle from "./icons/ColorCircle";
 import { View, Text } from "react-native";
 
 function DescriptionDisplay({ visible, onRequestClose, data, category }) {
-    console.log("Description display: ", data);
-    console.log(visible);
 
     return (
         <Dialog

@@ -1,7 +1,6 @@
 import supabase from "./supabase";
 
 export async function addItem({ item, itemDetails }) {
-    console.log("we are in");
     const { data: insertedItem, errorItem } = await supabase
         .from("Items")
         .insert([
@@ -13,6 +12,7 @@ export async function addItem({ item, itemDetails }) {
                 description: item.description,
                 method: item.method,
                 available: true,
+                tradeCount: 0,
             },
         ])
         .select();
@@ -20,7 +20,6 @@ export async function addItem({ item, itemDetails }) {
     const itemId = insertedItem[0].id;
     const chosenCategory = item.category;
 
-    console.log(insertedItem);
     const { data: insertedItemDetails, errorItemDetails } = await supabase
         .from(chosenCategory)
         .insert([
@@ -43,28 +42,48 @@ export async function addItem({ item, itemDetails }) {
         ])
         .select();
 
-    console.log(insertedItemDetails);
     if (errorItemDetails || errorItem) {
         throw new Error(errorItemDetails.message);
     }
 }
 
 export async function getItems({ userId }) {
-    console.log("running");
-    console.log("userId: ", userId);
-    const { data: items, error: fetchError } = await supabase
+    const { data, error } = await supabase
         .from("Items")
         .select("*")
         .eq("userId", userId)
         .order("created_at", { ascending: false });
 
-    if (fetchError) {
-        throw new Error(fetchError.message);
+    if (error) {
+        throw new Error(error.message);
     }
-    console.log("data: ", items);
-    return items;
+    return data;
 }
 
+export async function deleteItems({ itemId }) {
+    const { error } = await supabase
+        .from("Items")
+        .delete()
+        .eq("id", itemId);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+    
+}
+
+export async function getItemById({ id }) {
+    const { data, error } = await supabase
+    .from("Items")
+    .select("*")
+    .eq("id", id);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+return data[0];
+
+}
 export async function getItemsInfo({ category, itemId }) {
     console.log("Data", category, itemId);
     const { data: item, error } = await supabase
@@ -75,12 +94,11 @@ export async function getItemsInfo({ category, itemId }) {
     if (error) {
         throw new Error(error.message);
     }
-    console.log("Data", item);
+
     return item[0];
 }
 
 export async function getGroupItems({ users }) {
-    console.log(users);
 
     const { data, error } = await supabase
         .from("Items")

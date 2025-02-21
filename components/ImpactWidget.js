@@ -1,7 +1,6 @@
 import { View, Text, Image, StyleSheet } from "react-native";
 
 function ImpactWidget({ number, label, source, color, count }) {
-    console.log(color);
     return (
         <View
             style={[

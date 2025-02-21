@@ -37,7 +37,6 @@ function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
             setAvatar(result.assets[0].uri);
             setIsModalVisible(false);
             onImageSelected(result.assets[0].uri);
-            console.log("avatar: " + result.assets[0].uri);
         }
     };
 
@@ -52,7 +51,6 @@ function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
             setAvatar(result.assets[0].uri);
             onImageSelected(result.assets[0].uri);
             setIsModalVisible(false);
-            console.log("avatar :" + result.assets[0].uri);
         }
     };
 

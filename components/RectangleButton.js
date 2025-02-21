@@ -12,7 +12,6 @@ function RectangleButton({
 }) {
     const navigation = useNavigation();
     const ButtonWrapper = location ? TouchableOpacity : View;
-    console.log(number);
     return (
         <ButtonWrapper
             onPress={

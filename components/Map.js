@@ -93,7 +93,6 @@ const Map = ({ apikey, postcode }) => {
     }, [region]);
 
     const handlePress = (group) => {
-        console.log("BEFORE NAVIFATION: ", group);
         navigation.navigate("GroupDetails", { group });
     };
 

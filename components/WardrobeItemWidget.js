@@ -7,47 +7,86 @@ import { useEffect, useState } from "react";
 import { findUserById } from "../services/apiAdmin";
 import { useNavigation } from "@react-navigation/native";
 import { useUser } from "./authentication/useUser";
-import { getItemsInfo } from "../services/apiItems";
+import { getItemById } from "../services/apiItems";
+import { getWishListItem } from "../services/apiWishlist";
 
-function WardrobeitemWidget({ item }) {
-    console.log("ITEM", item);
+function WardrobeitemWidget({ item: initialItem, wishlistItem }) {
     const [user, setUser] = useState();
-    const { currentUser } = useUser();
+    const { user: currentUser } = useUser();
     const navigation = useNavigation();
-    const [owner, setOwner] = useState(false);
-    const [itemData, setItemData] = useState([]);
+    const [ owner, setOwner ] = useState(false);
+    const [ itemData, setItemData ] = useState([]);
+    const [ itemWishlist, setItemWishlist ] = useState(null);
+    const [ item, setItem ] = useState(initialItem);
+    const [ date, setDate ] = useState();
+
+
+    const fetchWishlist = async () => {
+        try {
+            const wishlist = await getWishListItem({ userId: currentUser.id, itemId: item.id });
+            setItemWishlist(wishlist.length > 0 ? wishlist[0] : null);
+        } catch (error) {
+            console.error("Error fetching wishlist:", error);
+        }
+    };
 
     useEffect(() => {
+        let isMounted = true; 
+    
         const fetchInfo = async () => {
+            console.log("Running fetchInfo...");
+        
             try {
-                const user = await findUserById({ id: item.userId });
-                const itemDetails = await getItemsInfo({
-                    category: item.category,
-                    itemId: item.id,
-                });
-                console.log(user);
-                setUser(user);
-                setItemData(itemDetails);
-                if (currentUser.id === item.userId) {
-                    setOwner(true);
+                let newItem = item;
+                console.log("1");
+                
+                if (wishlistItem) {
+                    console.log("2");
+                    newItem = await getItemById({ id: wishlistItem.itemId });
+                    console.log("NewItem: ", newItem);
+                  //  console.log("NewItem ID: ", newItem.id);
+                    if (!newItem?.userId) {
+                        console.log("failed")
+                        return
+                    };
+                    if (isMounted) setItem(newItem);
                 }
+                console.log("3");
+    
+                const fetchedUser = await findUserById({ id: newItem.userId });
+                if (fetchedUser?.id !== user?.id && isMounted) {
+                    setUser(fetchedUser);
+                }
+    
+                if (isMounted) {
+                    setOwner(currentUser?.id === newItem.userId);
+                    setDate((prev) => (prev !== dateFormatting(newItem.created_at) ? dateFormatting(newItem.created_at) : prev));
+                }
+    
+                await fetchWishlist();
+    
             } catch (error) {
-                console.error("Error fetching user:", error);
+                console.error("Error fetching data:", error);
             }
         };
-
-        fetchInfo();
-    }, [item]); // Dependency array to re-run effect when `item` changes
-
-    console.log(user);
-    console.log("Created At:", item.created_at);
-    const date = dateFormatting(item.created_at);
-
+    
+        if ((wishlistItem || item) && currentUser) {
+            fetchInfo();
+        }
+    
+        return () => {
+            isMounted = false; // Cleanup function to prevent state updates if component unmounts
+        };
+    }, [wishlistItem, currentUser]); // Do NOT include `item` in dependencies
+    
     return (
-        user && (
+        <>
+        {console.log("Item:", item)}
+        {console.log("User:", user)}
+
+         {item && user && (
             <View style={styles.itemContainer}>
                 <View style={styles.row3}>
-                    {/* <Image style={styles.avatar} source={avatar ? { uri: avatar } : null} /> */}
                     <Image style={styles.avatar} source={null} />
                     <View style={styles.column}>
                         <Text style={styles.userName}>
@@ -76,11 +115,12 @@ function WardrobeitemWidget({ item }) {
                     {item.title}
                 </Text>
                 <View style={styles.iconContainer}>
-                    <HeartSwitch />
+                  {currentUser && <HeartSwitch itemId={item.id} userId={currentUser.id} wishList={itemWishlist} refreshWishlist={fetchWishlist}/>}
                     <ContactIcon width={26} height={26} />
                 </View>
             </View>
-        )
+         )}
+        </>
     );
 }
 

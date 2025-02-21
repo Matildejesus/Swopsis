@@ -63,22 +63,18 @@ function ItemDescriptionInputScreen() {
             break;
     }
 
-    console.log(ColorsList);
-
-    const submitHandler = () => {
-        console.log("Selected Color:", selectedColor);
-        console.log("submitting!!!");
+    const submitHandler = async () => {
         if (
             !subcategory ||
             !weight ||
             !condition ||
             !selectedColor ||
-            (category != "Accessories" ? !size || !fabric : !material) ||
-            (category == "Shoes" && !length)
+            (category !== "Accessories" ? !size || !fabric : !material) ||
+            (category === "Shoes" && !length)
         ) {
             setInputError("Missing inputs");
-            console.log(inputError);
         } else {
+            // Add item before retrieving subcategory details
             addItem({
                 item: {
                     userId,
@@ -90,51 +86,69 @@ function ItemDescriptionInputScreen() {
                 },
                 itemDetails: {
                     subcategory: subcategory.value,
-                    ...(category != "Accessories" && { size: size.value }),
+                    ...(category !== "Accessories" && { size: size.value }),
                     weight,
-                    ...(category == "Accessories" ? { material } : { fabric }),
+                    ...(category === "Accessories" ? { material } : { fabric }),
                     condition: condition.value,
                     color: selectedColor,
-                    ...(category == "Shoes" && { length }),
+                    ...(category === "Shoes" && { length }),
                 },
             });
+    
+            try {
+                const itemConversion = await getSubcategoryDetails({
+                    item: subcategory.value,
+                });
+                setSubcategoryDetails(itemConversion);
+    
+                // Once details are retrieved, perform calculations
+                console.log("itemconversion: ", itemConversion.carbon);
+                const litresSaved = totalLitres + itemConversion.litres;
 
-            const retrieveSubcategoryDetails = async () => {
-                try {
-                    const itemConversion = await getSubcategoryDetails({
-                        item: subcategory.value,
-                    });
-                    setSubcategoryDetails(itemConversion);
-                } catch (error) {
-                    console.error("Error fetching subcategory details:", error);
-                    setSubcategoryDetails(null);
+                let carbonSaved = totalCarbon;
+    
+                if (itemConversion.scalable === "true") {
+                    carbonSaved += itemConversion.carbon * weight;
+                } else {
+                    carbonSaved += itemConversion.carbon;
                 }
-            };
+    
+                const weightSaved = totalWeight + parseFloat(weight);
+                console.log("totalWeight: ", totalWeight);
+                console.log("weight: ", weight);
+                console.log("Weight saved: ", weightSaved);
 
-            retrieveSubcategoryDetails();
-
-            console.log("itemconversion: ", subcategoryDetails.carbon);
-            const litresSaved = totalLitres + subcategoryDetails.litres;
-            const carbonSaved = totalCarbon;
-            if (subcategoryDetails.scalable == "true") {
-                carbonSaved += subcategoryDetails.carbon * weight;
-            } else {
-                carbonSaved += subcategoryDetails.carbon;
+                const itemsSaved = itemsSwapped + 1;
+                const newCoins = coins + 1;
+                console.log(newCoins);
+                console.log(weightSaved.toFixed(2), itemsSaved, carbonSaved, litresSaved);
+    
+                // Update user data after calculations
+                await updateUserData({
+                    newCoins,
+                    totalLitres: litresSaved,
+                    totalCarbon: carbonSaved,
+                    totalWeight: parseFloat(weightSaved.toFixed(2)),
+                    itemsSwapped: itemsSaved,
+                });
+    
+                // Navigate to Profile after update
+                navigation.reset({
+                    index: 0,
+                    routes: [
+                        {
+                            name: "InApp",
+                        },
+                    ],
+                });
+    
+            } catch (error) {
+                console.error("Error fetching subcategory details:", error);
+                setSubcategoryDetails(null);
             }
-            const weightSaved = totalWeight + weight;
-            const itemsSaved = itemsSwapped + 1;
-            const newCoins = coins + 1;
-            console.log(newCoins);
-            updateUserData({
-                newCoins,
-                totalLitres: litresSaved,
-                totalCarbon: carbonSaved,
-                totalWeight: weightSaved,
-                itemsSwapped: itemsSaved,
-            });
-            navigation.navigate("Profile");
         }
     };
+    
 
     return (
         <View style={styles.container}>
