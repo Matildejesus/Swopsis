@@ -33,8 +33,21 @@ export async function getAllConversation({ userId }) {
     return data;
 }
 
+export async function getConversation({userId_1, userId_2}) {
+    const { data, error } = await supabase
+        .from("Conversations")
+        .select("*")
+        .or(`and(userId_1.eq.${userId_1},userId_2.eq.${userId_2}),and(userId_1.eq.${userId_2},userId_2.eq.${userId_1})`);
 
-export async function sendMessage({ senderId, text, itemId = null, conversationId }) {
+        if (error) {
+            throw new Error(error.message);
+        }
+        console.log("Conversations: ", data);
+        return data[0];
+
+}
+
+export async function sendMessage({ senderId, text = null, itemId = null, conversationId }) {
     const messageType = text ? "text" : "item";
 
     const { data, error } = await supabase
@@ -62,7 +75,7 @@ export async function getMessagesForConvo({ conversationId }) {
         .from("Messages")
         .select("*")
         .eq("conversationId", conversationId)
-        .order("created_at", {ascending: true });
+        .order("created_at", {ascending: false });
 
     if (error) {
         throw new Error(error.message);

@@ -6,8 +6,6 @@ export function useItem({ userId }) {
         queryKey: ["item", userId],
         queryFn: () => getNewItem({ userId }),
     });
-    console.log(userId);
-    console.log("actual: ", item);
 
     return { isLoading, item };
 }

@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useUser } from "./authentication/useUser";
 import { useEffect, useState } from "react";
-import { findUserById } from "../services/apiAdmin";
+import { findUserById, findUserByIdforInbox } from "../services/apiAdmin";
 import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 
@@ -21,7 +21,7 @@ function InboxUserWidget({ thread }) {
             if (!receiverUser) return;
 
             try {
-                const data = await findUserById({ id: receiverUser });
+                const data = await findUserByIdforInbox({ id: receiverUser });
                 setReceiverUserData(data.user.user_metadata);
             } catch (error) {
                 console.error("Error fetching data: ", error);

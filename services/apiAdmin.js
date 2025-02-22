@@ -9,6 +9,26 @@ export async function findUserByEmail(email) {
 }
 
 export async function findUserById(id) {
+    try {
+        const { data, error } = await supabaseAdmin.auth.admin.getUserById(
+            id.id,
+        );
+        console.log("Fetching user with ID:", id);
+        console.log("Response Data:", data);
+        console.log("Error:", error);
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        return data?.user || null;
+    } catch (err) {
+        console.error("findUserById Error:", err);
+        return null;
+    }
+}
+
+export async function findUserByIdforInbox( id ) {
     const { data, error } = await supabaseAdmin.auth.admin.getUserById(
         id.id,
     );

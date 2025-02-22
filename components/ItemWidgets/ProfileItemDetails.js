@@ -47,7 +47,6 @@ function ProfileItemDetails({ itemData, user, owner }) {
                     itemId: itemData.id,
                 });
                 setItemDetails(details);
-                console.log("Details: ", details);
             } catch (error) {
                 console.error("Error fetching item details:", error);
             }
@@ -57,21 +56,14 @@ function ProfileItemDetails({ itemData, user, owner }) {
     }, [itemData]);
 
     const handleDeletion = async () => {
-        console.log("Deleting");
         let { totalLitres, totalCarbon, totalWeight, itemsSwapped, coins } = currentUser.user_metadata;
-        console.log("0");
         try {
-            console.log("1");
             if (itemData.tradeCount == 0) {
-                console.log("2");
-               // const [ subcategoryDetails, setSubcategoryDetails ] = useState();
                 itemsSwapped -= 1;
                 try {
-                    console.log("3");
                     const itemConversion = await getSubcategoryDetails({
                         item: itemDetails.subcategory,
                     });
-                    console.log("ITEMCONVERSION: ", itemConversion);
                     totalLitres -= itemConversion.litres;
                     if (itemConversion.scalable === "true") {
                         totalCarbon -= itemConversion.carbon * itemDetails.weight;
@@ -80,15 +72,12 @@ function ProfileItemDetails({ itemData, user, owner }) {
                     }
                     coins -= 1;
                     totalWeight -= itemDetails.weight;
-                    console.log("4");
-                    console.log(coins, totalLitres, totalCarbon, totalWeight, itemsSwapped);
                     await updateUserData({ newCoins: coins, totalLitres, totalCarbon, totalWeight, itemsSwapped});
                 } catch (error) {
                     console.error("Error fetching conversion details: ", error);
                 }
 
             }
-            console.log("5");
             await deleteItems({ itemId: itemData.id });
             navigation.reset({
             index: 0,

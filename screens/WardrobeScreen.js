@@ -1,31 +1,42 @@
-import { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
-import { getFilteredGroupMember, getGroupMembers } from "../services/apiAdmin";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { getFilteredGroupMember } from "../services/apiAdmin";
 import { useUser } from "../components/authentication/useUser";
 import { getGroupItems } from "../services/apiItems";
+import { getWishlist } from "../services/apiWishlist"; // Import wishlist API
 import Colors from "../constants/colors";
 import WardrobeitemWidget from "../components/WardrobeItemWidget";
+import FilledHeartIcon from "../components/icons/FilledHeartIcon";
+import HeartIcon from "../components/icons/HeartIcon"; // Add an outlined heart icon
 
 function WardrobeScreen() {
     const { user } = useUser();
     const [group, setGroup] = useState();
     const [groupItems, setGroupItems] = useState([]);
+    const [wishlistItems, setWishlistItems] = useState([]);
+    const [showWishlist, setShowWishlist] = useState(false);
+    const navigation = useNavigation();
 
-    //   const date = dateFormatting(itemData.created_at);
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <View style={{ paddingRight: 30 }}>
+                    <TouchableOpacity onPress={toggleWishlist}>
+                        {showWishlist ? <FilledHeartIcon /> : <HeartIcon />}
+                    </TouchableOpacity>
+                </View>
+            ),
+        });
+    }, [showWishlist]);
 
     useEffect(() => {
         if (user) {
-            console.log("I AM LOGGING USER: ", user.user_metadata);
             setGroup(user.user_metadata.group);
             const fetchUsers = async () => {
                 try {
-                    const users = await getFilteredGroupMember({
-                        groupId: user.user_metadata.group,
-                    });
+                    const users = await getFilteredGroupMember({ groupId: user.user_metadata.group });
                     const userIds = users.map((user) => user.userId);
-                    console.log(userIds);
                     const usersItems = await getGroupItems({ users: userIds });
-                    console.log(usersItems);
                     setGroupItems(usersItems);
                 } catch (error) {
                     console.error("Error fetching requests: ", error);
@@ -35,15 +46,35 @@ function WardrobeScreen() {
         }
     }, [group]);
 
+    // Fetch wishlist items
+    const fetchWishlist = async () => {
+        try {
+            const wishlist = await getWishlist({ userId: user.id });
+            setWishlistItems(wishlist.map(item => item.itemId)); // Store only item IDs
+        } catch (error) {
+            console.error("Error fetching wishlist:", error);
+        }
+    };
+
+    // Toggle wishlist view
+    const toggleWishlist = async () => {
+        if (!showWishlist) {
+            await fetchWishlist();
+        }
+        setShowWishlist(!showWishlist);
+    };
+
+    const filteredItems = showWishlist
+        ? groupItems.filter((item) => wishlistItems.includes(item.id)) // Only show wishlist items
+        : groupItems; // Show all items
+
     return (
         <View style={styles.container}>
             <View style={styles.flatlistContainer}>
                 <FlatList
-                    data={groupItems}
+                    data={filteredItems}
                     numColumns={2}
-                    renderItem={({ item }) => (
-                        <WardrobeitemWidget item={item} />
-                    )}
+                    renderItem={({ item }) => <WardrobeitemWidget item={item} />}
                     keyExtractor={(item) => item.id}
                     showsVerticalScrollIndicator={false}
                     bounce={false}

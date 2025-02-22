@@ -16,11 +16,13 @@ function ChatScreen() {
     const [messages, setMessages] = useState([]); // Initialize as empty array
     const [newMessage, setNewMessage] = useState("");
 
+    console.log("RECEIVER USER: ", receiverUser);
+
     useLayoutEffect(() => {
         if (receiverUser?.userName) {
             navigation.setOptions({
                 headerTitle: (props) => (
-                    <Title title={receiverUser.userName} goBack={true} {...props} />
+                    <Title title={receiverUser.userName} goBack={true} avatar={receiverUser.avatar} {...props}  />
                 ),
             });
         }
@@ -79,13 +81,21 @@ function ChatScreen() {
 
     return (
         <View style={styles.container}>
-            <FlatList
-                data={messages}
-                renderItem={({ item }) => <Text>{item.text}</Text>}
-                keyExtractor={(item) => item.id.toString()}
-                showsVerticalScrollIndicator={false}
-                bounces={false}
-            />
+                <FlatList
+                    data={messages}
+                    renderItem={({ item }) => 
+                        <View style={ item.senderId === user.id
+                            ? styles.textContainer 
+                            : styles.receiverTextContainer 
+                    }>
+                            <Text style={styles.text}>{item.text}</Text>
+                        </View>
+                    }
+                    inverted
+                    keyExtractor={(item) => item.id.toString()}
+                    showsVerticalScrollIndicator={false}
+                    bounces={false}
+                />
             <View style={styles.inputContainer}>
             <InputField
                 placeholder="Type your message here..."
@@ -113,7 +123,7 @@ export default ChatScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "white"
+        backgroundColor: "white",
 
     },
     inputStyle: {
@@ -121,14 +131,13 @@ const styles = StyleSheet.create({
         fontFamily: "RalewayRegular",
         fontSize: 13,
         textAlignVertical: "top",
-        // minHeight: 20,
-        // maxHeight: 120,
         flexGrow: 1
     },
     inputContainer: {
         flexDirection: "row",
         alignItems: "flex-end",
         marginBottom: 20,
+        marginTop: 22,
     }, 
     buttonContainer: {
         width: 100,
@@ -155,5 +164,36 @@ const styles = StyleSheet.create({
         maxHeight: 120, // Prevents it from expanding beyond 5 lines
         width: "60%", 
         alignSelf: "center",
+    },
+    textContainer: {
+        width: 231,
+        backgroundColor: Colors.primary1,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        borderTopEndRadius: 20,
+        borderTopLeftRadius: 20,
+        borderBottomLeftRadius: 20,
+        marginTop: 18,
+        alignSelf: "flex-end",
+        marginRight: 16,
+    },
+    receiverTextContainer: {
+        width: 231,
+        backgroundColor: Colors.primary2,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        borderTopEndRadius: 20,
+        borderTopLeftRadius: 20,
+        borderBottomEndRadius: 20,
+        marginTop: 18,
+        marginLeft: 16,
+    },
+    messageContainer: {
+        alignContent: "flex-end"
+    },
+    text: {
+        color: "white",
+        fontFamily: "RalewayRegular",
+
     }
 })

@@ -20,18 +20,20 @@ function HeartSwitch({ itemId, userId, wishList, refreshWishlist }) {
 
 
     const handleToggle = async () => {
-        const newIsFilled = !isFilled;  // New state after toggle
-        setIsFilled(newIsFilled);
+      //  const newIsFilled = !isFilled;  // New state after toggle
+      //  setIsFilled(newIsFilled);
 
-        if (newIsFilled) {
+        if (isFilled) {
             // Remove from wishlist
             console.log("adding new wishlist item");
-            await addItemToWishlist({ userId, itemId });
+            await removeWishlistItem({ id: wishListId });
+            setIsFilled(false);
             
         } else {
             // Add to wishlist 
             console.log("removing wishlist item");
-            await removeWishlistItem({ id: wishListId });
+            await addItemToWishlist({ userId, itemId });
+            setIsFilled(true);
            
         }
 

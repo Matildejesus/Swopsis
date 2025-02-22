@@ -32,7 +32,7 @@ function WishList() {
                     numColumns={2}
                     renderItem={({ item }) => (
                         <>
-                        <WardrobeitemWidget wishlistItem={item} /></>
+                        <WardrobeitemWidget wishlistItem={item} heartFilled={true}/></>
                     )}
                     keyExtractor={(item) => item.id}
                     showsVerticalScrollIndicator={false}
@@ -54,5 +54,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "white",
+        padding: 20,
+        alignItems: "center",
     },
 });

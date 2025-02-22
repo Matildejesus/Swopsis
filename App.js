@@ -149,17 +149,6 @@ function BottomTabNavigator() {
                     headerTitleAlign: "left",
                     headerTitle: "",
                     headerLeft: (props) => <Logo {...props} />,
-                    headerRight: (props) => {
-                      const navigation = useNavigation();
-                      return(
-                      <View style={{
-                        paddingRight: 30
-                    }}>
-                      <TouchableOpacity  onPress={() => navigation.navigate("WishList")}>
-                          <FilledHeartIcon {...props} />
-                        </TouchableOpacity>
-                      </View>
-                  )},
                     tabBarIcon: (props) => {
                         return (
                             <View
@@ -373,6 +362,7 @@ export default function App() {
                         <NavigationContainer>
                             <Stack.Navigator
                                 initialRouteName="Welcome"
+                                screenOptions={{ headerStyle: { height: 200 }, }}
                             >
                                 <Stack.Screen
                                     name="Welcome"

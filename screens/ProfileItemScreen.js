@@ -9,12 +9,17 @@ import ContactButton from "../components/ItemWidgets/ContactButton";
 import ReviewButton from "../components/ItemWidgets/ReviewButton";
 import { useUser } from "../components/authentication/useUser";
 import TrashIcon from "../components/icons/TrashIcon.js";
-import { createConversation } from "../services/apiChat.js";
+import { createConversation, getConversation, sendMessage } from "../services/apiChat.js";
+import MessageModal from "../components/MessageModel.js";
 
 function ProfileItemScreen() {
     const [selectedOption, setSelectedOption] = useState(0);
-
     const { user: currentUser } = useUser();
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [message, setMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [conversation, setConversation] = useState();
+
 
     const navigation = useNavigation();
     const handleChange = (index) => {
@@ -24,10 +29,24 @@ function ProfileItemScreen() {
     const route = useRoute();
     const { itemData, owner, user } = route.params;
 
-
-    const handleContact = async () => {
+    const submitHandler = async () => {
+        if (!message) {
+            setErrorMessage("Please write a message.");
+            return;
+        }
         try {
-           const conversation = await createConversation({user1: itemData.userId, user2: currentUser.id});
+            setErrorMessage("");
+            setIsModalVisible(false);
+            const pendingConversation = await getConversation({ userId_1: itemData.userId, userId_2: currentUser.id});
+            if (pendingConversation) {
+                setConversation(pendingConversation);
+            } else {
+                pendingConversation = await createConversation({user1: itemData.userId, user2: currentUser.id});
+                setConversation(pendingConversation);
+            }
+           // await sendMessage({ senderId: currentUser.id, itemId: itemData. });
+          
+
             navigation.navigate('InApp', {
                 screen: 'Inbox',
                 params: { conversationId: 'conversation.id' },
@@ -57,7 +76,7 @@ function ProfileItemScreen() {
                 <>
                     <View style={styles.button}>
                         {selectedOption === 0 ? (
-                            <ContactButton handleContact={handleContact}/>
+                            <ContactButton handleContact={setIsModalVisible(true)}/>
                         ) : (
                             <ReviewButton />
                         )}
@@ -69,6 +88,12 @@ function ProfileItemScreen() {
                     </View>
                 </>
             )}
+            <MessageModal
+                visible={isModalVisible}
+                onRequestClose={submitHandler}
+                errorMessage={errorMessage}
+                onMessageChange={setMessage}
+            />
         </View>
     );
 }
