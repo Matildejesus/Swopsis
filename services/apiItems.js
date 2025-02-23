@@ -73,6 +73,7 @@ export async function deleteItems({ itemId }) {
 }
 
 export async function getItemById({ id }) {
+    
     const { data, error } = await supabase
     .from("Items")
     .select("*")
@@ -105,6 +106,24 @@ export async function getGroupItems({ users }) {
         .select("*")
         .in("userId", users)
         .order("created_at", { ascending: false });
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+    return data;
+}
+
+export async function updateAvailability({ available, itemId }) {
+    const { data, error } = await supabase
+        .from('Items')
+        .update({ "available": available })
+        .eq("id", itemId)
+        .select();
+
+    if (error) {
+        throw new Error(error.message);
+    }
 
     return data;
 }

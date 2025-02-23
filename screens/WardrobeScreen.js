@@ -8,6 +8,7 @@ import Colors from "../constants/colors";
 import WardrobeitemWidget from "../components/WardrobeItemWidget";
 import FilledHeartIcon from "../components/icons/FilledHeartIcon";
 import HeartIcon from "../components/icons/HeartIcon"; // Add an outlined heart icon
+import { useNavigation } from "@react-navigation/native";
 
 function WardrobeScreen() {
     const { user } = useUser();
@@ -27,26 +28,25 @@ function WardrobeScreen() {
                 </View>
             ),
         });
-    }, [showWishlist]);
+    }, [showWishlist]);  
 
     useEffect(() => {
-        if (user) {
+        if (user && !group) { 
             setGroup(user.user_metadata.group);
-            const fetchUsers = async () => {
-                try {
-                    const users = await getFilteredGroupMember({ groupId: user.user_metadata.group });
-                    const userIds = users.map((user) => user.userId);
-                    const usersItems = await getGroupItems({ users: userIds });
-                    setGroupItems(usersItems);
-                } catch (error) {
-                    console.error("Error fetching requests: ", error);
-                }
-            };
-            fetchUsers();
         }
-    }, [group]);
-
-    // Fetch wishlist items
+        const fetchUsers = async () => {
+            try {
+                const users = await getFilteredGroupMember({ groupId: user.user_metadata.group });
+                const userIds = users.map((user) => user.userId);
+                const usersItems = await getGroupItems({ users: userIds });
+                setGroupItems(usersItems);
+            } catch (error) {
+                console.error("Error fetching requests: ", error);
+            }
+        };
+        if (group) fetchUsers();
+    }, [user, group]);
+    
     const fetchWishlist = async () => {
         try {
             const wishlist = await getWishlist({ userId: user.id });

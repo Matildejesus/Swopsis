@@ -1,0 +1,53 @@
+import { StyleSheet, View } from "react-native";
+import PrimaryButton from "./PrimaryButton";
+import Colors from "../constants/colors";
+
+function DecisionMakingWidget({ accept, reject }) {
+    return(
+        <View>
+            <View style={styles.decisionContainer}>
+                <PrimaryButton 
+                    title="Accept"
+                    onPress={accept}
+                    style={styles.buttonContainer}
+                    textStyle={styles.buttonText}  
+                />
+                <PrimaryButton 
+                    title="Reject"
+                    onPress={reject}
+                    style={styles.buttonContainer}
+                    textStyle={styles.buttonText} 
+                />
+            </View>
+        </View>
+    )
+}
+
+export default DecisionMakingWidget;
+
+const styles = StyleSheet.create({
+    decisionContainer: {
+        width: "90%",
+        height: 60,
+        backgroundColor: Colors.impact,
+        marginTop: 14,
+        alignSelf: "center",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 20,
+        borderWidth: 3,
+        borderColor: Colors.primary1,
+        flexDirection: "row",
+    },
+    buttonContainer: {
+        width: 100,
+        height: 40,
+        paddingVertical: 10,
+        marginLeft: 8,
+    },
+    buttonText: {
+        fontFamily: "RalewayMedium",
+        fontSize: 15,
+
+    },
+})

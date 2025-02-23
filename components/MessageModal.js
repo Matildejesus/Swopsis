@@ -1,5 +1,5 @@
 import { Dialog } from "@rneui/themed";
-import { StyleSheet } from "react-native";
+import { StyleSheet,Text } from "react-native";
 import ModalButton from "./modals/ModalButton";
 import Colors from "../constants/colors";
 import InputField from "./authentication/InputField";
@@ -10,13 +10,22 @@ function MessageModal({
     onRequestClose,
     errorMessage,
     onMessageChange,
+    onBackdropPress,
+    method
 }) {
     return (
         <Dialog
             isVisible={visible}
-            onBackdropPress={onRequestClose}
+            onBackdropPress={onBackdropPress}
             overlayStyle={styles.container}
         >
+           {/* // <Dialog.Description>Item For Swap</Dialog.Description> */}
+            {method == "swap" ? (
+                <Text style={styles.title}>For Swap</Text>
+            ): (
+                <Text style={styles.title}>For Loan</Text>
+            )
+            }
             <InputField
                 placeholder="Write your message..."
                 onChangeText={onMessageChange}
@@ -54,6 +63,7 @@ const styles = StyleSheet.create({
         fontFamily: "RalewayBold",
         fontSize: 18,
         alignSelf: "center",
+        paddingBottom: 15,
     },
     image: {
         marginTop: 10,

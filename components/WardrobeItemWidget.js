@@ -32,26 +32,13 @@ function WardrobeitemWidget({ item: initialItem, wishlistItem }) {
 
     useEffect(() => {
         let isMounted = true; 
-    
         const fetchInfo = async () => {
-            console.log("Running fetchInfo...");
-        
             try {
                 let newItem = item;
-                console.log("1");
-                
                 if (wishlistItem) {
-                    console.log("2");
                     newItem = await getItemById({ id: wishlistItem.itemId });
-                    console.log("NewItem: ", newItem);
-                  //  console.log("NewItem ID: ", newItem.id);
-                    if (!newItem?.userId) {
-                        console.log("failed")
-                        return
-                    };
                     if (isMounted) setItem(newItem);
                 }
-                console.log("3");
     
                 const fetchedUser = await findUserById({ id: newItem.userId });
                 if (fetchedUser?.id !== user?.id && isMounted) {
@@ -62,9 +49,6 @@ function WardrobeitemWidget({ item: initialItem, wishlistItem }) {
                     setOwner(currentUser?.id === newItem.userId);
                     setDate((prev) => (prev !== dateFormatting(newItem.created_at) ? dateFormatting(newItem.created_at) : prev));
                 }
-    
-                await fetchWishlist();
-    
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -73,11 +57,11 @@ function WardrobeitemWidget({ item: initialItem, wishlistItem }) {
         if ((wishlistItem || item) && currentUser) {
             fetchInfo();
         }
-    
+        
         return () => {
-            isMounted = false; // Cleanup function to prevent state updates if component unmounts
+            isMounted = false; 
         };
-    }, [wishlistItem, currentUser]); // Do NOT include `item` in dependencies
+    }, [wishlistItem, item, currentUser]);
     
     return (
         <>

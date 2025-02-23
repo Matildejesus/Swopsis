@@ -47,8 +47,11 @@ export async function getConversation({userId_1, userId_2}) {
 
 }
 
-export async function sendMessage({ senderId, text = null, itemId = null, conversationId }) {
+export async function sendMessage({ senderId, text, itemId, conversationId }) {
     const messageType = text ? "text" : "item";
+    console.log("messageType", messageType);
+    console.log("text", text);
+    console.log("itemid", itemId);
 
     const { data, error } = await supabase
         .from("Messages")
@@ -58,7 +61,8 @@ export async function sendMessage({ senderId, text = null, itemId = null, conver
                 senderId,
                 text,
                 itemId,
-                messageType   
+                messageType,
+                decision 
             }   
         ])
         .select();
@@ -78,6 +82,23 @@ export async function getMessagesForConvo({ conversationId }) {
         .order("created_at", {ascending: false });
 
     if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
+}
+
+export async function updateDecision({ id, decision }) {
+    console.log(id);
+    console.log(decision);
+    const {data, error } = await supabase
+        .from("Messages")
+        .update({ "decision": decision })
+        .eq("id", id)
+        .select();
+
+    if (error) {
+        console.log("thisi is the problem");
         throw new Error(error.message);
     }
 

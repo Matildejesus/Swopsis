@@ -100,3 +100,24 @@ export async function updateUserMetadata(id, groupId, ambassador) {
 
     return data;
 }
+
+export async function updateUserImpactData({
+    id, newCoins, totalLitres, totalCarbon, totalWeight, itemsSwapped }) {
+    let user_metadata = {};
+    user_metadata = {
+        coins: newCoins,
+        totalWeight,
+        totalLitres,
+        totalCarbon,
+        itemsSwapped,
+    };
+    console.log("UPDATE DATA: ", user_metadata);
+
+    const { data, error } = await supabaseAdmin.auth.admin.updateUserById(id, {
+        user_metadata,
+    });
+    if (error) throw new Error(error.message);
+
+    console.log("Data: ", data);
+    return data;
+}

@@ -6,7 +6,7 @@ import MemberIcon from "../components/icons/MemberIcon";
 import SmallPinIcon from "../components/icons/SmallPinIcon";
 import { updateGroup } from "../services/apiAuth";
 import { useState } from "react";
-import MessageModal from "../components/MessageModel";
+import MessageModal from "../components/MessageModal";
 import { addJoinRequest } from "../services/apiJoinRequests";
 import { useUser } from "../components/authentication/useUser";
 
