@@ -68,7 +68,7 @@ function WardrobeitemWidget({ item: initialItem, wishlistItem }) {
         {console.log("Item:", item)}
         {console.log("User:", user)}
 
-         {item && user && (
+         {item.available && user && (
             <View style={styles.itemContainer}>
                 <View style={styles.row3}>
                     <Image style={styles.avatar} source={null} />

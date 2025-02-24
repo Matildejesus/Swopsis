@@ -10,12 +10,13 @@ import Categories, {
     Colors as ColorsList,
 } from "../../constants/itemCategories.js";
 import PrimaryButton from "../../components/PrimaryButton";
-import { addItem } from "../../services/apiItems.js";
+import { addItem, updateUnavailability } from "../../services/apiItems.js";
 import ErrorMessage from "../../components/ErrorMessage.js";
 import ColorSwitch from "../../components/ColorSwitch.js";
 import ColorCircle from "../../components/icons/ColorCircle.js";
 import { updateUserData } from "../../services/apiAuth.js";
 import { getSubcategoryDetails } from "../../services/apiItemConvert.js";
+import CalendarModal from "../../components/CalendarModal.js";
 
 function ItemDescriptionInputScreen() {
     const route = useRoute();
@@ -30,6 +31,8 @@ function ItemDescriptionInputScreen() {
     const [selectedColor, setSelectedColor] = useState("");
     const [inputError, setInputError] = useState(null);
     const [subcategoryDetails, setSubcategoryDetails] = useState();
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [unavailableDates, setUnavailableDates] = useState({});
 
     const navigation = useNavigation();
 
@@ -63,7 +66,84 @@ function ItemDescriptionInputScreen() {
             break;
     }
 
+    const handleSaveDates = async (dates) => {
+        setIsModalVisible(false);
+        addItem({
+            item: {
+                userId,
+                category,
+                image: avatar,
+                title,
+                description,
+                method,
+                unavailableDates: dates
+            },
+            itemDetails: {
+                subcategory: subcategory.value,
+                ...(category !== "Accessories" && { size: size.value }),
+                weight,
+                ...(category === "Accessories" ? { material } : { fabric }),
+                condition: condition.value,
+                color: selectedColor,
+                ...(category === "Shoes" && { length }),
+            },
+        });
+
+        try {
+            const itemConversion = await getSubcategoryDetails({
+                item: subcategory.value,
+            });
+            setSubcategoryDetails(itemConversion);
+
+            // Once details are retrieved, perform calculations
+            console.log("itemconversion: ", itemConversion.carbon);
+            const litresSaved = totalLitres + itemConversion.litres;
+
+            let carbonSaved = totalCarbon;
+
+            if (itemConversion.scalable === "true") {
+                carbonSaved += itemConversion.carbon * weight;
+            } else {
+                carbonSaved += itemConversion.carbon;
+            }
+
+            const weightSaved = totalWeight + parseFloat(weight);
+            console.log("totalWeight: ", totalWeight);
+            console.log("weight: ", weight);
+            console.log("Weight saved: ", weightSaved);
+
+            const itemsSaved = itemsSwapped + 1;
+            const newCoins = coins + 1;
+            console.log(newCoins);
+            console.log(weightSaved.toFixed(2), itemsSaved, carbonSaved, litresSaved);
+
+            // Update user data after calculations
+            await updateUserData({
+                newCoins,
+                totalLitres: litresSaved,
+                totalCarbon: carbonSaved,
+                totalWeight: parseFloat(weightSaved.toFixed(2)),
+                itemsSwapped: itemsSaved,
+            });
+
+            // Navigate to Profile after update
+            navigation.reset({
+                index: 0,
+                routes: [
+                    {
+                        name: "InApp",
+                    },
+                ],
+            });
+
+        } catch (error) {
+            console.error("Error fetching subcategory details:", error);
+            setSubcategoryDetails(null);
+        }
+    };
+
     const submitHandler = async () => {
+        console.log("submitting");
         if (
             !subcategory ||
             !weight ||
@@ -74,77 +154,11 @@ function ItemDescriptionInputScreen() {
         ) {
             setInputError("Missing inputs");
         } else {
-            // Add item before retrieving subcategory details
-            addItem({
-                item: {
-                    userId,
-                    category,
-                    image: avatar,
-                    title,
-                    description,
-                    method,
-                },
-                itemDetails: {
-                    subcategory: subcategory.value,
-                    ...(category !== "Accessories" && { size: size.value }),
-                    weight,
-                    ...(category === "Accessories" ? { material } : { fabric }),
-                    condition: condition.value,
-                    color: selectedColor,
-                    ...(category === "Shoes" && { length }),
-                },
-            });
-    
-            try {
-                const itemConversion = await getSubcategoryDetails({
-                    item: subcategory.value,
-                });
-                setSubcategoryDetails(itemConversion);
-    
-                // Once details are retrieved, perform calculations
-                console.log("itemconversion: ", itemConversion.carbon);
-                const litresSaved = totalLitres + itemConversion.litres;
+            console.log("item method is: ", method);
+            if (method == "loan") { 
+                console.log("opening modal");
+                setIsModalVisible(true);
 
-                let carbonSaved = totalCarbon;
-    
-                if (itemConversion.scalable === "true") {
-                    carbonSaved += itemConversion.carbon * weight;
-                } else {
-                    carbonSaved += itemConversion.carbon;
-                }
-    
-                const weightSaved = totalWeight + parseFloat(weight);
-                console.log("totalWeight: ", totalWeight);
-                console.log("weight: ", weight);
-                console.log("Weight saved: ", weightSaved);
-
-                const itemsSaved = itemsSwapped + 1;
-                const newCoins = coins + 1;
-                console.log(newCoins);
-                console.log(weightSaved.toFixed(2), itemsSaved, carbonSaved, litresSaved);
-    
-                // Update user data after calculations
-                await updateUserData({
-                    newCoins,
-                    totalLitres: litresSaved,
-                    totalCarbon: carbonSaved,
-                    totalWeight: parseFloat(weightSaved.toFixed(2)),
-                    itemsSwapped: itemsSaved,
-                });
-    
-                // Navigate to Profile after update
-                navigation.reset({
-                    index: 0,
-                    routes: [
-                        {
-                            name: "InApp",
-                        },
-                    ],
-                });
-    
-            } catch (error) {
-                console.error("Error fetching subcategory details:", error);
-                setSubcategoryDetails(null);
             }
         }
     };
@@ -259,6 +273,12 @@ function ItemDescriptionInputScreen() {
                     onPress={submitHandler}
                 />
             </View>
+            {method == "loan" && 
+            <CalendarModal 
+                visible={isModalVisible}
+                onSave={handleSaveDates}
+                onBackdropPress={() => setIsModalVisible(false)}
+            />}
         </View>
     );
 }

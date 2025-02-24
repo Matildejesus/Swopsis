@@ -7,11 +7,12 @@ import DescriptionDisplay from "../DescriptionDisplay";
 import { useUser } from "../authentication/useUser";
 import Colors from "../../constants/colors";
 import dateFormatting from "../dateFormatting";
-import { deleteItems, getItemsInfo } from "../../services/apiItems";
+import { deleteItems, getItemsInfo, updateUnavailability } from "../../services/apiItems";
 import TrashIcon from "../icons/TrashIcon";
 import { getSubcategoryDetails } from "../../services/apiItemConvert";
 import { useNavigation } from "@react-navigation/native";
 import { updateUserData } from "../../services/apiAuth";
+import CalendarIcon from "../icons/CalendarIcon";
 
 function ProfileItemDetails({ itemData, user, owner }) {
     const { user: currentUser } = useUser();
@@ -98,11 +99,24 @@ function ProfileItemDetails({ itemData, user, owner }) {
             <Image source={{ uri: itemData.image }} style={styles.image} />
             <View style={styles.header}>
                 <Text style={styles.itemName}>{itemData.title}</Text>
+                <View style={styles.icon}>
+                { itemData.method == "loan"  && itemData.userId == currentUser.id && 
+                    (
+                    <View style={styles.calendar}>
+                        <CalendarIcon 
+                            calendarDates={itemData.unavailableDates} 
+                            itemId={itemData.id}
+                            owner={true}
+                        />
+                    </View>
+                    )
+                }
                 { !owner ? <HeartSwitch /> :  
                     <TouchableOpacity onPress={handleDeletion}>
                         <TrashIcon width={26} height={33}/>
                     </TouchableOpacity>
                 }
+                </View>
             </View>
             <Divider style={styles.divider} />
             <View style={styles.row3}>
@@ -211,4 +225,11 @@ const styles = StyleSheet.create({
         width: "80%",
         marginVertical: 10,
     },
+    icon: {
+        flexDirection: "row",
+        gap: 15,
+    },
+    calendar: {
+        marginTop: 5,
+    }
 });

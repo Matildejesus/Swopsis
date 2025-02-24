@@ -454,7 +454,7 @@ export default function App() {
                                         headerBackVisible: false,
                                         headerTitle: (props) => (
                                             <Title
-                                                title="CALENDAR"
+                                                title=""
                                                 goBack="true"
                                                 {...props}
                                             />

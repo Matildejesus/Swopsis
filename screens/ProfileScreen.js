@@ -20,7 +20,6 @@ import ProfileItemWidget from "../components/ProfileItemWidget";
 import { getItems } from "../services/apiItems";
 import AnimatedEnvelope from "../components/AnimatedEnvelope";
 import { useFocusEffect } from "@react-navigation/native";
-import { getSubcategoryDetails } from "../services/apiItemConvert";
 import DashboardIcon from "../components/icons/DashboardIcon";
 
 function ProfileScreen({ navigation }) {

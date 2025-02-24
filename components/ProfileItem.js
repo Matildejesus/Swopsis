@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Image, StyleSheet, TouchableOpacity, Text } from "react-native";
+import Colors from "../constants/colors";
 
 function ProfileItem({ style, source, itemData }) {
     const navigation = useNavigation();
@@ -20,6 +21,10 @@ function ProfileItem({ style, source, itemData }) {
                     resizeMode="contain"
                 />
             </View>
+            { itemData.available == false && itemData.method == "swap" &&
+            (<Text style={styles.overText}> SWAPPED </Text>)}
+            { itemData.available == false && itemData.method == "loan" && 
+            (<Text style={styles.overText}> LOANED </Text>)}
         </TouchableOpacity>
     );
 }
@@ -30,4 +35,18 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
+    overText: {
+        position: "absolute",
+        top: "52%",
+        left: 7,
+        width: 130,
+        backgroundColor: "white",
+        opacity: 0.7,
+        paddingLeft: 24,
+        transform: [{ rotate: "45deg" }],
+        fontFamily: "RalewayBold",
+        fontSize: 15,
+        color: Colors.primary2,
+        borderRadius: 20,
+    }
 });

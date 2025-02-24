@@ -79,7 +79,7 @@ function ProfileItemScreen() {
             {!owner ? (
                 <>
                     <View style={styles.button}>
-                        {selectedOption === 0 ? (
+                        {selectedOption === 0 && itemData.available ? (
                             <ContactButton handleContact={() => setIsModalVisible(true)} />
                         ) : (
                             <ReviewButton />

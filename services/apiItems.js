@@ -13,6 +13,7 @@ export async function addItem({ item, itemDetails }) {
                 method: item.method,
                 available: true,
                 tradeCount: 0,
+                unavailableDates: item.unavailableDates
             },
         ])
         .select();
@@ -119,6 +120,20 @@ export async function updateAvailability({ available, itemId }) {
         .from('Items')
         .update({ "available": available })
         .eq("id", itemId)
+        .select();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
+}
+
+    console.log("DATES IN THE FUNCTION: ", dates);
+    const {data, error} = await supabase
+        .from("Items")
+        .update({"unavailableDates": dates })
+        .eq("id", id)
         .select();
 
     if (error) {
