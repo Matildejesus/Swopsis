@@ -5,6 +5,7 @@ import { useRoute } from "@react-navigation/native";
 import PrimaryButton from "../components/PrimaryButton";
 import { useState } from "react";
 import { updateUnavailability } from "../services/apiItems";
+import CalendarWidget from "../components/CalendarWidget";
 
 function CalendarScreen() {
     const route = useRoute();
@@ -42,32 +43,11 @@ function CalendarScreen() {
         }
     }
 
+    console.log("MARKED DATES: ", markedDates);
     return (
         <View style={styles.container}>
-            <Calendar
-                markedDates={markedDates}
-                onDayPress={toggleDate}
-                theme={{
-                    backgroundColor: "#ffffff",
-                    calendarBackground: "#ffffff",
-                    textSectionTitleColor: Colors.primary2,
-                    selectedDayBackgroundColor: Colors.popup,
-                    selectedDayTextColor: Colors.primary1,
-                    todayTextColor: Colors.primary1,
-                    dayTextColor: Colors.primary2,
-                    textDisabledColor: "#d9e1e8",
-                    dotColor: Colors.primary2,
-                    arrowColor: Colors.primary1,
-                    monthTextColor: Colors.primary1,
-                    textDayFontFamily: "InterRegular",
-                    textMonthFontFamily: "InterRegular",
-                    textDayHeaderFontFamily: "InterSemiBold",
-                    textDayFontSize: 16,
-                    textMonthFontSize: 25,
-                    textDayHeaderFontSize: 16,
-                }}
-            />
-            { owner && !isEditing && 
+           <CalendarWidget markedDates={markedDates} toggleDate={toggleDate} />
+            { owner && !isEditing &&  
                 <PrimaryButton 
                     title="Edit Unavailable Dates" 
                     onPress={() =>setIsEditing(true)} 

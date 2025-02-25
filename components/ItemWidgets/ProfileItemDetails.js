@@ -141,6 +141,7 @@ function ProfileItemDetails({ itemData, user, owner }) {
                     onRequestClose={() => setIsModalVisible(false)}
                     data={itemDetails}
                     category={itemData.category}
+                
                 />
             )}
         </View>

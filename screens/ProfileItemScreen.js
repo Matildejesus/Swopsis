@@ -11,6 +11,7 @@ import { useUser } from "../components/authentication/useUser";
 import TrashIcon from "../components/icons/TrashIcon.js";
 import { createConversation, getConversation, sendMessage } from "../services/apiChat.js";
 import MessageModal from "../components/MessageModal.js";
+import Colors from "../constants/colors.js";
 
 function ProfileItemScreen() {
     const [selectedOption, setSelectedOption] = useState(0);
@@ -19,6 +20,7 @@ function ProfileItemScreen() {
     const [message, setMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [conversation, setConversation] = useState();
+    const [selectedDates, setSelectedDates] = useState({});
 
     const navigation = useNavigation();
     const handleChange = (index) => {
@@ -29,9 +31,38 @@ function ProfileItemScreen() {
         setIsModalVisible(false); 
     };
 
+    const handleContact = () => {
+        setIsModalVisible(true);
+    };
+
+
     const route = useRoute();
     const { itemData, owner, user } = route.params;
     console.log("ITEM DATA: ", itemData);
+
+    const toggleDate = (day) => {
+        const { dateString } = day;
+    
+        // Prevent selecting unavailable dates (already marked in red)
+        if (itemData.unavailableDates?.[dateString]?.dotColor === "red") {
+            return;
+        }
+    
+        setSelectedDates((prevDates) => {
+            const newDates = { ...prevDates };
+            if (newDates[dateString]) {
+                delete newDates[dateString]; // Remove if already selected
+            } else {
+                newDates[dateString] = {
+                    marked: true,
+                    dotColor: Colors.primary2, // Dark green
+                    selected: true,
+                };
+            }
+            return newDates; // Ensure React re-renders
+        });
+    };
+    
 
     const submitHandler = async () => {
         if (!message) {
@@ -40,17 +71,20 @@ function ProfileItemScreen() {
         }
         try {
             setErrorMessage("");
-            setIsModalVisible(false);
-            const pendingConversation = await getConversation({ userId_1: itemData.userId, userId_2: currentUser.id});
-            if (pendingConversation) {
-                setConversation(pendingConversation);
-            } else {
+            let pendingConversation = await getConversation({ userId_1: itemData.userId, userId_2: currentUser.id});
+            if (!pendingConversation) {
                 pendingConversation = await createConversation({user1: itemData.userId, user2: currentUser.id});
-                setConversation(pendingConversation);
+
             }
-            await sendMessage({ senderId: currentUser.id, itemId: itemData.id, conversationId: pendingConversation.id });
+            if (selectedDates) {
+                console.log("selectedDates: ", selectedDates);
+                await sendMessage({ senderId: currentUser.id, itemId: itemData.id, loanDates: selectedDates, conversationId: pendingConversation.id});
+            } else {
+                await sendMessage({ senderId: currentUser.id, itemId: itemData.id, conversationId: pendingConversation.id });
+            }
             await sendMessage({ senderId: currentUser.id, text: message, conversationId: pendingConversation.id});
           
+            setIsModalVisible(false);
             navigation.navigate('InApp', {
                 screen: 'Inbox',
                 params: { conversationId: 'conversation.id' },
@@ -80,7 +114,7 @@ function ProfileItemScreen() {
                 <>
                     <View style={styles.button}>
                         {selectedOption === 0 && itemData.available ? (
-                            <ContactButton handleContact={() => setIsModalVisible(true)} />
+                            <ContactButton handleContact={handleContact} />
                         ) : (
                             <ReviewButton />
                         )}
@@ -99,6 +133,8 @@ function ProfileItemScreen() {
                 errorMessage={errorMessage}
                 onMessageChange={setMessage}
                 method={itemData.method}
+                markedDates={{ ...itemData.unavailableDates, ...selectedDates }}
+                toggleDate={toggleDate}
             />
         </View>
     );

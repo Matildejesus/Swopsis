@@ -129,6 +129,7 @@ export async function updateAvailability({ available, itemId }) {
     return data;
 }
 
+export async function updateUnavailability ({ dates, id }) {
     console.log("DATES IN THE FUNCTION: ", dates);
     const {data, error} = await supabase
         .from("Items")
@@ -140,5 +141,6 @@ export async function updateAvailability({ available, itemId }) {
         throw new Error(error.message);
     }
 
+    console.log("data: ", data);
     return data;
 }

@@ -7,11 +7,13 @@ import InputField from "../components/authentication/InputField";
 import Colors from "../constants/colors";
 import PrimaryButton from "../components/PrimaryButton";
 import { useUser } from "../components/authentication/useUser";
-import { getItemById, getItemsInfo, updateAvailability } from "../services/apiItems";
+import { getItemById, getItemsInfo, updateAvailability, updateUnavailability } from "../services/apiItems";
 import ChatItemWidget from "../components/ChatItemWidget";
 import DecisionMakingWidget from "../components/DecisionMakingWidget";
 import { findUserById, updateUserImpactData } from "../services/apiAdmin";
 import { getSubcategoryDetails } from "../services/apiItemConvert";
+import CalendarWidget from "../components/CalendarWidget";
+import CalendarIcon from "../components/icons/CalendarIcon";
 
 function ChatScreen() {
     const route = useRoute();
@@ -22,6 +24,7 @@ function ChatScreen() {
     const [newMessage, setNewMessage] = useState("");
     const [selectedItem, setSelectedItem]= useState([]);
     const [ decision, setDecision ] = useState(null);
+    const [decisionDisplay, setDecisionDisplay] = useState(false);
 
     console.log("RECEIVER USER: ", receiverUser);
 
@@ -88,36 +91,67 @@ function ChatScreen() {
     useEffect(() => {
         const makeDecision = async () => {
             try {
-               if (decision == "accept") {
-                // how would i get item.itemiD, BECAUSE THAT IS IN THE FLATLIST
-                    await updateDecision({ id: selectedItem.id, decision});
-                    updateAvailability({ available: false, itemId: selectedItem.itemId});
+                if (decision === "accept") {
+                    if (!selectedItem || !selectedItem.itemId) {
+                        console.error("No selected item or itemId");
+                        return;
+                    }
+    
+                    await updateDecision({ id: selectedItem.id, decision });
+    
+                    if (!selectedItem.loanDates) {
+                        await updateAvailability({ available: false, itemId: selectedItem.itemId });
+                    }
+    
                     const item = await getItemById({ id: selectedItem.itemId });
                     console.log("get item: ", item);
-                    const itemInfo = await getItemsInfo({ category: item.category, itemId: item.id});
-                    const categoryData = await getSubcategoryDetails({ item: itemInfo.subcategory});
+    
+                    const itemInfo = await getItemsInfo({ category: item.category, itemId: item.id });
+                    console.log("items info: ", itemInfo);
+                    const categoryData = await getSubcategoryDetails({ item: itemInfo.subcategory });
+    
                     console.log("SENDERID: ", selectedItem.senderId);
-                    const receiverUser = await findUserById({ id: selectedItem.senderId});
-                    console.log("RECEIVER USER: ", receiverUser.user_metadata);
-                    const updatedCoins = receiverUser.user_metadata.coins - 1;
-                    console.log(updatedCoins);
-                    const updatedLitres = receiverUser.user_metadata.totalLitres + categoryData.litres;
-                    console.log(updatedLitres);
-                    const updatedWeight = receiverUser.user_metadata.totalWeight + parseFloat(itemInfo.weight);
-                    console.log(updatedWeight);
-                    const updatedSwapped = receiverUser.user_metadata.itemsSwapped + 1;
-                    console.log(updatedSwapped);
-                    console.log("scalable");
-                    if (categoryData.scalable == true ) {
-                        const updatedCarbon = (itemInfo.weight * categoryData.carbon);
-                        console.log("dataaaaa: ", updatedCarbon, updatedLitres, updatedWeight, updatedSwapped);
-                        await updateUserImpactData({ id: selectedItem.senderId, newCoins: updatedCoins, totalLitres: updatedLitres, totalCarbon: updatedCarbon, totalWeight: updatedWeight, itemsSwapped: updatedSwapped });
-                    } else {
-                        const updatedCarbon  = (categoryData.carbon);
-                        console.log("dataaaaa: ", updatedCarbon, updatedLitres, updatedWeight, updatedSwapped);
-                        await updateUserImpactData({ id: selectedItem.senderId, newCoins: updatedCoins, totalLitres: updatedLitres, totalCarbon: updatedCarbon, totalWeight: updatedWeight, itemsSwapped: updatedSwapped });
+    
+                    const mergedDates = { ...item.unavailableDates };
+
+                    for (const date in selectedItem.loanDates) {
+                        mergedDates[date] = {
+                            ...item.unavailableDates[date],  // Keep existing properties
+                            ...selectedItem.loanDates[date], // Add new properties
+                        };
                     }
-                } else if (decision == "reject") {
+                    
+                    console.log("Updated unavailable dates:", mergedDates);
+    
+                    await updateUnavailability({ id: selectedItem.itemId, dates: mergedDates });
+    
+                    const receiverUser = await findUserById({ id: selectedItem.senderId });
+                    console.log("RECEIVER USER: ", receiverUser.user_metadata);
+    
+                    const updatedCoins = receiverUser.user_metadata.coins - 1;
+                    const updatedLitres = receiverUser.user_metadata.totalLitres + categoryData.litres;
+                    const updatedWeight = receiverUser.user_metadata.totalWeight + parseFloat(itemInfo.weight);
+                    const updatedSwapped = receiverUser.user_metadata.itemsSwapped + 1;
+    
+                    let updatedCarbon;
+                    if (categoryData.scalable) {
+                        updatedCarbon = itemInfo.weight * categoryData.carbon;
+                    } else {
+                        updatedCarbon = categoryData.carbon;
+                    }
+    
+                    console.log("Impact data:", updatedCarbon, updatedLitres, updatedWeight, updatedSwapped);
+    
+                    await updateUserImpactData({
+                        id: selectedItem.senderId,
+                        newCoins: updatedCoins,
+                        totalLitres: updatedLitres,
+                        totalCarbon: updatedCarbon,
+                        totalWeight: updatedWeight,
+                        itemsSwapped: updatedSwapped,
+                    });
+    
+                } else if (decision === "reject") {
                     console.log("SELECTED ITEM ID: ", selectedItem);
                     await updateDecision({ id: selectedItem.id, decision });
                 }
@@ -125,10 +159,12 @@ function ChatScreen() {
                 console.error("Error saving decision: ", error.message);
             }
         };
-
-        makeDecision();
-
+    
+        if (decision && selectedItem) {
+            makeDecision();
+        }
     }, [decision, selectedItem]);
+    
     
     return (
         <View style={styles.container}>
@@ -144,26 +180,39 @@ function ChatScreen() {
                         </View>
                     ) : (
                         <>
-                            {item.senderId != user.id && !item.decision && ( <DecisionMakingWidget 
-                                accept={()=> { 
-                                    setDecision("accept");  
-                                    setSelectedItem(item);} 
-                                }
-                                reject={() => {
-                                    setDecision("reject");
-                                    setSelectedItem(item);}
-                                }
-                            /> )}
-                           {decision || item.decision && (
-                            <Text style={styles.announcement}>Item {decision || item.decision}ed for Swap</Text>
-                           )}
+                        {item.senderId != user.id && !item.decision && 
+                                ( <DecisionMakingWidget 
+                                    accept={()=> { 
+                                        setDecision("accept");  
+                                        setSelectedItem(item);} 
+                                    }
+                                    reject={() => {
+                                        setDecision("reject");
+                                        setSelectedItem(item);}
+                                    }
+                                /> 
+                            )}
+                             {decision || item.decision && (
+                                <Text style={styles.announcement}>
+                                    Item {decision || item.decision ? `${decision || item.decision}ed` : ""} for {item.loanDates ? "loan" : "swap"}
+                                </Text>
+                            )}
                             <View style={item.senderId === user.id
                                 ? styles.imageContainer 
                                 : styles.receiverImageContainer 
                             }>
+                                <View style={styles.rowContainer}>
                                 <ChatItemWidget itemId={item.itemId} currentUser={user}/>
+                                {item.loanDates && 
+                                    (  
+                                         <View style={styles.calenderContainer}>
+                                      
+                                       {!decision ||!item.decision &&  <CalendarIcon calendarDates={item.loanDates} itemId={item.itemId} owner={false}/> }
+                                        </View>
+                                    ) 
+                                } </View>
                             </View>
-                            
+                           
                         </>
                     )
                 )}
@@ -174,22 +223,22 @@ function ChatScreen() {
             />
 
             <View style={styles.inputContainer}>
-            <InputField
-                placeholder="Type your message here..."
-                inputStyle={styles.inputStyle}
-                value={newMessage} // Fixed value prop
-                onChangeText={setNewMessage} // Corrected event handler
-                multiline={true}
-                numberOfLines={5}
-                maxLength={200}
-                containerStyle={styles.fieldContainer}
-            />
-            <PrimaryButton 
-                title="SEND"
-                onPress={handleText}
-                style={styles.buttonContainer}
-                textStyle={styles.buttonText}   
-            />
+                <InputField
+                    placeholder="Type your message here..."
+                    inputStyle={styles.inputStyle}
+                    value={newMessage} // Fixed value prop
+                    onChangeText={setNewMessage} // Corrected event handler
+                    multiline={true}
+                    numberOfLines={5}
+                    maxLength={200}
+                    containerStyle={styles.fieldContainer}
+                />
+                <PrimaryButton 
+                    title="SEND"
+                    onPress={handleText}
+                    style={styles.buttonContainer}
+                    textStyle={styles.buttonText}   
+                />
             </View>
         </View>
     );
@@ -237,8 +286,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 13,
         borderRadius: 10,
         opacity: 0.76,
-        minHeight: 40, // Ensures input box is visible initially
-        maxHeight: 120, // Prevents it from expanding beyond 5 lines
+        minHeight: 40, 
+        maxHeight: 120,
         width: "60%", 
         alignSelf: "center",
     },
@@ -298,5 +347,26 @@ const styles = StyleSheet.create({
         color: Colors.primary2,
         opacity: 0.5,
         alignSelf: "center"
+    },
+    calenderContainer: {
+     //paddingTop: "80%",
+     paddingTop: 40,
+    // flexShrink: 1,
+    },
+    itemContainer: {
+        marginVertical: 10,
+        padding: 10, // Add padding around the entire item container
+        backgroundColor: "#f9f9f9", // Light background for distinction
+        borderRadius: 8, // Rounded corners
+        shadowColor: "#000", // Shadow for depth
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 1,
+        elevation: 2,
+        
+    },
+    rowContainer: {
+        flexDirection: "row",
+        gap: 10,
     }
 })

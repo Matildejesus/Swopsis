@@ -47,8 +47,8 @@ export async function getConversation({userId_1, userId_2}) {
 
 }
 
-export async function sendMessage({ senderId, text, itemId, conversationId }) {
-    const messageType = text ? "text" : "item";
+export async function sendMessage({ senderId, text, itemId, loanDates, conversationId }) {
+    const messageType = text ? "text" : loanDates ? "calendar" : "item";
     console.log("messageType", messageType);
     console.log("text", text);
     console.log("itemid", itemId);
@@ -61,8 +61,9 @@ export async function sendMessage({ senderId, text, itemId, conversationId }) {
                 senderId,
                 text,
                 itemId,
+                loanDates,
                 messageType,
-                decision 
+                decision: null
             }   
         ])
         .select();

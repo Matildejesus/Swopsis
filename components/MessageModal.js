@@ -4,6 +4,7 @@ import ModalButton from "./modals/ModalButton";
 import Colors from "../constants/colors";
 import InputField from "./authentication/InputField";
 import ErrorMessage from "./ErrorMessage";
+import CalendarWidget from "./CalendarWidget";
 
 function MessageModal({
     visible,
@@ -11,7 +12,9 @@ function MessageModal({
     errorMessage,
     onMessageChange,
     onBackdropPress,
-    method
+    method,
+    markedDates, 
+    toggleDate
 }) {
     return (
         <Dialog
@@ -23,7 +26,10 @@ function MessageModal({
             {method == "swap" ? (
                 <Text style={styles.title}>For Swap</Text>
             ): (
+                <>
                 <Text style={styles.title}>For Loan</Text>
+                <CalendarWidget markedDates={markedDates} toggleDate={toggleDate}/>
+                </>
             )
             }
             <InputField
@@ -89,5 +95,6 @@ const styles = StyleSheet.create({
         opacity: 0.76,
         paddingHorizontal: 13,
         paddingVertical: 8,
+        marginTop: 20,
     },
 });
