@@ -155,9 +155,6 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end",
         flex: 1,
         paddingBottom: 10,
-        //  marginBottom: 40,
-        // position: "absolute",
-        // zIndex: 10,
     },
     button: {
         paddingLeft: "60%",

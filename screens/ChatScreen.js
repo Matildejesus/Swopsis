@@ -7,7 +7,7 @@ import InputField from "../components/authentication/InputField";
 import Colors from "../constants/colors";
 import PrimaryButton from "../components/PrimaryButton";
 import { useUser } from "../components/authentication/useUser";
-import { getItemById, getItemsInfo, updateAvailability, updateUnavailability } from "../services/apiItems";
+import { getItemById, getItemsInfo, updateAvailability, updateTradeCount, updateUnavailability } from "../services/apiItems";
 import ChatItemWidget from "../components/ChatItemWidget";
 import DecisionMakingWidget from "../components/DecisionMakingWidget";
 import { findUserById, updateUserImpactData } from "../services/apiAdmin";
@@ -103,8 +103,11 @@ function ChatScreen() {
                         await updateAvailability({ available: false, itemId: selectedItem.itemId });
                     }
     
+
                     const item = await getItemById({ id: selectedItem.itemId });
                     console.log("get item: ", item);
+                    const newCount = await updateTradeCount({ id: item.id, count: item.tradeCount});
+                    console.log("trade count", newCount);
     
                     const itemInfo = await getItemsInfo({ category: item.category, itemId: item.id });
                     console.log("items info: ", itemInfo);
@@ -168,9 +171,12 @@ function ChatScreen() {
     
     return (
         <View style={styles.container}>
+
             <FlatList
                 data={messages}
-                renderItem={({ item }) => (
+                renderItem={({ item }) => {
+                    console.log("Rendering item:", item);
+                    return (
                     item.text ? (
                         <View style={item.senderId === user.id
                             ? styles.textContainer 
@@ -192,12 +198,17 @@ function ChatScreen() {
                                     }
                                 /> 
                             )}
-                             {decision || item.decision && (
-                                <Text style={styles.announcement}>
-                                    Item {decision || item.decision ? `${decision || item.decision}ed` : ""} for {item.loanDates ? "loan" : "swap"}
+                             {(decision || item.decision) && (
+                                <View style={styles.announcement}>
+                                <Text >
+                                    Item {decision || item.decision}ed for 
                                 </Text>
-                            )}
-                            <View style={item.senderId === user.id
+
+                                {item.method ? <Text> loan</Text> : <Text> swap</Text>}
+                           </View> )
+                            }
+
+                             <View style={item.senderId === user.id
                                 ? styles.imageContainer 
                                 : styles.receiverImageContainer 
                             }>
@@ -205,17 +216,19 @@ function ChatScreen() {
                                 <ChatItemWidget itemId={item.itemId} currentUser={user}/>
                                 {item.loanDates && 
                                     (  
-                                         <View style={styles.calenderContainer}>
+                                        <View style={styles.calenderContainer}>
                                       
-                                       {!decision ||!item.decision &&  <CalendarIcon calendarDates={item.loanDates} itemId={item.itemId} owner={false}/> }
+                                       {!decision || !item.decision &&  <CalendarIcon calendarDates={item.loanDates} itemId={item.itemId} owner={false}/> }
                                         </View>
+                                   
                                     ) 
-                                } </View>
-                            </View>
+                                } 
+                                </View>
+                            </View> 
                            
                         </>
                     )
-                )}
+                )}}
                 inverted
                 keyExtractor={(item) => item.id.toString()}
                 showsVerticalScrollIndicator={false}
@@ -346,7 +359,8 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: Colors.primary2,
         opacity: 0.5,
-        alignSelf: "center"
+        alignSelf: "center",
+        flexDirection: "row"
     },
     calenderContainer: {
      //paddingTop: "80%",

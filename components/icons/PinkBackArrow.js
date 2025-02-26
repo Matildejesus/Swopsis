@@ -1,8 +1,9 @@
-import { TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
 function PinkBackArrow({ onPress }) {
     return (
+        <View style={styles.container}>
         <TouchableOpacity onPress={onPress}>
             <Svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +18,14 @@ function PinkBackArrow({ onPress }) {
                 />
             </Svg>
         </TouchableOpacity>
+        </View>
     );
 }
 
 export default PinkBackArrow;
+
+const styles = StyleSheet.create({
+    container: {
+        marginRight: 27,
+    }
+})

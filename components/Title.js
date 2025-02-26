@@ -33,11 +33,11 @@ export default Title;
 const styles = StyleSheet.create({
     container: {
         // marginLeft: 20,
-        marginTop: 10,
+      //  marginTop: 10,
         flex: 1,
         flexDirection: "row",
         alignItems: "center",
-        gap: 27,
+       // gap: 27,
     },
     imageStyle: {
         width: 40,
@@ -45,9 +45,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary1,
         borderRadius: 20,
         marginRight: 4,
-        marginLeft: 21,
-        marginBottom: 20,
-        overflow: "hidden",
+        overflow: "hidden"
         
     }, 
     image: {

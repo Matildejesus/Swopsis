@@ -144,3 +144,17 @@ export async function updateUnavailability ({ dates, id }) {
     console.log("data: ", data);
     return data;
 }
+
+export async function updateTradeCount({ id, count }) {
+    console.log(count);
+    const newCoins = count + 1;
+    const { data, error } = await supabase
+        .from("Items")
+        .update({"tradeCount": count})
+        .eq("id", id)
+        .select();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+}

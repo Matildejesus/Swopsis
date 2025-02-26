@@ -6,7 +6,7 @@ function ContactButton({ handleContact }) {
     console.log("handleContact prop:", handleContact);
 
     return (
-        <TouchableOpacity onPress={ handleContact()}>
+        <TouchableOpacity onPress={handleContact}>
             <View style={styles.button}>
                 <Text style={styles.label}>CONTACT</Text>
                 <ContactIcon />

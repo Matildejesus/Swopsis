@@ -159,6 +159,8 @@ function ItemDescriptionInputScreen() {
                 console.log("opening modal");
                 setIsModalVisible(true);
 
+            } else {
+                handleSaveDates();
             }
         }
     };
