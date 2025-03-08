@@ -3,11 +3,12 @@ import Colors from "../../constants/colors";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-function AddIcon() {
+function AddIcon({navigateLocal, onPress, buttonStyle}) {
     const navigation = useNavigation();
+
     return (
-        <TouchableOpacity onPress={() => navigation.navigate("CreateItem")}>
-            <View style={styles.container}>
+        <TouchableOpacity onPress={onPress ? onPress : () => navigation.navigate(navigateLocal)}>
+            <View style={buttonStyle ? buttonStyle : styles.container}>
                 <Svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="40"

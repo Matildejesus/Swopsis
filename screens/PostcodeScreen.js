@@ -1,15 +1,17 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import { useState } from "react";
 
 import Colors from "../constants/colors";
 import PinIcon from "../components/icons/PinIcon";
 import RegisterContainer from "../components/authentication/RegisterContainer";
 import PrimaryButton from "../components/PrimaryButton";
+import { useNavigation } from "@react-navigation/native";
 
 // missing function: postcode must be entered and must be a valid aus postcode ***
 
 function PostcodeScreen({ navigation }) {
     const [postcode, setPostcode] = useState("");
+    
     return (
         <View style={styles.container}>
             <Image
@@ -24,11 +26,17 @@ function PostcodeScreen({ navigation }) {
                     onChangeText={setPostcode}
                     value={postcode}
                 />
-                <View style={styles.linkContainer}>
+                {/* <View style={styles.linkContainer}>
                     <Text style={styles.text}>
                         To register your account, request to join a group first
                     </Text>
-                </View>
+                </View> */}
+                <TouchableOpacity onPress={() => navigation.navigate("AmbassadorRequest")}>
+                    <Text style={styles.link}>
+                        Be an{" "}
+                        <Text style={styles.register}>Ambassador</Text>
+                    </Text>
+                </TouchableOpacity>
                 <PrimaryButton
                     title="Search"
                     style={{ width: 200 }}
@@ -75,14 +83,24 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontFamily: "RalewayBold",
+        paddingBottom: 10,
+        color: Colors.primary2,
     },
     text: {
         fontSize: 12,
         paddingHorizontal: 30,
         paddingTop: 18,
+        color: Colors.primary2,
+        fontFamily: "RalewayRegular"
     },
-    linkContainer: {
-        marginBottom: 31,
-        gap: 7,
+    link: {
+        color: Colors.primary2,
+        fontSize: 15,
+        fontFamily: "RalewayMedium",
+        paddingBottom: 15,
+        marginTop: 40,
+    },
+    register: {
+        fontFamily: "RalewayBold",
     },
 });

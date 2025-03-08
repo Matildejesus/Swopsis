@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
 import Colors from "../constants/colors.js";
-function SecondaryButton({ title, onPress }) {
+function SecondaryButton({ title, onPress, styleContainer, textStyle }) {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, styleContainer]}>
             <Pressable onPress={onPress}>
-                <Text style={styles.text}>{title}</Text>
+                <Text style={[styles.text, textStyle]}>{title}</Text>
             </Pressable>
         </View>
     );

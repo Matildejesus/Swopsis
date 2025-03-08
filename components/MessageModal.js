@@ -14,7 +14,8 @@ function MessageModal({
     onBackdropPress,
     method,
     markedDates, 
-    toggleDate
+    toggleDate,
+    joinRequest
 }) {
     return (
         <Dialog
@@ -22,16 +23,18 @@ function MessageModal({
             onBackdropPress={onBackdropPress}
             overlayStyle={styles.container}
         >
-           {/* // <Dialog.Description>Item For Swap</Dialog.Description> */}
-            {method == "swap" ? (
-                <Text style={styles.title}>For Swap</Text>
-            ): (
-                <>
-                <Text style={styles.title}>For Loan</Text>
-                <CalendarWidget markedDates={markedDates} toggleDate={toggleDate}/>
-                </>
-            )
-            }
+            {!joinRequest && (
+                method === "swap" ? (
+                    <Text style={styles.title}>For Swap</Text>
+                ) : (
+                    <>
+                        <Text style={styles.title}>For Loan</Text>
+                        <CalendarWidget markedDates={markedDates} toggleDate={toggleDate} />
+                    </>
+                )
+            )}
+
+            
             <InputField
                 placeholder="Write your message..."
                 onChangeText={onMessageChange}

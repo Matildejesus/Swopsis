@@ -13,7 +13,8 @@ export async function addGroup({ group }) {
                 rules: group.rules,
                 numberOfMem: group.numberOfMem,
                 avatar: group.avatar,
-                ambassadorId: group.ambassador,
+                ambassadorId: group.ambassadorId,
+                status: group.status
             },
         ])
         .select();
@@ -35,6 +36,21 @@ export async function getGroups() {
     if (fetchError) {
         throw new Error(fetchError.message);
     }
-    console.log("data: ", groups[0].location);
+    console.log("data: ", groups);
     return groups;
+}
+
+
+export async function updateStatus({ id, status }) {
+    const { data, error } = await supabase
+        .from("Groups")
+        .update({ "status": status })
+        .eq("id", id)
+        .select();
+        
+    if (error) {
+        throw new Error(error.message);
+    }
+    
+    return data;
 }

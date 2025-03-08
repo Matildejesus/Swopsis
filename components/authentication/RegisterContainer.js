@@ -10,6 +10,10 @@ function RegisterContainer({
     onChangeText,
     value,
     secureTextEntry,
+    multiline,
+    numberOfLines,
+    maxLength,
+    containerStyle
 }) {
     const inputStyle = value ? styles.changedText : styles.inputText;
 
@@ -22,6 +26,10 @@ function RegisterContainer({
                 value={value}
                 text={text}
                 secureTextEntry={secureTextEntry}
+                containerStyle={containerStyle}
+                maxLength={maxLength}
+                numberOfLines={numberOfLines}
+                multiline={multiline}
             />
         </View>
     );

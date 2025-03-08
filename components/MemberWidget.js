@@ -54,10 +54,13 @@ function MemberWidget({ user, requests }) {
             setGroup("");
         }
 
+        console.log("group set");
         try {
-            console.log("THE USERS ID IS: ", currentUser.id);
+            console.log("status: ", status);
+            console.log("id: ", requests.id);
+            console.log("currentuser: ", currentUser.id);
             await updateStatus({ newStatus: status, id: requests.id });
-            await updateUserMetadata(currentUser.id, group, false);
+            await updateUserMetadata({ id: currentUser.id, groupId: group, ambassador: false });
         } catch (error) {
             console.error("Error updating user metadata: ", error);
         }

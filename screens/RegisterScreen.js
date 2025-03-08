@@ -21,9 +21,9 @@ function RegisterScreen({ navigation }) {
     const [userNameError, setUserNameError] = useState(null);
     const [passwordError, setPasswordError] = useState(null);
 
-    const [debouncedEmail] = useDebounce(email, 500);
-    const [debouncedUserName] = useDebounce(userName, 500);
-    const [debouncedPassword] = useDebounce(password, 500);
+    const [debouncedEmail] = useDebounce(email, 1000);
+    const [debouncedUserName] = useDebounce(userName, 1000);
+    const [debouncedPassword] = useDebounce(password, 1000);
 
     useEffect(() => {
         if (debouncedEmail) {
@@ -69,14 +69,6 @@ function RegisterScreen({ navigation }) {
             }
         }
     }, [debouncedUserName]);
-
-    function addUserNameHandler(enteredUserName) {
-        setUserName(enteredUserName);
-    }
-
-    function addPasswordHandler(enteredPassword) {
-        setPassword(enteredPassword);
-    }
 
     const submitHandler = () => {
         if (!emailError && !userNameError && !passwordError) {

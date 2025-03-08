@@ -17,8 +17,8 @@ function LoginScreen({ navigation }) {
     // janedoe@gmail.com  Test12345
     // test@gmail.com Test12345
     // admin@gmail.com admin
-    const [email, setEmail] = useState("janedoe@gmail.com");
-    const [password, setPassword] = useState("Test12345");
+    const [email, setEmail] = useState("admin@gmail.com");
+    const [password, setPassword] = useState("admin");
     const [emailError, setEmailError] = useState(null);
     const [passwordError, setPasswordError] = useState(null);
     const [loginError, setLoginError] = useState(null);
@@ -67,7 +67,7 @@ function LoginScreen({ navigation }) {
                             setPassword("");
                         },
                         onError: (error) => {
-                            setError(
+                            setLoginError(
                                 "Invalid email or password. Please try again.",
                             );
                         },
@@ -115,13 +115,15 @@ function LoginScreen({ navigation }) {
                         </Text>
                     </TouchableOpacity>
                 </View>
-
+                 <View style={styles.loginError}>
+                    <ErrorMessage error={loginError} />
+                </View>
                 <PrimaryButton
                     title="LOG IN"
                     style={{ width: 200 }}
                     onPress={submitHandler}
                 />
-                <ErrorMessage error={loginError} />
+               
             </View>
         </View>
     );
@@ -145,20 +147,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.24,
         shadowRadius: 8.5,
         shadowOffset: { width: 4, height: 5 },
-        height: 370,
+        height: 400,
         width: 283,
         zIndex: 1,
-        // paddingTop: 114,
         justifyContent: "center",
         alignItems: "center",
     },
     image: {
         width: 173,
         height: 200,
-        // left: 207,
-        // top: 160,
-        // position: "absolute",
-        // zIndex: 2,
     },
     link: {
         color: Colors.primary2,
@@ -167,10 +164,15 @@ const styles = StyleSheet.create({
     },
     linkContainer: {
         marginTop: 20,
-        marginBottom: 31,
+        marginBottom: 0,
         gap: 7,
     },
     register: {
         fontFamily: "RalewayBold",
     },
+    loginError: {
+        width: 170,
+        paddingBottom: 10,
+        height: 45,
+    }
 });

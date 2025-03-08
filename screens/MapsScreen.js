@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import Map from "../components/Map";
 import RegisterContainer from "../components/authentication/RegisterContainer";
 import PrimaryButton from "../components/PrimaryButton";
+import MapWidget from "../components/MapWidget";
 
 function MapsScreen({ route }) {
     const [newPostcode, setNewPostcode] = useState("");
@@ -17,7 +18,8 @@ function MapsScreen({ route }) {
 
     return (
         <View style={styles.container}>
-            <Map
+            <MapWidget postcode={postcode} onChangeText={setNewPostcode} value={newPostcode} onPress={handleSearch} />
+            {/* <Map
                 apikey={"FjRYhw4teVr0pkKgzacHIVAyEXKoDe_G4jBNQhILcsQ"}
                 postcode={postcode}
             />
@@ -33,7 +35,7 @@ function MapsScreen({ route }) {
                     style={{ width: 100 }}
                     onPress={handleSearch}
                 />
-            </View>
+            </View> */}
         </View>
     );
 }

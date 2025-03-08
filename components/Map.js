@@ -23,10 +23,15 @@ const Map = ({ apikey, postcode }) => {
 
                 // Geocode group locations
                 const locations = await Promise.all(
-                    fetchedGroups.map(async (group) => {
+                    fetchedGroups
+                    .filter(group => group.status !== 'pending')
+                    .map(async (group) => {
+                        const groupLocation = group.location.split(', ').pop();
+                        console.log("Group location:", groupLocation);
                         const response = await fetch(
                             `https://geocode.search.hereapi.com/v1/geocode?q=${group.location}&apiKey=${apikey}`,
                         );
+                        console.log(response);
                         const data = await response.json();
                         if (data.items && data.items.length > 0) {
                             const position = data.items[0].position;
@@ -96,13 +101,18 @@ const Map = ({ apikey, postcode }) => {
         navigation.navigate("GroupDetails", { group });
     };
 
+    const onRegionChangeComplete = (newRegion) => {
+        setRegion(newRegion);
+    };
+
     return (
         <View style={styles.container}>
             {region && (
                 <MapView
                     style={styles.map}
                     region={region}
-                    onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
+                    onRegionChangeComplete={onRegionChangeComplete}
+                    showsUserLocation={true} 
                 >
                     {/* Render markers for group locations */}
                     {groupLocations.map((group) => (

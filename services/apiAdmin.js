@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import supabase, { supabaseAdmin } from "./supabase";
 
 export async function findUserByEmail(email) {
@@ -46,7 +47,9 @@ export async function getAllUsers() {
     if (error) {
         console.error("Error fetching user:", error);
     }
-    return data;
+    const filteredUsers = data.users.filter(user => !user.user_metadata?.is_super_admin);
+
+    return filteredUsers;
 }
 
 export async function getGroupMembers({ groupId, id }) {
@@ -83,7 +86,7 @@ export async function getFilteredGroupMember({ groupId }) {
     return membersList;
 }
 
-export async function updateUserMetadata(id, groupId, ambassador) {
+export async function updateUserMetadata({ id, groupId, ambassador }) {
     console.log(id, groupId, ambassador);
     const user_metadata = ambassador
         ? { group: groupId, ambassador }
@@ -120,4 +123,22 @@ export async function updateUserImpactData({
 
     console.log("Data: ", data);
     return data;
+}
+
+export async function subscribeNewGroups({ setNotification }) {
+    const channel = supabase.channel("Groups")
+    .on(
+    'postgres_changes',
+    { event: 'INSERT', schema: 'public', table: 'Groups' },
+    (payload) => {
+        console.log('New Pending Group - ', payload);
+        setNotification(true); // Set notification state to show alert/icon
+        Alert.alert("New Group Request", `Group "${payload.new.name}" is pending approval.`);           
+    }
+    )
+    .subscribe();
+
+    return () => {
+        channel.unsubscribe();
+    };
 }

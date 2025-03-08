@@ -1,22 +1,33 @@
 import { Text, View, Image, StyleSheet } from "react-native";
 import { SearchBar } from "react-native-elements";
 import Colors from "../../constants/colors";
-import ViewIcon from "../../components/icons/ViewIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RectangleButton from "../../components/RectangleButton";
 import GroupIcon from "../../components/icons/adminicons/GroupIcon";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
 import { getGroups } from "../../services/apiGroups";
 import SideBarNav from "../../components/SideBarNav";
+import GroupWidget from "../../components/adminWidget/GroupWidget";
+import { FlatList } from "react-native-gesture-handler";
 
 function GroupsScreen() {
-    const avatar = [];
-    const [search, setSearch] = useState("");
-
+    const [ groups, setGroups ] = useState();
     const navigation = useNavigation();
 
-    const groups = getGroups();
+    useEffect(() => {
+        const fetchGroups = async () => {
+            try {
+                const data = await getGroups();
+                setGroups(data); // Set the fetched groups data to state
+            } catch (error) {
+                console.error("Groups could not be retrieved: ", error);
+            }
+        };
+
+        fetchGroups();
+    }, []);
+
     console.log("Groups: ", groups);
     function addSearch(newSearch) {
         setSearch(newSearch);
@@ -35,35 +46,15 @@ function GroupsScreen() {
                     onPress={() => navigation.navigate("GroupCreate")}
                 />
             </View>
-            <View
-                style={{
-                    width: 284,
-                    height: 60,
-                    backgroundColor: "#FFFFFF",
-                    //marginTop: 43,
-                    marginBottom: 16,
-                    marginLeft: 47,
-                    marginRight: 44.5,
-                    borderRadius: 10,
-                    shadowColor: "#00000040",
-                    shadowOpacity: 0.3,
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowRadius: 4,
-                    elevation: 4,
-                    flexDirection: "row",
-                }}
-            >
-                <Image
-                    style={styles.image}
-                    source={avatar ? { uri: avatar } : null}
-                />
-                <View style={styles.textContainer}>
-                    <Text>xxxx Group</Text>
-                    <Text>xx Members</Text>
-                    <Text>20xx-xx-xx</Text>
-                </View>
-                <ViewIcon />
-            </View>
+            <FlatList
+                data={groups}
+                renderItem={({ item }) => (
+                    <GroupWidget group={item} />
+                )}
+                keyExtractor={(item) => item.id}
+                showsVerticalScrollIndicator={false}
+                bounce={false}
+            />
             <View style={styles.bottom}>
                 <RectangleButton
                     icon={<GroupIcon />}
@@ -111,10 +102,11 @@ const styles = StyleSheet.create({
         // marginBottom: 40,
     },
     bottom: {
-        alignContent: "flex-end",
-        alignSelf: "flex-end",
         alignItems: "flex-end",
-        justifyContent: "flex-end",
+        paddingBottom: 50,
+        gap: 20,
+        paddingRight: 20,
+        paddingTop: 20,
     },
     navbar: {
         flex: 1,

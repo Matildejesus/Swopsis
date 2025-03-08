@@ -1,6 +1,7 @@
 import supabase from "./supabase";
 
 export async function addJoinRequest({ userId, groupId, message }) {
+    console.log("REQUEST: ", userId, groupId, message);
     const { data, error } = await supabase
         .from("JoinRequests")
         .insert([

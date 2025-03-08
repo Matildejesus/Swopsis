@@ -88,10 +88,7 @@ export default WelcomePageWidget;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: "center",
-        // alignItems: "center",
         backgroundColor: "#fff",
-        // gap: 10,
     },
     girlsImage: {
         width: 390,
@@ -103,6 +100,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         //  marginBottom: 50,
         gap: 6,
+        flex: 1,
     },
     btnContainer: {
         flexDirection: "row",

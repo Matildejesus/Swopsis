@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import "react-native-gesture-handler";
+import 'react-native-get-random-values';
 
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -30,9 +31,7 @@ import GroupCreateScreen from "./screens/admin/GroupCreateScreen.js";
 import ProfileItemScreen from "./screens/ProfileItemScreen.js";
 import CreateItemScreen from "./screens/createItem/CreateItemScreen.js";
 import ItemDescriptionInputScreen from "./screens/createItem/ItemDescriptionInputScreen.js";
-import MyGroupsScreen from "./screens/MyGroupsScreen";
 import GroupDetailsScreen from "./screens/GroupDetailsScreen";
-import AdminPageScreen from "./screens/AdminPageScreen";
 import AdminProfileScreen from "./screens/AdminProfileScreen";
 import GroupsScreen from "./screens/admin/GroupsScreen.js";
 import ItemsScreen from "./screens/admin/ItemsScreen.js";
@@ -61,6 +60,7 @@ import MemberIcon from "./components/icons/adminicons/MemberIcon.js";
 import CoinIcon from "./components/icons/adminicons/CoinIcon.js";
 import FilledHeartIcon from "./components/icons/FilledHeartIcon.js";
 import ChatScreen from "./screens/ChatScreen.js";
+import AmbassadorRequestScreen from "./screens/AmbassadorRequestScreen.js";
 
 AppRegistry.registerComponent("main", () => App);
 
@@ -402,6 +402,11 @@ export default function App() {
                                 <Stack.Screen
                                     name="Postcode"
                                     component={PostcodeScreen}
+                                    options={{ headerShown: false }}
+                                />
+                                 <Stack.Screen
+                                    name="AmbassadorRequest"
+                                    component={AmbassadorRequestScreen}
                                     options={{ headerShown: false }}
                                 />
                                 <Stack.Screen

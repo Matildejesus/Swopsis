@@ -5,19 +5,38 @@ import { useNavigation } from "@react-navigation/native";
 import MemberIcon from "../components/icons/MemberIcon";
 import SmallPinIcon from "../components/icons/SmallPinIcon";
 import { updateGroup } from "../services/apiAuth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MessageModal from "../components/MessageModal";
 import { addJoinRequest } from "../services/apiJoinRequests";
 import { useUser } from "../components/authentication/useUser";
+import { findUserByEmail, findUserById, updateUserMetadata } from "../services/apiAdmin";
+import { updateStatus } from "../services/apiGroups";
 
 function GroupDetailsScreen({ route }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [message, setMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [ ambassadorData, setAmbassadorData ] = useState();
     const navigation = useNavigation();
     const { group } = route.params;
 
     const { user } = useUser();
+
+      useEffect(() => {
+            const fetchAmbassador = async () => {
+                try {
+                    const data = await findUserById({ id: group.ambassadorId });
+                    setAmbassadorData(data);
+                    console.log("Full Data: ", data);
+                    console.log("Data: ", data.user_metadata.userName);
+                } catch (error) {
+                    console.error("Error fetching data: ", error);
+                }
+            };
+    
+            fetchAmbassador();
+
+        }, []);
 
     const submitHandler = async () => {
         if (!message) {
@@ -49,6 +68,21 @@ function GroupDetailsScreen({ route }) {
             setErrorMessage("Something went wrong. Please try again later.");
         }
     };
+    
+    const handlePress = async (action) => {
+        try {
+            if (action == "approve") {
+                console.log(ambassadorData.id);
+                const data = await updateUserMetadata({ id: ambassadorData.id, groupId: group.id, ambassador: true});
+                console.log("group data: ", data);
+                await updateStatus({ id: group.id, status: action });
+                navigation.goBack();
+                
+            }
+        } catch(error) {
+            console.error("Erron handling press: ", error);
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -61,17 +95,44 @@ function GroupDetailsScreen({ route }) {
                 </ScrollView>
                 <Text style={[styles.header, { marginTop: 10 }]}>Rules</Text>
                 <ScrollView>
-                    <Text style={[styles.content, { width: 170 }]}>
-                        {group.rules}
-                    </Text>
+                    {group.rules.map((rule, index) => (
+                        <Text key={index} style={[styles.content, { width: 170 }]}>
+                            • {rule}
+                        </Text>
+                    ))}
                 </ScrollView>
             </View>
             <View style={styles.buttonContainer}>
-                <PrimaryButton
-                    title="REQUEST TO JOIN"
-                    onPress={() => setIsModalVisible(true)}
-                />
-            </View>
+                {group.status == "pending" ? 
+                    (
+                        <>
+                        <PrimaryButton
+                            title="APPROVE"
+                            onPress={() => handlePress("approve")}
+                        />
+                        <PrimaryButton
+                            title="REJECT"
+                            onPress={() => handlePress("reject")}
+                        />
+                        </>
+                    ) : (
+                        <PrimaryButton
+                            title="REQUEST TO JOIN"
+                            onPress={() => setIsModalVisible(true)}
+                        />
+                    )
+                }
+            </View> 
+            {ambassadorData && 
+                <View style={styles.ambassadorContainer}>
+                    <Image source={{ uri: ambassadorData.user_metadata.avatar }} style={styles.profileImage}/>
+                    <View>
+                        <Text style={styles.name}>{ambassadorData.user_metadata.userName}</Text>
+                        <Text style={styles.info}>{ambassadorData.email}</Text>
+                    </View>
+                    
+                </View>
+            }
             <View style={styles.infoContainer}>
                 <View style={styles.row}>
                     <View style={{ marginTop: 10 }}>
@@ -89,6 +150,7 @@ function GroupDetailsScreen({ route }) {
                 onRequestClose={submitHandler}
                 errorMessage={errorMessage}
                 onMessageChange={setMessage}
+                joinRequest={true}
             />
         </View>
     );
@@ -149,13 +211,34 @@ const styles = StyleSheet.create({
         // zIndex: 5,
         gap: 10,
     },
+    ambassadorContainer: {
+        position: "absolute",
+        top: 340,
+        left: 30,
+      //  left: 227,
+        flexDirection: "row",
+        paddingTop: 5,
+        gap: 5,
+    },
     info: {
         fontFamily: "RalewayRegular",
         fontSize: 15,
+        color: Colors.primary2,
+        alignSelf: "center"
+    },
+    name: {
+        fontFamily: "RalewayBold",
+        fontSize: 15, 
         color: Colors.primary2,
     },
     row: {
         flexDirection: "row",
         gap: 20,
     },
+    profileImage: {
+        width: 40,
+        height: 40,
+        backgroundColor: Colors.primary1,
+        borderRadius: 21,
+    }
 });

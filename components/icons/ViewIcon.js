@@ -2,10 +2,10 @@ import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
-function ViewIcon() {
+function ViewIcon({ screen, group }) {
     const navigation = useNavigation();
     return (
-        <TouchableOpacity onPress={() => navigation.navigate("Item")}>
+    <TouchableOpacity onPress={() => navigation.navigate(screen, { group })}>
             <Svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="27"

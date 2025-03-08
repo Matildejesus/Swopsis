@@ -112,7 +112,7 @@ function ProfileScreen({ navigation }) {
                         onPress={handleAddIconPress}
                         style={styles.addIconContainer}
                     >
-                        <AddIcon />
+                        <AddIcon navigateLocal="CreateItem" />
                     </TouchableOpacity>
                 </>
             )}

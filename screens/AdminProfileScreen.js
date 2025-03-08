@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    Modal,
-} from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { useDispatch } from "react-redux";
 import Colors from "../constants/colors";
 import SettingsIcon from "../components/icons/SettingsIcon";
@@ -22,13 +15,12 @@ import FeedbackIcon from "../components/icons/adminicons/FeedbackIcon";
 import LmsIcon from "../components/icons/adminicons/LmsIcon";
 import RequestStatistic from "../components/RequestStatistic";
 import DashboardIcon from "../components/icons/DashboardIcon";
-import {
-    getAllJoinRequests,
-    getJoinRequests,
-} from "../services/apiJoinRequests";
+import { getAllJoinRequests, getJoinRequests } from "../services/apiJoinRequests";
 import CoinIcon from "../components/icons/adminicons/CoinIcon";
 import NewsIcon from "../components/icons/adminicons/NewsIcon";
-import { getAllUsers, getGroupMembers } from "../services/apiAdmin";
+import { getAllUsers, getGroupMembers, subscribeNewGroups } from "../services/apiAdmin";
+import SecondaryButton from "../components/SecondaryButton";
+import { useLogout } from "../components/authentication/useLogout";
 
 function AdminProfileScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -37,19 +29,20 @@ function AdminProfileScreen({ navigation }) {
     const [rejectedReq, setRejectedReq] = useState([]);
     const [members, setMembers] = useState([]);
     const [membersCount, setMembersCount] = useState();
-    const [loading, setLoading] = useState();
     const { user } = useUser();
     const [userName, setUsername] = useState("");
     const [avatar, setAvatar] = useState("");
     const [ambassador, setAmbassador] = useState(null);
     const [group, setGroup] = useState("");
     const [email, setEmail] = useState("");
+    const { logout, isLoading } = useLogout();
+    const [ hasNotification, setHasNotification ] = useState(false);
     // console.log(user.app_metadata);
 
     useEffect(() => {
         if (!user) return;
 
-        if (user.app_metadata?.role == "super-admin") {
+        if (user.app_metadata.role == "super-admin") {
             console.log("USER: ", user);
             setUsername("Super Admin");
         } else {
@@ -93,7 +86,8 @@ function AdminProfileScreen({ navigation }) {
                     setRejectedReq(rejected);
                     setPendingReq(pending);
                     setMembers(fetchedMembers);
-                    setMembersCount(fetchedMembers.users.length);
+                    setMembersCount(fetchedMembers.users ? fetchedMembers.users.length : 0);
+
                 } catch (error) {
                     console.error("Error fetching requests: ", error);
                 }
@@ -106,6 +100,11 @@ function AdminProfileScreen({ navigation }) {
         setModalVisible(true);
     };
 
+    // useEffect(() => {
+    //     const unsubscribe = subscribeNewGroups({ setNotification: setHasNotification });
+    //     return () => unsubscribe();
+    // }, []);
+    
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -128,9 +127,19 @@ function AdminProfileScreen({ navigation }) {
                     />
                 )}
 
-                <SettingsIcon />
+                <SecondaryButton
+                    title="LOG OUT"
+                    onPress={logout}
+                    styleContainer={styles.logoutButton}
+                    textStyle={styles.logoutText}
+                ></SecondaryButton>
             </View>
             <Line style={styles.line} />
+            {hasNotification && (
+                <View style={styles.notificationBadge}>
+                    <Text style={styles.notificationText}>!</Text>
+                </View>
+            )}
             <View style={styles.iconContainer}>
                 <RectangleButton
                     icon={<ItemIcon />}
@@ -295,4 +304,13 @@ const styles = StyleSheet.create({
         gap: 40,
         marginTop: 20,
     },
+    logoutButton: {
+        width: 100,
+        height: 30,
+        paddingTop: 5,
+        padding: 0
+    },
+    logoutText: {
+        fontSize: 15,
+    }
 });

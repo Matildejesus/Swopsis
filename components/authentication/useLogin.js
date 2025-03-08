@@ -16,6 +16,7 @@ export function useLogin() {
             queryClient.setQueriesData(["user"], user);
             queryClient.invalidateQueries(["user"]);
 
+            console.log(user.user);
             if (user.user.user_metadata.group) {
                 navigation.reset({
                     index: 0,
@@ -25,7 +26,7 @@ export function useLogin() {
                         },
                     ],
                 });
-            } else if (user.user.email == "admin@gmail.com") {
+            } else if (user.user.app_metadata.role == "super-admin") {
                 navigation.reset({
                     index: 0,
                     routes: [

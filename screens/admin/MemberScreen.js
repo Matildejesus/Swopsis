@@ -11,7 +11,7 @@ import MemberWidget from "../../components/MemberWidget";
 function MemberScreen() {
     const navigation = useNavigation();
     const route = useRoute();
-    const { membersList, membersCount, requests } = route.params;
+    const { membersList, membersCount, requests } = route?.params;
     //console.log("MEMBERSLIST: ", membersList.users);
     console.log("REQUESTS: ", membersList);
 
