@@ -1,34 +1,27 @@
-import { Modal, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import ModalButton from "./ModalButton";
-import ModalOptions from "./ModalOptions";
-import { Dialog } from "@rneui/themed";
+import { Modal, Portal, Text } from 'react-native-paper';
 import Colors from "../../constants/colors";
-import PictureButton from "../icons/PictureButton";
 import TrashIcon from "../icons/TrashIcon";
 
 function ModalLeaveWidget({ visible, onRequestClose }) {
     return (
-        <Dialog
-            isVisible={visible}
-            onBackdropPress={onRequestClose}
-            overlayStyle={styles.container}
-        >
-            <Dialog.Title
-                title="You are about to leave the group"
-                titleStyle={styles.title}
-            />
-            <TrashIcon style={styles.image} width="60" height="69" />
-            <Dialog.Actions>
+        <Portal>
+            <Modal visible={visible} onDismiss={onRequestClose}>
+                <View style={styles.container}>
+                <Text style={styles.title}>You are about to leave the group</Text>
+                <TrashIcon style={styles.image} width="60" height="69" />
                 <View style={styles.buttonContainer}>
-                    <ModalButton
-                        title="CANCEL"
-                        onPress={onRequestClose}
-                        removeContainer={true}
+                    <ModalButton 
+                    title="CANCEL" 
+                    onPress={onRequestClose} 
+                    removeContainer={true} 
                     />
                     <ModalButton title="LEAVE" />
                 </View>
-            </Dialog.Actions>
-        </Dialog>
+                </View>
+            </Modal>
+        </Portal>
     );
 }
 

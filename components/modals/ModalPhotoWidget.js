@@ -1,53 +1,51 @@
-import { Modal, View, StyleSheet } from "react-native";
-import ModalButton from "./ModalButton";
-import ModalOptions from "./ModalOptions";
-import { Dialog } from "@rneui/themed";
-import Colors from "../../constants/colors";
-import PictureButton from "../icons/PictureButton";
+import { Modal, Portal, Text } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
 
 function ModalPhotoWidget({ visible, onRequestClose, pickImage, takeImage }) {
     return (
-        <Dialog
-            isVisible={visible}
-            onBackdropPress={onRequestClose}
-            overlayStyle={styles.container}
-        >
-            <Dialog.Title
-                title="Add profile picture"
-                titleStyle={styles.title}
-            />
-            <PictureButton style={styles.image} />
-            <Dialog.Actions>
-                <ModalOptions text="TAKE A PHOTO" onPress={takeImage} />
-                <ModalOptions text="UPLOAD A PHOTO" onPress={pickImage} />
-
-                <ModalButton title="CLOSE" onPress={onRequestClose} />
-            </Dialog.Actions>
-        </Dialog>
+        <Portal>
+            <Modal 
+                visible={visible} 
+                onDismiss={onRequestClose}
+                contentContainerStyle={styles.container}
+            >
+                <View style={styles.innerContainer}>
+                <Text style={styles.title}>Add profile picture</Text>
+                <PictureButton style={styles.image} />
+                <View style={styles.buttonRow}>
+                    <ModalOptions text="TAKE A PHOTO" onPress={takeImage} />
+                    <ModalOptions text="UPLOAD A PHOTO" onPress={pickImage} />
+                    <ModalButton title="CLOSE" onPress={onRequestClose} />
+                </View>
+                </View>
+            </Modal>
+        </Portal>
     );
 }
 
-export default ModalPhotoWidget;
-
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
-        // backgroundColor: "white",
-        position: "absolute",
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    innerContainer: {
+        backgroundColor: 'white',
         width: 350,
         borderRadius: 20,
-        alignItems: "flex-end",
+        padding: 20,
+        alignItems: 'center',
     },
-
     title: {
         color: Colors.primary2,
-        fontFamily: "RalewayBold",
+        fontFamily: 'RalewayBold',
         fontSize: 18,
-        alignSelf: "center",
+        marginBottom: 10,
+    },
+    buttonRow: {
+        width: '100%',
+        marginTop: 10,
     },
     image: {
-        marginTop: 10,
-        marginBottom: 18,
-        alignSelf: "center",
-    },
+        marginVertical: 18,
+    }
 });

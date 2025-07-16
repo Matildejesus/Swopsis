@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
-import { Button } from "react-native-elements";
 import RegisterContainer from "./authentication/RegisterContainer";
 import SecondaryButton from "./SecondaryButton";
 import Colors from "../constants/colors";

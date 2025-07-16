@@ -1,5 +1,4 @@
 import { Text, View, Image, StyleSheet } from "react-native";
-import { SearchBar } from "react-native-elements";
 import Colors from "../../constants/colors";
 import { useEffect, useState } from "react";
 import RectangleButton from "../../components/RectangleButton";

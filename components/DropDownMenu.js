@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
+import DropDownPicker from "react-native-dropdown-picker";
 import Colors from "../constants/colors";
 import { getItemsNames } from "../services/apiItemConvert";
 import { useEffect, useState } from "react";
@@ -37,19 +37,27 @@ function DropDownMenu({
         value: item,
     }));
     return (
-        <Dropdown
-            style={dropDownStyle ? dropDownStyle : styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            data={formattedData}
-            maxHeight={150}
-            labelField="label"
-            valueField="value"
-            placeholder="Select item"
+        <DropDownPicker
+            open={open}
             value={value}
-            onChange={addCategoryHandler}
-        />
+            items={items}
+            setOpen={setOpen}
+            setValue={(callback) => {
+                const newValue = callback(value);
+                addCategoryHandler(newValue);
+            }}
+            setItems={setItems}
+            style={dropDownStyle ? dropDownStyle : styles.dropdown}
+            textStyle={styles.textStyle}
+            placeholder="Select item"
+            dropDownContainerStyle={styles.dropDownContainerStyle}
+            listItemLabelStyle={styles.listItemLabelStyle}
+            showTickIcon={true}
+            modalProps={{
+                animationType: "fade"
+            }}
+            listMode="MODAL" 
+            />
     );
 }
 

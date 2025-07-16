@@ -7,7 +7,7 @@ import {
     FlatList,
 } from "react-native";
 import Colors from "../../constants/colors";
-import { StarRatingDisplay } from "react-native-star-rating-widget";
+import { Rating } from "react-native-ratings";
 import ItemReviewWidget from "./ItemReviewWidget";
 import AvatarTemplate from "../icons/AvatarTemplate";
 import ReviewCount from "./ReviewCount";
@@ -69,11 +69,21 @@ function ProfileItemReviews() {
                 <View style={styles.column}>
                     <Text style={styles.itemTitle}>{"Black Heels"}</Text>
                     <View style={styles.rating}>
-                        <StarRatingDisplay
+                        {/* <StarRatingDisplay
                             rating={3.5}
                             starSize={18}
                             enableHalfStar={true}
                             starSpacing={2}
+                        /> */}
+                         <Rating
+                            type='star'
+                            ratingCount={5}
+                            imageSize={18}
+                            fractions={1} // Enable half-stars
+                            startingValue={3.5}
+                            readonly={true}
+                            tintColor={Colors.background} // Match your background
+                            style={styles.ratingStars}
                         />
                     </View>
                 </View>

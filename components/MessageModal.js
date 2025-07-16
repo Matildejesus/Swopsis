@@ -1,4 +1,4 @@
-import { Dialog } from "@rneui/themed";
+import { Modal, Portal, Button, Text } from 'react-native-paper';
 import { StyleSheet,Text } from "react-native";
 import ModalButton from "./modals/ModalButton";
 import Colors from "../constants/colors";
@@ -18,39 +18,36 @@ function MessageModal({
     joinRequest
 }) {
     return (
-        <Dialog
-            isVisible={visible}
-            onBackdropPress={onBackdropPress}
-            overlayStyle={styles.container}
-        >
-            {!joinRequest && (
-                method === "swap" ? (
-                    <Text style={styles.title}>For Swap</Text>
-                ) : (
-                    <>
-                        <Text style={styles.title}>For Loan</Text>
-                        <CalendarWidget markedDates={markedDates} toggleDate={toggleDate} />
-                    </>
-                )
-            )}
-
-            
-            <InputField
-                placeholder="Write your message..."
-                onChangeText={onMessageChange}
-                secureTextEntry={false}
-                multiline={true}
-                containerStyle={styles.inputFieldContainer}
-            />
-            <ErrorMessage error={errorMessage} />
-            <Dialog.Actions>
-                <ModalButton
-                    title="SEND"
-                    onPress={onRequestClose}
-                    removeContainer={styles.button}
-                />
-            </Dialog.Actions>
-        </Dialog>
+        <Portal>
+            <Modal visible={visible} onDismiss={onBackdropPress}>
+                <View style={styles.container}>
+                    {!joinRequest && (
+                        method === "swap" ? (
+                        <Text style={styles.title}>For Swap</Text>
+                        ) : (
+                        <>
+                            <Text style={styles.title}>For Loan</Text>
+                            <CalendarWidget markedDates={markedDates} toggleDate={toggleDate} />
+                        </>
+                        )
+                    )}
+                    
+                    <InputField
+                        placeholder="Write your message..."
+                        onChangeText={onMessageChange}
+                        containerStyle={styles.inputField}
+                    />
+                
+                    <ErrorMessage error={errorMessage} />
+                
+                    <ModalButton
+                        title="SEND"
+                        onPress={onRequestClose}
+                        removeContainer={styles.button}
+                    />
+                </View>
+            </Modal>
+        </Portal>
     );
 }
 

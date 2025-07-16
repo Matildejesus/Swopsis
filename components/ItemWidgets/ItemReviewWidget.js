@@ -1,9 +1,10 @@
 import { View, Image, Text, StyleSheet } from "react-native";
-import { StarRatingDisplay } from "react-native-star-rating-widget";
+// import { StarRatingDisplay } from "react-native-star-rating-widget";
+import { AirbnbRating } from "react-native-ratings";
 import Colors from "../../constants/colors";
 
 function ItemReviewWidget({ review }) {
-    const { id, name, avatar, text, rating } = review;
+    const { name, avatar, text, rating } = review;
     const currentDate = Date.now();
 
     return (
@@ -17,10 +18,17 @@ function ItemReviewWidget({ review }) {
             </View>
             <View style={styles.ratingContainer}>
                 <Text style={styles.daysAgoText}>{"4 days ago"}</Text>
-                <StarRatingDisplay
+                {/* <StarRatingDisplay
                     rating={rating}
                     starSize={18}
                     enableHalfStar={true}
+                /> */}
+                <AirbnbRating
+                    count={5}
+                    defaultRating={rating}
+                    size={18}
+                    showRating={false}
+                    isDisabled={true} 
                 />
             </View>
         </View>

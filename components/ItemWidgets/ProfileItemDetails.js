@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Divider } from "@rneui/themed";
 import HeartSwitch from "../HeartSwitch";
 import PinkNextArrow from "../icons/PinkNextArrow";
 import DescriptionDisplay from "../DescriptionDisplay";
 import { useUser } from "../authentication/useUser";
 import Colors from "../../constants/colors";
 import dateFormatting from "../dateFormatting";
-import { deleteItems, getItemsInfo, updateUnavailability } from "../../services/apiItems";
+import { deleteItems, getItemsInfo } from "../../services/apiItems";
 import TrashIcon from "../icons/TrashIcon";
 import { getSubcategoryDetails } from "../../services/apiItemConvert";
 import { useNavigation } from "@react-navigation/native";
@@ -118,7 +117,7 @@ function ProfileItemDetails({ itemData, user, owner }) {
                 }
                 </View>
             </View>
-            <Divider style={styles.divider} />
+            <View style={styles.divider} />
             <View style={styles.row3}>
                 <Image
                     style={styles.avatar}

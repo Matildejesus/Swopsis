@@ -1,4 +1,4 @@
-import { StarRatingDisplay } from "react-native-star-rating-widget";
+import { Rating } from "react-native-ratings";
 import { View, Text, StyleSheet } from "react-native";
 import * as Progress from "react-native-progress";
 
@@ -20,10 +20,19 @@ function ReviewCount() {
                 return (
                     <View style={styles.ratingContainer} key={index}>
                         <Text style={styles.text}>{stars}</Text>
-                        <StarRatingDisplay
+                        {/* <StarRatingDisplay
                             maxStars={1}
                             rating={1}
                             starSize={18}
+                        /> */}
+                        <Rating
+                            type='star'
+                            ratingCount={1}
+                            imageSize={18}
+                            startingValue={1}
+                            readonly={true}
+                            tintColor="#ffffff" // Match your background
+                            style={styles.singleStar}
                         />
                         <Progress.Bar
                             progress={progressList[index]}

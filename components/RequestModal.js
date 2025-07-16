@@ -1,26 +1,34 @@
-import { Dialog, Button } from "@rneui/themed";
+import { Modal, Portal, Button, TextInput } from "react-native-paper";
 import { StyleSheet, Text } from "react-native";
 
 function RequestModal({ visible, onRequestClose, name, message }) {
     return (
-        <Dialog
-            isVisible={visible}
-            onBackdropPress={onRequestClose}
-            overlayStyle={styles.container}
-        >
-            <Dialog.Title title={name} />
-            <Text>{message}</Text>
-            <Dialog.Actions>
-                <Dialog.Button
-                    title="Accept"
-                    onPress={() => onRequestClose("Accept")}
-                />
-                <Dialog.Button
-                    title="Reject"
-                    onPress={() => onRequestClose("Reject")}
-                />
-            </Dialog.Actions>
-        </Dialog>
+        <Portal>
+            <Modal
+                visible={visible}
+                onDismiss={() => onRequestClose(null)}
+                contentContainerStyle={styles.container}
+            >
+                <Text style={styles.title}>{name}</Text>
+                <Text style={styles.message}>{message}</Text>
+                <View style={styles.buttonContainer}>
+                    <Button
+                        mode="contained"
+                        style={styles.button}
+                        onPress={() => onRequestClose("Accept")}
+                    >
+                        Accept
+                    </Button>
+                    <Button
+                        mode="outlined"
+                        style={styles.button}
+                        onPress={() => onRequestClose("Reject")}
+                    >
+                        Reject
+                    </Button>
+                </View>
+            </Modal>
+        </Portal>
     );
 }
 
