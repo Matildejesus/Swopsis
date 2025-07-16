@@ -1,57 +1,66 @@
 {
-    "expo": {
-        "name": "swopsis",
-        "slug": "swopsis",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "./assets/images/logo.png",
-        "userInterfaceStyle": "light",
-        "jsEngine": "hermes",
-        "splash": {
-            "image": "./assets/images/logo.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "assetBundlePatterns": ["**/*"],
-        "ios": {
-            "supportsTablet": true,
-            "bundleIdentifier": "com.anonymous.swopsis",
-            "config": {
-                "googleMapsApiKey": "AIzaSyDsuQsscuJJ5wqftyf8G-p6O6xL4s6Zoaw"
-            },
-            "newArchEnabled": true
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/images/logo.png",
-                "backgroundColor": "#ffffff"
-            },
-            "permissions": ["android.permission.RECORD_AUDIO"],
-            "package": "com.anonymous.swopsis",
-            "config": {
-                "googleMaps": {
-                    "apiKey": "AIzaSyDsuQsscuJJ5wqftyf8G-p6O6xL4s6Zoaw"
-                }
-            },
-            "newArchEnabled": true
-        },
-        "web": {
-            "favicon": "./assets/favicon.png"
-        },
-        "plugins": [
-            [
-                "expo-image-picker",
-                {
-                    "photosPermission": "The app needs access to your photos to upload images."
-                }
-            ],
-            [
-                "expo-document-picker",
-                {
-                    "iCloudContainerEnvironment": "Production"
-                }
-            ],
-            "expo-font"
-        ]
+  "expo": {
+    "name": "swopsis",
+    "slug": "swopsis",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/logo.png",
+    "userInterfaceStyle": "light",
+    "jsEngine": "hermes",
+    "splash": {
+      "image": "./assets/images/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.swopsis",
+      "config": {
+        "googleMapsApiKey": "AIzaSyDsuQsscuJJ5wqftyf8G-p6O6xL4s6Zoaw"
+      },
+      "newArchEnabled": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/logo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.swopsis",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDsuQsscuJJ5wqftyf8G-p6O6xL4s6Zoaw"
+        }
+      },
+      "newArchEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app needs access to your photos to upload images."
+        }
+      ],
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
+      ],
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "7b040ed1-7073-41c5-81d0-1cc3cd1343f3"
+      }
     }
+  }
 }
