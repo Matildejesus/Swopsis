@@ -1,16 +1,16 @@
 import { View, Text, ScrollView, StyleSheet, Image } from "react-native";
-import Colors from "../constants/colors";
-import PrimaryButton from "../components/PrimaryButton";
+import Colors from "../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
-import MemberIcon from "../components/icons/MemberIcon";
-import SmallPinIcon from "../components/icons/SmallPinIcon";
-import { updateGroup } from "../services/apiAuth";
+import MemberIcon from "../../components/icons/MemberIcon";
+import SmallPinIcon from "../../components/icons/SmallPinIcon";
+import { updateGroup } from "../../services/apiAuth";
 import { useEffect, useState } from "react";
-import MessageModal from "../components/MessageModal";
-import { addJoinRequest } from "../services/apiJoinRequests";
-import { useUser } from "../components/authentication/useUser";
-import { findUserByEmail, findUserById, updateUserMetadata } from "../services/apiAdmin";
-import { updateStatus } from "../services/apiGroups";
+import MessageModal from "../../components/MessageModal";
+import { addJoinRequest } from "../../services/apiJoinRequests";
+import { useUser } from "../../components/authentication/useUser";
+import { findUserByEmail, findUserById, updateUserMetadata } from "../../services/apiAdmin";
+import { updateStatus } from "../../services/apiGroups";
+import MainButton from "../../components/MainButton";
 
 function GroupDetailsScreen({ route }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -20,6 +20,7 @@ function GroupDetailsScreen({ route }) {
     const navigation = useNavigation();
     const { group } = route.params;
 
+    console.log("Group:", group);
     const { user } = useUser();
 
       useEffect(() => {
@@ -106,19 +107,22 @@ function GroupDetailsScreen({ route }) {
                 {group.status == "pending" ? 
                     (
                         <>
-                        <PrimaryButton
+                        <MainButton
                             title="APPROVE"
                             onPress={() => handlePress("approve")}
+                            variant="primary"
                         />
-                        <PrimaryButton
+                        <MainButton
                             title="REJECT"
                             onPress={() => handlePress("reject")}
+                            variant="primary"
                         />
                         </>
                     ) : (
-                        <PrimaryButton
+                        <MainButton
                             title="REQUEST TO JOIN"
                             onPress={() => setIsModalVisible(true)}
+                            variant="primary"
                         />
                     )
                 }

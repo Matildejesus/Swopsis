@@ -1,22 +1,24 @@
 import { StyleSheet, View } from "react-native";
-import PrimaryButton from "./PrimaryButton";
+import MainButton from "./MainButton";
 import Colors from "../constants/colors";
 
 function DecisionMakingWidget({ accept, reject }) {
     return(
         <View>
             <View style={styles.decisionContainer}>
-                <PrimaryButton 
+                <MainButton 
                     title="Accept"
                     onPress={accept}
                     style={styles.buttonContainer}
-                    textStyle={styles.buttonText}  
+                    textStyle={styles.buttonText} 
+                    variant="primary" 
                 />
-                <PrimaryButton 
+                <MainButton 
                     title="Reject"
                     onPress={reject}
                     style={styles.buttonContainer}
                     textStyle={styles.buttonText} 
+                    variant="primary"
                 />
             </View>
         </View>

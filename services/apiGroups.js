@@ -1,7 +1,6 @@
 import supabase from "./supabase";
 
 export async function addGroup({ group }) {
-    console.log("we are in");
     console.log("group data for data:", group);
     const { data, error } = await supabase
         .from("Groups")

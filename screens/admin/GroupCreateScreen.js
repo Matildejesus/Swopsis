@@ -15,10 +15,9 @@ import { updateUserMetadata } from "../../services/apiAdmin";
 import { useNavigation } from "@react-navigation/native";
 import { findUserByEmail } from "../../services/apiAdmin";
 import PicturePicker from "../../components/PicturePicker";
-import PinIcon from "../../components/icons/PinIcon";
 import InputField from "../../components/authentication/InputField";
 import ErrorMessage from "../../components/ErrorMessage";
-import PrimaryButton from "../../components/PrimaryButton";
+import MainButton from "../../components/MainButton";
 
 function GroupCreateScreen() {
     const [name, setName] = useState("");
@@ -140,10 +139,11 @@ function GroupCreateScreen() {
                 <ErrorMessage error={inputError} />
             </View>
             <View style={styles.buttonContainer}>
-                <PrimaryButton
+                <MainButton
                     title={"CREATE"}
                     style={styles.button}
                     onPress={submitHandler}
+                    variant="primary"
                 />
             </View>
         </View>

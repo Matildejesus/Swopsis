@@ -23,10 +23,13 @@ const config = {
             },
         }),
         babelTransformerPath: require.resolve("react-native-svg-transformer"),
+         unstable_allowRequireContext: true,
     },
     resolver: {
         assetExts: assetExts.filter((ext) => ext !== "svg"),
         sourceExts: [...sourceExts, "svg"],
+        unstable_enablePackageExports: false,
+        unstable_conditionNames: ['require', 'import'],
     },
 };
 

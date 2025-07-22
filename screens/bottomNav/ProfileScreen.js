@@ -8,19 +8,19 @@ import {
     Modal,
 } from "react-native";
 import { useDispatch } from "react-redux";
-import Colors from "../constants/colors";
-import CoinIcon from "../components/icons/CoinIcon";
-import SettingsIcon from "../components/icons/SettingsIcon";
-import CalendarIcon from "../components/icons/CalendarIcon";
-import ImpactIcon from "../components/icons/ImpactIcon";
-import AddIcon from "../components/icons/AddIcon";
-import { useUser } from "../components/authentication/useUser";
-import Line from "../components/Line";
-import ProfileItemWidget from "../components/ProfileItemWidget";
-import { getItems } from "../services/apiItems";
-import AnimatedEnvelope from "../components/AnimatedEnvelope";
+import Colors from "../../constants/colors";
+import CoinIcon from "../../components/icons/CoinIcon";
+import SettingsIcon from "../../components/icons/SettingsIcon";
+import CalendarIcon from "../../components/icons/CalendarIcon";
+import ImpactIcon from "../../components/icons/ImpactIcon";
+import AddIcon from "../../components/icons/AddIcon";
+import { useUser } from "../../components/authentication/useUser";
+import Line from "../../components/Line";
+import ProfileItemWidget from "../../components/ProfileItemWidget";
+import { getItems } from "../../services/apiItems";
+import AnimatedEnvelope from "../../components/AnimatedEnvelope";
 import { useFocusEffect } from "@react-navigation/native";
-import DashboardIcon from "../components/icons/DashboardIcon";
+import DashboardIcon from "../../components/icons/DashboardIcon";
 
 function ProfileScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -83,7 +83,7 @@ function ProfileScreen({ navigation }) {
                             <DashboardIcon
                                 text="Dashboard"
                                 location={{
-                                    name: "AdminApp",
+                                    stack: "AdminApp",
                                 }}
                             />
                         )}

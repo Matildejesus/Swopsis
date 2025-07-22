@@ -1,5 +1,5 @@
 import { Modal, Portal, Button, TextInput } from "react-native-paper";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 function RequestModal({ visible, onRequestClose, name, message }) {
     return (

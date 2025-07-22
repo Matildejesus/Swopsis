@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
-import RegisterContainer from "./authentication/RegisterContainer";
-import SecondaryButton from "./SecondaryButton";
 import Colors from "../constants/colors";
 import AddIcon from "./icons/AddIcon";
+import InputField from "./authentication/InputField";
 
 function BulletPointWidget({pointsList, setPointsList}) {
     const [ input, setInput ] = useState("");
@@ -19,13 +18,13 @@ function BulletPointWidget({pointsList, setPointsList}) {
         <View style={styles.container}>
 
             <View style={styles.rowContainer}>
-                <RegisterContainer 
+                <InputField 
                     value={input}
                     onChangeText={(text) => setInput(text)}
                     placeholder={"Enter rules..."}
                     text="Rules"
-                    containerStyle={styles.inputContainer}/>
-                {/* <SecondaryButton title="Add Rule" onPress={addBulletPoint} styleContainer={styles.buttonContainer} textStyle={styles.buttonText}/> */}
+                    containerStyle={styles.inputContainer}
+                    error={"yay"}/>
                 <AddIcon onPress={addBulletPoint} buttonStyle={styles.addButton} />
             </View>            
             <FlatList
@@ -47,6 +46,7 @@ export default BulletPointWidget;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignSelf: "flex-start",
     },
     rowContainer: {
         flexDirection: "row"
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     },
     flatlist: {
         height: 100,
-        width: 243,
+        width: 280,
         overflow: "hidden",
         marginBottom: 10,
         paddingHorizontal: 10,

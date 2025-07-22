@@ -16,7 +16,7 @@ export function useLogin() {
             queryClient.setQueriesData(["user"], user);
             queryClient.invalidateQueries(["user"]);
 
-            console.log(user.user);
+            console.log("USER: ", user.is_super_admin);
             if (user.user.user_metadata.group) {
                 navigation.reset({
                     index: 0,

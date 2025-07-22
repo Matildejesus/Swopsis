@@ -12,9 +12,9 @@ function DropDownMenu({
     dropDownStyle,
 }) {
     const [items, setItems] = useState([]);
+    const [open, setOpen] = useState(false); // <-- Fix added here
 
     useEffect(() => {
-        // Run only if category is provided and data is not directly passed
         if (category && !data) {
             const fetchData = async () => {
                 try {
@@ -24,10 +24,8 @@ function DropDownMenu({
                     console.error("Error fetching items:", error);
                 }
             };
-
             fetchData();
         } else if (data) {
-            // If data is directly provided, use it
             setItems(data);
         }
     }, [category, data]);
@@ -36,11 +34,12 @@ function DropDownMenu({
         label: item,
         value: item,
     }));
+
     return (
         <DropDownPicker
             open={open}
             value={value}
-            items={items}
+            items={formattedData} // <- Use `formattedData` to apply correct shape
             setOpen={setOpen}
             setValue={(callback) => {
                 const newValue = callback(value);
@@ -57,9 +56,10 @@ function DropDownMenu({
                 animationType: "fade"
             }}
             listMode="MODAL" 
-            />
+        />
     );
 }
+
 
 export default DropDownMenu;
 

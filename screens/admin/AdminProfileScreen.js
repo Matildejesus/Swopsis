@@ -1,26 +1,26 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { useDispatch } from "react-redux";
-import Colors from "../constants/colors";
-import SettingsIcon from "../components/icons/SettingsIcon";
-import { useUser } from "../components/authentication/useUser";
-import Line from "../components/Line";
-import { getItems } from "../services/apiItems";
+import Colors from "../../constants/colors";
+import SettingsIcon from "../../components/icons/SettingsIcon";
+import { useUser } from "../../components/authentication/useUser";
+import Line from "../../components/Line";
+import { getItems } from "../../services/apiItems";
 import { useEffect } from "react";
-import RectangleButton from "../components/RectangleButton";
-import ItemIcon from "../components/icons/adminicons/ItemIcon";
-import MemberIcon from "../components/icons/adminicons/MemberIcon";
-import GroupIcon from "../components/icons/adminicons/GroupIcon";
-import FeedbackIcon from "../components/icons/adminicons/FeedbackIcon";
-import LmsIcon from "../components/icons/adminicons/LmsIcon";
-import RequestStatistic from "../components/RequestStatistic";
-import DashboardIcon from "../components/icons/DashboardIcon";
-import { getAllJoinRequests, getJoinRequests } from "../services/apiJoinRequests";
-import CoinIcon from "../components/icons/adminicons/CoinIcon";
-import NewsIcon from "../components/icons/adminicons/NewsIcon";
-import { getAllUsers, getGroupMembers, subscribeNewGroups } from "../services/apiAdmin";
-import SecondaryButton from "../components/SecondaryButton";
-import { useLogout } from "../components/authentication/useLogout";
+import RectangleButton from "../../components/RectangleButton";
+import ItemIcon from "../../components/icons/adminicons/ItemIcon";
+import MemberIcon from "../../components/icons/adminicons/MemberIcon";
+import GroupIcon from "../../components/icons/adminicons/GroupIcon";
+import FeedbackIcon from "../../components/icons/adminicons/FeedbackIcon";
+import LmsIcon from "../../components/icons/adminicons/LmsIcon";
+import RequestStatistic from "../../components/RequestStatistic";
+import DashboardIcon from "../../components/icons/DashboardIcon";
+import { getAllJoinRequests, getJoinRequests } from "../../services/apiJoinRequests";
+import CoinIcon from "../../components/icons/adminicons/CoinIcon";
+import NewsIcon from "../../components/icons/adminicons/NewsIcon";
+import { getAllUsers, getGroupMembers, subscribeNewGroups } from "../../services/apiAdmin";
+import { useLogout } from "../../components/authentication/useLogout";
+import MainButton from "../../components/MainButton";
 
 function AdminProfileScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -122,17 +122,18 @@ function AdminProfileScreen({ navigation }) {
                     <DashboardIcon
                         text="Profile"
                         location={{
-                            name: "InApp",
+                            stack: "InApp",
                         }}
                     />
                 )}
 
-                <SecondaryButton
+                <MainButton
                     title="LOG OUT"
                     onPress={logout}
                     styleContainer={styles.logoutButton}
                     textStyle={styles.logoutText}
-                ></SecondaryButton>
+                    variant="secon"
+                />
             </View>
             <Line style={styles.line} />
             {hasNotification && (

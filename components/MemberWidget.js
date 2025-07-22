@@ -45,22 +45,25 @@ function MemberWidget({ user, requests }) {
             setIsModalVisible(false);
             return;
         }
-
+        let newStatus = "";
+        let newGroup = "";
         if (action === "Accept") {
-            setStatus("Accepted");
-            setGroup(requests.groupId);
+            newStatus = "Accepted";
+            newGroup = requests.groupId;
         } else {
-            setStatus("Rejected");
-            setGroup("");
+            newStatus = "Rejected";
         }
 
-        console.log("group set");
+        console.log("status of joining: ", newStatus);
+        
         try {
-            console.log("status: ", status);
+            console.log("status: ", newStatus);
             console.log("id: ", requests.id);
             console.log("currentuser: ", currentUser.id);
-            await updateStatus({ newStatus: status, id: requests.id });
-            await updateUserMetadata({ id: currentUser.id, groupId: group, ambassador: false });
+            await updateStatus({ newStatus: newStatus, id: requests.id });
+            await updateUserMetadata({ id: currentUser.id, groupId: newGroup, ambassador: false });
+            setStatus(newStatus);
+            setGroup(newGroup);
         } catch (error) {
             console.error("Error updating user metadata: ", error);
         }

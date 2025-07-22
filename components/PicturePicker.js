@@ -2,8 +2,8 @@ import { View, StyleSheet, Image } from "react-native";
 import Colors from "../constants/colors";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
-import PictureButton from "../components/icons/PictureButton";
 import ModalPhotoWidget from "./modals/ModalPhotoWidget";
+import PictureButton from "./icons/PictureButton";
 
 function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
     const [isModalVisible, setIsModalVisible] = useState(false);

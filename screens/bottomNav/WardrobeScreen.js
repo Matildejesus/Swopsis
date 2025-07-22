@@ -1,13 +1,12 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { getFilteredGroupMember } from "../services/apiAdmin";
-import { useUser } from "../components/authentication/useUser";
+import { useUser } from "../../components/authentication/useUser";
 import { getGroupItems } from "../services/apiItems";
 import { getWishlist } from "../services/apiWishlist"; // Import wishlist API
-import Colors from "../constants/colors";
-import WardrobeitemWidget from "../components/WardrobeItemWidget";
-import FilledHeartIcon from "../components/icons/FilledHeartIcon";
-import HeartIcon from "../components/icons/HeartIcon"; // Add an outlined heart icon
+import WardrobeitemWidget from "../../components/WardrobeItemWidget";
+import FilledHeartIcon from "../../components/icons/FilledHeartIcon";
+import HeartIcon from "../../components/icons/HeartIcon";
 import { useNavigation } from "@react-navigation/native";
 
 function WardrobeScreen() {

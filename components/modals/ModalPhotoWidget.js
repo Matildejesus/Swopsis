@@ -1,5 +1,9 @@
 import { Modal, Portal, Text } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
+import Colors from '../../constants/colors';
+import PictureButton from '../icons/PictureButton';
+import ModalOptions from './ModalOptions';
+import ModalButton from './ModalButton';
 
 function ModalPhotoWidget({ visible, onRequestClose, pickImage, takeImage }) {
     return (
@@ -22,6 +26,7 @@ function ModalPhotoWidget({ visible, onRequestClose, pickImage, takeImage }) {
         </Portal>
     );
 }
+export default ModalPhotoWidget;
 
 const styles = StyleSheet.create({
     container: {

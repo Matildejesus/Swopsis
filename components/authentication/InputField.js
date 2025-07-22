@@ -1,5 +1,6 @@
 import { Text, View, TextInput, StyleSheet } from "react-native";
 import Colors from "../../constants/colors";
+import ErrorMessage from "../ErrorMessage";
 
 function InputField({
     inputStyle,
@@ -12,10 +13,14 @@ function InputField({
     multiline,
     textStyle,
     numberOfLines,
-    maxLength
+    maxLength,
+    error
 }) {
+
+    // const inputStyle = value ? styles.changedText : styles.inputText;
     return (
         <>
+        <View style={styles.container}>
             {text && (
                 <Text style={textStyle ? textStyle : styles.text}>{text}</Text>
             )}
@@ -34,6 +39,8 @@ function InputField({
                     scrollEnabled={false}
                 />
             </View>
+        </View>
+        <ErrorMessage error={error} />
         </>
     );
 }
@@ -58,5 +65,21 @@ const styles = StyleSheet.create({
         opacity: 0.76,
         paddingHorizontal: 13,
         paddingVertical: 16,
+    },
+     container: {
+        //flex: 1,
+        justifyContent: "center",
+        alignItems: "flex-end",
+        marginBottom: 13,
+    },
+    changedText: {
+        color: Colors.primary2,
+        opacity: 1,
+        fontFamily: "RalewayRegular",
+    },
+    inputText: {
+        color: Colors.primary2,
+        opacity: 0.6,
+        fontFamily: "RalewayRegular",
     },
 });

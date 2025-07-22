@@ -1,5 +1,5 @@
-import { Modal, Portal, Button, Text } from 'react-native-paper';
-import { StyleSheet,Text } from "react-native";
+import { Modal, Portal } from 'react-native-paper';
+import { StyleSheet,Text, View } from "react-native";
 import ModalButton from "./modals/ModalButton";
 import Colors from "../constants/colors";
 import InputField from "./authentication/InputField";

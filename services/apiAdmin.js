@@ -96,6 +96,7 @@ export async function updateUserMetadata({ id, groupId, ambassador }) {
         user_metadata,
     });
 
+    console.log("Data: ", data);
     if (error) {
         console.error("Error updating user metadata:", error);
         throw error; // Propagate the error

@@ -1,15 +1,13 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text } from "react-native";
 import { useState, useEffect } from "react";
-
-import PrimaryButton from "../components/PrimaryButton";
-import Colors from "../constants/colors";
 
 import { validate } from "validate.js";
 import { useDebounce } from "use-debounce";
 
-import constraints from "../constraints.js";
-import InputForm from "../components/authentication/InputForm";
-import { useRegister } from "../components/authentication/useRegister";
+import constraints from "../../constraints.js";
+import { useRegister } from "../../components/authentication/useRegister.js";
+import InputTemplateWidget from "../../components/InputTemplateWidget.js";
+import InputField from "../../components/authentication/InputField.js";
 
 function RegisterScreen({ navigation }) {
     const { register, isLoading } = useRegister();
@@ -81,78 +79,53 @@ function RegisterScreen({ navigation }) {
                     },
                 },
             );
+            
         }
     };
 
+    const content = () => {
+        return (
+            <>
+                <InputField
+                    placeholder="enter your name"
+                    text="Name"
+                    onChangeText={setUserName}
+                    value={userName}
+                    error={userNameError}
+                />
+                <InputField
+                    placeholder="youremail@email.com"
+                    text="Email"
+                    onChangeText={setEmail}
+                    value={email}
+                    error={emailError}
+                />
+                <InputField
+                    placeholder="password"
+                    text="Password"
+                    onChangeText={setPassword}
+                    value={password}
+                    secureTextEntry={true}
+                    error={passwordError}
+                />
+            </>
+        )
+    }
+
     return (
-        <View style={styles.container}>
-            <Image
-                source={require("../assets/images/simpleLogo.png")}
-                style={styles.image}
-            />
-            <View style={styles.contentContainer}>
-                <InputForm
-                    setUserName={setUserName}
-                    userName={userName}
-                    userNameError={userNameError}
-                    setEmail={setEmail}
-                    email={email}
-                    emailError={emailError}
-                    setPassword={setPassword}
-                    password={password}
-                    passwordError={passwordError}
-                />
-                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                    <Text style={styles.link}>
-                        Already a user?
-                        <Text style={styles.signIn}> Sign in</Text>
-                    </Text>
-                </TouchableOpacity>
-                <PrimaryButton
-                    title="REGISTER"
-                    style={{ width: 200 }}
-                    onPress={submitHandler}
-                />
-            </View>
-        </View>
+        <InputTemplateWidget 
+            title="REGISTER" 
+            handleSearch={submitHandler}
+            content={content} 
+            link={() => navigation.navigate("Login")}
+            linkText={
+            <Text>
+                Already a user? <Text style={{ fontFamily: "RalewayBold" }}>SignIn</Text>
+            </Text>
+            }
+        />
+
     );
 }
 
 export default RegisterScreen;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Colors.impact,
-        justifyContent: "center",
-        alignItems: "center",
-        position: "relative",
-    },
-    contentContainer: {
-        borderRadius: 51,
-        backgroundColor: "white",
-        opacity: 0.9,
-        shadowColor: "black",
-        shadowOpacity: 0.24,
-        shadowRadius: 8.5,
-        shadowOffset: { width: 4, height: 5 },
-        height: 432,
-        width: 283,
-        zIndex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    image: {
-        width: 173,
-        height: 200,
-    },
-    link: {
-        marginTop: 29,
-        marginBottom: 31,
-        color: Colors.primary2,
-        fontSize: 15,
-    },
-    signIn: {
-        fontFamily: "RalewayBold",
-    },
-});

@@ -3,7 +3,7 @@ import Colors from "../../constants/colors";
 import { useEffect, useState } from "react";
 import RectangleButton from "../../components/RectangleButton";
 import GroupIcon from "../../components/icons/adminicons/GroupIcon";
-import PrimaryButton from "../../components/PrimaryButton";
+import MainButton from "../../components/MainButton";
 import { useNavigation } from "@react-navigation/native";
 import { getGroups } from "../../services/apiGroups";
 import SideBarNav from "../../components/SideBarNav";
@@ -38,11 +38,12 @@ function GroupsScreen() {
                 <View style={styles.navbar}>
                     <SideBarNav navigation={navigation} />
                 </View>
-                <PrimaryButton
+                <MainButton
                     title="Create Group"
                     textStyle={styles.button}
                     style={styles.buttonSpot}
                     onPress={() => navigation.navigate("GroupCreate")}
+                    variant="primary"
                 />
             </View>
             <FlatList

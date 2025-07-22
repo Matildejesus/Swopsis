@@ -1,37 +1,20 @@
-import { View, Image, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Image, Text, StyleSheet, ScrollView, useWindowDimensions } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 import { useState } from "react";
-import PrimaryButton from "./PrimaryButton";
-import SecondaryButton from "./SecondaryButton.js";
+import MainButton from "./MainButton.js";
 import Colors from "../constants/colors.js";
+import { horizontalScale as hs, verticalScale as vs, moderateScale as ms } from "../utils/responsive";
 
-function WelcomePageWidget({ text1, text2, navigation, image1, image2 }) {
-    const [page, setPage] = useState(0);
+function WelcomePageWidget({ content, image1, image2, onRegister, onLogin, page, handleScroll }) {
+    const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
-    const handleScroll = (event) => {
-        const contentOffsetX = event.nativeEvent.contentOffset.x;
-        const viewWidth = event.nativeEvent.layoutMeasurement.width;
-        const newPage = Math.round(contentOffsetX / viewWidth);
-        setPage(newPage);
-    };
+    const imageHeight = screenHeight * 0.55;
 
-    const renderText = () => {
-        const displayedText = page === 0 ? text1 : text2;
-        if (displayedText.includes("/n")) {
-            const items = displayedText.split(" /n ");
-            return (
-                <View style={styles.bulletList}>
-                    {items.map((item, index) => (
-                        <Text key={index.toString()} style={styles.bulletItem}>
-                            • {item}
-                        </Text>
-                    ))}
-                </View>
-            );
-        } else {
-            return <Text style={styles.text}>{displayedText}</Text>;
-        }
-    };
+    const imageStyle = {
+        width: screenWidth,
+        height: imageHeight,
+        resizeMode: 'contain'
+    }
 
     return (
         <View style={styles.container}>
@@ -42,8 +25,8 @@ function WelcomePageWidget({ text1, text2, navigation, image1, image2 }) {
                 onMomentumScrollEnd={handleScroll}
                 decelerationRate="fast"
             >
-                <Image source={image1} style={styles.girlsImage} />
-                <Image source={image2} style={styles.girlsImage} />
+                <Image source={image1} style={imageStyle} />
+                <Image source={image2} style={imageStyle} />
             </ScrollView>
             <View style={styles.navbar}>
                 {page === 0 ? (
@@ -67,16 +50,31 @@ function WelcomePageWidget({ text1, text2, navigation, image1, image2 }) {
                 )}
             </View>
 
-            {renderText()}
+            {page === 0 ? (
+                <Text style={styles.text}>
+                    SWAP AND INSPIRED WITH A SHARED COMMUNITY WARDROBE
+                </Text>
+            ) : (
+                <View style={styles.bulletList}>
+                    {["Swap", "Impact", "BE YOU"].map((item, index) => (
+                        <Text key={index} style={styles.bulletItem}>• {item}</Text>
+                    ))}
+                </View>
+            )
+            }
 
             <View style={styles.btnContainer}>
-                <PrimaryButton
+                <MainButton
                     title="REGISTER"
-                    onPress={() => navigation.navigate("Register")}
+                    onPress={onRegister}
+                    variant="primary"
+                    style={{ width: 141 }}
                 />
-                <SecondaryButton
+                <MainButton
                     title="LOG IN"
-                    onPress={() => navigation.navigate("Login")}
+                    onPress={onLogin}
+                    variant="secon"
+                    style={{ width: 141 }}
                 />
             </View>
         </View>
@@ -90,42 +88,34 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
     },
-    girlsImage: {
-        width: 390,
-        height: 497,
-        flexShrink: 0,
-    },
     navbar: {
         flexDirection: "row",
         justifyContent: "center",
-        //  marginBottom: 50,
-        gap: 6,
+        gap: hs(6),
         flex: 1,
     },
     btnContainer: {
         flexDirection: "row",
         justifyContent: "center",
-        gap: 19,
-        marginBottom: 50,
+        gap: hs(19),
+        marginBottom: vs(50),
     },
     text: {
         color: Colors.primary1,
         textAlign: "center",
-        fontSize: 25,
+        fontSize: ms(25),
         fontWeight: "bold",
-        marginBottom: 30,
-        marginTop: 30,
+        marginVertical: vs(30),
         fontFamily: "RalewayBold",
     },
     bulletItem: {
         textAlign: "center",
         color: Colors.primary1,
-        fontSize: 25,
+        fontSize: ms(25),
         fontWeight: "700",
     },
     bulletList: {
         flexDirection: "column",
-        marginTop: 30,
-        marginBottom: 33,
+        marginVertical: vs(30)
     },
 });

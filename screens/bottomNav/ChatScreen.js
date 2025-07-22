@@ -1,19 +1,19 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import Title from "../components/Title";
-import { getMessagesForConvo, sendMessage, updateDecision } from "../services/apiChat";
-import InputField from "../components/authentication/InputField";
-import Colors from "../constants/colors";
-import PrimaryButton from "../components/PrimaryButton";
-import { useUser } from "../components/authentication/useUser";
-import { getItemById, getItemsInfo, updateAvailability, updateTradeCount, updateUnavailability } from "../services/apiItems";
-import ChatItemWidget from "../components/ChatItemWidget";
-import DecisionMakingWidget from "../components/DecisionMakingWidget";
-import { findUserById, updateUserImpactData } from "../services/apiAdmin";
-import { getSubcategoryDetails } from "../services/apiItemConvert";
-import CalendarWidget from "../components/CalendarWidget";
-import CalendarIcon from "../components/icons/CalendarIcon";
+import Title from "../../components/Title";
+import { getMessagesForConvo, sendMessage, updateDecision } from "../../services/apiChat";
+import InputField from "../../components/authentication/InputField";
+import Colors from "../../constants/colors";
+import MainButton from "../../components/MainButton";
+import { useUser } from "../../components/authentication/useUser";
+import { getItemById, getItemsInfo, updateAvailability, updateTradeCount, updateUnavailability } from "../../services/apiItems";
+import ChatItemWidget from "../../components/ChatItemWidget";
+import DecisionMakingWidget from "../../components/DecisionMakingWidget";
+import { findUserById, updateUserImpactData } from "../../services/apiAdmin";
+import { getSubcategoryDetails } from "../../services/apiItemConvert";
+import CalendarWidget from "../../components/CalendarWidget";
+import CalendarIcon from "../../components/icons/CalendarIcon";
 
 function ChatScreen() {
     const route = useRoute();
@@ -246,11 +246,12 @@ function ChatScreen() {
                     maxLength={200}
                     containerStyle={styles.fieldContainer}
                 />
-                <PrimaryButton 
+                <MainButton 
                     title="SEND"
                     onPress={handleText}
                     style={styles.buttonContainer}
-                    textStyle={styles.buttonText}   
+                    textStyle={styles.buttonText} 
+                    variant="primary"  
                 />
             </View>
         </View>

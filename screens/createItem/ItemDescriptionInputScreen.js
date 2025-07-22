@@ -9,7 +9,7 @@ import Categories, {
     Conditions,
     Colors as ColorsList,
 } from "../../constants/itemCategories.js";
-import PrimaryButton from "../../components/PrimaryButton";
+import MainButton from "../../components/MainButton.js";
 import { addItem, updateUnavailability } from "../../services/apiItems.js";
 import ErrorMessage from "../../components/ErrorMessage.js";
 import ColorSwitch from "../../components/ColorSwitch.js";
@@ -269,10 +269,11 @@ function ItemDescriptionInputScreen() {
                 <ErrorMessage error={inputError} />
             </View>
             <View style={styles.buttonContainer}>
-                <PrimaryButton
+                <MainButton
                     title={"UPLOAD"}
                     style={styles.button}
                     onPress={submitHandler}
+                    variant="primary"
                 />
             </View>
             {method == "loan" && 

@@ -1,10 +1,11 @@
-import { View, Image, StyleSheet } from "react-native";
-import RegisterContainer from "../components/authentication/RegisterContainer";
-import PrimaryButton from "../components/PrimaryButton";
+import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import MainButton from "../../components/MainButton";
 import { useState } from "react";
-import Colors from "../constants/colors";
-import { changePassword } from "../services/apiPassword";
+import Colors from "../../constants/colors";
+import { changePassword } from "../../services/apiPassword";
 import { useNavigation } from "@react-navigation/native";
+import InputField from "../../components/authentication/InputField";
+import InputTemplateWidget from "../../components/InputTemplateWidget";
 
 function ResetPasswordScreen() {
     const [email, setEmail] = useState("");
@@ -25,29 +26,27 @@ function ResetPasswordScreen() {
         }
     }
 
-    return (
-        <View style={styles.container}>
-            <Image
-                source={require("../assets/images/simpleLogo.png")}
-                style={styles.image}
+    const content = () => {
+        return (
+            <InputField
+                placeholder="youremail@email.com"
+                text="Email"
+                onChangeText={addEmailHandler}
+                value={email}
             />
-            <View style={styles.contentContainer}>
-                <RegisterContainer
-                    placeholder="youremail@email.com"
-                    text="Email"
-                    onChangeText={addEmailHandler}
-                    value={email}
-                />
+        )
+    }
 
-                <PrimaryButton
-                    title="Reset Password"
-                    style={{ width: 200, marginTop: 50 }}
-                    onPress={() => {
-                        handlePasswordReset();
-                    }}
-                />
-            </View>
-        </View>
+    return (
+        <InputTemplateWidget 
+            title="RESET PASSWORD" 
+            handleSearch={() => {handlePasswordReset();}}
+            content={content} 
+            link={() => navigation.goBack()}
+            linkText={
+                <Text style={styles.link}>Go Back?</Text>
+            }
+        />
     );
 }
 
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.24,
         shadowRadius: 8.5,
         shadowOffset: { width: 4, height: 5 },
-        height: 271,
+        height: 400,
         width: 283,
         zIndex: 1,
         // marginTop: 100,
@@ -81,10 +80,23 @@ const styles = StyleSheet.create({
     },
     image: {
         width: 137,
-        height: 160,
-        left: 207,
-        top: 160,
-        position: "absolute",
-        zIndex: 2,
+        height: 200,
+        // left: 207,
+        // top: 160,
+        // position: "absolute",
+        // zIndex: 2,
+    }, 
+    link: {
+        color: Colors.primary2,
+        fontSize: 15,
+        fontFamily: "RalewayMedium",
+    }, 
+    linkContainer: {
+        marginTop: 20,
+        marginBottom: 0,
+        gap: 7,
     },
+    buttonContainer: {
+        paddingBottom: 70,
+    }
 });

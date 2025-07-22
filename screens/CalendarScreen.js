@@ -2,7 +2,7 @@ import { View, StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
 import Colors from "../constants/colors";
 import { useRoute } from "@react-navigation/native";
-import PrimaryButton from "../components/PrimaryButton";
+import MainButton from "../components/MainButton";
 import { useState } from "react";
 import { updateUnavailability } from "../services/apiItems";
 import CalendarWidget from "../components/CalendarWidget";
@@ -48,15 +48,16 @@ function CalendarScreen() {
         <View style={styles.container}>
            <CalendarWidget markedDates={markedDates} toggleDate={toggleDate} />
             { owner && !isEditing &&  
-                <PrimaryButton 
+                <MainButton 
                     title="Edit Unavailable Dates" 
                     onPress={() =>setIsEditing(true)} 
                     style={styles.buttonContainer} 
                     textStyle={styles.textStyle}
+                    variant="primary"
                 />
             }
             {isEditing && 
-                <PrimaryButton 
+                <MainButton 
                     title="Update"  
                     onPress={() => {
                         console.log("Update button pressed");
@@ -64,6 +65,7 @@ function CalendarScreen() {
                     }}
                     style={styles.buttonContainer} 
                     textStyle={styles.textStyle}
+                    variant="primary"
                 />
             }
         </View>

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import PicturePicker from "../../components/PicturePicker";
 import Colors from "../../constants/colors";
-import PrimaryButton from "../../components/PrimaryButton";
+import MainButton from "../../components/MainButton.js";
 import InputField from "../../components/authentication/InputField.js";
 import { useState } from "react";
 import DropDownMenu from "../../components/DropDownMenu.js";
@@ -114,7 +114,7 @@ function CreateItemScreen() {
                 <ErrorMessage error={inputError} />
             </View>
             <View style={styles.buttonContainer}>
-                <PrimaryButton
+                <MainButton
                     title={"NEXT"}
                     style={styles.button}
                     onPress={submitHandler}

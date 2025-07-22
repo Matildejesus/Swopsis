@@ -1,7 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
 import PicturePicker from "../components/PicturePicker";
-import PrimaryButton from "../components/PrimaryButton";
-import SecondaryButton from "../components/SecondaryButton";
 import SettingsInputField from "../components/SettingsInputField";
 
 import { useSelector } from "react-redux";
@@ -11,6 +9,7 @@ import Line from "../components/Line";
 import { useUser } from "../components/authentication/useUser";
 import { useState } from "react";
 import { useUpdateUser } from "../components/authentication/useUpdateUser";
+import MainButton from "../components/MainButton";
 
 function SettingsScreen() {
     const userPassword = useSelector((state) => state.userInfo.password);
@@ -93,14 +92,16 @@ function SettingsScreen() {
             </View>
             <Line />
             <View style={styles.buttonContainer}>
-                <SecondaryButton
+                <MainButton
                     title="LOG OUT"
                     onPress={logout}
-                ></SecondaryButton>
-                <PrimaryButton
+                    variant="second"
+                />
+                <MainButton
                     title="UPDATE"
                     onPress={handleSubmit}
-                ></PrimaryButton>
+                    variant="primary"
+                />
             </View>
         </View>
     );

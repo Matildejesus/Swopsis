@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, View, Text, Button, StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
 import Colors from "../constants/colors";
-import PrimaryButton from "./PrimaryButton";
+import MainButton from "./MainButton";
 
 function CalendarModal({ visible, onSave, onBackdropPress }) {
     const [selectedDates, setSelectedDates] = useState({});
@@ -45,7 +45,7 @@ function CalendarModal({ visible, onSave, onBackdropPress }) {
                         }}
                     />
                     <View style={styles.buttonContainer}>
-                        <PrimaryButton title="Save" onPress={() => onSave(selectedDates)} />
+                        <MainButton title="Save" onPress={() => onSave(selectedDates)} variant="primary"/>
                     </View>
                 </View>
             </View>

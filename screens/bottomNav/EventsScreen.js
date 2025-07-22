@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text } from "react-native";
-import UnderConstruction from "../components/UnderConstruction";
+import UnderConstruction from "../../components/UnderConstruction";
 
-function BeYouScreen() {
+function EventsScreen() {
     return (
         <View style={styles.container}>
             <UnderConstruction />
@@ -9,7 +9,7 @@ function BeYouScreen() {
     );
 }
 
-export default BeYouScreen;
+export default EventsScreen;
 
 const styles = StyleSheet.create({
     container: {

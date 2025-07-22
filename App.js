@@ -10,29 +10,29 @@ import 'react-native-get-random-values';
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { RootSiblingParent } from "react-native-root-siblings";
-import { Text, Image, View, TouchableOpacity } from "react-native";
+import { Text, Image, View } from "react-native";
 import Svg, { G, Path, Circle } from "react-native-svg";
 
-import WelcomeScreen from "./screens/WelcomeScreen.js";
-import MapsScreen from "./screens/MapsScreen.js";
-import RegisterScreen from "./screens/RegisterScreen.js";
-import LoginScreen from "./screens/LoginScreen.js";
-import ProfileScreen from "./screens/ProfileScreen.js";
-import ResetPasswordScreen from "./screens/ResetPasswordScreen.js";
-import PostcodeScreen from "./screens/PostcodeScreen.js";
+import WelcomeScreen from "./screens/starter/WelcomeScreen.js";
+import MapsScreen from "./screens/starter/MapsScreen.js";
+import RegisterScreen from "./screens/starter/RegisterScreen.js";
+import LoginScreen from "./screens/starter/LoginScreen.js";
+import ProfileScreen from "./screens/bottomNav/ProfileScreen.js";
+import ResetPasswordScreen from "./screens/starter/ResetPasswordScreen.js";
+import PostcodeScreen from "./screens/starter/PostcodeScreen.js";
 import ImpactScreen from "./screens/ImpactScreen.js";
-import BeYouScreen from "./screens/BeYouScreen.js";
+import BeYouScreen from "./screens/bottomNav/BeYouScreen.js";
 import SettingsScreen from "./screens/SettingsScreen.js";
-import EventsScreen from "./screens/EventsScreen.js";
+import EventsScreen from "./screens/bottomNav/EventsScreen.js";
 import InboxScreen from "./screens/InboxScreen.js";
-import WardrobeScreen from "./screens/WardrobeScreen.js";
+import WardrobeScreen from "./screens/bottomNav/WardrobeScreen.js";
 import CalendarScreen from "./screens/CalendarScreen.js";
 import GroupCreateScreen from "./screens/admin/GroupCreateScreen.js";
 import ProfileItemScreen from "./screens/ProfileItemScreen.js";
 import CreateItemScreen from "./screens/createItem/CreateItemScreen.js";
 import ItemDescriptionInputScreen from "./screens/createItem/ItemDescriptionInputScreen.js";
-import GroupDetailsScreen from "./screens/GroupDetailsScreen";
-import AdminProfileScreen from "./screens/AdminProfileScreen";
+import GroupDetailsScreen from "./screens/starter/GroupDetailsScreen.js";
+import AdminProfileScreen from "./screens/admin/AdminProfileScreen.js";
 import GroupsScreen from "./screens/admin/GroupsScreen.js";
 import ItemsScreen from "./screens/admin/ItemsScreen.js";
 import LmsScreen from "./screens/admin/LmsScreen.js";
@@ -48,6 +48,7 @@ import store from "./store/store.js";
 import { Provider } from "react-redux";
 import { AppRegistry } from "react-native";
 import Colors from "./constants/colors.js";
+import { Provider as PaperProvider } from 'react-native-paper';
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -58,9 +59,9 @@ import LmsIcon from "./components/icons/adminicons/LmsIcon.js";
 import DashboardIcon from "./components/icons/DashboardIcon.js";
 import MemberIcon from "./components/icons/adminicons/MemberIcon.js";
 import CoinIcon from "./components/icons/adminicons/CoinIcon.js";
-import FilledHeartIcon from "./components/icons/FilledHeartIcon.js";
-import ChatScreen from "./screens/ChatScreen.js";
-import AmbassadorRequestScreen from "./screens/AmbassadorRequestScreen.js";
+import ChatScreen from "./screens/bottomNav/ChatScreen.js";
+import AmbassadorRequestScreen from "./screens/starter/AmbassadorRequestScreen.js";
+import Toast from "react-native-toast-message";
 
 AppRegistry.registerComponent("main", () => App);
 
@@ -324,7 +325,8 @@ function DrawerNavigator() {
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-    const [fontsLoaded] = useFonts({
+
+    const [fontsLoaded, fontError] = useFonts({
         RalewayBold: require("./assets/fonts/Raleway-Bold.ttf"),
         RalewayBoldItalic: require("./assets/fonts/Raleway-BoldItalic.ttf"),
         RalewayItalic: require("./assets/fonts/Raleway-Italic.ttf"),
@@ -345,10 +347,10 @@ export default function App() {
         InterLight: require("./assets/fonts/Inter-Light.ttf"),
     });
 
-    if (!fontsLoaded) {
-        console.log("Fonts are still loading...");
-        return null;
+    if (!fontsLoaded && !fontError) {
+        return null; // Return empty instead of hanging
     }
+
 
     console.log("Fonts loaded, hiding splash screen");
     SplashScreen.hideAsync();
@@ -358,6 +360,8 @@ export default function App() {
             <SafeAreaProvider>
                 <QueryClientProvider client={queryClient}>
                     <Provider store={store}>
+                        <PaperProvider>
+                        
                         <StatusBar />
                         <NavigationContainer>
                             <Stack.Navigator
@@ -571,6 +575,8 @@ export default function App() {
                                 />
                             </Stack.Navigator>
                         </NavigationContainer>
+                        <Toast />
+                        </PaperProvider>
                     </Provider>
                 </QueryClientProvider>
             </SafeAreaProvider>

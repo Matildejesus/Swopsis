@@ -20,6 +20,7 @@ const Map = ({ apikey, postcode }) => {
             try {
                 const fetchedGroups = await getGroups();
                 setGroups(fetchedGroups);
+                console.log(fetchedGroups);
 
                 // Geocode group locations
                 const locations = await Promise.all(
@@ -29,7 +30,7 @@ const Map = ({ apikey, postcode }) => {
                         const groupLocation = group.location.split(', ').pop();
                         console.log("Group location:", groupLocation);
                         const response = await fetch(
-                            `https://geocode.search.hereapi.com/v1/geocode?q=${group.location}&apiKey=${apikey}`,
+                            `https://geocode.search.hereapi.com/v1/geocode?q=$Australia+${groupLocation}&apiKey=${apikey}`,
                         );
                         console.log(response);
                         const data = await response.json();

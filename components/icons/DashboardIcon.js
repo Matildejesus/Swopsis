@@ -9,7 +9,7 @@ function DashboardIcon({ location, text }) {
             onPress={() =>
                 navigation.reset({
                     index: 0,
-                    routes: [location],
+                    routes: [{ name: location.stack }]
                 })
             }
         >
