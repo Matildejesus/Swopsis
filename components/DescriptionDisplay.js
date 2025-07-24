@@ -62,21 +62,27 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
+        flex: 1,
+        position: "absolute",
+        right: 25,
+
     },
     content: {
         backgroundColor: "#DACFD4",
         width: 340,
-        padding: 35,
+        paddingVertical: 35,
+        // marginHorizontal: 10,
         borderRadius: 20,
-        marginBottom: 20,
+        // marginBottom: 20,
     },
     button: {
-        width: "100%",
+        width: "80%",
         height: 40,
         borderRadius: 20,
         backgroundColor: "#D0ADBD",
         alignItems: "center",
         justifyContent: "center",
         marginTop: 20,
+        alignSelf: "center",
     },
 });

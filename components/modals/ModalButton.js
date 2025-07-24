@@ -3,15 +3,13 @@ import Colors from "../../constants/colors";
 
 function ModalButton({ title, onPress, style, removeContainer }) {
     return (
-        <View
-            style={
-                !removeContainer ? [styles.container, style] : removeContainer
-            }
-        >
-            <Pressable onPress={onPress}>
+        <Pressable onPress={onPress}>
+            <View
+                style={ !removeContainer ? [styles.container, style] : removeContainer}
+            >
                 <Text style={styles.text}>{title}</Text>
-            </Pressable>
-        </View>
+            </View>
+        </Pressable>
     );
 }
 
