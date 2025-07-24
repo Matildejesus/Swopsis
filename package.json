@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@babel/helper-validator-identifier": "^7.24.7",
+    "@expo-google-fonts/inter": "^0.4.1",
+    "@expo-google-fonts/raleway": "^0.4.1",
     "@here/maps-api-for-javascript": "^1.56.0",
     "@react-native/metro-config": "^0.77.0",
     "@react-navigation/bottom-tabs": "^7.2.0",

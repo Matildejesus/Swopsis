@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import Colors from "../../constants/colors";
 import InputField from "../../components/authentication/InputField";
 import { useState } from "react";
-import { useUser } from "../../components/authentication/useUser.js";
+import { useUser } from "../../hooks/useUser.js";
 import DropDownMenu from "../../components/DropDownMenu.js";
 import Categories, {
     Conditions,
@@ -79,11 +79,11 @@ function ItemDescriptionInputScreen() {
                 unavailableDates: dates
             },
             itemDetails: {
-                subcategory: subcategory.value,
-                ...(category !== "Accessories" && { size: size.value }),
+                subcategory: subcategory,
+                ...(category !== "Accessories" && { size: size }),
                 weight,
                 ...(category === "Accessories" ? { material } : { fabric }),
-                condition: condition.value,
+                condition: condition,
                 color: selectedColor,
                 ...(category === "Shoes" && { length }),
             },
@@ -91,7 +91,7 @@ function ItemDescriptionInputScreen() {
 
         try {
             const itemConversion = await getSubcategoryDetails({
-                item: subcategory.value,
+                item: subcategory,
             });
             setSubcategoryDetails(itemConversion);
 
@@ -176,12 +176,12 @@ function ItemDescriptionInputScreen() {
                 </View>
             </View>
             <View style={styles.row}>
-                <Text style={styles.textStyle}>Subcategory</Text>
                 <DropDownMenu
                     value={subcategory}
                     category={category}
                     addCategoryHandler={setSubcategory}
                     dropDownStyle={styles.dropDownStyle}
+                    title="Subcategory"
                 />
             </View>
             {/* <View style={styles.rowContainer}> */}
@@ -189,65 +189,57 @@ function ItemDescriptionInputScreen() {
                 <InputField
                     text="Weight(kg)"
                     textStyle={styles.inputTextStyle}
-                    containerStyle={styles.inputField}
+                    containerStyle={styles.weightField}
                     placeholder="1.5"
                     inputStyle={styles.text}
                     onChangeText={setWeight}
                     value={weight}
                     secureTextEntry={false}
                 />
-            </View>
-            {/* </View> */}
-
-            <View style={styles.row}>
-                <Text style={styles.textStyle}>Condition</Text>
+                {category != "Accessories" && (
                 <DropDownMenu
-                    value={condition}
-                    data={Conditions}
-                    addCategoryHandler={setCondition}
-                    dropDownStyle={styles.dropDownStyle}
+                    value={size}
+                    data={sizeList}
+                    addCategoryHandler={setSize}
+                    dropDownStyle={styles.sizeStyle}
+                    title="Size"
                 />
+            )}
             </View>
-            <View style={styles.input}>
-                <InputField
-                    text={
-                        fields[0].charAt(0).toUpperCase() + fields[0].slice(1)
-                    }
-                    textStyle={styles.inputTextStyle}
-                    containerStyle={styles.inputField}
-                    placeholder="made of"
-                    inputStyle={styles.text}
-                    onChangeText={
-                        fields[0] == "fabric" ? setFabric : setMaterial
-                    }
-                    value={fields[0] === "fabric" ? fabric : material}
-                    secureTextEntry={false}
-                />
+            <View style={{flexDirection: "row"}}>
+            <DropDownMenu
+                value={condition}
+                data={Conditions}
+                addCategoryHandler={setCondition}
+                dropDownStyle={styles.conditionStyle}
+                title="Condition"
+            />
+            <InputField
+                text={fields[0] &&
+                    fields[0].charAt(0).toUpperCase() + fields[0].slice(1)
+                }
+                textStyle={styles.inputTextStyle}
+                containerStyle={styles.inputField}
+                placeholder="made of"
+                inputStyle={styles.text}
+                onChangeText={
+                    fields[0] == "fabric" ? setFabric : setMaterial
+                }
+                value={fields[0] === "fabric" ? fabric : material}
+                secureTextEntry={false}
+            />
             </View>
             {category == "Shoes" && (
-                <View style={styles.input}>
-                    <InputField
-                        text="Length"
-                        textStyle={styles.inputTextStyle}
-                        containerStyle={styles.inputField}
-                        placeholder="short"
-                        inputStyle={styles.text}
-                        onChangeText={setLength}
-                        value={length}
-                        secureTextEntry={false}
-                    />
-                </View>
-            )}
-            {category != "Accessories" && (
-                <View style={styles.row}>
-                    <Text style={styles.textStyle}>Size</Text>
-                    <DropDownMenu
-                        value={size}
-                        data={sizeList}
-                        addCategoryHandler={setSize}
-                        dropDownStyle={styles.dropDownStyle}
-                    />
-                </View>
+                <InputField
+                    text="Length"
+                    textStyle={styles.inputTextStyle}
+                    containerStyle={styles.inputField}
+                    placeholder="short"
+                    inputStyle={styles.text}
+                    onChangeText={setLength}
+                    value={length}
+                    secureTextEntry={false}
+                />
             )}
             <Text style={styles.colorStyle}>Color</Text>
             <FlatList
@@ -293,7 +285,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "white",
         alignItems: "center",
-        paddingTop: 40,
+        paddingTop: 30,
         gap: 10,
     },
     image: {
@@ -323,46 +315,45 @@ const styles = StyleSheet.create({
     textContainer: {
         marginTop: 8,
         flexDirection: "column",
-        gap: 11,
     },
     text: {
         color: Colors.primary2,
         fontFamily: "InterRegular",
         fontSize: 15,
     },
+    sizeStyle: {
+        width: 110 ,
+    },
+    conditionStyle: {
+        width: 140,
+    },
     inputField: {
-        height: 37,
-        marginHorizontal: 16,
-        borderRadius: 10,
-        borderColor: Colors.primary2,
-        borderWidth: 1,
-        width: 200,
-        paddingHorizontal: 13,
-        justifyContent: "center",
+        width: 170,
+
+    },
+    weightField: {
+        width: 110,
     },
     input: {
         flexDirection: "row",
         //  paddingLeft: 16,
     },
     textStyle: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 15,
         color: Colors.primary1,
         width: 100,
     },
     inputTextStyle: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 15,
         color: Colors.primary1,
-        marginTop: 7,
-        marginLeft: 22,
-        width: 100,
+        paddingRight: 20,
     },
     row: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        marginLeft: 22,
     },
     rowContainer: {
         flexDirection: "row",
@@ -387,7 +378,7 @@ const styles = StyleSheet.create({
     colorStyle: {
         alignSelf: "flex-start",
         marginLeft: 37,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 15,
         color: Colors.primary1,
     },

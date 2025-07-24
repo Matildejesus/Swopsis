@@ -6,7 +6,7 @@ import { getMessagesForConvo, sendMessage, updateDecision } from "../../services
 import InputField from "../../components/authentication/InputField";
 import Colors from "../../constants/colors";
 import MainButton from "../../components/MainButton";
-import { useUser } from "../../components/authentication/useUser";
+import { useUser } from "../../hooks/useUser";
 import { getItemById, getItemsInfo, updateAvailability, updateTradeCount, updateUnavailability } from "../../services/apiItems";
 import ChatItemWidget from "../../components/ChatItemWidget";
 import DecisionMakingWidget from "../../components/DecisionMakingWidget";

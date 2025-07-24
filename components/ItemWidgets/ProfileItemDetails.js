@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import HeartSwitch from "../HeartSwitch";
 import PinkNextArrow from "../icons/PinkNextArrow";
 import DescriptionDisplay from "../DescriptionDisplay";
-import { useUser } from "../authentication/useUser";
+import { useUser } from "../../hooks/useUser";
 import Colors from "../../constants/colors";
 import dateFormatting from "../dateFormatting";
 import { deleteItems, getItemsInfo } from "../../services/apiItems";

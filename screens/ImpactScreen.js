@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
 
 import ImpactWidget from "../components/ImpactWidget";
-import { useUser } from "../components/authentication/useUser";
+import { useUser } from "../hooks/useUser";
 import { useState } from "react";
 
 function ImpactScreen() {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: "#FF6780",
         fontWeight: "700",
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
     },
     swappedContainer: {
         flexDirection: "row",

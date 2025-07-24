@@ -61,7 +61,7 @@ export default PostcodeScreen;
 const styles = StyleSheet.create({
     title: {
         fontSize: 18,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         paddingBottom: 10,
         color: Colors.primary2,
     },

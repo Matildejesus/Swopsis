@@ -52,7 +52,7 @@ export async function getAllUsers() {
     return filteredUsers;
 }
 
-export async function getGroupMembers({ groupId, id }) {
+export async function getGroupMembers({ groupId}) {
     console.log("yes");
     const { data, error } = await supabaseAdmin.auth.admin.listUsers();
     console.log(data.users[0].user_metadata.group);
@@ -76,11 +76,11 @@ export async function getFilteredGroupMember({ groupId }) {
     const membersList = (data?.users || [])
         .map((u) => ({
             userId: u.id,
-            groupId: u.user_metadata?.group ?? null, // Default to null if undefined
+            groupId: u.user_metadata?.group ?? null, 
             avatar: u.user_metadata?.avatar ?? null,
-            email: u.email ?? null, // Fixed: `email` is not inside `app_metadata`
+            email: u.email ?? null,
         }))
-        .filter((u) => u.groupId === groupId); // Safely filter users
+        .filter((u) => u.groupId === groupId); 
 
     console.log("Filtered Members:", membersList);
     return membersList;

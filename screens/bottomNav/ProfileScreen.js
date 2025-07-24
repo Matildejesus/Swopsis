@@ -1,12 +1,5 @@
-import React, { useState, useCallback } from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    Modal,
-} from "react-native";
+import React, { useState, useCallback, useEffect } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useDispatch } from "react-redux";
 import Colors from "../../constants/colors";
 import CoinIcon from "../../components/icons/CoinIcon";
@@ -14,65 +7,47 @@ import SettingsIcon from "../../components/icons/SettingsIcon";
 import CalendarIcon from "../../components/icons/CalendarIcon";
 import ImpactIcon from "../../components/icons/ImpactIcon";
 import AddIcon from "../../components/icons/AddIcon";
-import { useUser } from "../../components/authentication/useUser";
+import { useUser } from "../../hooks/useUser";
 import Line from "../../components/Line";
 import ProfileItemWidget from "../../components/ProfileItemWidget";
 import { getItems } from "../../services/apiItems";
 import AnimatedEnvelope from "../../components/AnimatedEnvelope";
 import { useFocusEffect } from "@react-navigation/native";
 import DashboardIcon from "../../components/icons/DashboardIcon";
+import { useGroupWardrobe } from "../../hooks/useGroupWardrobe";
 
 function ProfileScreen({ navigation }) {
     const dispatch = useDispatch();
-    const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState();
     const { user } = useUser();
+    const { groupWardrobe, isLoading: isGroupLoading, isFetching } = useGroupWardrobe();
+    const [ userItems, setUserItems ] = useState([]);
 
-    const [modalVisible, setModalVisible] = useState(false);
-
-    const fetchItems = useCallback(async () => {
-        if (!user || !user.id) return;
-        setLoading(true);
-        try {
-            const fetchedItems = await getItems({ userId: user.id });
-            setItems(fetchedItems);
-        } catch (error) {
-            console.error("Error fetching items: ", error);
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        if (groupWardrobe && groupWardrobe.length > 0) {
+            // console.log("ProfileScreen - Group Wardrobe: ", groupWardrobe);
+            const items = groupWardrobe?.filter(item => item.userId === user?.id);
+            console.log("Filtered Items: ", items);
+            setUserItems(items);
         }
-    }, [user]);
+    }, [groupWardrobe, user]);
 
-    useFocusEffect(
-        React.useCallback(() => {
-            const fetchData = async () => {
-                await fetchItems();
-            };
-
-            fetchData();
-        }, [fetchItems]),
-    );
-
-    if (!user || !user.user_metadata) {
+    if (!user || !user.user_metadata || isGroupLoading) {
         return <Text>Loading user data...</Text>;
     }
 
     const { userName, avatar, coins, group } = user.user_metadata;
     const email = user.email;
 
-    const handleAddIconPress = () => {
-        setModalVisible(true);
-    };
-
     console.log("PROFILE IMAGE: ", avatar);
 
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                <Image
-                    style={styles.image}
-                    source={avatar ? { uri: avatar } : null}
-                />
+                 {avatar ? (
+                    <Image source={{ uri: avatar }} style={styles.image} />
+                ) : (
+                    <View style={styles.imageContainer} />
+                )}
                 <View style={styles.userInfo}>
                     <Text style={styles.userName}>{userName}</Text>
                     <Text style={styles.userEmail}>{email}</Text>
@@ -107,9 +82,8 @@ function ProfileScreen({ navigation }) {
                 </View>
             ) : (
                 <>
-                    <ProfileItemWidget items={items} />
+                    <ProfileItemWidget items={userItems} />
                     <TouchableOpacity
-                        onPress={handleAddIconPress}
                         style={styles.addIconContainer}
                     >
                         <AddIcon navigateLocal="CreateItem" />
@@ -148,21 +122,21 @@ const styles = StyleSheet.create({
     },
     userName: {
         color: Colors.primary2,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 20,
         fontWeight: "700",
         marginRight: 70,
     },
     userEmail: {
         color: Colors.primary2,
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
         fontSize: 15,
         fontWeight: "500",
         marginBottom: 11,
     },
     coins: {
         flexDirection: "row",
-        gap: 11,
+        gap:5,
     },
     iconsContainer: {
         marginHorizontal: 30,
@@ -177,28 +151,16 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary2,
         marginLeft: 25,
     },
+    imageContainer: {
+        width: 112,
+        height: 114,
+        backgroundColor: Colors.secondary2,
+        borderRadius: 21,
+    },
     addIconContainer: {
         position: "absolute",
         bottom: 30,
         alignSelf: "center",
-    },
-    modalOverlay: {
-        flex: 1,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalContainer: {
-        backgroundColor: "white",
-        width: "80%",
-        borderRadius: 10,
-        padding: 20,
-    },
-    modalTitle: {
-        fontSize: 18,
-        fontWeight: "bold",
-        marginBottom: 20,
-        textAlign: "center",
     },
     modalButton: {
         backgroundColor: Colors.primary1,
@@ -206,18 +168,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginVertical: 5,
         alignItems: "center",
-    },
-    modalButtonText: {
-        color: "white",
-        fontWeight: "bold",
-    },
-    closeButton: {
-        marginTop: 10,
-        alignItems: "center",
-    },
-    closeButtonText: {
-        color: Colors.primary1,
-        fontWeight: "bold",
     },
     textPendingContainer: {
         marginLeft: 50,

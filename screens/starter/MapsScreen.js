@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Map from "../../components/Map";
-import MainButton from "../../components/MainButton";
 import MapWidget from "../../components/MapWidget";
 
 function MapsScreen({ route }) {

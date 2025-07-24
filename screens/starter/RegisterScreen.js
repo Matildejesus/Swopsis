@@ -5,7 +5,7 @@ import { validate } from "validate.js";
 import { useDebounce } from "use-debounce";
 
 import constraints from "../../constraints.js";
-import { useRegister } from "../../components/authentication/useRegister.js";
+import { useRegister } from "../../hooks/useRegister.js";
 import InputTemplateWidget from "../../components/InputTemplateWidget.js";
 import InputField from "../../components/authentication/InputField.js";
 
@@ -120,7 +120,7 @@ function RegisterScreen({ navigation }) {
             link={() => navigation.navigate("Login")}
             linkText={
             <Text>
-                Already a user? <Text style={{ fontFamily: "RalewayBold" }}>SignIn</Text>
+                Already a user? <Text style={{ fontFamily: "Raleway_700Bold" }}>SignIn</Text>
             </Text>
             }
         />

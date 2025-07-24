@@ -38,8 +38,6 @@ function MemberWidget({ user, requests }) {
 
     if (!currentUser) return null;
 
-    console.log("Current User is: ", currentUser);
-
     const onModalClose = async (action) => {
         if (!action) {
             setIsModalVisible(false);
@@ -62,6 +60,7 @@ function MemberWidget({ user, requests }) {
             console.log("currentuser: ", currentUser.id);
             await updateStatus({ newStatus: newStatus, id: requests.id });
             await updateUserMetadata({ id: currentUser.id, groupId: newGroup, ambassador: false });
+            await updateMemberCount
             setStatus(newStatus);
             setGroup(newGroup);
         } catch (error) {

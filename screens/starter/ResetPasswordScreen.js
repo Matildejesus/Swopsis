@@ -1,5 +1,4 @@
-import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
-import MainButton from "../../components/MainButton";
+import { StyleSheet, Text } from "react-native";
 import { useState } from "react";
 import Colors from "../../constants/colors";
 import { changePassword } from "../../services/apiPassword";

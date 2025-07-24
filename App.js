@@ -63,6 +63,25 @@ import ChatScreen from "./screens/bottomNav/ChatScreen.js";
 import AmbassadorRequestScreen from "./screens/starter/AmbassadorRequestScreen.js";
 import Toast from "react-native-toast-message";
 
+import { Inter_100Thin } from '@expo-google-fonts/inter/100Thin';
+import { Inter_300Light } from '@expo-google-fonts/inter/300Light';
+import { Inter_400Regular } from '@expo-google-fonts/inter/400Regular';
+import { Inter_500Medium } from '@expo-google-fonts/inter/500Medium';
+import { Inter_600SemiBold } from '@expo-google-fonts/inter/600SemiBold';
+import { Inter_700Bold } from '@expo-google-fonts/inter/700Bold';
+import { Raleway_100Thin } from '@expo-google-fonts/raleway/100Thin';
+import { Raleway_300Light } from '@expo-google-fonts/raleway/300Light';
+import { Raleway_400Regular } from '@expo-google-fonts/raleway/400Regular';
+import { Raleway_500Medium } from '@expo-google-fonts/raleway/500Medium';
+import { Raleway_600SemiBold } from '@expo-google-fonts/raleway/600SemiBold';
+import { Raleway_700Bold } from '@expo-google-fonts/raleway/700Bold';
+import { Raleway_100Thin_Italic } from '@expo-google-fonts/raleway/100Thin_Italic';
+import { Raleway_300Light_Italic } from '@expo-google-fonts/raleway/300Light_Italic';
+import { Raleway_400Regular_Italic } from '@expo-google-fonts/raleway/400Regular_Italic';
+import { Raleway_500Medium_Italic } from '@expo-google-fonts/raleway/500Medium_Italic';
+import { Raleway_600SemiBold_Italic } from '@expo-google-fonts/raleway/600SemiBold_Italic';
+import { Raleway_700Bold_Italic } from '@expo-google-fonts/raleway/700Bold_Italic';
+
 AppRegistry.registerComponent("main", () => App);
 
 const Stack = createNativeStackNavigator();
@@ -106,7 +125,7 @@ function BottomTabNavigator() {
                                 <Text
                                     style={{
                                         color: Colors.primary1,
-                                        fontFamily: "RalewayBold",
+                                        fontFamily: "Raleway_700Bold",
                                     }}
                                 >
                                     BE
@@ -114,7 +133,7 @@ function BottomTabNavigator() {
                                 <Text
                                     style={{
                                         color: Colors.primary1,
-                                        fontFamily: "RalewayBold",
+                                        fontFamily: "Raleway_700Bold",
                                     }}
                                 >
                                     YOU
@@ -325,32 +344,55 @@ function DrawerNavigator() {
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-
     const [fontsLoaded, fontError] = useFonts({
-        RalewayBold: require("./assets/fonts/Raleway-Bold.ttf"),
-        RalewayBoldItalic: require("./assets/fonts/Raleway-BoldItalic.ttf"),
-        RalewayItalic: require("./assets/fonts/Raleway-Italic.ttf"),
-        RalewayLight: require("./assets/fonts/Raleway-Light.ttf"),
-        RalewayLightItalic: require("./assets/fonts/Raleway-LightItalic.ttf"),
-        RalewayMedium: require("./assets/fonts/Raleway-Medium.ttf"),
-        RalewayMediumItalic: require("./assets/fonts/Raleway-MediumItalic.ttf"),
-        RalewayRegular: require("./assets/fonts/Raleway-Regular.ttf"),
-        RalewaySemiBold: require("./assets/fonts/Raleway-SemiBold.ttf"),
-        RalewaySemiBoldItalic: require("./assets/fonts/Raleway-SemiBoldItalic.ttf"),
-        RalewayThin: require("./assets/fonts/Raleway-Thin.ttf"),
-        RalewayThinItalic: require("./assets/fonts/Raleway-ThinItalic.ttf"),
-        InterBold: require("./assets/fonts/Inter-Bold.ttf"),
-        InterRegular: require("./assets/fonts/Inter-Regular.ttf"),
-        InterSemiBold: require("./assets/fonts/Inter-SemiBold.ttf"),
-        InterMedium: require("./assets/fonts/Inter-Medium.ttf"),
-        InterThin: require("./assets/fonts/Inter-Thin.ttf"),
-        InterLight: require("./assets/fonts/Inter-Light.ttf"),
+        Inter_100Thin, 
+        Inter_300Light, 
+        Inter_400Regular, 
+        Inter_500Medium, 
+        Inter_600SemiBold, 
+        Inter_700Bold,
+        Raleway_100Thin, 
+        Raleway_300Light, 
+        Raleway_400Regular, 
+        Raleway_500Medium, 
+        Raleway_600SemiBold, 
+        Raleway_700Bold, 
+        Raleway_100Thin_Italic, 
+        Raleway_300Light_Italic, 
+        Raleway_400Regular_Italic, 
+        Raleway_500Medium_Italic, 
+        Raleway_600SemiBold_Italic, 
+        Raleway_700Bold_Italic, 
+        // Raleway_700Bold: require("./assets/fonts/Raleway-Bold.ttf"),
+        // Raleway_700Bold_Italic: require("./assets/fonts/Raleway-BoldItalic.ttf"),
+        // Raleway_400_Italic: require("./assets/fonts/Raleway-Italic.ttf"),
+        // Raleway_300Light: require("./assets/fonts/Raleway-Light.ttf"),
+        // Raleway_300Light_Italic: require("./assets/fonts/Raleway-LightItalic.ttf"),
+        // Raleway_500Medium: require("./assets/fonts/Raleway-Medium.ttf"),
+        // Raleway_500Medium_Italic: require("./assets/fonts/Raleway-MediumItalic.ttf"),
+        // Raleway_400Regular: require("./assets/fonts/Raleway-Regular.ttf"),
+        // Raleway_600SemiBold: require("./assets/fonts/Raleway-SemiBold.ttf"),
+        // Raleway_600SemiBold_Italic: require("./assets/fonts/Raleway-SemiBoldItalic.ttf"),
+        // Raleway_100Thin: require("./assets/fonts/Raleway-Thin.ttf"),
+        // Raleway_100Thin_Italic: require("./assets/fonts/Raleway-ThinItalic.ttf"),
+        // Inter_700Bold: require("./assets/fonts/Inter-Bold.ttf"),
+        // Inter_400Regular: require("./assets/fonts/Inter-Regular.ttf"),
+        // Inter_600SemiBold: require("./assets/fonts/Inter-SemiBold.ttf"),
+        // Inter_500Medium: require("./assets/fonts/Inter-Medium.ttf"),
+        // Inter_100Thin: require("./assets/fonts/Inter-Thin.ttf"),
+        // Inter_300Light: require("./assets/fonts/Inter-Light.ttf"),
     });
 
-    if (!fontsLoaded && !fontError) {
-        return null; // Return empty instead of hanging
+    React.useEffect(() => {
+    if (fontError) {
+        console.error('Font loading error:', fontError);
     }
+    }, [fontError]);
 
+    if (!fontsLoaded)
+    {
+        return null;
+    }
 
     console.log("Fonts loaded, hiding splash screen");
     SplashScreen.hideAsync();

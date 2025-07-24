@@ -11,13 +11,13 @@ import {
     SafeAreaView,
 } from "react-native";
 import Colors from "../constants/colors";
-import { useUser } from "../components/authentication/useUser";
+import { useUser } from "../hooks/useUser";
 import { useRoute } from "@react-navigation/native";
 import { getAllConversation, getMessagesForConvo, sendMessage } from "../services/apiChat";
 import InboxUserWidget from "../components/InboxUserWidget";
 
 function InboxScreen() {
-    const { user } = useUser(); // Current user info
+    const { user } = useUser(); 
     const route = useRoute();
     const conversationId = route.params?.conversationId ?? null;
     const currentUserId = user ? user.id : "currentUser"; // Fallback if no user data

@@ -7,6 +7,9 @@ class Item {
         method,
         available,
         userId,
+        tradeCount,
+        unavailableDates,
+        
     ) {
         this.category = category;
         this.image = image;
@@ -15,6 +18,8 @@ class Item {
         this.method = method;
         this.available = available;
         this.userId = userId;
+        this.tradeCount = tradeCount;
+        this.unavailableDates = unavailableDates;
     }
 }
 c;

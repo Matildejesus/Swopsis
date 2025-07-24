@@ -12,8 +12,8 @@ import RadioGroup from "react-native-radio-buttons-group";
 import ErrorMessage from "../../components/ErrorMessage.js";
 
 function CreateItemScreen() {
-    const [title, setTitle] = useState("Black Heals");
-    const [description, setDescription] = useState("YSL HEALS!!! red bottoms");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
     const [category, setCategory] = useState(null);
     const [avatar, setAvatar] = useState("");
     const [selectedId, setSelectedId] = useState();
@@ -28,8 +28,8 @@ function CreateItemScreen() {
         [],
     );
 
-    console.log(Object.keys(Categories));
-    console.log();
+    // console.log(Object.keys(Categories));
+    // console.log();
 
     const handleImageSelected = (newAvatarUri) => {
         setAvatar(newAvatarUri);
@@ -54,7 +54,7 @@ function CreateItemScreen() {
             navigation.navigate("ItemDescriptionInput", {
                 title: title,
                 description: description,
-                category: category.value,
+                category: category,
                 avatar: avatar,
                 method: method,
             });
@@ -81,8 +81,8 @@ function CreateItemScreen() {
                     secureTextEntry={false}
                 />
             </View>
-            <View>
-                <View style={styles.view2}>
+            {/* <View> */}
+                {/* <View style={styles.view2}> */}
                     <InputField
                         text="Description"
                         textStyle={styles.label}
@@ -94,16 +94,16 @@ function CreateItemScreen() {
                         value={description}
                         secureTextEntry={false}
                     />
-                </View>
-            </View>
-            <View style={styles.row}>
-                <Text style={styles.label}>Category</Text>
+                {/* </View> */}
+            {/* </View> */}
+            {/* <View style={styles.row}> */}
                 <DropDownMenu
                     value={category}
                     data={Object.keys(Categories)}
                     addCategoryHandler={setCategory}
+                    title="Category"
                 />
-            </View>
+            {/* </View> */}
             <RadioGroup
                 radioButtons={radioButtons}
                 onPress={setSelectedId}
@@ -118,6 +118,7 @@ function CreateItemScreen() {
                     title={"NEXT"}
                     style={styles.button}
                     onPress={submitHandler}
+                    variant="secon"
                 />
             </View>
         </View>
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "white",
         alignItems: "center",
-        paddingTop: 40,
+        paddingTop: 30,
         gap: 15,
     },
     picturePicker: {
@@ -147,54 +148,54 @@ const styles = StyleSheet.create({
     },
     button: {
         width: 141,
-        height: 49,
     },
     buttonContainer: {
         alignSelf: "flex-end",
-        paddingRight: 20,
+        paddingRight: 70,
     },
-    row: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-    scrollView: {
-        alignItems: "flex-start",
-        backgroundColor: "#FFFFFF",
-        paddingTop: 38,
-    },
+    // row: {
+    //     flexDirection: "row",
+    //     justifyContent: "space-between",
+    //     alignItems: "center",
+    // },
+    // scrollView: {
+    //     alignItems: "flex-start",
+    //     backgroundColor: "#FFFFFF",
+    //     paddingTop: 38,
+    // },
     label: {
         color: Colors.primary1,
         fontSize: 15,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
+        marginRight: 20,
     },
-    text: {
-        color: Colors.primary2,
-        fontFamily: "InterRegular",
-        fontSize: 15,
-    },
-    titleField: {
-        height: 37,
-        marginHorizontal: 20,
-        borderRadius: 10,
-        justifyContent: "center",
-        borderColor: Colors.primary2,
-        borderWidth: 1,
-        width: 243,
-        paddingHorizontal: 13,
-    },
+    // text: {
+    //     color: Colors.primary2,
+    //     fontFamily: "Inter_400Regular",
+    //     fontSize: 15,
+    // },
+    // titleField: {
+    //     height: 37,
+    //     marginHorizontal: 20,
+    //     borderRadius: 10,
+    //     justifyContent: "center",
+    //     borderColor: Colors.primary2,
+    //     borderWidth: 1,
+    //     width: 243,
+    //     paddingHorizontal: 13,
+    // },
     descriptionField: {
-        marginTop: 19,
-        width: 272,
+        // marginTop: 19,
+        width: 243,
         height: 75,
-        marginHorizontal: 20,
-        borderRadius: 10,
-        borderColor: Colors.primary2,
-        borderWidth: 1,
-        paddingHorizontal: 13,
-        paddingTop: 5,
+        // marginHorizontal: 20,
+        // borderRadius: 10,
+        // borderColor: Colors.primary2,
+        // borderWidth: 1,
+        // paddingHorizontal: 13,
+        // paddingTop: 5,
     },
-    error: {
-        height: 30,
-    },
+    // error: {
+    //     height: 30,
+    // },
 });

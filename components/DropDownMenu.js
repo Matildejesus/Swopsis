@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import Colors from "../constants/colors";
 import { getItemsNames } from "../services/apiItemConvert";
@@ -10,9 +10,10 @@ function DropDownMenu({
     data,
     addCategoryHandler,
     dropDownStyle,
+    title
 }) {
     const [items, setItems] = useState([]);
-    const [open, setOpen] = useState(false); // <-- Fix added here
+    const [open, setOpen] = useState(false); 
 
     useEffect(() => {
         if (category && !data) {
@@ -36,27 +37,29 @@ function DropDownMenu({
     }));
 
     return (
-        <DropDownPicker
-            open={open}
-            value={value}
-            items={formattedData} // <- Use `formattedData` to apply correct shape
-            setOpen={setOpen}
-            setValue={(callback) => {
-                const newValue = callback(value);
-                addCategoryHandler(newValue);
-            }}
-            setItems={setItems}
-            style={dropDownStyle ? dropDownStyle : styles.dropdown}
-            textStyle={styles.textStyle}
-            placeholder="Select item"
-            dropDownContainerStyle={styles.dropDownContainerStyle}
-            listItemLabelStyle={styles.listItemLabelStyle}
-            showTickIcon={true}
-            modalProps={{
-                animationType: "fade"
-            }}
-            listMode="MODAL" 
-        />
+        <View style={styles.container}>
+            <Text style={styles.label}>{title}</Text>
+            <DropDownPicker
+                open={open}
+                value={value}
+                items={formattedData}
+                setOpen={setOpen}
+                setValue={(callback) => {
+                    const newValue = callback(value);
+                    addCategoryHandler(newValue);
+                }}
+                setItems={setItems}
+                style={[ styles.dropdown, dropDownStyle && dropDownStyle]}
+                textStyle={styles.textStyle}
+                placeholder="Select item"
+                dropDownContainerStyle={styles.dropDownContainerStyle}
+                showTickIcon={true}
+                modalProps={{
+                    animationType: "fade"
+                }}
+                listMode="MODAL" 
+            />
+        </View>
     );
 }
 
@@ -64,28 +67,34 @@ function DropDownMenu({
 export default DropDownMenu;
 
 const styles = StyleSheet.create({
-    dropdown: {
-        margin: 16,
-        width: 201,
-        height: 37,
-        borderRadius: 10,
+    container: {
         justifyContent: "center",
+        alignItems: "flex-end",
+        marginBottom: 13,
+    },
+    dropdown: {
+        width: 243,
+        borderRadius: 10,
+        alignSelf: "center",
         borderColor: Colors.primary2,
-        borderWidth: 1,
-        paddingHorizontal: 13,
     },
     placeholderStyle: {
         fontSize: 15,
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
         color: Colors.primary2,
     },
-    selectedTextStyle: {
+    textStyle: {
         fontSize: 15,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_500Medium",
         color: Colors.primary2,
     },
     inputSearchStyle: {
         height: 40,
         fontSize: 16,
     },
+    label: {
+        color: Colors.primary1,
+        fontSize: 15,
+        fontFamily: "Raleway_700Bold",
+    }
 });

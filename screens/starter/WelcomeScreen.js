@@ -1,6 +1,5 @@
 import { useState } from "react";
 import WelcomePageWidget from "../../components/WelcomePageWidget";
-import { Text, View } from "react-native";
 
 function WelcomeScreen({ navigation }) {
     const [page, setPage] = useState(0);
@@ -15,7 +14,6 @@ function WelcomeScreen({ navigation }) {
         const newPage = Math.round(contentOffsetX / viewWidth);
         handlePageChange(newPage);
     };
-
 
     return (
         <WelcomePageWidget

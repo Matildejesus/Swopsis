@@ -2,15 +2,13 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Colors from "../constants/colors";
 import MainButton from "./MainButton";
 import ErrorMessage from "./ErrorMessage";
+import Logo from "./icons/Logo";
 
 
 function InputTemplateWidget({content, title, handleSearch, link, linkText, anotherLink, submitError}) {
     return (
         <View style={styles.container}>
-            <Image
-                source={require("../assets/images/simpleLogo.png")}
-                style={styles.image}
-            />
+            <Logo />
             <View style={styles.contentContainer}>
                 {content()}
                 <View style={styles.loginError}>

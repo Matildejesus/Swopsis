@@ -21,6 +21,7 @@ function MessageModal({
         <Portal>
             <Modal visible={visible} onDismiss={onBackdropPress}>
                 <View style={styles.container}>
+                    <View style={styles.content}>
                     {!joinRequest && (
                         method === "swap" ? (
                         <Text style={styles.title}>For Swap</Text>
@@ -31,7 +32,7 @@ function MessageModal({
                         </>
                         )
                     )}
-                    
+                    </View>
                     <InputField
                         placeholder="Write your message..."
                         onChangeText={onMessageChange}
@@ -58,11 +59,15 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#DACFD4",
         position: "absolute",
-        bottom: 20,
+        bottom: -40,
+        left: 20,
         width: 340,
-        //  height: 366,
+        height: 366,
         paddingTop: 35,
         borderRadius: 20,
+    },
+    content: {
+        height: 169,
     },
     title: {
         color: Colors.primary2,

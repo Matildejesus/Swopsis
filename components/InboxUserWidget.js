@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useUser } from "./authentication/useUser";
+import { useUser } from "../hooks/useUser";
 import { useEffect, useState } from "react";
 import { findUserById, findUserByIdforInbox } from "../services/apiAdmin";
 import Colors from "../constants/colors";

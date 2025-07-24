@@ -1,9 +1,9 @@
 import { Text, View, TextInput, StyleSheet } from "react-native";
 import Colors from "../../constants/colors";
 import ErrorMessage from "../ErrorMessage";
+import { inlineStyles } from "react-native-svg";
 
 function InputField({
-    inputStyle,
     placeholder,
     onChangeText,
     value,
@@ -16,8 +16,6 @@ function InputField({
     maxLength,
     error
 }) {
-
-    // const inputStyle = value ? styles.changedText : styles.inputText;
     return (
         <>
         <View style={styles.container}>
@@ -25,10 +23,10 @@ function InputField({
                 <Text style={textStyle ? textStyle : styles.text}>{text}</Text>
             )}
             <View
-                style={containerStyle ? containerStyle : styles.inputContainer}
+                style={[styles.inputContainer, containerStyle]}
             >
                 <TextInput
-                    style={inputStyle}
+                    style={styles.inputText}
                     placeholder={placeholder}
                     onChangeText={onChangeText}
                     value={value}
@@ -53,7 +51,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         // alignSelf: "flex-end",
         marginRight: 20,
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
     },
     inputContainer: {
         marginHorizontal: 20,
@@ -72,14 +70,8 @@ const styles = StyleSheet.create({
         alignItems: "flex-end",
         marginBottom: 13,
     },
-    changedText: {
-        color: Colors.primary2,
-        opacity: 1,
-        fontFamily: "RalewayRegular",
-    },
     inputText: {
         color: Colors.primary2,
-        opacity: 0.6,
         fontFamily: "RalewayRegular",
     },
 });

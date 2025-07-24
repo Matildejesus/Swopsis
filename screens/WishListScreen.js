@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { useUser } from "../components/authentication/useUser";
+import { useUser } from "../hooks/useUser";
 import { getWishlist } from "../services/apiWishlist";
 import WardrobeitemWidget from "../components/WardrobeItemWidget";
 

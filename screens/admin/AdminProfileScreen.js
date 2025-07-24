@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import { useDispatch } from "react-redux";
 import Colors from "../../constants/colors";
 import SettingsIcon from "../../components/icons/SettingsIcon";
-import { useUser } from "../../components/authentication/useUser";
+import { useUser } from "../../hooks/useUser";
 import Line from "../../components/Line";
 import { getItems } from "../../services/apiItems";
 import { useEffect } from "react";
@@ -19,7 +19,7 @@ import { getAllJoinRequests, getJoinRequests } from "../../services/apiJoinReque
 import CoinIcon from "../../components/icons/adminicons/CoinIcon";
 import NewsIcon from "../../components/icons/adminicons/NewsIcon";
 import { getAllUsers, getGroupMembers, subscribeNewGroups } from "../../services/apiAdmin";
-import { useLogout } from "../../components/authentication/useLogout";
+import { useLogout } from "../../hooks/useLogout";
 import MainButton from "../../components/MainButton";
 
 function AdminProfileScreen({ navigation }) {
@@ -249,13 +249,13 @@ const styles = StyleSheet.create({
     },
     userName: {
         color: Colors.primary2,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 20,
         fontWeight: "700",
     },
     userEmail: {
         color: Colors.primary2,
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
         fontSize: 15,
         fontWeight: "500",
         marginBottom: 11,
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
         marginTop: 23,
     },
     title: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 18,
         color: Colors.primary2,
         marginBottom: 10,
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
         marginLeft: 23,
     },
     subtitle: {
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
         fontSize: 15,
         color: Colors.primary2,
         marginBottom: 15,

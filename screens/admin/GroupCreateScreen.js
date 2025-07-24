@@ -8,7 +8,7 @@ import {
     StyleSheet,
     ScrollView,
 } from "react-native";
-import { createGroup } from "../../services/groupService";
+// import { createGroup } from "../../services/groupService";
 import Colors from "../../constants/colors";
 import { addGroup } from "../../services/apiGroups";
 import { updateUserMetadata } from "../../services/apiAdmin";
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     label: {
         color: Colors.primary1,
         fontSize: 15,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
     },
     text: {
         color: Colors.primary2,

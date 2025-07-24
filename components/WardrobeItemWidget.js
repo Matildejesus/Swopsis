@@ -6,7 +6,7 @@ import dateFormatting from "./dateFormatting";
 import { useEffect, useState } from "react";
 import { findUserById } from "../services/apiAdmin";
 import { useNavigation } from "@react-navigation/native";
-import { useUser } from "./authentication/useUser";
+import { useUser } from "../hooks/useUser";
 import { getItemById } from "../services/apiItems";
 import { getWishListItem } from "../services/apiWishlist";
 
@@ -65,8 +65,6 @@ function WardrobeitemWidget({ item: initialItem, wishlistItem }) {
     
     return (
         <>
-        {console.log("Item:", item)}
-        {console.log("User:", user)}
 
          {item.available && user && (
             <View style={styles.itemContainer}>
@@ -131,12 +129,13 @@ const styles = StyleSheet.create({
     userName: {
         color: Colors.primary2,
         fontSize: 15,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
     },
     date: {
         color: Colors.primary2,
         fontSize: 12,
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
+        width: 90,
     },
     row3: {
         flexDirection: "row",

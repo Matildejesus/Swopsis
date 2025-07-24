@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         marginBottom: 28,
     },
     text: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 15,
         color: Colors.primary2,
         width: 130,

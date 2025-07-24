@@ -48,8 +48,6 @@ const styles = StyleSheet.create({
         marginLeft: 8,
     },
     buttonText: {
-        fontFamily: "RalewayMedium",
         fontSize: 15,
-
     },
 })

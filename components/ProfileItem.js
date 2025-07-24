@@ -4,7 +4,7 @@ import Colors from "../constants/colors";
 
 function ProfileItem({ style, source, itemData }) {
     const navigation = useNavigation();
-
+    console.log("ProfileItem - itemData: ", itemData);
     return (
         <TouchableOpacity
             onPress={() =>

@@ -5,7 +5,6 @@ import Colors from "../constants/colors";
 
 function Title(props) {
     const navigation = useNavigation();
-    console.log("title: ", props.avatar);
 
     return (
         <View style={styles.container}>

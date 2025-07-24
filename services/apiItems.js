@@ -1,3 +1,4 @@
+import { getFilteredGroupMember } from "./apiAdmin";
 import supabase from "./supabase";
 
 export async function addItem({ item, itemDetails }) {
@@ -42,6 +43,8 @@ export async function addItem({ item, itemDetails }) {
             },
         ])
         .select();
+
+    console.log("insertedItemDetails: ", insertedItemDetails);
 
     if (errorItemDetails || errorItem) {
         throw new Error(errorItemDetails.message);
@@ -100,19 +103,55 @@ export async function getItemsInfo({ category, itemId }) {
     return item[0];
 }
 
-export async function getGroupItems({ users }) {
-
+export async function getGroupItems({ groupId }) {
+    const groupMembers = await getFilteredGroupMember({ groupId });
+    const memberIds = groupMembers.map((member) => member.userId);
+    // console.log("Member IDs: ", memberIds);
     const { data, error } = await supabase
         .from("Items")
-        .select("*")
-        .in("userId", users)
+        .select(`
+            id, created_at, userId, category, image, title, description, method, available, tradeCount, unavailableDates,
+            Shoes!itemId (*),
+             Clothing!itemId (*),
+             Accessories!itemId (*)`)
+        .in('userId', memberIds)
         .order("created_at", { ascending: false });
+    console.log("Query results:", { data, error });
 
-        if (error) {
-            throw new Error(error.message);
-        }
+    // console.log("Group Members: ", groupMembers);
+    // console.log("GROUP ITEMS: ", data);
+    if (error) {
+        throw new Error(error.message);
+    }
 
-    return data;
+    console.log("NOW TRANSFORMING DATA");
+    const transformedData = data.map(item => {
+
+        const itemOwner = groupMembers.find(member => member.userId === item.userId);
+        console.log("Item Owner: ", itemOwner);
+        const extraInfo = 
+            item.category === 'Shoes' ? item.Shoes[0] :
+            item.category === 'Clothing' ? item.Clothing[0] :
+            item.category === 'Accessories' ? item.Accessories[0] :
+            null;
+        console.log("Extra Info: ", extraInfo);
+        
+        return {
+        ...item,
+        avatar: itemOwner?.avatar || '', // Now using the direct avatar field
+        email: itemOwner?.email || '',
+        extraInfo,
+        // Remove the relationship data we don't need in final output
+        users: undefined,
+        // Shoes: undefined,
+        // Clothing: undefined,
+        // Accessories: undefined
+        };
+    });
+
+    console.log("Transformed Data: ", transformedData);
+
+    return transformedData;
 }
 
 export async function updateAvailability({ available, itemId }) {

@@ -1,12 +1,11 @@
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import ErrorMessage from "../../components/ErrorMessage";
 import MainButton from "../../components/MainButton";
 import PicturePicker from "../../components/PicturePicker";
 import { useState } from "react";
 import Colors from "../../constants/colors";
 import BulletPointWidget from "../../components/BulletPointWidget";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { useUser } from "../../components/authentication/useUser";
+import { useUser } from "../../hooks/useUser";
 import { addGroup } from "../../services/apiGroups";
 import InputField from "../../components/authentication/InputField";
 
@@ -38,7 +37,7 @@ function AmbassadorRequestScreen({ navigation }) {
 
     const submitHandler = async () => {
         const addressPattern = /^[\w\s]+,\s*\d{4}$/;
- console.log(groupName, description, address, pointsList.length, profileImage);
+        console.log(groupName, description, address, pointsList.length, profileImage);
         if (!groupName || !address || !profileImage || pointsList.length === 0 || !description) {
             setRequestError("Invalid or Missing details. Please try again.");
             console.log("1");
@@ -167,10 +166,10 @@ const styles = StyleSheet.create({
     link: {
         color: Colors.primary2,
         fontSize: 15,
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
     },
     bold: {
-        fontFamily: "RalewayBold"
+        fontFamily: "Raleway_700Bold"
     },
     linkContainer: {
         marginTop: 20,
@@ -178,7 +177,7 @@ const styles = StyleSheet.create({
         gap: 7,
     },
     register: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
     },
     loginError: {
         width: 170,

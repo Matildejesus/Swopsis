@@ -48,12 +48,12 @@ const styles = StyleSheet.create({
     },
     number: {
         fontSize: 25,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         color: "white",
     },
     label: {
         fontSize: 20,
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
         color: "white",
     },
 });

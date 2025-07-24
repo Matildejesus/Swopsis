@@ -7,7 +7,7 @@ import ProfileItemDetails from "../components/ItemWidgets/ProfileItemDetails";
 import ProfileItemReviews from "../components/ItemWidgets/ProfileItemReviews";
 import ContactButton from "../components/ItemWidgets/ContactButton";
 import ReviewButton from "../components/ItemWidgets/ReviewButton";
-import { useUser } from "../components/authentication/useUser";
+import { useUser } from "../hooks/useUser.js";
 import TrashIcon from "../components/icons/TrashIcon.js";
 import { createConversation, getConversation, sendMessage } from "../services/apiChat.js";
 import MessageModal from "../components/MessageModal.js";

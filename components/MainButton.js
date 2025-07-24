@@ -3,11 +3,10 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import Colors from "../constants/colors";
 
 function MainButton({ title, onPress, style, textStyle, variant}) {
-    console.log(variant);
     return (
-        <View style={[variant === "primary" ? styles.container : styles.secondaryContainer, style]}>
+        <View style={[variant === "primary" ? {backgroundColor: Colors.primary1} :  {borderColor: Colors.primary1, borderWidth: 2,}, styles.container, style]}>
             <Pressable onPress={onPress}>
-                <Text style={[variant === "primary" ? styles.text : styles.secondaryText, textStyle]}>{title}</Text>
+                <Text style={[variant === "primary" ? {color: "white"} : {color: Colors.primary1}, styles.text, textStyle]}>{title}</Text>
             </Pressable>
         </View>
     );
@@ -20,28 +19,10 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 27.5,
         paddingHorizontal: 15,
-        backgroundColor: Colors.primary1,
-        // width: 141,
-        fontFamily: "RalewayMedium",
     },
     text: {
-        color: "white",
         textAlign: "center",
         fontSize: 20,
-        fontWeight: "500",
-    },
-    secondaryContainer: {
-        padding: 15,
-        borderRadius: 27.5,
-        borderColor: Colors.primary1,
-        borderWidth: 2,
-        // width: 141,
-        fontFamily: "RalewayMedium",
-    },
-    secondaryText: {
-        color: Colors.primary1,
-        textAlign: "center",
-        fontSize: 20,
-        fontWeight: "500",
-    },
+        fontFamily: "Raleway_500Medium",
+    }
 });

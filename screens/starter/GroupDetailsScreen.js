@@ -7,7 +7,7 @@ import { updateGroup } from "../../services/apiAuth";
 import { useEffect, useState } from "react";
 import MessageModal from "../../components/MessageModal";
 import { addJoinRequest } from "../../services/apiJoinRequests";
-import { useUser } from "../../components/authentication/useUser";
+import { useUser } from "../../hooks/useUser";
 import { findUserByEmail, findUserById, updateUserMetadata } from "../../services/apiAdmin";
 import { updateStatus } from "../../services/apiGroups";
 import MainButton from "../../components/MainButton";
@@ -84,6 +84,10 @@ function GroupDetailsScreen({ route }) {
             console.error("Erron handling press: ", error);
         }
     }
+    
+    const closeModal = () => {
+        setIsModalVisible(false); 
+    };
 
     return (
         <View style={styles.container}>
@@ -91,13 +95,11 @@ function GroupDetailsScreen({ route }) {
             <Text style={styles.title}>{group.name}</Text>
             <Text style={styles.header}>Description</Text>
             <View style={{ height: 270 }}>
-                <ScrollView>
-                    <Text style={styles.content}>{group.description}</Text>
-                </ScrollView>
+                <Text style={styles.content}>{group.description}</Text>
                 <Text style={[styles.header, { marginTop: 10 }]}>Rules</Text>
                 <ScrollView>
                     {group.rules.map((rule, index) => (
-                        <Text key={index} style={[styles.content, { width: 170 }]}>
+                        <Text key={index} style={[styles.content]}>
                             • {rule}
                         </Text>
                     ))}
@@ -153,6 +155,7 @@ function GroupDetailsScreen({ route }) {
                 visible={isModalVisible}
                 onRequestClose={submitHandler}
                 errorMessage={errorMessage}
+                onBackdropPress={closeModal}
                 onMessageChange={setMessage}
                 joinRequest={true}
             />
@@ -172,7 +175,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textTransform: "uppercase",
         alignSelf: "center",
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 30,
         color: Colors.primary1,
         marginTop: 10,
@@ -183,21 +186,18 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     header: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 18,
         color: Colors.primary2,
         marginLeft: 23,
     },
     content: {
-        width: 296,
-        //height: 73,
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
         fontSize: 15,
         color: Colors.primary2,
         paddingTop: 14,
         marginLeft: 33,
+        marginRight: 4,
     },
     buttonContainer: {
         alignItems: "flex-end",
@@ -225,13 +225,13 @@ const styles = StyleSheet.create({
         gap: 5,
     },
     info: {
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
         fontSize: 15,
         color: Colors.primary2,
         alignSelf: "center"
     },
     name: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 15, 
         color: Colors.primary2,
     },

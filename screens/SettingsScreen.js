@@ -3,12 +3,12 @@ import PicturePicker from "../components/PicturePicker";
 import SettingsInputField from "../components/SettingsInputField";
 
 import { useSelector } from "react-redux";
-import { useLogout } from "../components/authentication/useLogout";
+import { useLogout } from "../hooks/useLogout";
 import Colors from "../constants/colors";
 import Line from "../components/Line";
-import { useUser } from "../components/authentication/useUser";
+import { useUser } from "../hooks/useUser";
 import { useState } from "react";
-import { useUpdateUser } from "../components/authentication/useUpdateUser";
+import { useUpdateUser } from "../hooks/useUpdateUser";
 import MainButton from "../components/MainButton";
 
 function SettingsScreen() {

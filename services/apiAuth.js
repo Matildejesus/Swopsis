@@ -52,7 +52,6 @@ export async function getUser() {
     if (error) {
         throw new Error(error.message);
     }
-    console.log(data);
     return data?.user;
 }
 
@@ -91,7 +90,7 @@ export async function updateUserData({
     return data;
 }
 
-export async function updateUser({ userName, avatar }) {
+export async function updateUser({ userName, avatar }, userId) {
     let updateData = {};
     if (userName) updateData.data = { userName };
     console.log(updateData);
@@ -105,7 +104,8 @@ export async function updateUser({ userName, avatar }) {
         console.log("Avatar URI:", avatar);
 
         const fileExt = avatar.split(".").pop();
-        const fileName = `avatars/${Math.random()}.${fileExt}`;
+        const fileName = `user_${userId}/avatar.${fileExt}`;
+        console.log("filename: ", fileName);
 
         let formData = new FormData();
         formData.append("file", {
@@ -127,14 +127,13 @@ export async function updateUser({ userName, avatar }) {
             throw new Error(storageError.message);
         }
 
-        // Update user's avatar URL
-        const avatarUrl = `http://127.0.0.1:54321/storage/v1/object/public/avatars/${fileName}`;
-        const { data: updatedUser, error: error2 } =
-            await supabase.auth.updateUser({
-                data: {
-                    avatar: avatarUrl,
-                },
-            });
+        const { data: urlData } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(fileName);
+
+        const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
+            data: { avatar: urlData.publicUrl }
+        });
 
         if (error2) {
             console.error("Update User Error:", error2);

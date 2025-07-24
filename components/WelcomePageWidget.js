@@ -8,12 +8,12 @@ import { horizontalScale as hs, verticalScale as vs, moderateScale as ms } from 
 function WelcomePageWidget({ content, image1, image2, onRegister, onLogin, page, handleScroll }) {
     const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
-    const imageHeight = screenHeight * 0.55;
+    const imageHeight = screenHeight * 0.65;
 
     const imageStyle = {
         width: screenWidth,
         height: imageHeight,
-        resizeMode: 'contain'
+        // resizeMode: 'contain'
     }
 
     return (
@@ -104,9 +104,9 @@ const styles = StyleSheet.create({
         color: Colors.primary1,
         textAlign: "center",
         fontSize: ms(25),
-        fontWeight: "bold",
+        // fontWeight: "bold",
         marginVertical: vs(30),
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
     },
     bulletItem: {
         textAlign: "center",

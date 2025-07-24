@@ -1,13 +1,15 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
-import { getFilteredGroupMember } from "../services/apiAdmin";
-import { useUser } from "../../components/authentication/useUser";
-import { getGroupItems } from "../services/apiItems";
-import { getWishlist } from "../services/apiWishlist"; // Import wishlist API
+import { useUser } from "../../hooks/useUser";
+
 import WardrobeitemWidget from "../../components/WardrobeItemWidget";
 import FilledHeartIcon from "../../components/icons/FilledHeartIcon";
 import HeartIcon from "../../components/icons/HeartIcon";
 import { useNavigation } from "@react-navigation/native";
+import { getFilteredGroupMember } from "../../services/apiAdmin";
+import { getGroupItems } from "../../services/apiItems";
+import { getWishlist } from "../../services/apiWishlist";
+import { useGroupWardrobe } from "../../hooks/useGroupWardrobe";
 
 function WardrobeScreen() {
     const { user } = useUser();
@@ -16,6 +18,7 @@ function WardrobeScreen() {
     const [wishlistItems, setWishlistItems] = useState([]);
     const [showWishlist, setShowWishlist] = useState(false);
     const navigation = useNavigation();
+    const { groupWardrobe, isLoading: isGroupLoading } = useGroupWardrobe();
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -71,7 +74,7 @@ function WardrobeScreen() {
         <View style={styles.container}>
             <View style={styles.flatlistContainer}>
                 <FlatList
-                    data={filteredItems}
+                    data={groupWardrobe}
                     numColumns={2}
                     renderItem={({ item }) => <WardrobeitemWidget item={item} />}
                     keyExtractor={(item) => item.id}

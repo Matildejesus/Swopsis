@@ -18,21 +18,18 @@ const Map = ({ apikey, postcode }) => {
     useEffect(() => {
         const fetchGroups = async () => {
             try {
+                setLoading(true);
                 const fetchedGroups = await getGroups();
                 setGroups(fetchedGroups);
-                console.log(fetchedGroups);
 
-                // Geocode group locations
                 const locations = await Promise.all(
                     fetchedGroups
                     .filter(group => group.status !== 'pending')
                     .map(async (group) => {
                         const groupLocation = group.location.split(', ').pop();
-                        console.log("Group location:", groupLocation);
                         const response = await fetch(
                             `https://geocode.search.hereapi.com/v1/geocode?q=$Australia+${groupLocation}&apiKey=${apikey}`,
                         );
-                        console.log(response);
                         const data = await response.json();
                         if (data.items && data.items.length > 0) {
                             const position = data.items[0].position;
@@ -48,12 +45,8 @@ const Map = ({ apikey, postcode }) => {
                                 ambassadorId: group.ambassadorId,
                                 location: group.location,
                             };
-                        } else {
-                            console.error(
-                                `No geocode results for location: ${group.location}`,
-                            );
-                            return null;
-                        }
+                        } 
+                        return null;
                     }),
                 );
                 setGroupLocations(locations.filter((loc) => loc !== null)); // Remove nulls
@@ -65,7 +58,10 @@ const Map = ({ apikey, postcode }) => {
         };
 
         fetchGroups();
+    }, [apikey]);
 
+    useEffect(() => {
+        if (!postcode) return;
         const fetchGeocode = async () => {
             try {
                 const response = await fetch(
@@ -77,20 +73,18 @@ const Map = ({ apikey, postcode }) => {
                     setRegion({
                         latitude: position.lat,
                         longitude: position.lng,
-                        latitudeDelta: 0.03, // Adjust as needed
-                        longitudeDelta: 0.005, // Adjust as needed
+                        latitudeDelta: 0.03,
+                        longitudeDelta: 0.005, 
                     });
-                    console.log("Geocode fetched:", position); // Debugging log
                 }
             } catch (error) {
                 console.error("Error fetching geocode data:", error);
             }
         };
 
-        if (postcode) {
-            fetchGeocode();
-        }
-    }, [apikey, postcode]);
+        fetchGeocode();
+
+    }, [ postcode]);
 
     useEffect(() => {
         if (region) {
@@ -108,7 +102,7 @@ const Map = ({ apikey, postcode }) => {
 
     return (
         <View style={styles.container}>
-            {region && (
+            {region && !loading && (
                 <MapView
                     style={styles.map}
                     region={region}
@@ -165,14 +159,14 @@ const styles = StyleSheet.create({
         height: 40,
         alignItems: "center",
         paddingHorizontal: 5,
-        gap: 10,
+        // gap: 7,
     },
     calloutTitle: {
         fontSize: 14,
         fontFamily: "RalewayRegular",
         color: "white",
         textTransform: "uppercase",
-        width: 133,
+        width: 140,
         marginLeft: 10,
     },
     arrowContainer: {
@@ -188,6 +182,7 @@ const styles = StyleSheet.create({
     },
     calloutContainer: {
         flexDirection: "row",
+        // marginLeft: 20,
         // justifyContent: "center"
         alignItems: "center",
     },

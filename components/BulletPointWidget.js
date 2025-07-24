@@ -23,8 +23,7 @@ function BulletPointWidget({pointsList, setPointsList}) {
                     onChangeText={(text) => setInput(text)}
                     placeholder={"Enter rules..."}
                     text="Rules"
-                    containerStyle={styles.inputContainer}
-                    error={"yay"}/>
+                    containerStyle={styles.inputContainer}/>
                 <AddIcon onPress={addBulletPoint} buttonStyle={styles.addButton} />
             </View>            
             <FlatList
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     bulletPointText: {
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
         color: Colors.primary2,
     }
 })

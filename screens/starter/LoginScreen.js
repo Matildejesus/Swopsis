@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useLogin } from "../../components/authentication/useLogin.js";
+import { useLogin } from "../../hooks/useLogin.js";
 
 import { validate } from "validate.js";
 import { useDebounce } from "use-debounce";
@@ -100,7 +100,7 @@ function LoginScreen({ navigation }) {
             <TouchableOpacity
                 onPress={() => navigation.navigate("ResetPassword")}
             >
-                <Text style={{ color: Colors.primary2, fontFamily: "RalewayMedium" }}>Forgot your Password?</Text>
+                <Text style={{ color: Colors.primary2, fontFamily: "Raleway_600SemiBold" }}>Forgot your Password?</Text>
             </TouchableOpacity>
         )
     }
@@ -113,7 +113,7 @@ function LoginScreen({ navigation }) {
             link={() => navigation.navigate("Register")}
             linkText={
                 <Text>
-                    Not a user? <Text style={{ fontFamily: "RalewayBold" }}>Register</Text>
+                    Not a user? <Text style={{ fontFamily: "Raleway_700Bold" }}>Register</Text>
                 </Text>
             }
             submitError={loginError}
