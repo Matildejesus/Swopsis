@@ -1,0 +1,36 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.8
+-- Dumped by pg_dump version 17.5 (Homebrew)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: auth; Owner: -
+--
+
+COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status, banned_until, reauthentication_token, reauthentication_sent_at, is_sso_user, deleted_at, is_anonymous) FROM stdin;
+00000000-0000-0000-0000-000000000000	68c1c652-43a4-4882-b89d-6550a16a5b5e	authenticated	authenticated	steve@gmail.com	$2a$10$AJEMPnoHaZrqT5QaWWCpk.l1dUp8rvkPFp3LuyhASV.GQHwo8zdne	2025-07-21 13:03:41.868309+00	\N		\N		\N			\N	2025-07-21 13:15:47.986477+00	{"provider": "email", "providers": ["email"]}	{"sub": "68c1c652-43a4-4882-b89d-6550a16a5b5e", "coins": 10, "email": "steve@gmail.com", "group": 1, "avatar": "", "userName": "steve", "ambassador": false, "totalCarbon": 0, "totalLitres": 0, "totalWeight": 0, "itemsSwapped": 0, "email_verified": true, "phone_verified": false}	\N	2025-07-21 13:03:41.860487+00	2025-07-21 15:30:40.415791+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	ca6cf2db-d1e7-41d0-a18a-cee77d54f4ac	authenticated	authenticated	janedoe@gmail.com	$2a$10$N2Hpu6N7F/y37FeXr2OXdOFo2TKmrvVSEY6PGR5kQkOGx44Rv5HGq	2025-07-21 07:02:38.831213+00	\N		\N		\N			\N	2025-07-24 02:40:02.374783+00	{"provider": "email", "providers": ["email"]}	{"sub": "ca6cf2db-d1e7-41d0-a18a-cee77d54f4ac", "coins": 11, "email": "janedoe@gmail.com", "group": 1, "avatar": "http://127.0.0.1:54321/storage/v1/object/public/avatars/user_ca6cf2db-d1e7-41d0-a18a-cee77d54f4ac/avatar.jpg", "userName": "Jane doe", "ambassador": true, "totalCarbon": 16.7, "totalLitres": 8543, "totalWeight": 0.8, "itemsSwapped": 1, "email_verified": true, "phone_verified": false}	\N	2025-07-21 07:02:38.818755+00	2025-07-24 02:40:02.382162+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	d28cf020-0435-4927-aef3-a9bab0704c44	authenticated	authenticated	amber@gmail.com	$2a$10$K/2k737WUSUZBzlJeyeX5udNvbn4XO.YWbsKoF/4wkarSLznz4wEu	2025-07-22 06:08:59.000741+00	\N		\N		\N			\N	2025-07-22 06:09:06.342004+00	{"provider": "email", "providers": ["email"]}	{"sub": "d28cf020-0435-4927-aef3-a9bab0704c44", "coins": 10, "email": "amber@gmail.com", "group": "", "avatar": "", "userName": "amber", "ambassador": false, "totalCarbon": 0, "totalLitres": 0, "totalWeight": 0, "itemsSwapped": 0, "email_verified": true, "phone_verified": false}	\N	2025-07-22 06:08:58.987009+00	2025-07-22 06:09:06.346862+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	fc65b6f1-6b7f-49af-9c99-ee3f06de3591	authenticated	authenticated	bob@gmail.com	$2a$10$ljcxGzGUVdhii.teKzbA8.hvIRxaRBTnd9z2mPNsa7oErXm9PNugu	2025-07-22 01:15:04.247961+00	\N		\N		\N			\N	2025-07-24 02:40:33.664792+00	{"provider": "email", "providers": ["email"]}	{"sub": "fc65b6f1-6b7f-49af-9c99-ee3f06de3591", "coins": 11, "email": "bob@gmail.com", "group": 1, "avatar": "", "userName": "Bob", "ambassador": false, "totalCarbon": 23, "totalLitres": 2700, "totalWeight": 0.2, "itemsSwapped": 1, "email_verified": true, "phone_verified": false}	\N	2025-07-22 01:15:04.223293+00	2025-07-24 02:46:46.917447+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	8b5f3bf9-9864-459e-b898-a8d0fceb841c	authenticated	authenticated	admin@gmail.com	$2a$10$0cn9UwkH4Q0iNDDYFsDyj.xPaICrcuTnCH6oMr8eawV8giFNStrxG	2025-07-21 06:41:59.427252+00	\N		\N		\N			\N	2025-07-21 13:02:45.353395+00	{"role": "super-admin", "provider": "email", "providers": ["email"]}	{"email_verified": true}	t	2025-07-21 06:41:59.419546+00	2025-07-21 13:02:45.362426+00	\N	\N			\N		0	\N		\N	f	\N	f
+\.
+
+
+--
+-- PostgreSQL database dump complete
+--
+
