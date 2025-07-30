@@ -14,7 +14,7 @@ import DashboardIcon from "../../components/icons/DashboardIcon";
 import { useGroupWardrobe } from "../../hooks/useGroupWardrobe";
 
 function ProfileScreen() {
-    const { user: userData, isLoading: isUserLoading, error } = useUser();
+    const { user: userData, isLoading: isUserLoading } = useUser();
     const { groupWardrobe, isLoading: isGroupLoading, isFetching } = useGroupWardrobe();
     const [ userItems, setUserItems ] = useState([]);
 
@@ -51,10 +51,6 @@ function ProfileScreen() {
 
     if (isUserLoading || isGroupLoading) {
         return <Text>Loading user data...</Text>;
-    }
-
-    if (error) {
-        return <Text>{error}</Text>;
     }
 
     if (!user) {

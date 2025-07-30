@@ -11,13 +11,17 @@ export function useUpdateUserMetadata() {
             return data;
         },
         onSuccess: (updatedUser) => {
-            console.log("Updating user metadata with data:", updatedUser);
-            queryClient.setQueryData(["user"], (old) => {
-                return {
-                    ...old,
-                    user: updatedUser
-                };
-            });
+            console.log("Updating user metadata with data:", updatedUser.user.user_metadata);
+            queryClient.setQueryData(["user"], (old) => ({
+                ...old,
+                user: {
+                    ...old?.user,  
+                    user_metadata: {
+                        ...old?.user?.user_metadata,  // ← Keep old metadata
+                        ...updatedUser.user.user_metadata  // ← Merge new metadata
+                    }
+                }
+            }));
             console.log("User Metadata updated successfully:", queryClient.getQueryData(["user"]));
         },
         onError: (err) => {

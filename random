@@ -1,0 +1,38 @@
+export function useUpdateUserMetadata() {
+    const queryClient = useQueryClient();
+
+    const { mutate: updateUserMetadata, isLoading: isUpdating } = useMutation({
+        mutationFn: async (updateData) => {
+            const response = await updateUserDataApi(updateData);
+            // Handle both possible response structures:
+            return response.user || response; // Returns either inner user or full response
+        },
+        onSuccess: (updatedData) => {
+            queryClient.setQueryData(["user"], (old) => {
+                // Get the actual user_metadata from the response
+                const newMetadata = updatedData.user_metadata 
+                    || updatedData.user?.user_metadata;
+
+                return {
+                    ...old,
+                    user: {
+                        ...old?.user,
+                        user_metadata: {
+                            ...old?.user?.user_metadata,
+                            ...newMetadata // Safely merge new metadata
+                        }
+                    }
+                };
+            });
+        },
+        onError: (err) => {
+            Toast.show({
+                type: 'error',
+                text1: 'Update Failed',
+                text2: err.message
+            });
+        },
+    });
+
+    return { updateUserMetadata, isUpdating };
+}

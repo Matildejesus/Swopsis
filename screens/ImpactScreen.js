@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
+import { Text, View, StyleSheet, Image, ScrollView, ActivityIndicator } from "react-native";
 
 import ImpactWidget from "../components/ImpactWidget";
 import { useUser } from "../hooks/auth/useUser";
@@ -7,9 +7,31 @@ import { useUser } from "../hooks/auth/useUser";
 function ImpactScreen() {
 
     const { user } = useUser();
-    console.log("User Data on Impact screen: ", user);
-    const { itemsSwapped, totalCarbon, totalLitres, totalWeight } = user.user.user_metadata;
- 
+    console.log("User Data on Impact screen: ", user.user);
+    console.log("UserMeTADATA on Impact screen: ", user.user.user_metadata);
+    
+    // const { itemsSwapped, totalCarbon, totalLitres, totalWeight } = user.user.user_metadata;
+    if (user?.user?.user_metadata) { 
+        console.log("there is metadata: ", user.user.user_metadata); 
+    }
+    const metadata = user?.user?.user_metadata || {};
+    
+     // 1. Handle loading state
+    if (!user?.user) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#00CCCB" />
+            </View>
+        );
+    }
+    // Destructure with default values
+    let {
+        itemsSwapped = 0,
+        totalCarbon = 0,
+        totalLitres = 0,
+        totalWeight = 0
+    } = metadata;
+
     return (
         <ScrollView bounces={false}>
             <View style={styles.container}>
