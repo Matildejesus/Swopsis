@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import { useDispatch } from "react-redux";
 import Colors from "../../constants/colors";
-import SettingsIcon from "../../components/icons/SettingsIcon";
-import { useUser } from "../../hooks/useUser";
 import Line from "../../components/Line";
-import { getItems } from "../../services/apiItems";
 import { useEffect } from "react";
 import RectangleButton from "../../components/RectangleButton";
 import ItemIcon from "../../components/icons/adminicons/ItemIcon";
@@ -19,11 +15,11 @@ import { getAllJoinRequests, getJoinRequests } from "../../services/apiJoinReque
 import CoinIcon from "../../components/icons/adminicons/CoinIcon";
 import NewsIcon from "../../components/icons/adminicons/NewsIcon";
 import { getAllUsers, getGroupMembers, subscribeNewGroups } from "../../services/apiAdmin";
-import { useLogout } from "../../hooks/useLogout";
+import { useLogout } from "../../hooks/auth/useLogout";
 import MainButton from "../../components/MainButton";
+import { useUser } from "../../hooks/auth/useUser";
 
 function AdminProfileScreen({ navigation }) {
-    const dispatch = useDispatch();
     const [pendingReq, setPendingReq] = useState([]);
     const [acceptedReq, setAcceptedReq] = useState([]);
     const [rejectedReq, setRejectedReq] = useState([]);

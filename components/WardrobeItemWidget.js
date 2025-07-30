@@ -1,78 +1,27 @@
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import Colors from "../constants/colors";
+import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { useUser } from "../hooks/auth/useUser";
 import HeartSwitch from "./HeartSwitch";
 import ContactIcon from "./icons/ContactIcon";
-import dateFormatting from "./dateFormatting";
-import { useEffect, useState } from "react";
-import { findUserById } from "../services/apiAdmin";
-import { useNavigation } from "@react-navigation/native";
-import { useUser } from "../hooks/useUser";
-import { getItemById } from "../services/apiItems";
-import { getWishListItem } from "../services/apiWishlist";
 
-function WardrobeitemWidget({ item: initialItem, wishlistItem }) {
+function WardrobeitemWidget({ item }) {
     const [user, setUser] = useState();
-    const { user: currentUser } = useUser();
     const navigation = useNavigation();
     const [ owner, setOwner ] = useState(false);
-    const [ itemData, setItemData ] = useState([]);
-    const [ itemWishlist, setItemWishlist ] = useState(null);
-    const [ item, setItem ] = useState(initialItem);
     const [ date, setDate ] = useState();
 
-
-    const fetchWishlist = async () => {
-        try {
-            const wishlist = await getWishListItem({ userId: currentUser.id, itemId: item.id });
-            setItemWishlist(wishlist.length > 0 ? wishlist[0] : null);
-        } catch (error) {
-            console.error("Error fetching wishlist:", error);
-        }
-    };
-
-    useEffect(() => {
-        let isMounted = true; 
-        const fetchInfo = async () => {
-            try {
-                let newItem = item;
-                if (wishlistItem) {
-                    newItem = await getItemById({ id: wishlistItem.itemId });
-                    if (isMounted) setItem(newItem);
-                }
-    
-                const fetchedUser = await findUserById({ id: newItem.userId });
-                if (fetchedUser?.id !== user?.id && isMounted) {
-                    setUser(fetchedUser);
-                }
-    
-                if (isMounted) {
-                    setOwner(currentUser?.id === newItem.userId);
-                    setDate((prev) => (prev !== dateFormatting(newItem.created_at) ? dateFormatting(newItem.created_at) : prev));
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-    
-        if ((wishlistItem || item) && currentUser) {
-            fetchInfo();
-        }
-        
-        return () => {
-            isMounted = false; 
-        };
-    }, [wishlistItem, item, currentUser]);
-    
+    console.log("ITEM: ", item.available);
     return (
         <>
-
-         {item.available && user && (
+         {item.available && (
             <View style={styles.itemContainer}>
                 <View style={styles.row3}>
-                    <Image style={styles.avatar} source={null} />
+                    <Image style={styles.avatar} source={{uri: item.avatar}} />
                     <View style={styles.column}>
                         <Text style={styles.userName}>
-                            {user.user_metadata.userName}
+                            {item.userName}
                         </Text>
                         <Text style={styles.date}>{date}</Text>
                     </View>
@@ -80,9 +29,7 @@ function WardrobeitemWidget({ item: initialItem, wishlistItem }) {
                 <TouchableOpacity
                     onPress={() =>
                         navigation.navigate("ProfileItem", {
-                            itemData: item,
-                            owner,
-                            user,
+                            itemData: item
                         })
                     }
                 >
@@ -97,7 +44,7 @@ function WardrobeitemWidget({ item: initialItem, wishlistItem }) {
                     {item.title}
                 </Text>
                 <View style={styles.iconContainer}>
-                  {currentUser && <HeartSwitch itemId={item.id} userId={currentUser.id} wishList={itemWishlist} refreshWishlist={fetchWishlist}/>}
+                  <HeartSwitch isWishListItem={item.wishlist} />
                     <ContactIcon width={26} height={26} />
                 </View>
             </View>
@@ -117,6 +64,8 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderWidth: 1,
         paddingVertical: 9,
+        marginTop: 20,
+        marginLeft: 20,
     },
     avatar: {
         width: 40,

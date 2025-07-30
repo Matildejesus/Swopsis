@@ -28,9 +28,6 @@ function CreateItemScreen() {
         [],
     );
 
-    // console.log(Object.keys(Categories));
-    // console.log();
-
     const handleImageSelected = (newAvatarUri) => {
         setAvatar(newAvatarUri);
     };

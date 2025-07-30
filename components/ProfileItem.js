@@ -4,7 +4,6 @@ import Colors from "../constants/colors";
 
 function ProfileItem({ style, source, itemData }) {
     const navigation = useNavigation();
-    console.log("ProfileItem - itemData: ", itemData);
     return (
         <TouchableOpacity
             onPress={() =>
@@ -18,7 +17,7 @@ function ProfileItem({ style, source, itemData }) {
                 <Image
                     source={{ uri: source }}
                     style={styles.image}
-                    resizeMode="contain"
+                    // resizeMode="contain"
                 />
             </View>
             { itemData.available == false && itemData.method == "swap" &&
@@ -34,6 +33,7 @@ const styles = StyleSheet.create({
     image: {
         width: "100%",
         height: "100%",
+        borderRadius: 10,
     },
     overText: {
         position: "absolute",

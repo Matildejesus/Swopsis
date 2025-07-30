@@ -1,22 +1,21 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
-import Colors from "../../constants/colors";
-import InputField from "../../components/authentication/InputField";
+import InputField from "../../components/authentication/InputField.js";
 import { useState } from "react";
-import { useUser } from "../../hooks/useUser.js";
 import DropDownMenu from "../../components/DropDownMenu.js";
 import Categories, {
     Conditions,
     Colors as ColorsList,
 } from "../../constants/itemCategories.js";
 import MainButton from "../../components/MainButton.js";
-import { addItem, updateUnavailability } from "../../services/apiItems.js";
 import ErrorMessage from "../../components/ErrorMessage.js";
 import ColorSwitch from "../../components/ColorSwitch.js";
-import ColorCircle from "../../components/icons/ColorCircle.js";
-import { updateUserData } from "../../services/apiAuth.js";
-import { getSubcategoryDetails } from "../../services/apiItemConvert.js";
 import CalendarModal from "../../components/CalendarModal.js";
+import Colors from "../../constants/colors.js";
+import { useAddItem } from "../../hooks/items/useAddItem.js";
+import { getSubcategoryDetails } from "../../services/apiItemConvert.js";
+import { useUser } from "../../hooks/auth/useUser.js";
+import { useUpdateUserMetadata } from "../../hooks/auth/useUpdateUserMetadata.js";
 
 function ItemDescriptionInputScreen() {
     const route = useRoute();
@@ -35,22 +34,27 @@ function ItemDescriptionInputScreen() {
     const [unavailableDates, setUnavailableDates] = useState({});
 
     const navigation = useNavigation();
+    const { addItem, isLoading: isAddingItem } = useAddItem();
+    const { updateUserMetadata } = useUpdateUserMetadata();
 
     let fields = [];
     let sizeList = [];
+    const { user: userData } = useUser();
+
+    const user = userData?.user;
+
+    console.log("User Data: ", user);
 
     const {
-        user: {
-            id: userId,
-            user_metadata: {
-                coins,
-                totalWeight,
-                totalLitres,
-                totalCarbon,
-                itemsSwapped,
-            },
-        },
-    } = useUser();
+        group,
+        coins,
+        totalWeight,
+        totalLitres,
+        totalCarbon,
+        itemsSwapped,
+    } = user?.user_metadata || {};
+
+    const userId = user?.id;
 
     switch (category) {
         case "Clothing":
@@ -68,6 +72,7 @@ function ItemDescriptionInputScreen() {
 
     const handleSaveDates = async (dates) => {
         setIsModalVisible(false);
+
         addItem({
             item: {
                 userId,
@@ -76,7 +81,8 @@ function ItemDescriptionInputScreen() {
                 title,
                 description,
                 method,
-                unavailableDates: dates
+                unavailableDates: dates,
+                group
             },
             itemDetails: {
                 subcategory: subcategory,
@@ -93,6 +99,7 @@ function ItemDescriptionInputScreen() {
             const itemConversion = await getSubcategoryDetails({
                 item: subcategory,
             });
+            console.log('Item conversion data:', itemConversion);
             setSubcategoryDetails(itemConversion);
 
             // Once details are retrieved, perform calculations
@@ -118,24 +125,26 @@ function ItemDescriptionInputScreen() {
             console.log(weightSaved.toFixed(2), itemsSaved, carbonSaved, litresSaved);
 
             // Update user data after calculations
-            await updateUserData({
+            await updateUserMetadata({
                 newCoins,
                 totalLitres: litresSaved,
                 totalCarbon: carbonSaved,
                 totalWeight: parseFloat(weightSaved.toFixed(2)),
                 itemsSwapped: itemsSaved,
             });
-
+            // await queryClient.invalidateQueries(["user"]); 
+            
             // Navigate to Profile after update
-            navigation.reset({
-                index: 0,
-                routes: [
-                    {
-                        name: "InApp",
-                    },
-                ],
-            });
-
+            // navigation.reset({
+            //     index: 0,
+            //     routes: [
+            //         {
+            //             name: "InApp",
+            //         },
+            //     ],
+            // });
+            navigation.replace("InApp");
+            
         } catch (error) {
             console.error("Error fetching subcategory details:", error);
             setSubcategoryDetails(null);
@@ -152,8 +161,11 @@ function ItemDescriptionInputScreen() {
             (category !== "Accessories" ? !size || !fabric : !material) ||
             (category === "Shoes" && !length)
         ) {
-            setInputError("Missing inputs");
-        } else {
+            setInputError("Missing inputs.");
+        } else if (isNaN(weight)) {
+            setInputError("Weight must be in numbers.");
+        }
+        else {
             console.log("item method is: ", method);
             if (method == "loan") { 
                 console.log("opening modal");

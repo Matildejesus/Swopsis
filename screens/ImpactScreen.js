@@ -1,13 +1,14 @@
 import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
 
 import ImpactWidget from "../components/ImpactWidget";
-import { useUser } from "../hooks/useUser";
-import { useState } from "react";
+import { useUser } from "../hooks/auth/useUser";
+
 
 function ImpactScreen() {
 
     const { user } = useUser();
-    const { coins, itemsSwapped, totalCarbon, totalLitres, totalWeight } = user.user_metadata 
+    console.log("User Data on Impact screen: ", user);
+    const { itemsSwapped, totalCarbon, totalLitres, totalWeight } = user.user.user_metadata;
  
     return (
         <ScrollView bounces={false}>
@@ -22,26 +23,26 @@ function ImpactScreen() {
                     POSITIVE IMPACT.
                 </Text>
                 <View style={styles.swappedContainer}>
-                    <Text style={styles.numberText}>{user.user_metadata.itemsSwapped}</Text>
+                    <Text style={styles.numberText}>{itemsSwapped}</Text>
                     <Text style={styles.itemText}>ITEM SWAPPED</Text>
                 </View>
                 <View style={styles.widget}>
                     <ImpactWidget
-                        number={parseFloat(user.user_metadata.totalWeight.toFixed(2))}
+                        number={parseFloat(totalWeight.toFixed(2))}
                         label={"KG OF TEXTILE OUT OF LANDFILL"}
                         source={require("../assets/images/garb.png")}
                         color={"#00CCCB"}
                         count={1}
                     />
                     <ImpactWidget
-                        number={user.user_metadata.totalLitres}
+                        number={totalLitres}
                         label={"L OF FRESH WATER SAVE"}
                         source={require("../assets/images/water.png")}
                         color={"#0080FB"}
                         count={2}
                     />
                     <ImpactWidget
-                        number={user.user_metadata.totalCarbon}
+                        number={totalCarbon.toFixed(2)}
                         label={"TONNES OF CO2 EMMISSIONS SAVED"}
                         source={require("../assets/images/gas.png")}
                         color={"#FFA330"}

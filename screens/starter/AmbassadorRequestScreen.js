@@ -5,7 +5,7 @@ import PicturePicker from "../../components/PicturePicker";
 import { useState } from "react";
 import Colors from "../../constants/colors";
 import BulletPointWidget from "../../components/BulletPointWidget";
-import { useUser } from "../../hooks/useUser";
+import { useUser } from "../../hooks/auth/useUser";
 import { addGroup } from "../../services/apiGroups";
 import InputField from "../../components/authentication/InputField";
 

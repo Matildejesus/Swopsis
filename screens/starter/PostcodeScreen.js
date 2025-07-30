@@ -52,6 +52,7 @@ function PostcodeScreen({ navigation }) {
             content={content} 
             link={() => navigation.navigate("AmbassadorRequest")}
             linkText="Be an Ambassador"
+            page="postcode"
         />
     );
 }

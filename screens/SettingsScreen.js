@@ -1,26 +1,41 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
 import PicturePicker from "../components/PicturePicker";
 import SettingsInputField from "../components/SettingsInputField";
 
-import { useSelector } from "react-redux";
-import { useLogout } from "../hooks/useLogout";
 import Colors from "../constants/colors";
 import Line from "../components/Line";
-import { useUser } from "../hooks/useUser";
+
 import { useState } from "react";
-import { useUpdateUser } from "../hooks/useUpdateUser";
+
 import MainButton from "../components/MainButton";
 
-function SettingsScreen() {
-    const userPassword = useSelector((state) => state.userInfo.password);
-    const { logout, isLoading } = useLogout();
+import { horizontalScale as hs, verticalScale as vs, moderateScale as ms } from "../utils/responsive";
+import { useUser } from "../hooks/auth/useUser";
+import { useUpdateUser } from "../hooks/auth/useUpdateUser";
+import { useLogout } from "../hooks/auth/useLogout";
 
-    const {
-        user: {
-            email,
-            user_metadata: { userName: currentUserName, avatar: currentAvatar },
-        },
-    } = useUser();
+function SettingsScreen() {
+    const { logout, isLoading } = useLogout();
+    const { user, isLoading: isUserLoading } = useUser();
+
+    const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+
+    const profileHeight = screenHeight * 0.15;
+    const profileWidth = screenWidth * 0.3;
+
+    const profileStyle = {
+        width: profileWidth,
+        height: profileHeight
+    }
+
+     const {
+        id = '',
+        email = '',
+        user_metadata: { 
+            userName: currentUserName = '', 
+            avatar: currentAvatar = null 
+        } = {}
+    } = user.user || {};
 
     const { updateUser, isUpdating } = useUpdateUser();
 
@@ -30,7 +45,7 @@ function SettingsScreen() {
 
     const handleImageSelected = (newAvatarUri) => {
         setUserAvatar(newAvatarUri);
-        updateUser({ avatar: newAvatarUri });
+        updateUser({ avatar: newAvatarUri}, user.id);
     };
 
     function updateUserNameHandler(enteredUserName) {
@@ -42,13 +57,14 @@ function SettingsScreen() {
     }
 
     function handleSubmit() {
+        console.log("Submitting user data:",  userName );
         if (!userName) return;
-        updateUser({ userName });
+        updateUser({ updateData: { userName }, userId: id });
     }
 
     return (
         <View style={styles.container}>
-            <View style={styles.center}>
+            <View>
                 <PicturePicker
                     userPicture={userAvatar}
                     onImageSelected={handleImageSelected}
@@ -112,16 +128,10 @@ export default SettingsScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // justifyContent: "center",
-        // alignItems: "center",
-        paddingTop: 20,
+        paddingTop: vs(20),
         justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "white",
-    },
-    center: {
-        // f/lex: 1,
-        alignItems: "center",
     },
     header: {
         color: Colors.primary1,
@@ -143,5 +153,5 @@ const styles = StyleSheet.create({
         width: 112,
         height: 114,
         borderRadius: 21,
-    },
+    }
 });

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { register as registerApi } from "../services/apiAuth";
+import { register as registerApi } from "../../services/apiAuth";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import Toast from "react-native-toast-message";

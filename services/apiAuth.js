@@ -44,15 +44,15 @@ export async function logout() {
 }
 
 export async function getUser() {
-    const { data: session } = await supabase.auth.getSession();
-
-    if (!session.session) return null;
-    const { data, error } = await supabase.auth.getUser();
+    const [{ data: session }, { data: userData }] = await Promise.all([
+        supabase.auth.getSession(),
+        supabase.auth.getUser()
+    ]);
 
     if (error) {
         throw new Error(error.message);
     }
-    return data?.user;
+    return userData?.user;
 }
 
 export async function updateGroup({ group }) {
@@ -74,75 +74,86 @@ export async function updateUserData({
     totalWeight,
     itemsSwapped,
 }) {
-    let updateData = {};
-    updateData.data = {
-        coins: newCoins,
-        totalWeight,
+    console.log("Starting updateUserData with:", {
+        newCoins,
         totalLitres,
         totalCarbon,
+        totalWeight,
         itemsSwapped,
+    });
+    let updateData = {
+        data: {
+            coins: newCoins,
+            totalWeight,
+            totalLitres,
+            totalCarbon,
+            itemsSwapped,
+        }
     };
-    console.log(updateData);
+    console.log("Full updatedata : ", updateData);
 
     const { data, error } = await supabase.auth.updateUser(updateData);
+    console.log("Update response data:", data);
     if (error) throw new Error(error.message);
 
     return data;
 }
 
 export async function updateUser({ userName, avatar }, userId) {
-    let updateData = {};
-    if (userName) updateData.data = { userName };
-    console.log(updateData);
-
-    const { data, error } = await supabase.auth.updateUser(updateData);
-    if (error) throw new Error(error.message);
-
-    if (!avatar) return data;
-
     try {
-        console.log("Avatar URI:", avatar);
+        let updateData = {};
+        let updatedUser = null;
 
-        const fileExt = avatar.split(".").pop();
-        const fileName = `user_${userId}/avatar.${fileExt}`;
-        console.log("filename: ", fileName);
+        // Handle username update
+        if (userName) {
+            updateData.data = { ...updateData.data, userName };
+            const { data, error } = await supabase.auth.updateUser(updateData);
+            if (error) throw new Error(error.message);
+            updatedUser = data.user;
+        }
 
-        let formData = new FormData();
-        formData.append("file", {
-            uri: avatar,
-            name: fileName,
-            type: `image/${fileExt}`,
-        });
-        console.log(formData);
+        // Handle avatar update if provided
+        if (avatar) {
+            console.log("Updating user avatar for user ID:", userId);
+            const fileExt = avatar.split(".").pop();
+            const fileName = `${userId}/avatar.${fileExt}`;
 
-        const { error: storageError } = await supabase.storage
-            .from("avatars")
-            .upload(fileName, formData, {
-                contentType: "image/jpg",
-                upsert: false,
+            let formData = new FormData();
+            formData.append("file", {
+                uri: avatar,
+                name: fileName,
+                type: `image/${fileExt}`,
             });
 
-        if (storageError) {
-            console.error("Storage Error:", storageError);
-            throw new Error(storageError.message);
+            // Upload new avatar
+            const { error: storageError } = await supabase.storage
+                .from("avatars")
+                .upload(fileName, formData, {
+                    contentType: "image/jpg",
+                    upsert: true, // Changed to true to allow updates
+                });
+
+            if (storageError) throw new Error(storageError.message);
+
+            // Get public URL
+            const { data: urlData } = supabase.storage
+                .from('avatars')
+                .getPublicUrl(fileName);
+
+            // Update user with new avatar URL
+            const { data: userWithAvatar, error: updateError } = await supabase.auth.updateUser({
+                data: { avatar: urlData.publicUrl }
+            });
+
+            if (updateError) throw new Error(updateError.message);
+            updatedUser = userWithAvatar.user;
         }
-
-        const { data: urlData } = supabase.storage
-            .from('avatars')
-            .getPublicUrl(fileName);
-
-        const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
-            data: { avatar: urlData.publicUrl }
-        });
-
-        if (error2) {
-            console.error("Update User Error:", error2);
-            throw new Error(error2.message);
-        }
-
+        console.log("Updated User:", updatedUser);
+        // Return the updated user in the same structure as getUser()
         return updatedUser;
-    } catch (generalError) {
-        console.error("General Error:", generalError);
-        throw generalError;
+        
+    } catch (error) {
+        console.error("Update error:", error);
+        throw error;
     }
 }

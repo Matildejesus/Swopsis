@@ -5,10 +5,11 @@ import ErrorMessage from "./ErrorMessage";
 import Logo from "./icons/Logo";
 
 
-function InputTemplateWidget({content, title, handleSearch, link, linkText, anotherLink, submitError}) {
+function InputTemplateWidget({content, title, handleSearch, link, linkText, anotherLink, submitError, page}) {
     return (
         <View style={styles.container}>
-            <Logo />
+            { page !== "postcode" &&
+            <Logo />}
             <View style={styles.contentContainer}>
                 {content()}
                 <View style={styles.loginError}>

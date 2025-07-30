@@ -1,7 +1,7 @@
 
 import { Image, StyleSheet, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { useUser } from "../../hooks/useUser";
+import { useUser } from "../../hooks/auth/useUser";
 
 function Logo() {
     const {user} = useUser();

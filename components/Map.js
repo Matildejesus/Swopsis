@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MapView, { Marker, Callout } from "react-native-maps";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { getGroups } from "../services/apiGroups";
 import PinIcon from "../components/icons/PinIcon";
 import Colors from "../constants/colors";
@@ -105,7 +105,7 @@ const Map = ({ apikey, postcode }) => {
             {region && !loading && (
                 <MapView
                     style={styles.map}
-                    region={region}
+                    initialRegion={region} 
                     onRegionChangeComplete={onRegionChangeComplete}
                     showsUserLocation={true} 
                 >

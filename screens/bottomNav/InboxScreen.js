@@ -10,11 +10,11 @@ import {
     Platform,
     SafeAreaView,
 } from "react-native";
-import Colors from "../constants/colors";
-import { useUser } from "../hooks/useUser";
+import Colors from "../../constants/colors";
+import { useUser } from "../../hooks/auth/useUser";
 import { useRoute } from "@react-navigation/native";
-import { getAllConversation, getMessagesForConvo, sendMessage } from "../services/apiChat";
-import InboxUserWidget from "../components/InboxUserWidget";
+import { getAllConversation, getMessagesForConvo, sendMessage } from "../../services/apiChat";
+import InboxUserWidget from "../../components/InboxUserWidget";
 
 function InboxScreen() {
     const { user } = useUser(); 

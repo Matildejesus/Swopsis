@@ -18,12 +18,14 @@ export async function addItemToWishlist({ userId, itemId }) {
 }
 
 export async function getWishlist({ userId }) {
+    console.log("Fetching wishlist for userId: ", userId);
     const { data, error } = await supabase
         .from("Wishlist")
         .select("*")
         .eq("userId", userId)
         .order("created_at", { ascending: false });
 
+    console.log("Wishlist data: ", data);
     if (error) {
         throw new Error(error.message);
     }
@@ -39,17 +41,4 @@ export async function removeWishlistItem({ id }) {
     if (error) {
         throw new Error(error.message);
     }
-}
-
-export async function getWishListItem({ userId, itemId }) {
-    const { data, error } = await supabase
-        .from("Wishlist")
-        .select("*")
-        .eq("userId", userId)
-        .eq("itemId", itemId);
-
-    if (error) {
-        throw new Error(error.message);
-    }
-    return data;
 }

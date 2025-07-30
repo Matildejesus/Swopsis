@@ -7,7 +7,7 @@ import ProfileItemDetails from "../components/ItemWidgets/ProfileItemDetails";
 import ProfileItemReviews from "../components/ItemWidgets/ProfileItemReviews";
 import ContactButton from "../components/ItemWidgets/ContactButton";
 import ReviewButton from "../components/ItemWidgets/ReviewButton";
-import { useUser } from "../hooks/useUser.js";
+import { useUser } from "../hooks/auth/useUser.js";
 import TrashIcon from "../components/icons/TrashIcon.js";
 import { createConversation, getConversation, sendMessage } from "../services/apiChat.js";
 import MessageModal from "../components/MessageModal.js";
@@ -97,7 +97,7 @@ function ProfileItemScreen() {
     return (
         <View style={styles.container}>
             {selectedOption === 0 ? (
-                <ProfileItemDetails itemData={itemData} user={user} owner={owner} />
+                <ProfileItemDetails itemData={itemData} />
             ) : (
                 <ProfileItemReviews user={user} />
             )}

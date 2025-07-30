@@ -1,9 +1,9 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useUser } from "../hooks/useUser";
 import { useEffect, useState } from "react";
 import { findUserById, findUserByIdforInbox } from "../services/apiAdmin";
 import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
+import { useUser } from "../hooks/auth/useUser";
 
 function InboxUserWidget({ thread }) {
     const { user } = useUser();
@@ -22,6 +22,7 @@ function InboxUserWidget({ thread }) {
 
             try {
                 const data = await findUserByIdforInbox({ id: receiverUser });
+                console.log(data.user.user_metadata.avatar);
                 setReceiverUserData(data.user.user_metadata);
             } catch (error) {
                 console.error("Error fetching data: ", error);
@@ -39,7 +40,7 @@ function InboxUserWidget({ thread }) {
             <TouchableOpacity onPress={() => navigation.navigate("Chat", { thread: thread, receiverUser: receiverUserData })}>
                 <View style={styles.container}>
                     <View style={styles.imageContainer}>
-                    <Image source={{ uri: receiverUserData.avatar }} />
+                        <Image source={{ uri: receiverUserData.avatar }} style={styles.imageContainer}/>
                     </View>
                     <Text style={styles.name}>{receiverUserData.userName}</Text>
                 </View>

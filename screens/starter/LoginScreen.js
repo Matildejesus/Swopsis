@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { useLogin } from "../../hooks/useLogin.js";
-
 import { validate } from "validate.js";
 import { useDebounce } from "use-debounce";
 import constraints from "../../constraints.js";
@@ -9,10 +7,11 @@ import InputField from "../../components/authentication/InputField.js";
 import InputTemplateWidget from "../../components/InputTemplateWidget.js";
 import { Text, TouchableOpacity } from "react-native";
 import Colors from "../../constants/colors.js";
+import { useLogin } from "../../hooks/auth/useLogin.js";
 
 function LoginScreen({ navigation }) {
 
-    const [email, setEmail] = useState("janedoe@gmail.com");
+    const [email, setEmail] = useState("steve@gmail.com");
     const [password, setPassword] = useState("Test12345");
     const [emailError, setEmailError] = useState(null);
     const [passwordError, setPasswordError] = useState(null);

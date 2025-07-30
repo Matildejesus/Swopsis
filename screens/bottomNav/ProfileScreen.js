@@ -1,44 +1,65 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { useDispatch } from "react-redux";
 import Colors from "../../constants/colors";
 import CoinIcon from "../../components/icons/CoinIcon";
 import SettingsIcon from "../../components/icons/SettingsIcon";
 import CalendarIcon from "../../components/icons/CalendarIcon";
 import ImpactIcon from "../../components/icons/ImpactIcon";
 import AddIcon from "../../components/icons/AddIcon";
-import { useUser } from "../../hooks/useUser";
+import { useUser } from "../../hooks/auth/useUser";
 import Line from "../../components/Line";
 import ProfileItemWidget from "../../components/ProfileItemWidget";
-import { getItems } from "../../services/apiItems";
 import AnimatedEnvelope from "../../components/AnimatedEnvelope";
-import { useFocusEffect } from "@react-navigation/native";
 import DashboardIcon from "../../components/icons/DashboardIcon";
 import { useGroupWardrobe } from "../../hooks/useGroupWardrobe";
 
-function ProfileScreen({ navigation }) {
-    const dispatch = useDispatch();
-    const { user } = useUser();
+function ProfileScreen() {
+    const { user: userData, isLoading: isUserLoading, error } = useUser();
     const { groupWardrobe, isLoading: isGroupLoading, isFetching } = useGroupWardrobe();
     const [ userItems, setUserItems ] = useState([]);
 
+    const [userName, setUserName] = useState("");
+    const [avatar, setAvatar] = useState(null);
+    const [coins, setCoins] = useState(0);
+    const [group, setGroup] = useState(null);
+    const [ambassador, setAmbassador] = useState(false);
+    const [email, setEmail] = useState("");
+
+    const user = userData?.user;
+
     useEffect(() => {
-        if (groupWardrobe && groupWardrobe.length > 0) {
-            // console.log("ProfileScreen - Group Wardrobe: ", groupWardrobe);
-            const items = groupWardrobe?.filter(item => item.userId === user?.id);
-            console.log("Filtered Items: ", items);
-            setUserItems(items);
+        if (user?.user_metadata) { // Only proceed if metadata exists
+            const metadata = user.user_metadata;
+
+            setUserName(metadata.userName);
+            setAvatar(metadata.avatar);
+            setCoins(metadata.coins);
+            setGroup(metadata.group);
+            setAmbassador(metadata.ambassador);
+            setEmail(user.email);
+            console.log("User Metadata: ", metadata);
         }
+    }, [user?.user_metadata]); // Only re-run when metadata changes
+
+    useEffect(() => {
+        if (!userData?.user?.id || !groupWardrobe) return;
+        // console.log("User ID: ", user);
+        const items = groupWardrobe.filter(item => item.userId === user.id);
+        setUserItems(items);
+
     }, [groupWardrobe, user]);
 
-    if (!user || !user.user_metadata || isGroupLoading) {
+    if (isUserLoading || isGroupLoading) {
         return <Text>Loading user data...</Text>;
     }
 
-    const { userName, avatar, coins, group } = user.user_metadata;
-    const email = user.email;
+    if (error) {
+        return <Text>{error}</Text>;
+    }
 
-    console.log("PROFILE IMAGE: ", avatar);
+    if (!user) {
+        return <Text>No user data found</Text>;
+    }
 
     return (
         <View style={styles.container}>
@@ -54,7 +75,7 @@ function ProfileScreen({ navigation }) {
                     <View style={styles.coins}>
                         <CoinIcon />
                         <Text style={styles.userName}>{coins}</Text>
-                        {user.user_metadata.ambassador && (
+                        {ambassador && (
                             <DashboardIcon
                                 text="Dashboard"
                                 location={{

@@ -14,7 +14,8 @@ export async function addItem({ item, itemDetails }) {
                 method: item.method,
                 available: true,
                 tradeCount: 0,
-                unavailableDates: item.unavailableDates
+                unavailableDates: item.unavailableDates,
+                group: item.group
             },
         ])
         .select();
@@ -73,7 +74,7 @@ export async function deleteItems({ itemId }) {
     if (error) {
         throw new Error(error.message);
     }
-    
+    return true;
 }
 
 export async function getItemById({ id }) {
@@ -89,24 +90,11 @@ export async function getItemById({ id }) {
 return data[0];
 
 }
-export async function getItemsInfo({ category, itemId }) {
-    console.log("Data", category, itemId);
-    const { data: item, error } = await supabase
-        .from(category)
-        .select("*")
-        .eq("itemId", itemId);
-
-    if (error) {
-        throw new Error(error.message);
-    }
-
-    return item[0];
-}
 
 export async function getGroupItems({ groupId }) {
     const groupMembers = await getFilteredGroupMember({ groupId });
     const memberIds = groupMembers.map((member) => member.userId);
-    // console.log("Member IDs: ", memberIds);
+    //  console.log("Member IDs: ", memberIds);
     const { data, error } = await supabase
         .from("Items")
         .select(`
@@ -116,7 +104,7 @@ export async function getGroupItems({ groupId }) {
              Accessories!itemId (*)`)
         .in('userId', memberIds)
         .order("created_at", { ascending: false });
-    console.log("Query results:", { data, error });
+    // console.log("Query results:", { data, error });
 
     // console.log("Group Members: ", groupMembers);
     // console.log("GROUP ITEMS: ", data);
@@ -124,32 +112,27 @@ export async function getGroupItems({ groupId }) {
         throw new Error(error.message);
     }
 
-    console.log("NOW TRANSFORMING DATA");
+    // console.log("NOW TRANSFORMING DATA");
     const transformedData = data.map(item => {
 
         const itemOwner = groupMembers.find(member => member.userId === item.userId);
-        console.log("Item Owner: ", itemOwner);
+        // console.log("Item Owner: ", itemOwner);
         const extraInfo = 
             item.category === 'Shoes' ? item.Shoes[0] :
             item.category === 'Clothing' ? item.Clothing[0] :
             item.category === 'Accessories' ? item.Accessories[0] :
             null;
-        console.log("Extra Info: ", extraInfo);
+        // console.log("Extra Info: ", extraInfo);
         
         return {
         ...item,
-        avatar: itemOwner?.avatar || '', // Now using the direct avatar field
+        userName: itemOwner?.userName || '',
+        avatar: itemOwner?.avatar || '',
         email: itemOwner?.email || '',
         extraInfo,
-        // Remove the relationship data we don't need in final output
         users: undefined,
-        // Shoes: undefined,
-        // Clothing: undefined,
-        // Accessories: undefined
         };
     });
-
-    console.log("Transformed Data: ", transformedData);
 
     return transformedData;
 }
@@ -161,6 +144,7 @@ export async function updateAvailability({ available, itemId }) {
         .eq("id", itemId)
         .select();
 
+    // console.log("Updateing availability: ", data);
     if (error) {
         throw new Error(error.message);
     }

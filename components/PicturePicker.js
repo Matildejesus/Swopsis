@@ -8,7 +8,7 @@ import PictureButton from "./icons/PictureButton";
 function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [avatar, setAvatar] = useState(userPicture);
-
+    
     const requestPermission = async () => {
         const { status } =
             await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -27,7 +27,7 @@ function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.All,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
@@ -83,14 +83,6 @@ function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
 export default PicturePicker;
 
 const styles = StyleSheet.create({
-    options: {
-        marginBottom: 8,
-    },
-    profileImage: {
-        width: 112,
-        height: 114,
-        borderRadius: 21,
-    },
     imageContainer: {
         width: 112,
         height: 114,

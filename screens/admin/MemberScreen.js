@@ -4,7 +4,7 @@ import RectangleButton from "../../components/RectangleButton";
 import MemberIcon from "../../components/icons/adminicons/MemberIcon";
 import CoinIcon from "../../components/icons/CoinIcon";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useUser } from "../../hooks/useUser";
+import { useUser } from "../../hooks/auth/useUser";
 import { getGroupMembers } from "../../services/apiAdmin";
 import MemberWidget from "../../components/MemberWidget";
 

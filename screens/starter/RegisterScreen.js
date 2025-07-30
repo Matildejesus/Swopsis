@@ -5,7 +5,7 @@ import { validate } from "validate.js";
 import { useDebounce } from "use-debounce";
 
 import constraints from "../../constraints.js";
-import { useRegister } from "../../hooks/useRegister.js";
+import { useRegister } from "../../hooks/auth/useRegister.js";
 import InputTemplateWidget from "../../components/InputTemplateWidget.js";
 import InputField from "../../components/authentication/InputField.js";
 

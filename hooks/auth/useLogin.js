@@ -1,10 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { login as loginApi } from "../services/apiAuth";
+import { login as loginApi } from "../../services/apiAuth";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
 import Toast from "react-native-root-toast";
-import { getGroupItems } from "../services/apiItems";
-import { setItem } from "../store/item";
 
 export function useLogin() {
     const navigation = useNavigation();
@@ -14,21 +11,10 @@ export function useLogin() {
         mutationFn: async ({ email, password }) => {
             const user = await loginApi({ email, password });
 
-
-            // if (user?.user?.user_metadata?.group) {
-            //     await queryClient.prefetchQuery({
-            //         queryKey: ['groupWardrobe', user.user.user_metadata.group],
-            //         queryFn: () => getGroupItems({ groupId: user.user.user_metadata.group }),
-            //         onSuccess: (wardrobeData) => {
-            //             dispatch(setItem(userData));
-            //         },
-            //     });
-            // }
             return user;
         },
         onSuccess: (user) => {
-            queryClient.setQueriesData(["user"], user);
-            queryClient.invalidateQueries(["user"]);
+            queryClient.setQueryData(["user"], user);
 
             if (user.user.user_metadata.group) {
                 navigation.reset({

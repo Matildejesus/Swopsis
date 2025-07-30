@@ -64,7 +64,7 @@ export async function getGroupMembers({ groupId}) {
 }
 
 export async function getFilteredGroupMember({ groupId }) {
-    console.log("GROUPID: ", groupId);
+    // console.log("GROUPID: ", groupId);
 
     const { data, error } = await supabaseAdmin.auth.admin.listUsers();
 
@@ -73,16 +73,20 @@ export async function getFilteredGroupMember({ groupId }) {
         throw error;
     }
 
-    const membersList = (data?.users || [])
+    // console.log("groupId in getFilteredGroupMember: ", groupId);
+    // console.log("All Users Data: ", data?.users);
+    // console.log("first user metadata: ", data?.users[0]);
+    const membersList = data.users
         .map((u) => ({
             userId: u.id,
-            groupId: u.user_metadata?.group ?? null, 
+            userName: u.user_metadata?.userName ?? null, 
             avatar: u.user_metadata?.avatar ?? null,
             email: u.email ?? null,
+            groupId: u.user_metadata?.group ?? null
         }))
         .filter((u) => u.groupId === groupId); 
 
-    console.log("Filtered Members:", membersList);
+    // console.log("Filtered Members:", membersList);
     return membersList;
 }
 
@@ -124,22 +128,4 @@ export async function updateUserImpactData({
 
     console.log("Data: ", data);
     return data;
-}
-
-export async function subscribeNewGroups({ setNotification }) {
-    const channel = supabase.channel("Groups")
-    .on(
-    'postgres_changes',
-    { event: 'INSERT', schema: 'public', table: 'Groups' },
-    (payload) => {
-        console.log('New Pending Group - ', payload);
-        setNotification(true); // Set notification state to show alert/icon
-        Alert.alert("New Group Request", `Group "${payload.new.name}" is pending approval.`);           
-    }
-    )
-    .subscribe();
-
-    return () => {
-        channel.unsubscribe();
-    };
 }

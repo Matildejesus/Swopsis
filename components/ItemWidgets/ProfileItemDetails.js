@@ -1,84 +1,97 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, useWindowDimensions } from "react-native";
 import HeartSwitch from "../HeartSwitch";
 import PinkNextArrow from "../icons/PinkNextArrow";
 import DescriptionDisplay from "../DescriptionDisplay";
-import { useUser } from "../../hooks/useUser";
+import { useUser } from "../../hooks/auth/useUser";
 import Colors from "../../constants/colors";
 import dateFormatting from "../dateFormatting";
-import { deleteItems, getItemsInfo } from "../../services/apiItems";
 import TrashIcon from "../icons/TrashIcon";
-import { getSubcategoryDetails } from "../../services/apiItemConvert";
 import { useNavigation } from "@react-navigation/native";
 import { updateUserData } from "../../services/apiAuth";
 import CalendarIcon from "../icons/CalendarIcon";
+import { useDeleteItem } from "../../hooks/items/useDeleteItem";
+import { useUpdateUser } from "../../hooks/auth/useUpdateUser";
+import { useUpdateUserMetadata } from "../../hooks/auth/useUpdateUserMetadata";
+import { getSubcategoryDetails } from "../../services/apiItemConvert";
+import { useQueryClient } from "@tanstack/react-query";
 
-function ProfileItemDetails({ itemData, user, owner }) {
+function ProfileItemDetails({ itemData }) {
     const { user: currentUser } = useUser();
+    const queryClient = useQueryClient();
 
-    const [userName, setUserName] = useState("");
-    const [avatar, setAvatar] = useState("");
-    const [email, setEmail] = useState("");
-    const [id, setId] = useState("");
+    const [isOwner, setIsOwner] = useState(false);
+    const [ownerData, setOwnerData] = useState({
+        userName: "",
+        avatar: "",
+        email: "",
+        id: ""
+    });
+    
+    const { deleteItem } = useDeleteItem();
+    const { updateUserMetadata } = useUpdateUserMetadata();
+
+    const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+    const imageHeight = screenHeight * 0.3;
+
+    const imageStyle = {
+        width: screenWidth,
+        height: imageHeight,
+    }
 
     const navigation = useNavigation();
 
-    useEffect(() => {
-        if (!user) user = currentUser; // Use authenticated user if none is passed
+     useEffect(() => {
+        // Check if the current user is the owner of the item
+        const owner = currentUser?.user?.id === itemData.userId;
+        setIsOwner(owner);
 
-        if (user) {
-            setUserName(user.user_metadata.userName);
-            setAvatar(user.user_metadata.avatar);
-            setEmail(user.email);
-            setId(user.id);
+        // Set owner data - if owner, use current user data, otherwise use itemData.user info
+        if (owner) {
+            setOwnerData({
+                userName: currentUser.user.user_metadata.userName,
+                avatar: currentUser.user.user_metadata.avatar,
+                email: currentUser.user.email,
+                id: currentUser.user.id
+            });
+        } else {
+            // Assuming itemData contains user information when the item belongs to someone else
+            setOwnerData({
+                userName: itemData.userName || "",
+                avatar: itemData.avatar || "",
+                email: itemData.email || "",
+                id: itemData.userId
+            });
         }
-    }, [user]);
+    }, [currentUser, itemData]);
 
-    const [itemDetails, setItemDetails] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
-
     const date = dateFormatting(itemData.created_at);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const details = await getItemsInfo({
-                    category: itemData.category,
-                    itemId: itemData.id,
-                });
-                setItemDetails(details);
-            } catch (error) {
-                console.error("Error fetching item details:", error);
-            }
-        };
-
-        fetchData();
-    }, [itemData]);
-
     const handleDeletion = async () => {
-        let { totalLitres, totalCarbon, totalWeight, itemsSwapped, coins } = currentUser.user_metadata;
+        let { totalLitres, totalCarbon, totalWeight, itemsSwapped, coins } = currentUser.user.user_metadata;
         try {
+            await deleteItem({ itemId: itemData.id });
             if (itemData.tradeCount == 0) {
                 itemsSwapped -= 1;
                 try {
                     const itemConversion = await getSubcategoryDetails({
-                        item: itemDetails.subcategory,
+                        item: itemData.extraInfo.subcategory,
                     });
                     totalLitres -= itemConversion.litres;
                     if (itemConversion.scalable === "true") {
-                        totalCarbon -= itemConversion.carbon * itemDetails.weight;
+                        totalCarbon -= itemConversion.carbon * itemData.extraInfo.weight;
                     } else {
                         totalCarbon -= itemConversion.carbon;
                     }
                     coins -= 1;
-                    totalWeight -= itemDetails.weight;
-                    await updateUserData({ newCoins: coins, totalLitres, totalCarbon, totalWeight, itemsSwapped});
+                    totalWeight -= itemData.extraInfo.weight;
+                    await updateUserMetadata({ newCoins: coins, totalLitres, totalCarbon, totalWeight, itemsSwapped});
                 } catch (error) {
                     console.error("Error fetching conversion details: ", error);
                 }
-
             }
-            await deleteItems({ itemId: itemData.id });
+            // await queryClient.refetchQueries(["user"], { cancelRefetch: false });
             navigation.reset({
             index: 0,
             routes: [
@@ -95,11 +108,13 @@ function ProfileItemDetails({ itemData, user, owner }) {
 
     return (
         <View style={styles.container}>
-            <Image source={{ uri: itemData.image }} style={styles.image} />
+            <View style={styles.imageStyle}>
+                <Image source={{ uri: itemData.image }} style={styles.image} />
+            </View>
             <View style={styles.header}>
                 <Text style={styles.itemName}>{itemData.title}</Text>
                 <View style={styles.icon}>
-                { itemData.method == "loan"  && itemData.userId == currentUser.id && 
+                { itemData.method == "loan"  && isOwner && 
                     (
                     <View style={styles.calendar}>
                         <CalendarIcon 
@@ -110,7 +125,7 @@ function ProfileItemDetails({ itemData, user, owner }) {
                     </View>
                     )
                 }
-                { !owner ? <HeartSwitch /> :  
+                { !isOwner ? <HeartSwitch /> :  
                     <TouchableOpacity onPress={handleDeletion}>
                         <TrashIcon width={26} height={33}/>
                     </TouchableOpacity>
@@ -121,11 +136,11 @@ function ProfileItemDetails({ itemData, user, owner }) {
             <View style={styles.row3}>
                 <Image
                     style={styles.avatar}
-                    source={avatar ? { uri: avatar } : null}
+                    source={ownerData.avatar ? { uri: ownerData.avatar } : null}
                 />
                 <View style={styles.column}>
-                    <Text style={styles.userName}>{userName}</Text>
-                    <Text style={styles.userEmail}>{email}</Text>
+                    <Text style={styles.userName}>{ownerData.userName}</Text>
+                    <Text style={styles.userEmail}>{ownerData.email}</Text>
                 </View>
                 <Text style={styles.text4}>{date}</Text>
             </View>
@@ -134,11 +149,11 @@ function ProfileItemDetails({ itemData, user, owner }) {
                 <PinkNextArrow onPress={() => setIsModalVisible(true)} />
             </View>
             <Text style={styles.text6}>{itemData.description}</Text>
-            {itemDetails && (
+            {itemData.extraInfo && (
                 <DescriptionDisplay
                     visible={isModalVisible}
                     onRequestClose={() => setIsModalVisible(false)}
-                    data={itemDetails}
+                    data={itemData.extraInfo}
                     category={itemData.category}
                 
                 />
@@ -154,7 +169,7 @@ const styles = StyleSheet.create({
         // justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "white",
-        padding: 16,
+        paddingHorizontal: 16,
     },
     avatar: {
         width: 40,
@@ -215,8 +230,8 @@ const styles = StyleSheet.create({
         width: 300,
     },
     image: {
-        width: 250,
-        height: 250,
+        width: 240,
+        height: 240,
         marginBottom: 20,
     },
     divider: {
@@ -231,5 +246,9 @@ const styles = StyleSheet.create({
     },
     calendar: {
         marginTop: 5,
-    }
+    },
+    imageContainer: {
+        height: 300,
+
+    },
 });

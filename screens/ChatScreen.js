@@ -1,26 +1,25 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import Title from "../../components/Title";
-import { getMessagesForConvo, sendMessage, updateDecision } from "../../services/apiChat";
-import InputField from "../../components/authentication/InputField";
-import Colors from "../../constants/colors";
-import MainButton from "../../components/MainButton";
-import { useUser } from "../../hooks/useUser";
-import { getItemById, getItemsInfo, updateAvailability, updateTradeCount, updateUnavailability } from "../../services/apiItems";
-import ChatItemWidget from "../../components/ChatItemWidget";
-import DecisionMakingWidget from "../../components/DecisionMakingWidget";
-import { findUserById, updateUserImpactData } from "../../services/apiAdmin";
-import { getSubcategoryDetails } from "../../services/apiItemConvert";
-import CalendarWidget from "../../components/CalendarWidget";
-import CalendarIcon from "../../components/icons/CalendarIcon";
+import Title from "../components/Title";
+import { getMessagesForConvo, sendMessage, updateDecision } from "../services/apiChat";
+import InputField from "../components/authentication/InputField";
+import Colors from "../constants/colors";
+import MainButton from "../components/MainButton";
+import { useUser } from "../hooks/auth/useUser";
+import { getItemById, getItemsInfo, updateAvailability, updateTradeCount, updateUnavailability } from "../services/apiItems";
+import ChatItemWidget from "../components/ChatItemWidget";
+import DecisionMakingWidget from "../components/DecisionMakingWidget";
+import { findUserById, updateUserImpactData } from "../services/apiAdmin";
+import CalendarWidget from "../components/CalendarWidget";
+import CalendarIcon from "../components/icons/CalendarIcon";
 
 function ChatScreen() {
     const route = useRoute();
     const { user } = useUser();
     const { thread, receiverUser } = route.params;
     const navigation = useNavigation();
-    const [messages, setMessages] = useState([]); // Initialize as empty array
+    const [messages, setMessages] = useState([]); 
     const [newMessage, setNewMessage] = useState("");
     const [selectedItem, setSelectedItem]= useState([]);
     const [ decision, setDecision ] = useState(null);
@@ -99,9 +98,9 @@ function ChatScreen() {
     
                     await updateDecision({ id: selectedItem.id, decision });
     
-                    if (!selectedItem.loanDates) {
-                        await updateAvailability({ available: false, itemId: selectedItem.itemId });
-                    }
+                    
+                    await updateAvailability({ available: false, itemId: selectedItem.itemId });
+                    
     
 
                     const item = await getItemById({ id: selectedItem.itemId });
@@ -111,7 +110,7 @@ function ChatScreen() {
     
                     const itemInfo = await getItemsInfo({ category: item.category, itemId: item.id });
                     console.log("items info: ", itemInfo);
-                    const categoryData = await getSubcategoryDetails({ item: itemInfo.subcategory });
+                    const categoryData = await get({ item: itemInfo.subcategory });
     
                     console.log("SENDERID: ", selectedItem.senderId);
     
@@ -239,8 +238,8 @@ function ChatScreen() {
                 <InputField
                     placeholder="Type your message here..."
                     inputStyle={styles.inputStyle}
-                    value={newMessage} // Fixed value prop
-                    onChangeText={setNewMessage} // Corrected event handler
+                    value={newMessage} 
+                    onChangeText={setNewMessage}
                     multiline={true}
                     numberOfLines={5}
                     maxLength={200}
@@ -277,7 +276,7 @@ const styles = StyleSheet.create({
         width: 100,
         height: 40,
         paddingVertical: 10,
-        marginLeft: 8,
+        marginBottom: 15,
     },
     buttonText: {
         fontFamily: "RalewayMedium",
@@ -289,21 +288,23 @@ const styles = StyleSheet.create({
         alignItems: "flex-end",
         marginBottom: 20,
         marginTop: 22,
+        width: 231
     }, 
     fieldContainer: {
-        borderColor: Colors.primary2,
-        borderWidth: 1,
-        borderRadius: 10, 
-        opacity: 0.76,
-        paddingVertical: 3,
-        marginLeft: 30,
-        paddingHorizontal: 13,
-        borderRadius: 10,
-        opacity: 0.76,
+        // borderColor: Colors.primary2,
+        // borderWidth: 1,
+        // borderRadius: 10, 
+        // opacity: 0.76,
+        // paddingVertical: 3,
+        // marginLeft: 30,
+        // paddingHorizontal: 13,
+        // borderRadius: 10,
+        // opacity: 0.76,
         minHeight: 40, 
         maxHeight: 120,
-        width: "60%", 
-        alignSelf: "center",
+        // width: "80%", 
+        // alignSelf: "center",
+        // height:"20%"
     },
     textContainer: {
         width: 231,
