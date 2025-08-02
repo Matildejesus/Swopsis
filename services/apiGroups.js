@@ -2,7 +2,9 @@ import supabase from "./supabase";
 
 export async function addGroup({ group }) {
     console.log("group data for data:", group);
-    const { data, error } = await supabase
+
+    try {
+        const { data, error } = await supabase
         .from("Groups")
         .insert([
             {
@@ -11,18 +13,58 @@ export async function addGroup({ group }) {
                 location: group.location,
                 rules: group.rules,
                 numberOfMem: group.numberOfMem,
-                avatar: group.avatar,
+                // avatar: group.avatar,
                 ambassadorId: group.ambassadorId,
                 status: group.status
             },
         ])
         .select();
 
-    if (error) {
+        console.log("Group created:", data[0].id);
+        const fileExt = group.avatar.split(".").pop();
+        const fileName = `${data[0].id}/groupAvatar.${fileExt}`;
+
+        let formData = new FormData();
+        formData.append("file", {
+            uri: group.avatar,
+            name: fileName,
+            type: `image/${fileExt}`,
+        });
+
+        const { error: uploadError } = await supabase.storage
+            .from("group-avatars")
+            .upload(fileName, formData, {
+                contentType: `image/${fileExt}`,
+                upsert: true,
+            });
+        
+        if (uploadError) {
+            throw new Error(uploadError.message);
+        }
+
+        const { data: urlData } = supabase.storage
+            .from('group-avatars')
+            .getPublicUrl(fileName);
+
+        console.log("Public URL for group avatar:", urlData.publicUrl);
+
+        const { data: groupWithAvatar, error: updateError } = await supabase
+            .from("Groups")
+            .update({ avatar: urlData.publicUrl })
+            .eq("id", data[0].id)
+            .select();
+
+        // console.log("THE ERROR: ", updateError);
+        if (updateError) {
+            throw new Error(updateError.message);
+        }
+        console.log("Group created with avatar:", groupWithAvatar);
+        return groupWithAvatar[0];
+    } catch (error) {   
+        console.error("Error creating group:", error);
         throw new Error(error.message);
     }
-    console.log("hehe", data[0]);
-    return data[0];
+
 }
 
 export async function getGroups() {

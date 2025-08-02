@@ -5,7 +5,7 @@ import { getWishlist } from "../services/apiWishlist";
 
 export function useGroupWardrobe() {
     const { user } = useUser();
-    console.log("User in useGroupWardrobe: ", user.user.id);
+    // console.log("User in useGroupWardrobe: ", user.user.id);
     const groupId = user?.user?.user_metadata?.group;
 
     const queryClient = useQueryClient();
@@ -24,7 +24,7 @@ export function useGroupWardrobe() {
         },
         enabled: !!groupId,
         onSuccess: (wardrobeData) => {
-            console.log("Wardrobe Data: ", wardrobeData);
+            // console.log("Wardrobe Data: ", wardrobeData);
             queryClient.setQueryData(["groupWardrobe"], wardrobeData); 
         }
     });

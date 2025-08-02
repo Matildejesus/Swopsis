@@ -70,15 +70,18 @@ function ProfileScreen() {
                     <Text style={styles.userEmail}>{email}</Text>
                     <View style={styles.coins}>
                         <CoinIcon />
-                        <Text style={styles.userName}>{coins}</Text>
+                        <Text style={styles.coinsText}>{coins}</Text>
+                    </View>
+                    <View style={{paddingLeft: 100}}>
                         {ambassador && (
-                            <DashboardIcon
-                                text="Dashboard"
-                                location={{
-                                    stack: "AdminApp",
-                                }}
-                            />
-                        )}
+                                <DashboardIcon
+                                    text="Dashboard"
+                                    location={{
+                                        stack: "AdminApp",
+                                    }}
+                                />
+                            )
+                        }
                     </View>
                 </View>
             </View>
@@ -143,6 +146,13 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "700",
         marginRight: 70,
+    },
+    coinsText: {
+        color: Colors.primary2,
+        fontFamily: "Raleway_700Bold",
+        fontSize: 20,
+        paddingRight: 20,
+        // marginLeft: 5,
     },
     userEmail: {
         color: Colors.primary2,

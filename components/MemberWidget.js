@@ -15,7 +15,7 @@ function MemberWidget({ user, requests }) {
     const [currentUser, setCurrentUser] = useState(null);
     const [group, setGroup] = useState();
     const [status, setStatus] = useState();
-    if (user?.app_metadata?.role == "super-admin") return;
+    if (user?.user?.app_metadata?.role == "super-admin") return;
 
     useEffect(() => {
         if (user) {

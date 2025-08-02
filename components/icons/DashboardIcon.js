@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
         // flex: 1,
         flexDirection: "row",
         gap: 4,
-        //paddingLeft: 70,
     },
     text: {
         paddingTop: 13,

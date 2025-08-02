@@ -15,6 +15,9 @@ export function useLogin() {
         },
         onSuccess: (user) => {
             queryClient.setQueryData(["user"], user);
+            
+            
+            console.log("User logged in:", user.user);
 
             if (user.user.user_metadata.group) {
                 navigation.reset({
@@ -25,7 +28,7 @@ export function useLogin() {
                         },
                     ],
                 });
-            } else if (user.user.app_metadata.role == "super-admin") {
+            } else if (user.user.app_metadata.role === "super-admin") {
                 navigation.reset({
                     index: 0,
                     routes: [

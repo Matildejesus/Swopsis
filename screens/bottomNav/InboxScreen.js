@@ -20,7 +20,7 @@ function InboxScreen() {
     const { user } = useUser(); 
     const route = useRoute();
     const conversationId = route.params?.conversationId ?? null;
-    const currentUserId = user ? user.id : "currentUser"; // Fallback if no user data
+    const currentUserId = user ? user.user.id : "currentUser"; // Fallback if no user data
     const [selectedThread, setSelectedThread] = useState(null);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
@@ -30,7 +30,7 @@ function InboxScreen() {
     useEffect(() => {
         const fetchConversations = async () => {
             try {
-                const conversations = await getAllConversation({ userId: user.id });
+                const conversations = await getAllConversation({ userId: user.user.id });
              //   console.log("Conversations: ", conversations);
                 setThreads(conversations);
 
@@ -46,7 +46,7 @@ function InboxScreen() {
     
         try {
             const sentMessage = await sendMessage({
-                senderId: user.id,
+                senderId: user.user.id,
                 text: newMessage.trim(),
                 itemId: null,
                 conversationId

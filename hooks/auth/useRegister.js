@@ -22,8 +22,8 @@ export function useRegister() {
         onError: (err) => {
             Toast.show({
                 type: 'error',
-                text1: 'Something has gone wrong ❌',
-                text2: err
+                text1: err.message,
+                text2: 'Something has gone wrong ❌',
             });
         },
     });

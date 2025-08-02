@@ -12,7 +12,7 @@ function InboxUserWidget({ thread }) {
     const navigation = useNavigation();
 
     useEffect(() => {
-        const receiverId = thread.userId_1 === user.id ? thread.userId_2 : thread.userId_1;
+        const receiverId = thread.userId_1 === user.user.id ? thread.userId_2 : thread.userId_1;
         setReceiverUser(receiverId);
     }, [thread, user]);
 

@@ -8,6 +8,7 @@ import BulletPointWidget from "../../components/BulletPointWidget";
 import { useUser } from "../../hooks/auth/useUser";
 import { addGroup } from "../../services/apiGroups";
 import InputField from "../../components/authentication/InputField";
+import Toast from "react-native-toast-message";
 
 function AmbassadorRequestScreen({ navigation }) {
     const [ groupName, setGroupName ] = useState();
@@ -17,7 +18,7 @@ function AmbassadorRequestScreen({ navigation }) {
     const [ pointsList, setPointsList ] = useState([]); 
     const [ requestError, setRequestError ] = useState(null);
     const user = useUser();
-    // console.log(user.id);
+    console.log(user.user.user.id);
 
     function addNameHandler(enteredName) {
         setGroupName(enteredName);
@@ -59,7 +60,7 @@ function AmbassadorRequestScreen({ navigation }) {
                 rules: pointsList,
                 numberOfMem: 1,
                 avatar: profileImage,
-                ambassadorId: user.user.id,
+                ambassadorId: user.user.user.id,
                 status: "pending"
             };
             await addGroup({ group: newGroup });
@@ -73,6 +74,11 @@ function AmbassadorRequestScreen({ navigation }) {
             });
         } catch (error) {
             console.error("Request not sent: ", error);
+            Toast.show({
+            type: 'error',
+            text1: 'Failed to create group',
+            text2: 'Please try again',
+        });
         }
     }
 

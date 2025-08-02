@@ -3,32 +3,28 @@ import FilledHeartIcon from "./icons/FilledHeartIcon";
 import { TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import { addItemToWishlist, removeWishlistItem } from "../services/apiWishlist";
+import { useToggleWishlist } from "../hooks/items/useToggleWishlist";
+import { useUser } from "../hooks/auth/useUser";
 
-function HeartSwitch({ isWishListItem }) {
+function HeartSwitch({ isWishListItem, itemId }) {
+    const { user } = useUser();
+    const { toggleWishlist } = useToggleWishlist();
+    const [ isFilled, setIsFilled ] = useState(isWishListItem);
 
-    // const handleToggle = async () => {
-    //   //  const newIsFilled = !isFilled;  // New state after toggle
-    //   //  setIsFilled(newIsFilled);
-
-    //     if (isFilled) {
-    //         // Remove from wishlist
-    //         console.log("adding new wishlist item");
-    //         await removeWishlistItem({ id: wishListId });
-    //         setIsFilled(false);
-            
-    //     } else {
-    //         // Add to wishlist 
-    //         console.log("removing wishlist item");
-    //         await addItemToWishlist({ userId, itemId });
-    //         setIsFilled(true);
-           
-    //     }
-
-    //     refreshWishlist();
-    // };
+    const handleToggle = async () => {
+      //  const newIsFilled = !isFilled;  // New state after toggle
+      //  setIsFilled(newIsFilled);
+        try {
+            await toggleWishlist({ userId: user.user.id, itemId, wishlist: isWishListItem});
+            setIsFilled(!isFilled);
+            console.log("Item is now in wishlist: ", !isFilled);
+        } catch (error) {
+            console.error("Wishlist toggle failed:", error);
+        }
+    };
 
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleToggle}>
             {!isWishListItem ? <HeartIcon /> : <FilledHeartIcon />}
         </TouchableOpacity>
     );

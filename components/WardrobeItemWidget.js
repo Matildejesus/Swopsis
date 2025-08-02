@@ -2,17 +2,26 @@ import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import Colors from "../constants/colors";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useUser } from "../hooks/auth/useUser";
 import HeartSwitch from "./HeartSwitch";
+import ContactButton from "./ItemWidgets/ContactButton";
 import ContactIcon from "./icons/ContactIcon";
 
 function WardrobeitemWidget({ item }) {
-    const [user, setUser] = useState();
     const navigation = useNavigation();
-    const [ owner, setOwner ] = useState(false);
     const [ date, setDate ] = useState();
 
-    console.log("ITEM: ", item.available);
+    // console.log("ITEM: ", item.available);
+    // console.log("ITEM: ", item.wishlist);
+
+     const handleContactPress = () => {
+
+        console.log("Attempting navigation to ProfileItem");
+        navigation.navigate("ProfileItem", { 
+            itemData: item,
+            showModal: true 
+        });
+    };
+
     return (
         <>
          {item.available && (
@@ -44,8 +53,9 @@ function WardrobeitemWidget({ item }) {
                     {item.title}
                 </Text>
                 <View style={styles.iconContainer}>
-                  <HeartSwitch isWishListItem={item.wishlist} />
-                    <ContactIcon width={26} height={26} />
+                    <HeartSwitch isWishListItem={item.wishlist} itemId={item.id}/>
+                    <ContactButton handleContact={handleContactPress} display="icon"/>
+
                 </View>
             </View>
          )}

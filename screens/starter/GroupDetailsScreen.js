@@ -29,7 +29,7 @@ function GroupDetailsScreen({ route }) {
                     const data = await findUserById({ id: group.ambassadorId });
                     setAmbassadorData(data);
                     console.log("Full Data: ", data);
-                    console.log("Data: ", data.user_metadata.userName);
+                    console.log("Data: ", data.user.user_metadata.userName);
                 } catch (error) {
                     console.error("Error fetching data: ", error);
                 }
@@ -49,9 +49,9 @@ function GroupDetailsScreen({ route }) {
             setErrorMessage("");
             setIsModalVisible(false);
             await updateGroup({ group: "Pending" });
-            console.log(user.id, group.id, message);
+            console.log(user.user.id, group.id, message);
             const data = await addJoinRequest({
-                userId: user.id,
+                userId: user.user.id,
                 groupId: group.id,
                 message,
             });
@@ -203,6 +203,8 @@ const styles = StyleSheet.create({
         alignItems: "flex-end",
         marginRight: 30,
         position: "absolute",
+        flexDirection: "row",
+        gap: 10,
         bottom: 30,
         right: 0,
     },

@@ -1,17 +1,19 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { RefreshControl, View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 
 import WardrobeitemWidget from "../../components/WardrobeItemWidget";
 import FilledHeartIcon from "../../components/icons/FilledHeartIcon";
 import HeartIcon from "../../components/icons/HeartIcon";
 import { useNavigation } from "@react-navigation/native";
 import { useGroupWardrobe } from "../../hooks/useGroupWardrobe";
+import { useUser } from "../../hooks/auth/useUser";
 
 function WardrobeScreen() {
     const [showWishlist, setShowWishlist] = useState(false);
     const navigation = useNavigation();
     const [ groupItems, setGroupItems] = useState([]);
     const { groupWardrobe, isLoading } = useGroupWardrobe();
+    const { user } = useUser();
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -26,14 +28,17 @@ function WardrobeScreen() {
     }, [showWishlist]);  
 
     useEffect(() => {
-        console.log("Group Wardrobe: ", groupWardrobe);
-        setGroupItems(groupWardrobe?.filter((item) => item.available === true) );
+        // console.log("Group Wardrobe: ", groupWardrobe);
+        const filteredWardrobe = groupWardrobe?.filter((item) => item.userId != user.user.id);
+        setGroupItems(filteredWardrobe?.filter((item) => item.available === true) );
+            // console.log("Filtered wardrobeee: ", filteredWardrobe);
        
     }, [groupWardrobe]);
 
     const toggleWishlist = useCallback(() => {
         setShowWishlist(prev => !prev);
     }, []); 
+
 
     const filteredItems = showWishlist
         ? groupItems.filter(item => item.wishlist)

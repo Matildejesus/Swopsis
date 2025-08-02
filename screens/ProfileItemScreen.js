@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { StyleSheet } from "react-native";
 import SegmentedBar from "../components/SegmentedBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import ProfileItemDetails from "../components/ItemWidgets/ProfileItemDetails";
 import ProfileItemReviews from "../components/ItemWidgets/ProfileItemReviews";
@@ -37,8 +37,14 @@ function ProfileItemScreen() {
 
 
     const route = useRoute();
-    const { itemData, owner, user } = route.params;
+    const { itemData, showModal, owner, user } = route.params;
     console.log("ITEM DATA: ", itemData);
+
+    useEffect(() => {
+        if (showModal) {
+            setIsModalVisible(true);
+        }
+    }, [showModal]);
 
     const toggleDate = (day) => {
         const { dateString } = day;
@@ -71,18 +77,18 @@ function ProfileItemScreen() {
         }
         try {
             setErrorMessage("");
-            let pendingConversation = await getConversation({ userId_1: itemData.userId, userId_2: currentUser.id});
+            let pendingConversation = await getConversation({ userId_1: itemData.userId, userId_2: currentUser.user.id});
             if (!pendingConversation) {
-                pendingConversation = await createConversation({user1: itemData.userId, user2: currentUser.id});
+                pendingConversation = await createConversation({user1: itemData.userId, user2: currentUser.user.id});
 
             }
             if (selectedDates) {
                 console.log("selectedDates: ", selectedDates);
-                await sendMessage({ senderId: currentUser.id, itemId: itemData.id, loanDates: selectedDates, conversationId: pendingConversation.id});
+                await sendMessage({ senderId: currentUser.user.id, itemId: itemData.id, loanDates: selectedDates, conversationId: pendingConversation.id});
             } else {
-                await sendMessage({ senderId: currentUser.id, itemId: itemData.id, conversationId: pendingConversation.id });
+                await sendMessage({ senderId: currentUser.user.id, itemId: itemData.id, conversationId: pendingConversation.id });
             }
-            await sendMessage({ senderId: currentUser.id, text: message, conversationId: pendingConversation.id});
+            await sendMessage({ senderId: currentUser.user.id, text: message, conversationId: pendingConversation.id});
           
             setIsModalVisible(false);
             navigation.navigate('InApp', {
@@ -114,7 +120,7 @@ function ProfileItemScreen() {
                 <>
                     <View style={styles.button}>
                         {selectedOption === 0 && itemData.available ? (
-                            <ContactButton handleContact={handleContact} />
+                            <ContactButton handleContact={handleContact} display="button"/>
                         ) : (
                             <ReviewButton />
                         )}

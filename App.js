@@ -359,13 +359,7 @@ export default function App() {
         Raleway_700Bold_Italic, 
     });
 
-    const [queryClient] = React.useState(() => new QueryClient({
-        defaultOptions: {
-            queries: {
-                staleTime: 60 * 1000,
-            },
-        },
-    }));
+    const queryClient = new QueryClient();
 
     React.useEffect(() => {
     if (fontError) {
@@ -387,8 +381,8 @@ export default function App() {
                 <QueryClientProvider client={queryClient}>
                     <PaperProvider>
                         <StatusBar />
-                        <SubscriptionProvider>
-                        <AppContent />
+                        <SubscriptionProvider >
+                            <AppContent />
                         </SubscriptionProvider>
                         <Toast />
                     </PaperProvider>
@@ -402,7 +396,7 @@ function AppContent( ) {
     const { user } = useUser(); 
     const groupId = user?.user?.user_metadata?.group;
     
-    useItemSubscription(groupId);
+    // useItemSubscription(groupId);
 
     return (
         <NavigationContainer>

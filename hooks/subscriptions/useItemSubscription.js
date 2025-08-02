@@ -20,9 +20,10 @@ export function useItemSubscription(groupId) {
             filter: `group=eq.${groupId}`
             },
             (payload) => {
-            queryClient.setQueryData(['groupWardrobe'], (old) => 
+            queryClient.setQueryData(["groupWardrobe", groupId], (old) => 
                 [...(old || []), {...payload.new, wishlist: false }]
             );
+            console.log("New item added:", payload.new);
             }
         )
         .on(
@@ -35,7 +36,7 @@ export function useItemSubscription(groupId) {
             columns: ['available', 'unavailableDates']
             },
             (payload) => {
-            queryClient.setQueryData(['groupWardrobe'], (old) =>
+            queryClient.setQueryData(["groupWardrobe", groupId], (old) =>
                 old.map(item => 
                 item.id === payload.new.id ? { ...item, ...payload.new } : item
                 )
@@ -51,13 +52,13 @@ export function useItemSubscription(groupId) {
             filter: `group=eq.${groupId}`
             },
             (payload) => {
-            queryClient.setQueryData(['groupWardrobe'], (old) =>
+            queryClient.setQueryData(["groupWardrobe", groupId], (old) =>
                 old.filter(item => item.id !== payload.old.id)
             );
             }
         )
         .subscribe();
 
-        return () => supabase.removeChannel(channel);
+        // return () => supabase.removeChannel(channel);
     }, [groupId, queryClient]);
 }

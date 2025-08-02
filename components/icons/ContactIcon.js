@@ -3,7 +3,7 @@ import Svg, { G, Path } from "react-native-svg";
 
 function ContactIcon({ width, height }) {
     return (
-        <TouchableOpacity onPress>
+        <TouchableOpacity>
             <Svg
                 viewBox="0 0 20 22"
                 fill="none"

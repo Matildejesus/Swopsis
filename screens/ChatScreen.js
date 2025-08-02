@@ -63,7 +63,7 @@ function ChatScreen() {
     
         const newMessageObj = {
             id: Math.random().toString(),
-            senderId: user.id,
+            senderId: user.user.id,
             text: newMessage,
             conversationId: thread.id,
             createdAt: new Date().toISOString(), 
@@ -75,7 +75,7 @@ function ChatScreen() {
     
         try {
             await sendMessage({
-                senderId: user.id,
+                senderId: user.user.id,
                 text: newMessage,
                 conversationId: thread.id,
             });
@@ -177,7 +177,7 @@ function ChatScreen() {
                     console.log("Rendering item:", item);
                     return (
                     item.text ? (
-                        <View style={item.senderId === user.id
+                        <View style={item.senderId === user.user.id
                             ? styles.textContainer 
                             : styles.receiverTextContainer 
                         }>
@@ -185,7 +185,7 @@ function ChatScreen() {
                         </View>
                     ) : (
                         <>
-                        {item.senderId != user.id && !item.decision && 
+                        {item.senderId != user.user.id && !item.decision && 
                                 ( <DecisionMakingWidget 
                                     accept={()=> { 
                                         setDecision("accept");  
@@ -207,7 +207,7 @@ function ChatScreen() {
                            </View> )
                             }
 
-                             <View style={item.senderId === user.id
+                             <View style={item.senderId === user.user.id
                                 ? styles.imageContainer 
                                 : styles.receiverImageContainer 
                             }>

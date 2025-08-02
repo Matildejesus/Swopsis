@@ -2,15 +2,23 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Colors from "../../constants/colors";
 import ContactIcon from "../icons/ContactIcon";
 
-function ContactButton({ handleContact }) {
+function ContactButton({ handleContact, display }) {
     console.log("handleContact prop:", handleContact);
 
     return (
         <TouchableOpacity onPress={handleContact}>
-            <View style={styles.button}>
-                <Text style={styles.label}>CONTACT</Text>
-                <ContactIcon />
-            </View>
+           
+                {display === "button" ? (
+                     <View style={styles.button}>
+                    <Text style={styles.label}>CONTACT</Text>
+                    <ContactIcon />
+                    </View>
+                ): (
+                    <View>
+                    <ContactIcon width={26} height={26} />
+                    </View>
+                )}
+               
         </TouchableOpacity>
     );
 }

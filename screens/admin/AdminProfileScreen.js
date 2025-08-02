@@ -38,16 +38,16 @@ function AdminProfileScreen({ navigation }) {
     useEffect(() => {
         if (!user) return;
 
-        if (user.app_metadata.role == "super-admin") {
+        if (user.user.app_metadata.role == "super-admin") {
             console.log("USER: ", user);
             setUsername("Super Admin");
         } else {
-            setUsername(user.user_metadata.userName);
-            setAvatar(user.user_metadata.avatar);
-            setGroup(user.user_metadata.group);
-            setAmbassador(user.user_metadata.ambassador);
+            setUsername(user.user.user_metadata.userName);
+            setAvatar(user.user.user_metadata.avatar);
+            setGroup(user.user.user_metadata.group);
+            setAmbassador(user.user.user_metadata.ambassador);
         }
-        setEmail(user.email);
+        setEmail(user.user.email);
 
         if (group) {
             const fetchRequests = async () => {
@@ -58,7 +58,7 @@ function AdminProfileScreen({ navigation }) {
                         });
                     const fetchedMembers = await getGroupMembers({
                         groupId: group,
-                        id: user.id,
+                        id: user.user.id,
                     });
                     setAcceptedReq(accepted);
                     setRejectedReq(rejected);

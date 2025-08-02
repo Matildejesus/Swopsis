@@ -125,7 +125,7 @@ function ProfileItemDetails({ itemData }) {
                     </View>
                     )
                 }
-                { !isOwner ? <HeartSwitch /> :  
+                { !isOwner ? <HeartSwitch sWishListItem={itemData.wishlist} itemId={itemData.id}/> :  
                     <TouchableOpacity onPress={handleDeletion}>
                         <TrashIcon width={26} height={33}/>
                     </TouchableOpacity>

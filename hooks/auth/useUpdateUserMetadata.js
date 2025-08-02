@@ -5,7 +5,7 @@ export function useUpdateUserMetadata() {
     const queryClient = useQueryClient();
 
     const { mutate: updateUserMetadata, isLoading: isUpdating } = useMutation({
-    mutationFn: async ( updateData ) => {
+        mutationFn: async ( updateData ) => {
             const data = await updateUserDataApi(updateData);
             console.log("Updating user metadata with data:", data);
             return data;
