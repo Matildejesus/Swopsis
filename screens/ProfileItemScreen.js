@@ -8,10 +8,10 @@ import ProfileItemReviews from "../components/ItemWidgets/ProfileItemReviews";
 import ContactButton from "../components/ItemWidgets/ContactButton";
 import ReviewButton from "../components/ItemWidgets/ReviewButton";
 import { useUser } from "../hooks/auth/useUser.js";
-import TrashIcon from "../components/icons/TrashIcon.js";
-import { createConversation, getConversation, sendMessage } from "../services/apiChat.js";
+import { sendMessage } from "../services/apiChat.js";
 import MessageModal from "../components/MessageModal.js";
 import Colors from "../constants/colors.js";
+import { useConversations, useCreateConversation } from "../random.js";
 
 function ProfileItemScreen() {
     const [selectedOption, setSelectedOption] = useState(0);
@@ -21,6 +21,8 @@ function ProfileItemScreen() {
     const [errorMessage, setErrorMessage] = useState("");
     const [conversation, setConversation] = useState();
     const [selectedDates, setSelectedDates] = useState({});
+    const {addConversation, isLoading } = useCreateConversation();
+    const { conversations } = useConversations();
 
     const navigation = useNavigation();
     const handleChange = (index) => {
@@ -77,9 +79,13 @@ function ProfileItemScreen() {
         }
         try {
             setErrorMessage("");
-            let pendingConversation = await getConversation({ userId_1: itemData.userId, userId_2: currentUser.user.id});
+            let pendingConversation = conversations.find(
+                (conv) => conv.userId_1 === itemData.userId && conv.userId_2 === currentUser.user.id
+            );
+            // let pendingConversation = await getConversation({ userId_1: itemData.userId, userId_2: currentUser.user.id});
             if (!pendingConversation) {
-                pendingConversation = await createConversation({user1: itemData.userId, user2: currentUser.user.id});
+                // pendingConversation = await createConversation({user1: itemData.userId, user2: currentUser.user.id});
+                pendingConversation = addConversation({ user1: itemData.userId, user2: currentUser.user.id });
 
             }
             if (selectedDates) {

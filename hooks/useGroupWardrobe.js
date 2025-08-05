@@ -2,19 +2,22 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getGroupItems } from "../services/apiItems";
 import { useUser } from "./auth/useUser";
 import { getWishlist } from "../services/apiWishlist";
+import { use } from "react";
+import { useMembers } from "./useMembers";
 
 export function useGroupWardrobe() {
     const { user } = useUser();
     // console.log("User in useGroupWardrobe: ", user.user.id);
     const groupId = user?.user?.user_metadata?.group;
 
+    const {members: groupMembers } = useMembers(groupId);
     const queryClient = useQueryClient();
 
     const {data: groupWardrobe, isLoading, isFetching } = useQuery({
         queryKey: ["groupWardrobe", groupId],
         queryFn: async () =>  {
             const [items, wishlist] = await Promise.all([
-                getGroupItems({ groupId }),
+                getGroupItems({ groupId, groupMembers }),
                 getWishlist({ userId: user.user.id })
             ]);
             return items.map(item => ({

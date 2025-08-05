@@ -7,56 +7,36 @@ import InputField from "../components/authentication/InputField";
 import Colors from "../constants/colors";
 import MainButton from "../components/MainButton";
 import { useUser } from "../hooks/auth/useUser";
-import { getItemById, getItemsInfo, updateAvailability, updateTradeCount, updateUnavailability } from "../services/apiItems";
+import { getItemsInfo, updateAvailability, updateTradeCount, updateUnavailability } from "../services/apiItems";
 import ChatItemWidget from "../components/ChatItemWidget";
 import DecisionMakingWidget from "../components/DecisionMakingWidget";
 import { findUserById, updateUserImpactData } from "../services/apiAdmin";
-import CalendarWidget from "../components/CalendarWidget";
 import CalendarIcon from "../components/icons/CalendarIcon";
+import { useMessages } from "../hooks/conversations/useMessage";
+import { useGroupWardrobe } from "../hooks/useGroupWardrobe";
 
 function ChatScreen() {
     const route = useRoute();
     const { user } = useUser();
-    const { thread, receiverUser } = route.params;
+    const { thread } = route.params;
     const navigation = useNavigation();
-    const [messages, setMessages] = useState([]); 
     const [newMessage, setNewMessage] = useState("");
+    const [message, setMessages] = useState([]);
     const [selectedItem, setSelectedItem]= useState([]);
     const [ decision, setDecision ] = useState(null);
-    const [decisionDisplay, setDecisionDisplay] = useState(false);
+    const { groupWardrobe } = useGroupWardrobe();
 
-    console.log("RECEIVER USER: ", receiverUser);
+    const { messages, isSending } = useMessages({conversationId: thread.id});
 
     useLayoutEffect(() => {
-        if (receiverUser?.userName) {
+        if (thread?.userName) {
             navigation.setOptions({
                 headerTitle: (props) => (
-                    <Title title={receiverUser.userName} goBack={true} avatar={receiverUser.avatar} {...props}  />
+                    <Title title={thread.userName} goBack={true} avatar={thread.avatar} {...props}  />
                 ),
             });
         }
-    }, [navigation, receiverUser]);
-
-    useEffect(() => {
-        let isMounted = true; 
-
-        const fetchMessages = async () => {
-            try {
-                const fetchedMessages = await getMessagesForConvo({ conversationId: thread.id });
-                if (isMounted) {
-                    setMessages(fetchedMessages);
-                }
-            } catch (error) {
-                console.error("Error fetching messages: ", error.message);
-            }
-        };
-
-        fetchMessages();
-
-        return () => {
-            isMounted = false; 
-        };
-    }, [thread.id]);
+    }, [navigation, thread]);
 
     const handleText = async () => {
         if (!newMessage.trim()) return; 
@@ -101,9 +81,7 @@ function ChatScreen() {
                     
                     await updateAvailability({ available: false, itemId: selectedItem.itemId });
                     
-    
-
-                    const item = await getItemById({ id: selectedItem.itemId });
+                    const item = groupWardrobe.find(item => item.id === selectedItem.itemId);
                     console.log("get item: ", item);
                     const newCount = await updateTradeCount({ id: item.id, count: item.tradeCount});
                     console.log("trade count", newCount);
@@ -128,7 +106,7 @@ function ChatScreen() {
                     await updateUnavailability({ id: selectedItem.itemId, dates: mergedDates });
     
                     const receiverUser = await findUserById({ id: selectedItem.senderId });
-                    console.log("RECEIVER USER: ", receiverUser.user_metadata);
+                    // console.log("RECEIVER USER: ", receiverUser.user_metadata);
     
                     const updatedCoins = receiverUser.user_metadata.coins - 1;
                     const updatedLitres = receiverUser.user_metadata.totalLitres + categoryData.litres;

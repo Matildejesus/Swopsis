@@ -2,10 +2,7 @@ import { Text, View, StyleSheet, FlatList } from "react-native";
 import SideBarNav from "../../components/SideBarNav";
 import RectangleButton from "../../components/RectangleButton";
 import MemberIcon from "../../components/icons/adminicons/MemberIcon";
-import CoinIcon from "../../components/icons/CoinIcon";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useUser } from "../../hooks/auth/useUser";
-import { getGroupMembers } from "../../services/apiAdmin";
 import MemberWidget from "../../components/MemberWidget";
 
 function MemberScreen() {

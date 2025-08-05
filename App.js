@@ -79,8 +79,6 @@ import { Raleway_400Regular_Italic } from '@expo-google-fonts/raleway/400Regular
 import { Raleway_500Medium_Italic } from '@expo-google-fonts/raleway/500Medium_Italic';
 import { Raleway_600SemiBold_Italic } from '@expo-google-fonts/raleway/600SemiBold_Italic';
 import { Raleway_700Bold_Italic } from '@expo-google-fonts/raleway/700Bold_Italic';
-import { useItemSubscription } from "./hooks/subscriptions/useItemSubscription.js";
-import { useEffect } from "react";
 import { useUser } from "./hooks/auth/useUser.js";
 import { SubscriptionProvider } from "./SubscriptionProvider.js";
 
@@ -167,7 +165,6 @@ function BottomTabNavigator() {
                         return (
                             <View
                                 style={{
-                                    // position: "absolute",
                                     bottom: 40,
                                     alignItems: "center",
                                     alignSelf: "center",
@@ -395,8 +392,6 @@ export default function App() {
 function AppContent( ) {
     const { user } = useUser(); 
     const groupId = user?.user?.user_metadata?.group;
-    
-    // useItemSubscription(groupId);
 
     return (
         <NavigationContainer>

@@ -1,4 +1,3 @@
-import { Alert } from "react-native";
 import supabase, { supabaseAdmin } from "./supabase";
 
 export async function findUserByEmail(email) {
@@ -64,7 +63,6 @@ export async function getGroupMembers({ groupId}) {
 }
 
 export async function getFilteredGroupMember({ groupId }) {
-    // console.log("GROUPID: ", groupId);
 
     const { data, error } = await supabaseAdmin.auth.admin.listUsers();
 
@@ -73,9 +71,6 @@ export async function getFilteredGroupMember({ groupId }) {
         throw error;
     }
 
-    // console.log("groupId in getFilteredGroupMember: ", groupId);
-    // console.log("All Users Data: ", data?.users);
-    // console.log("first user metadata: ", data?.users[0]);
     const membersList = data.users
         .map((u) => ({
             userId: u.id,

@@ -1,44 +1,22 @@
-import { useEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Text, View } from "react-native";
-import { getItemById } from "../services/apiItems";
+import { View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { findUserById } from "../services/apiAdmin";
+import { useGroupWardrobe } from "../hooks/useGroupWardrobe";
+import { useUser } from "../hooks/auth/useUser";
 
-function ChatItemWidget({ itemId, currentUser }) {
-    const [ item, setItem ] = useState();
+function ChatItemWidget({ itemId }) {
     const navigation = useNavigation();
-    const [ owner, setOwner ] = useState();
-    const [ user, setUser ] = useState();
+    const { user } = useUser();
+    const { groupWardrobe } = useGroupWardrobe();
 
-    console.log(itemId);
-    useEffect(() => {
-        const fetchItem = async () => {
-            try {
-                const fetchedItem = await getItemById({ id: itemId });
-                setItem(fetchedItem);
-                console.log(fetchedItem);
-                if (currentUser.id == fetchedItem.userId) {
-                    setOwner(true);
-                    setUser(currentUser);
-                } else {
-                    setOwner(false);
-                    const ownerOfItem = await findUserById({ id:fetchedItem.userId });
-                    setUser(ownerOfItem);
-                    
-                }
-            } catch (error) {
-                console.error("Error fetching messages: ", error.message);
-            }
-        };
-
-        fetchItem();
-    }, [itemId]);
+    const item = groupWardrobe.find(item => item.id === itemId);
+    const isOwner = user.user.id === item.userId ? true : false;
+    const { userName, avatar, email, userId } = item || {};
+    const itemOwner = { userName, avatar, email, userId };
 
     return (
         item && (
-            // itemData, owner, user 
-            <TouchableOpacity onPress={() => navigation.navigate("ProfileItem", { itemData: item, owner, user })}>
+            <TouchableOpacity onPress={() => navigation.navigate("ProfileItem", { itemData: item, isOwner, itemOwner })}>
                 <View style={styles.container}>
                     <Image source={{ uri: item.image }} style={styles.image} />
                 </View>

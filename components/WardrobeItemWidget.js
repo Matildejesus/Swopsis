@@ -5,15 +5,17 @@ import { useNavigation } from "@react-navigation/native";
 import HeartSwitch from "./HeartSwitch";
 import ContactButton from "./ItemWidgets/ContactButton";
 import ContactIcon from "./icons/ContactIcon";
+import dateFormatting from "./dateFormatting";
 
 function WardrobeitemWidget({ item }) {
     const navigation = useNavigation();
-    const [ date, setDate ] = useState();
 
     // console.log("ITEM: ", item.available);
     // console.log("ITEM: ", item.wishlist);
 
-     const handleContactPress = () => {
+    const date = dateFormatting(item.created_at);
+
+    const handleContactPress = () => {
 
         console.log("Attempting navigation to ProfileItem");
         navigation.navigate("ProfileItem", { 

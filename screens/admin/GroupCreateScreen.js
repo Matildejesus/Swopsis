@@ -1,14 +1,5 @@
-import React, { useState } from "react";
-import {
-    View,
-    Text,
-    TextInput,
-    Button,
-    Alert,
-    StyleSheet,
-    ScrollView,
-} from "react-native";
-// import { createGroup } from "../../services/groupService";
+import { useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import Colors from "../../constants/colors";
 import { addGroup } from "../../services/apiGroups";
 import { updateUserMetadata } from "../../services/apiAdmin";

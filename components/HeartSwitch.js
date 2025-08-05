@@ -1,8 +1,7 @@
 import HeartIcon from "./icons/HeartIcon";
 import FilledHeartIcon from "./icons/FilledHeartIcon";
 import { TouchableOpacity } from "react-native";
-import { useEffect, useState } from "react";
-import { addItemToWishlist, removeWishlistItem } from "../services/apiWishlist";
+import { useState } from "react";
 import { useToggleWishlist } from "../hooks/items/useToggleWishlist";
 import { useUser } from "../hooks/auth/useUser";
 

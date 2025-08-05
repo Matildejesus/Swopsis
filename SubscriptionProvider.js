@@ -1,6 +1,6 @@
 
 import { useUser } from './hooks/auth/useUser';
-import { useItemSubscription } from './hooks/subscriptions/useItemSubscription';
+import { useItemSubscription } from './hooks/items/useItemSubscription';
 
 export function SubscriptionProvider({ children }) {
     const { user } = useUser();

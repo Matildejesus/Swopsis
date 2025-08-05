@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteItems as deleteItemApi } from "../../services/apiItems";
 import { toggleWishlist as toggleWishlistApi } from "../../services/apiWishlist";
 import Toast from "react-native-toast-message";
 

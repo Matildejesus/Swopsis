@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import MessageModal from "../../components/MessageModal";
 import { addJoinRequest } from "../../services/apiJoinRequests";
 import { useUser } from "../../hooks/auth/useUser";
-import { findUserByEmail, findUserById, updateUserMetadata } from "../../services/apiAdmin";
+import { findUserById, updateUserMetadata } from "../../services/apiAdmin";
 import { updateStatus } from "../../services/apiGroups";
 import MainButton from "../../components/MainButton";
 

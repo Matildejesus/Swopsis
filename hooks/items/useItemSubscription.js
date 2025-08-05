@@ -10,7 +10,7 @@ export function useItemSubscription(groupId) {
         console.log("Setting up item subscription for group:", groupId);
         
         const channel = supabase
-        .channel('smart-items-subscription')
+        .channel(`group-items-${groupId}`)
         .on(
             'postgres_changes',
             {
@@ -20,6 +20,7 @@ export function useItemSubscription(groupId) {
             filter: `group=eq.${groupId}`
             },
             (payload) => {
+            console.log('Received new item:', payload);
             queryClient.setQueryData(["groupWardrobe", groupId], (old) => 
                 [...(old || []), {...payload.new, wishlist: false }]
             );
@@ -59,6 +60,9 @@ export function useItemSubscription(groupId) {
         )
         .subscribe();
 
-        // return () => supabase.removeChannel(channel);
+        return () => {
+            console.log("Unsubscribing from channel");
+            supabase.removeChannel(channel);
+        };
     }, [groupId, queryClient]);
 }

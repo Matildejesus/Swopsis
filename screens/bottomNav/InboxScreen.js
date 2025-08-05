@@ -1,82 +1,20 @@
-import React, { useState, useEffect } from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-    FlatList,
-    TouchableOpacity,
-    TextInput,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-} from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import Colors from "../../constants/colors";
 import { useUser } from "../../hooks/auth/useUser";
 import { useRoute } from "@react-navigation/native";
-import { getAllConversation, getMessagesForConvo, sendMessage } from "../../services/apiChat";
 import InboxUserWidget from "../../components/InboxUserWidget";
+import { useConversations } from "../../hooks/conversations/useConversations";
 
 function InboxScreen() {
     const { user } = useUser(); 
     const route = useRoute();
-    const conversationId = route.params?.conversationId ?? null;
-    const currentUserId = user ? user.user.id : "currentUser"; // Fallback if no user data
-    const [selectedThread, setSelectedThread] = useState(null);
-    const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessage] = useState("");
-
-    const [ threads, setThreads ] = useState([]);
-
-    useEffect(() => {
-        const fetchConversations = async () => {
-            try {
-                const conversations = await getAllConversation({ userId: user.user.id });
-             //   console.log("Conversations: ", conversations);
-                setThreads(conversations);
-
-            } catch (error) {
-                console.error("Error fetching conversations:", error.message);
-            }
-        };
-        fetchConversations();
-    }, [user, conversationId]);
-    
-    const handleSend = async () => {
-        if (!newMessage.trim()) return;
-    
-        try {
-            const sentMessage = await sendMessage({
-                senderId: user.user.id,
-                text: newMessage.trim(),
-                itemId: null,
-                conversationId
-            });
-    
-            setMessages((prev) => [...prev, sentMessage]); // Append new message
-            setNewMessage("");
-        } catch (error) {
-            console.error("Error sending message:", error.message);
-        }
-    };
-
-    const renderMessageItem = ({ item }) => {
-        const isMe = item.senderId === currentUserId;
-        return (
-            <View
-                style={[
-                    styles.messageItem,
-                    isMe ? styles.myMessage : styles.theirMessage,
-                ]}
-            >
-                <Text style={styles.messageText}>{item.text}</Text>
-            </View>
-        );
-    };
+    const { conversations, isLoading } = useConversations();
+    console.log("Conversations in InboxScreen: ", conversations);
 
     return (
             <View style={styles.container}>
                 <FlatList
-                data={threads}
+                data={conversations}
                 renderItem={({ item }) => (
                     <InboxUserWidget thread={item}/>
                 )}
@@ -94,8 +32,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "white",
-       // alignItems: "center",
-       paddingLeft: 40,
+        paddingLeft: 40,
     },
     title: {
         fontSize: 20,

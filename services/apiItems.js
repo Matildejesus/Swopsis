@@ -1,3 +1,4 @@
+import { useMembers } from "../hooks/useMembers";
 import { getFilteredGroupMember } from "./apiAdmin";
 import supabase from "./supabase";
 
@@ -8,7 +9,7 @@ export async function addItem({ item, itemDetails }) {
             {
                 userId: item.userId,
                 category: item.category,
-                image: item.image,
+                // image: item.image,
                 title: item.title,
                 description: item.description,
                 method: item.method,
@@ -22,6 +23,40 @@ export async function addItem({ item, itemDetails }) {
 
     const itemId = insertedItem[0].id;
     const chosenCategory = item.category;
+    const fileExt = item.image.split(".").pop();
+    const fileName = `${insertedItem[0].userId}/${itemId}.${fileExt}`;
+
+    let formData = new FormData();
+    formData.append("file", {
+        uri: item.image,
+        name: fileName,
+        type: `image/${fileExt}`,
+    });
+
+    const { error: uploadError } = await supabase.storage
+        .from("item-images")
+        .upload(fileName, formData, {
+            contentType: `image/${fileExt}`,
+            upsert: true,
+        });
+
+    if (uploadError) {
+        throw new Error(uploadError.message);
+    }
+    
+    const { data: urlData } = supabase.storage
+        .from('item-images')
+        .getPublicUrl(fileName);   
+
+    const { data: updatedItem, error: updateError } = await supabase
+        .from("Items")
+        .update({ image: urlData.publicUrl })
+        .eq("id", itemId)
+        .select();
+
+    if (updateError) {
+        throw new Error(updateError.message);
+    }
 
     const { data: insertedItemDetails, errorItemDetails } = await supabase
         .from(chosenCategory)
@@ -91,8 +126,8 @@ return data[0];
 
 }
 
-export async function getGroupItems({ groupId }) {
-    const groupMembers = await getFilteredGroupMember({ groupId });
+export async function getGroupItems({ groupId, groupMembers }) {
+    // const { members: groupMembers } = useMembers(groupId);
     const memberIds = groupMembers.map((member) => member.userId);
     //  console.log("Member IDs: ", memberIds);
     const { data, error } = await supabase
@@ -104,10 +139,7 @@ export async function getGroupItems({ groupId }) {
              Accessories!itemId (*)`)
         .in('userId', memberIds)
         .order("created_at", { ascending: false });
-    // console.log("Query results:", { data, error });
 
-    // console.log("Group Members: ", groupMembers);
-    // console.log("GROUP ITEMS: ", data);
     if (error) {
         throw new Error(error.message);
     }
