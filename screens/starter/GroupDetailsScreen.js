@@ -28,8 +28,6 @@ function GroupDetailsScreen({ route }) {
                 try {
                     const data = await findUserById({ id: group.ambassadorId });
                     setAmbassadorData(data);
-                    console.log("Full Data: ", data);
-                    console.log("Data: ", data.user.user_metadata.userName);
                 } catch (error) {
                     console.error("Error fetching data: ", error);
                 }

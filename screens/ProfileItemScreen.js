@@ -11,7 +11,8 @@ import { useUser } from "../hooks/auth/useUser.js";
 import { sendMessage } from "../services/apiChat.js";
 import MessageModal from "../components/MessageModal.js";
 import Colors from "../constants/colors.js";
-import { useConversations, useCreateConversation } from "../random.js";
+import { useConversations } from "../hooks/conversations/useConversations.js";
+import { useAddConversation } from "../hooks/conversations/useAddConversation.js";
 
 function ProfileItemScreen() {
     const [selectedOption, setSelectedOption] = useState(0);
@@ -21,7 +22,7 @@ function ProfileItemScreen() {
     const [errorMessage, setErrorMessage] = useState("");
     const [conversation, setConversation] = useState();
     const [selectedDates, setSelectedDates] = useState({});
-    const {addConversation, isLoading } = useCreateConversation();
+    const {addConversation, isLoading } = useAddConversation();
     const { conversations } = useConversations();
 
     const navigation = useNavigation();
@@ -88,6 +89,7 @@ function ProfileItemScreen() {
                 pendingConversation = addConversation({ user1: itemData.userId, user2: currentUser.user.id });
 
             }
+            console.log("Pending Conversation: ", pendingConversation);
             if (selectedDates) {
                 console.log("selectedDates: ", selectedDates);
                 await sendMessage({ senderId: currentUser.user.id, itemId: itemData.id, loanDates: selectedDates, conversationId: pendingConversation.id});
