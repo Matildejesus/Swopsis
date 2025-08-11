@@ -26,7 +26,7 @@ function MemberWidget({ user, requests }) {
     }, [groups]);
 
     handleDelete = async () => {
-
+        
     }
 
     // useEffect(() => {

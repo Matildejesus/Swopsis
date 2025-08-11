@@ -10,7 +10,7 @@ function MemberScreen() {
     const navigation = useNavigation();
     const route = useRoute();
     // const { dataList, dataCount, requests } = route?.params;
-    // const { dataList, dataCount } = route?.params;
+    const { dataList = null, dataCount = null} = route?.params || {};
     // console.log("Data List: ", dataList);
     const { members} = useAllMembers();
     return (
@@ -29,7 +29,7 @@ function MemberScreen() {
                     />
                 )} */}
                 <FlatList 
-                    data={members}
+                    data={dataList ? dataList: members}
                     renderItem={({item}) => <MemberWidget user={item}/>}
                     keyExtractor={item => item.id}
                 />
@@ -39,7 +39,7 @@ function MemberScreen() {
                     icon={<MemberIcon />}
                     text="Members"
                     color="#31CE36"
-                    number={members.length}
+                    number={dataCount ? dataCount : members.length}
                 />
             </View>
         </View>

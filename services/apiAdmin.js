@@ -1,4 +1,3 @@
-import { useAllMembers } from "../hooks/useAllMembers";
 import supabase, { supabaseAdmin } from "./supabase";
 
 export async function findUserByEmail(email) {
@@ -146,7 +145,7 @@ export async function getAllItems(members) {
         const transformedData = data.map(item => {
 
             const itemOwner = members.find(member => member.id === item.userId);
-            // console.log("Item Owner: ", itemOwner);
+            console.log("Item Owner: ", itemOwner.user_metadata);
             const extraInfo = 
                 item.category === 'Shoes' ? item.Shoes[0] :
                 item.category === 'Clothing' ? item.Clothing[0] :
@@ -156,9 +155,9 @@ export async function getAllItems(members) {
             
             return {
             ...item,
-            userName: itemOwner?.userName || '',
-            avatar: itemOwner?.avatar || '',
-            email: itemOwner?.email || '',
+            userName: itemOwner?.user_metadata?.userName || '',
+            avatar: itemOwner?.user_metadata?.avatar || '',
+            email: itemOwner?.user_metadata?.email || '',
             extraInfo,
             users: undefined,
             };

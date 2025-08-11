@@ -18,7 +18,10 @@ import { useQueryClient } from "@tanstack/react-query";
 
 function ProfileItemDetails({ itemData }) {
     const { user: currentUser } = useUser();
+    console.log("Current User: ", currentUser.user.app_metadata);
+
     const queryClient = useQueryClient();
+    console.log("itemData: ", itemData);
 
     const [isOwner, setIsOwner] = useState(false);
     const [ownerData, setOwnerData] = useState({
@@ -27,6 +30,7 @@ function ProfileItemDetails({ itemData }) {
         email: "",
         id: ""
     });
+
     
     const { deleteItem } = useDeleteItem();
     const { updateUserMetadata } = useUpdateUserMetadata();
@@ -125,7 +129,7 @@ function ProfileItemDetails({ itemData }) {
                     </View>
                     )
                 }
-                { !isOwner ? <HeartSwitch sWishListItem={itemData.wishlist} itemId={itemData.id}/> :  
+                { !isOwner  && currentUser.user.app_metadata.role != "super-admin" ? <HeartSwitch sWishListItem={itemData.wishlist} itemId={itemData.id}/> :  
                     <TouchableOpacity onPress={handleDeletion}>
                         <TrashIcon width={26} height={33}/>
                     </TouchableOpacity>

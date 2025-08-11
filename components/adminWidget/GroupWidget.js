@@ -18,6 +18,7 @@ function GroupWidget({ group }) {
 
     const handleNavigate = () => {
         const membersList = members.filter(member => member.user_metadata.group === group.id);
+        console.log("Members List: ", membersList);
         navigation.navigate("Members", { dataList: membersList, dataCount: membersList.length });
     };
     return(

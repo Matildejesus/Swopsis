@@ -22,7 +22,7 @@ function ItemWidget({ item }) {
                 {/* <Text style={styles.middleText}>{formattedDate}</Text> */}
             </View>
             <View style={styles.icons}>
-                <ViewIcon onPress={() => navigation.navigate("ProfileItem", { itemData:item, isOwner: false, itemOwner: item.userName })}/>
+                <ViewIcon onPress={() => navigation.navigate("ProfileItem", { itemData:item })}/>
                 <TrashIcon width="18" height="20"/>
             </View>
         </View>

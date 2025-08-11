@@ -124,7 +124,7 @@ function ProfileItemScreen() {
                     onChange={handleChange}
                 />
             </View>
-            {!owner ? (
+            {!owner && currentUser.user.app_metadata.role != "super-admin" ? (
                 <>
                     <View style={styles.button}>
                         {selectedOption === 0 && itemData.available ? (
