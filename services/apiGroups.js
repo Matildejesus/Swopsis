@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import supabase, {supabaseAdmin} from "./supabase";
 
 export async function addGroup({ group }) {
     console.log("group data for data:", group);
@@ -83,7 +83,8 @@ export async function getGroups() {
 
 
 export async function updateStatus({ id, status }) {
-    const { data, error } = await supabase
+        console.log("Updating status for request ID:", id, "to", status);
+    const { data, error } = await supabaseAdmin
         .from("Groups")
         .update({ "status": status })
         .eq("id", id)
@@ -92,7 +93,7 @@ export async function updateStatus({ id, status }) {
     if (error) {
         throw new Error(error.message);
     }
-    
+    console.log("Status updated:", data);
     return data;
 }
 

@@ -9,8 +9,10 @@ import MessageModal from "../../components/MessageModal";
 import { addJoinRequest } from "../../services/apiJoinRequests";
 import { useUser } from "../../hooks/auth/useUser";
 import { findUserById, updateUserMetadata } from "../../services/apiAdmin";
-import { updateStatus } from "../../services/apiGroups";
+// import { updateStatus } from "../../services/apiGroups";
 import MainButton from "../../components/MainButton";
+import { useUpdateGroupStatus } from "../../hooks/admin/useUpdateGroupStatus";
+import { useAllMembers } from "../../hooks/useAllMembers";
 
 function GroupDetailsScreen({ route }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -19,23 +21,25 @@ function GroupDetailsScreen({ route }) {
     const [ ambassadorData, setAmbassadorData ] = useState();
     const navigation = useNavigation();
     const { group } = route.params;
+    const { updateGroupStatus, isLoading } = useUpdateGroupStatus();
+    const { members, isLoading: membersLoading } = useAllMembers();
 
-    console.log("Group:", group);
     const { user } = useUser();
 
-      useEffect(() => {
-            const fetchAmbassador = async () => {
-                try {
-                    const data = await findUserById({ id: group.ambassadorId });
-                    setAmbassadorData(data);
-                } catch (error) {
-                    console.error("Error fetching data: ", error);
-                }
-            };
-    
-            fetchAmbassador();
+    useEffect(() => {
+        setAmbassadorData(members.find(member => member.id === group.ambassadorId));
+        // const fetchAmbassador = async () => {
+        //     try {
+        //         const data = await findUserById({ id: group.ambassadorId });
+        //         setAmbassadorData(data);
+        //     } catch (error) {
+        //         console.error("Error fetching data: ", error);
+        //     }
+        // };
 
-        }, []);
+        // fetchAmbassador();
+
+    }, []);
 
     const submitHandler = async () => {
         if (!message) {
@@ -71,10 +75,11 @@ function GroupDetailsScreen({ route }) {
     const handlePress = async (action) => {
         try {
             if (action == "approve") {
-                console.log(ambassadorData.id);
+                // console.log(ambassadorData.id);
                 const data = await updateUserMetadata({ id: ambassadorData.id, groupId: group.id, ambassador: true});
                 console.log("group data: ", data);
-                await updateStatus({ id: group.id, status: action });
+                // await updateStatus({ id: group.id, status: action });
+                updateGroupStatus({ id: group.id, status: action });
                 navigation.goBack();
                 
             }
@@ -104,12 +109,13 @@ function GroupDetailsScreen({ route }) {
                 </ScrollView>
             </View>
             <View style={styles.buttonContainer}>
-                {group.status == "pending" ? 
+                {group.status == "pending" &&
                     (
                         <>
                         <MainButton
                             title="APPROVE"
                             onPress={() => handlePress("approve")}
+                              disabled={isLoading}
                             variant="primary"
                         />
                         <MainButton
@@ -118,7 +124,9 @@ function GroupDetailsScreen({ route }) {
                             variant="primary"
                         />
                         </>
-                    ) : (
+                    )
+                }
+                {user.user.app_metadata.role != "super-admin" && (
                         <MainButton
                             title="REQUEST TO JOIN"
                             onPress={() => setIsModalVisible(true)}

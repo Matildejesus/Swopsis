@@ -4,21 +4,22 @@ import RectangleButton from "../../components/RectangleButton";
 import MemberIcon from "../../components/icons/adminicons/MemberIcon";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import MemberWidget from "../../components/MemberWidget";
+import { useAllMembers } from "../../hooks/useAllMembers";
 
 function MemberScreen() {
     const navigation = useNavigation();
     const route = useRoute();
-    const { membersList, membersCount, requests } = route?.params;
-    //console.log("MEMBERSLIST: ", membersList.users);
-    console.log("REQUESTS: ", membersList);
-
+    // const { dataList, dataCount, requests } = route?.params;
+    // const { dataList, dataCount } = route?.params;
+    // console.log("Data List: ", dataList);
+    const { members} = useAllMembers();
     return (
         <View style={styles.container}>
             <View style={styles.navbar}>
                 <SideBarNav navigation={navigation} />
             </View>
             <View style={styles.middle}>
-                {requests && (
+                {/* {requests && (
                     <FlatList
                         data={requests}
                         renderItem={({ item }) => (
@@ -26,21 +27,19 @@ function MemberScreen() {
                         )}
                         keyExtractor={(item) => item.id}
                     />
-                )}
-                {/* <Text>Help</Text>
+                )} */}
                 <FlatList 
-                    data={membersList.users}
+                    data={members}
                     renderItem={({item}) => <MemberWidget user={item}/>}
                     keyExtractor={item => item.id}
                 />
-                <Text>Yay</Text> */}
             </View>
             <View style={styles.bottom}>
                 <RectangleButton
                     icon={<MemberIcon />}
                     text="Members"
                     color="#31CE36"
-                    number={membersCount}
+                    number={members.length}
                 />
             </View>
         </View>

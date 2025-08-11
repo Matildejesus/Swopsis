@@ -1,15 +1,25 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ViewIcon from "../icons/ViewIcon";
 import TrashIcon from "../icons/TrashIcon";
 import Colors from "../../constants/colors";
 import { format } from "date-fns";
+import MemberIcon from "../icons/MemberIcon";
+import { useNavigation } from "@react-navigation/native";
+import { useAllMembers } from "../../hooks/useAllMembers";
 
 function GroupWidget({ group }) {
-    console.log("GROUP: ",group);
+    // console.log("GROUP: ",group);
     const formattedDate = format(new Date(group.created_at), 'yyyy-MM-dd');
-    console.log(formattedDate);
-    console.log(group.status);
+    // console.log(formattedDate);
+    // console.log(group.status);
+    console.log("GROUP WIDGET: ", group.status);
+    const navigation = useNavigation();
+    const { members, isLoading } = useAllMembers();
 
+    const handleNavigate = () => {
+        const membersList = members.filter(member => member.user_metadata.group === group.id);
+        navigation.navigate("Members", { dataList: membersList, dataCount: membersList.length });
+    };
     return(
         <>
             <View style={styles.container}>
@@ -23,7 +33,10 @@ function GroupWidget({ group }) {
                     <Text style={styles.text}>{formattedDate}</Text>
                 </View>
                 <View style={styles.iconContainers}>
-                    <ViewIcon screen="GroupDetails" group={group} />
+                    <TouchableOpacity onPress={handleNavigate}>
+                        <MemberIcon />
+                    </TouchableOpacity>
+                <ViewIcon onPress={() => navigation.navigate("GroupDetails", {group})} />
                     <TrashIcon width={24} height={24}/>
                 </View>
             </View>
@@ -38,11 +51,11 @@ export default GroupWidget;
 
 const styles = StyleSheet.create({
     container: {
-        width: 284,
+        width: 310,
         height: 70,
         backgroundColor: Colors.impact,
         marginTop: 16,
-        marginLeft: 47,
+        marginLeft: 40,
         marginRight: 44.5,
         borderRadius: 10,
         shadowColor: "#00000040",

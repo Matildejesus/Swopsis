@@ -4,30 +4,17 @@ import { useEffect, useState } from "react";
 import RectangleButton from "../../components/RectangleButton";
 import GroupIcon from "../../components/icons/adminicons/GroupIcon";
 import MainButton from "../../components/MainButton";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { getGroups } from "../../services/apiGroups";
 import SideBarNav from "../../components/SideBarNav";
 import GroupWidget from "../../components/adminWidget/GroupWidget";
 import { FlatList } from "react-native-gesture-handler";
+import { useAllGroups } from "../../hooks/useAllGroups";
 
 function GroupsScreen() {
-    const [ groups, setGroups ] = useState();
     const navigation = useNavigation();
+    const { groups } = useAllGroups();
 
-    useEffect(() => {
-        const fetchGroups = async () => {
-            try {
-                const data = await getGroups();
-                setGroups(data); // Set the fetched groups data to state
-            } catch (error) {
-                console.error("Groups could not be retrieved: ", error);
-            }
-        };
-
-        fetchGroups();
-    }, []);
-
-    console.log("Groups: ", groups);
     function addSearch(newSearch) {
         setSearch(newSearch);
     }
@@ -60,7 +47,7 @@ function GroupsScreen() {
                     icon={<GroupIcon />}
                     text="Groups"
                     color="#FFAD46"
-                    number="0"
+                    number={groups.length}
                 />
             </View>
         </View>

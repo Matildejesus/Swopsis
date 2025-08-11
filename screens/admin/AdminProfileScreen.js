@@ -18,12 +18,15 @@ import { getAllUsers, getGroupMembers, subscribeNewGroups } from "../../services
 import { useLogout } from "../../hooks/auth/useLogout";
 import MainButton from "../../components/MainButton";
 import { useUser } from "../../hooks/auth/useUser";
+import { useAllGroups } from "../../hooks/useAllGroups";
+import { useAllMembers } from "../../hooks/useAllMembers";
+import { useAllItems } from "../../hooks/useAllItems";
 
 function AdminProfileScreen({ navigation }) {
     const [pendingReq, setPendingReq] = useState([]);
     const [acceptedReq, setAcceptedReq] = useState([]);
     const [rejectedReq, setRejectedReq] = useState([]);
-    const [members, setMembers] = useState([]);
+    // const [members, setMembers] = useState([]);
     const [membersCount, setMembersCount] = useState();
     const { user } = useUser();
     const [userName, setUsername] = useState("");
@@ -33,14 +36,20 @@ function AdminProfileScreen({ navigation }) {
     const [email, setEmail] = useState("");
     const { logout, isLoading } = useLogout();
     const [ hasNotification, setHasNotification ] = useState(false);
-    // console.log(user.app_metadata);
+    const { groups, isLoading: groupsLoading } = useAllGroups();
+    const { members, isLoading: membersLoading } = useAllMembers();
+    const { items, isLoading: itemsLoading } = useAllItems();
 
     useEffect(() => {
         if (!user) return;
 
+        if (items) {
+            console.log("Items: ", items);
+        }
         if (user.user.app_metadata.role == "super-admin") {
             console.log("USER: ", user);
             setUsername("Super Admin");
+
         } else {
             setUsername(user.user.user_metadata.userName);
             setAvatar(user.user.user_metadata.avatar);
@@ -49,57 +58,53 @@ function AdminProfileScreen({ navigation }) {
         }
         setEmail(user.user.email);
 
-        if (group) {
-            const fetchRequests = async () => {
-                try {
-                    const { accepted, rejected, pending } =
-                        await getJoinRequests({
-                            groupId: group,
-                        });
-                    const fetchedMembers = await getGroupMembers({
-                        groupId: group,
-                        id: user.user.id,
-                    });
-                    setAcceptedReq(accepted);
-                    setRejectedReq(rejected);
-                    setPendingReq(pending);
-                    setMembers(fetchedMembers);
-                    console.log("FETCHED MEMBERS: ", fetchedMembers);
-                    setMembersCount(fetchedMembers.length);
-                } catch (error) {
-                    console.error("Error fetching requests: ", error);
-                }
-            };
-            fetchRequests();
-        } else {
-            console.log("ran second loop");
-            const fetchRequests = async () => {
-                try {
-                    const { accepted, rejected, pending } =
-                        await getAllJoinRequests();
-                    const fetchedMembers = await getAllUsers();
-                    setAcceptedReq(accepted);
-                    setRejectedReq(rejected);
-                    setPendingReq(pending);
-                    setMembers(fetchedMembers);
-                    setMembersCount(fetchedMembers.users ? fetchedMembers.users.length : 0);
+        // if (group) {
+        //     const fetchRequests = async () => {
+        //         try {
+        //             const { accepted, rejected, pending } =
+        //                 await getJoinRequests({
+        //                     groupId: group,
+        //                 });
+        //             const fetchedMembers = await getGroupMembers({
+        //                 groupId: group,
+        //                 id: user.user.id,
+        //             });
+        //             setAcceptedReq(accepted);
+        //             setRejectedReq(rejected);
+        //             setPendingReq(pending);
+        //             setMembers(fetchedMembers);
+        //             console.log("FETCHED MEMBERS: ", fetchedMembers);
+        //             setMembersCount(fetchedMembers.length);
+        //         } catch (error) {
+        //             console.error("Error fetching requests: ", error);
+        //         }
+        //     };
+        //     fetchRequests();
+        // } else {
+        //     console.log("ran second loop");
+        //     const fetchRequests = async () => {
+        //         try {
+        //             const { accepted, rejected, pending } =
+        //                 await getAllJoinRequests();
+        //             const fetchedMembers = await getAllUsers();
+        //             setAcceptedReq(accepted);
+        //             setRejectedReq(rejected);
+        //             setPendingReq(pending);
+        //             setMembers(fetchedMembers);
+        //             setMembersCount(fetchedMembers.users ? fetchedMembers.users.length : 0);
 
-                } catch (error) {
-                    console.error("Error fetching requests: ", error);
-                }
-            };
-            fetchRequests();
-        }
+        //         } catch (error) {
+        //             console.error("Error fetching requests: ", error);
+        //         }
+        //     };
+        //     fetchRequests();
+        // }
     }, [user, group]);
 
     const handleAddIconPress = () => {
         setModalVisible(true);
     };
 
-    // useEffect(() => {
-    //     const unsubscribe = subscribeNewGroups({ setNotification: setHasNotification });
-    //     return () => unsubscribe();
-    // }, []);
     
     return (
         <View style={styles.container}>
@@ -142,17 +147,18 @@ function AdminProfileScreen({ navigation }) {
                     icon={<ItemIcon />}
                     text="Total Items"
                     color="#FB5099"
-                    number="0"
+                    number={!itemsLoading && items.length}
                     location="Items"
+                    data={items}
                 />
                 <RectangleButton
                     icon={<MemberIcon />}
                     text="Members"
                     color="#31CE36"
-                    number={membersCount}
+                    number={!membersLoading && members.length}
                     location="Members"
                     data={members}
-                    requests={pendingReq}
+                    // requests={pendingReq}
                 />
                 <RectangleButton
                     icon={<FeedbackIcon />}
@@ -184,8 +190,9 @@ function AdminProfileScreen({ navigation }) {
                             icon={<GroupIcon />}
                             text="Groups"
                             color="#FFAD46"
-                            number="0"
+                            number={!groupsLoading && groups.length}
                             location="Groups"
+                            // data={groups}
                         />
                         <RectangleButton
                             icon={<LmsIcon />}

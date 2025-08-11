@@ -18,9 +18,11 @@ function RectangleButton({
                 location
                     ? () =>
                           navigation.navigate(location, {
-                              membersList: data,
-                              membersCount: number,
-                              requests: requests,
+                            //   membersList: data,
+                            dataList: data,
+                            //   membersCount: number,
+                            dataCount: number,
+                            requests: requests,
                           })
                     : null
             }

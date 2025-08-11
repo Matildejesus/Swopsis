@@ -1,3 +1,4 @@
+import { useAllMembers } from "../hooks/useAllMembers";
 import supabase, { supabaseAdmin } from "./supabase";
 
 export async function findUserByEmail(email) {
@@ -123,4 +124,49 @@ export async function updateUserImpactData({
 
     console.log("Data: ", data);
     return data;
+}
+
+export async function getAllItems(members) {
+    try {
+        console.log("Members in getAllItems: ", members);
+        const { data, error } = await supabaseAdmin
+            .from("Items")
+            .select(`
+                id, created_at, userId, category, image, title, description, method, available, tradeCount, unavailableDates,
+                Shoes!itemId (*),
+                Clothing!itemId (*),
+                Accessories!itemId (*)`)
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        // console.log("NOW TRANSFORMING DATA");
+        const transformedData = data.map(item => {
+
+            const itemOwner = members.find(member => member.id === item.userId);
+            // console.log("Item Owner: ", itemOwner);
+            const extraInfo = 
+                item.category === 'Shoes' ? item.Shoes[0] :
+                item.category === 'Clothing' ? item.Clothing[0] :
+                item.category === 'Accessories' ? item.Accessories[0] :
+                null;
+            // console.log("Extra Info: ", extraInfo);
+            
+            return {
+            ...item,
+            userName: itemOwner?.userName || '',
+            avatar: itemOwner?.avatar || '',
+            email: itemOwner?.email || '',
+            extraInfo,
+            users: undefined,
+            };
+        });
+
+        return transformedData;
+    } catch (error) {
+        console.error("Error fetching items:", error);
+        throw error; // Propagate the error
+    } 
 }
