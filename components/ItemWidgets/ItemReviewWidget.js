@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         // width: "80%",
     },
     name: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 20,
         color: Colors.primary2,
     },

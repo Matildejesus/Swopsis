@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary1,
     },
     name: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 15,
         color: Colors.primary1,
         alignSelf: "center"

@@ -12,8 +12,9 @@ import CoinIcon from "./icons/CoinIcon";
 import { useUser } from "../hooks/auth/useUser";
 import DataDisplayModal from "./adminWidget/modals/DataDIsplayModal";
 import { useUpdateUserCoins } from "../hooks/admin/useUpdateUserCoins";
+import { updateMemberCount } from "../services/apiGroups";
 
-function MemberWidget({ user, requests }) {
+function MemberWidget({ user, requests, memberCount }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isCoinModalVisible, setIsCoinModalVisible] = useState(false); 
     const [currentUser, setCurrentUser] = useState(null);
@@ -24,8 +25,6 @@ function MemberWidget({ user, requests }) {
     const { user: onScreenUser} = useUser();
     const { updateUserCoins, isLoading: coinsLoading, isSuccess} = useUpdateUserCoins();
 
-    console.log("MEMBER WIDGET --- THE USER: ", user);
-    console.log("MEMBER WIDGET ---THE REQUEST: ", requests);
     if (user?.app_metadata?.role == "super-admin") return;
 
     useEffect(() => {
@@ -62,8 +61,12 @@ function MemberWidget({ user, requests }) {
             console.log("id: ", requests.id);
             console.log("currentuser: ", currentUser.id);
             await updateStatus({ newStatus: newStatus, id: requests.id });
-            await updateUserMetadata({ id: currentUser.id, groupId: newGroup, ambassador: false });
-            await updateMemberCount
+            if (newStatus == "Accepted") {
+                await updateUserMetadata({ id: currentUser.id, groupId: newGroup, ambassador: false });
+                await updateMemberCount({id: requests.id, count: memberCount});
+            } else {
+                await updateUserMetadata({ id: currentUser.id, groupId: "", ambassador: false });
+            }
             setStatus(newStatus);
             setGroup(newGroup);
         } catch (error) {
@@ -83,7 +86,7 @@ function MemberWidget({ user, requests }) {
     };
 
     const handleEditIcon = () => {
-        if (onScreenUser.user.app_metadata.role == "super-admin"){
+        if (onScreenUser.user.app_metadata.role == "super-admin" || onScreenUser.user.user_metadata.ambassador && user.user_metadata.group !== "Pending"){
             setIsCoinModalVisible(true);
         } else {
             setIsModalVisible(true);
@@ -91,6 +94,7 @@ function MemberWidget({ user, requests }) {
     }
 
     return (
+        <>
         <View style={styles.container}>
             <Image
                 style={styles.image}
@@ -105,14 +109,19 @@ function MemberWidget({ user, requests }) {
                     {user.user_metadata.userName}
                 </Text>
                 <Text style={styles.middleText}>{user.email}</Text>
-                <Text style={styles.middleText}>
-                    Group: {!isLoading && groupName}
-                </Text>
+                {onScreenUser.user.app_metadata.role == "super-admin" ? (
+                    <Text style={styles.middleText}>
+                        Group: {!isLoading && groupName}
+                    </Text>) : (<>
+                        {/* <Text style={styles.middleText}>{user.user_metadata.totalCarbon} Tonnes of CO2</Text>
+                        <Text style={styles.middleText}></Text> */}
+                    </>)
+                }
                 {user.user_metadata.ambassador && <Text style={styles.year}>Ambassador</Text> }
             </View>
             <View style={styles.icons}>
                 <View style={styles.coins}>
-                    <Text>{user.user_metadata.coins}</Text>
+                    <Text style={styles.middleText}>{user.user_metadata.coins}</Text>
                     <CoinIcon screen="members"/>
                 </View>
                 <EditIcon onPress={handleEditIcon} />
@@ -132,7 +141,12 @@ function MemberWidget({ user, requests }) {
                 onRequestClose={onCoinModalClose}
                 user={user.user_metadata}
             />
+            
         </View>
+        {user.user_metadata.group === "Pending" && (
+            <Text style={styles.pendingBadge}>Pending</Text>
+        )}
+        </>
     );
 }
 
@@ -143,8 +157,8 @@ const styles = StyleSheet.create({
         width: 310,
         height: 74,
         backgroundColor: "#FFFFFF",
-        //marginTop: 43,
-        marginBottom: 16,
+        marginTop: 16,
+        // marginBottom: 16,
         marginLeft: 40,
         marginRight: 44.5,
         borderRadius: 10,
@@ -182,18 +196,42 @@ const styles = StyleSheet.create({
         gap: 5,
     },
     name: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 15,
         color: Colors.primary1,
     },
     middleText: {
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
         fontSize: 13,
         color: Colors.primary1,
     },
     year: {
-        fontFamily: "RalewayLight",
+        fontFamily: "Raleway_300Light",
         fontSize: 12,
         color: Colors.primary1,
+    },
+    pendingBadge: {
+        backgroundColor: Colors.popup,
+        color: Colors.primary1,
+        borderRadius: 5,
+        fontSize: 12,
+        width: 110,
+        fontSize: 15,
+        fontFamily: "Raleway_700Bold",
+        opacity: 0.8, 
+        width: 310,
+        marginLeft: 40,
+        marginRight: 44.5,
+        borderBottomLeftRadius: 10,
+        borderBottomEndRadius: 10,
+        shadowColor: "#00000040",
+        shadowOpacity: 0.3,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
+        elevation: 4,
+        height: 40,
+        paddingHorizontal: 112,
+        paddingTop: 15,
+
     },
 });

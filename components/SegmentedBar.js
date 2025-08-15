@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     optionStyle: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 15,
         color: Colors.primary2,
         opacity: 0.53,

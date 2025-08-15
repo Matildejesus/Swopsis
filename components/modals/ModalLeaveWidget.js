@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
 
     title: {
         color: Colors.primary2,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 18,
         alignSelf: "center",
     },

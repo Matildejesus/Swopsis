@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         flexDirection: "row",
-        marginTop: 77,
+        marginTop: 44,
         marginLeft: 44
     },
     userInfo: {

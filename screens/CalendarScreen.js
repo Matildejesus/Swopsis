@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
     textStyle: {
         paddingVertical: 7,
         fontSize: 15,
-        fontFamily: "RalewayRegular"
+        fontFamily: "Raleway_400Regular"
     }
 });

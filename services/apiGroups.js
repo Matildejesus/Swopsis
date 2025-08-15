@@ -97,4 +97,16 @@ export async function updateStatus({ id, status }) {
     return data;
 }
 
-// export async function updateMemberCount()
+export async function updateMemberCount({ id, count}) {
+    const numberOfMem = count++;
+    const { data, error } = await supabaseAdmin
+        .from("Groups")
+        .update({ "numberOfMem": numberOfMem})
+        .eq("id", id)
+        .select();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+    return data;
+}

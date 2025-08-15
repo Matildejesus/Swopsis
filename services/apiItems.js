@@ -124,7 +124,8 @@ return data[0];
 
 }
 
-export async function getGroupItems({ groupId, groupMembers }) {
+export async function getGroupItems({ groupId, groupMembers, itemConversions }) {
+    console.log(groupId, groupMembers, itemConversions);
     const memberIds = groupMembers.map((member) => member.userId);
     const { data, error } = await supabase
         .from("Items")
@@ -148,6 +149,16 @@ export async function getGroupItems({ groupId, groupMembers }) {
             item.category === 'Accessories' ? item.Accessories[0] :
             null;
         
+        const conversion = itemConversions?.find(c => c.name === extraInfo?.subcategory);
+        const litres = conversion?.litres;
+        let carbon;
+
+        if (conversion?.scalable) {
+            carbon = conversion?.carbon * extraInfo?.weight;
+        } else {
+            carbon = conversion?.carbon;
+        }
+
         return {
         ...item,
         userName: itemOwner?.userName || '',
@@ -155,6 +166,8 @@ export async function getGroupItems({ groupId, groupMembers }) {
         email: itemOwner?.email || '',
         extraInfo,
         users: undefined,
+        carbon,
+        litres
         };
     });
 

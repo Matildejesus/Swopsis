@@ -15,23 +15,6 @@ function ItemWidget({ item }) {
 
     useEffect(() => {
         if (!itemConversions || !item) return; 
-//         const conversion = itemConversions.find(c => c.subcategory === item.subcategory);
-//         setLitres(conversion.litres);
-//         if (conversion.scalable) {
-//             const categoryArray = item[conversion.category];
-//             // if (categoryArray) {
-//             //     const weight = parseFloat(categoryArray[0].weight);
-//             // }
-//             console.log(item);
-//             console.log(conversion.carbon);
-//             console.log(Object.keys(categoryArray[0]));
-// ;
-//             // setCarbon(conversion.carbon * item[conversion.category][0].weight);
-
-//         } else {
-//             setCarbon(conversion.carbon);
-//         }
-
     }, [item, itemConversions]);
 
     return(
@@ -41,7 +24,7 @@ function ItemWidget({ item }) {
                 source={{ uri: item.image }}
             />
             <View style={styles.textContainer}>
-                <Text style={[styles.name, {fontFamily: "RalewayBold"}]}>{item.title}</Text>
+                <Text style={[styles.name, {fontFamily: "Raleway_700Bold"}]}>{item.title}</Text>
                 <Text style={styles.middleText}>{item.category}</Text>
                 <Text style={styles.middleText}>{item.carbon} Tonnes of CO2</Text>
                 <Text style={styles.middleText}>{item.litres} Litres of Water</Text>
@@ -93,7 +76,7 @@ const styles = StyleSheet.create({
         gap: 20,
     },
     name: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 15,
         color: Colors.primary1,
     },

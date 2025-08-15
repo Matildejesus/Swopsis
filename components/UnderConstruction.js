@@ -20,7 +20,7 @@ export default UnderConstruction;
 
 const styles = StyleSheet.create({
     text: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 30,
         color: Colors.primary2,
         //   paddingTop: 30,

@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         opacity: 0.7,
         paddingLeft: 24,
         transform: [{ rotate: "45deg" }],
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 15,
         color: Colors.primary2,
         borderRadius: 20,

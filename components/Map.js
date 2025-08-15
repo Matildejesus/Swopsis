@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     },
     calloutTitle: {
         fontSize: 14,
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
         color: "white",
         textTransform: "uppercase",
         width: 140,

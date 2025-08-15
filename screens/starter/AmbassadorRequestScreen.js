@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     inputText: {
         alignSelf: "flex-end",
         paddingRight: 20,
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
         color: Colors.primary2,
         fontSize: 15,
     },

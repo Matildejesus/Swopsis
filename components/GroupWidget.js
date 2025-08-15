@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     text: {
         color: Colors.primary2,
         fontSize: 15,
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
     },
     dropdown: {
         marginBottom: 40,

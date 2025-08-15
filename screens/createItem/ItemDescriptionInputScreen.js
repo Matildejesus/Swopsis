@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
         color: Colors.primary2,
     },
     description: {
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
         fontSize: 15,
         color: Colors.primary2,
         height: 70,

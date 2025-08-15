@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 14,
         marginLeft: 8,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
     },
     text9: {
         color: "#FFD400",

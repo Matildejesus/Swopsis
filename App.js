@@ -267,6 +267,9 @@ function BottomTabNavigator() {
 }
 
 function DrawerNavigator() {
+    const { user } = useUser();
+    const isAdmin = user?.user?.app_metadata?.role === 'super-admin';
+    const isAmbassador = user?.user?.user_metadata?.ambassador;
     return (
         <Drawer.Navigator
             initialRouteName="AdminProfile"
@@ -280,16 +283,31 @@ function DrawerNavigator() {
                 options={{
                     drawerLabel: "Dashboard",
                     drawerIcon: () => <DashboardIcon />,
+                    headerTitleAlign: "left",
+                     headerShown: true,
+                    headerTitle: (props) => (
+                        <Title title="Profile" {...props} />
+                    ),
+                    headerRight: (props) => <Logo {...props} />,
+                    // tabBarIcon: (props) => {
+                    //     return (
+                    //         <Image
+                    //             style={{ width: 35, height: 35 }}
+                    //             source={require("./assets/images/user2.png")}
+                    //         />
+                    //     );
+                    // },
                 }}
             />
-            <Drawer.Screen
+            {isAdmin && <Drawer.Screen
                 name="Groups"
                 component={GroupsScreen}
                 options={{
                     drawerLabel: "Groups",
                     drawerIcon: () => <GroupIcon />,
                 }}
-            />
+            />}
+            
             <Drawer.Screen
                 name="Items"
                 component={ItemsScreen}
@@ -298,19 +316,19 @@ function DrawerNavigator() {
                     drawerIcon: () => <ItemIcon />,
                 }}
             />
-            <Drawer.Screen
+            {/* <Drawer.Screen
                 name="Feedback"
                 component={FeedbacksScreen}
                 options={{
                     drawerLabel: "Feedbacks",
                     drawerIcon: () => <FeedbackIcon />,
                 }}
-            />
-            <Drawer.Screen
+            /> */}
+            {/* <Drawer.Screen
                 name="Lms"
                 component={LmsScreen}
                 options={{ drawerLabel: "Lms", drawerIcon: () => <LmsIcon /> }}
-            />
+            /> */}
             <Drawer.Screen
                 name="Members"
                 component={MemberScreen}

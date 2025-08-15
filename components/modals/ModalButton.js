@@ -29,6 +29,6 @@ const styles = StyleSheet.create({
     text: {
         color: Colors.primary2,
         fontSize: 14,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
     },
 });

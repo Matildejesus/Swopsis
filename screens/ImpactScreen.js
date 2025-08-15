@@ -112,11 +112,11 @@ const styles = StyleSheet.create({
     },
     itemText: {
         fontSize: 20,
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
     },
     numberText: {
         fontSize: 20,
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
         paddingBottom: 10,
     },
     widget: {

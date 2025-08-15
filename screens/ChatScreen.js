@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         color: Colors.primary2,
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
         fontSize: 13,
         textAlignVertical: "top",
         flexGrow: 1
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     buttonText: {
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
         fontSize: 15,
 
     },
@@ -332,10 +332,10 @@ const styles = StyleSheet.create({
     },
     text: {
         color: "white",
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
     },
     announcement: {
-        fontFamily: "RalewayRegular",
+        fontFamily: "Raleway_400Regular",
         fontSize: 13,
         color: Colors.primary2,
         opacity: 0.5,

@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         width: 110,
         fontSize: 15,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         opacity: 0.8, 
         width: 310,
         marginLeft: 40,

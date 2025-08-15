@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 18,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         paddingBottom: 10,
         color: Colors.primary2,
     },
@@ -74,17 +74,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         paddingTop: 18,
         color: Colors.primary2,
-        fontFamily: "RalewayRegular"
+        fontFamily: "Raleway_400Regular"
     },
     link: {
         color: Colors.primary2,
         fontSize: 15,
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
         paddingBottom: 15,
         marginTop: 10,
     },
     register: {
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
     },
     loginError: {
         width: 170,

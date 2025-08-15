@@ -7,7 +7,7 @@ export function useRequests() {
     const queryClient = useQueryClient();
     const { user } = useUser();
     const { groups, isLoading: groupsLoading} = useAllGroups();
-    // console.log("GROUPS: ", groups);
+    console.log("GROUPS: ", groups);
     const { data: requests, isLoading } = useQuery({
         queryKey: ["requests" || "allGroups"],
         queryFn: async () => {
@@ -34,7 +34,7 @@ export function useRequests() {
                 return { accepted, rejected, pending };
             }
         },
-        enabled: !groupsLoading || !!user,
+        enabled: !groupsLoading || !!user && !!groups,
         onSuccess: (requestsData) => {
             queryClient.setQueryData(["requests"], requestsData);
         }

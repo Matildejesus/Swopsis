@@ -60,11 +60,11 @@ const styles = StyleSheet.create({
     text: {
         color: "#fcdd3a",
         fontSize: 18,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
     },
     ratingText: {
         marginLeft: 10,
-        fontFamily: "RalewayBold",
+        fontFamily: "Raleway_700Bold",
         fontSize: 16,
     },
 });

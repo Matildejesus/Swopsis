@@ -80,15 +80,11 @@ const styles = StyleSheet.create({
     image: {
         width: 137,
         height: 200,
-        // left: 207,
-        // top: 160,
-        // position: "absolute",
-        // zIndex: 2,
     }, 
     link: {
         color: Colors.primary2,
         fontSize: 15,
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
     }, 
     linkContainer: {
         marginTop: 20,

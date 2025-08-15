@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         marginBottom: 8.5,
         color: Colors.primary2,
         fontSize: 15,
-        fontFamily: "RalewaySemiBold",
+        fontFamily: "Raleway_600SemiBold",
     },
     container: {
         marginBottom: 20,

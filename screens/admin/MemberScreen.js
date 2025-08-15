@@ -14,11 +14,12 @@ function MemberScreen() {
     const { dataList = null, dataCount = null, requests = null} = route?.params || {};
     const { members } = useAllMembers();
     const [allUsers, setAllUsers] = useState([]);
+    const [ userCount, setUserCount ] = useState();
    
     useEffect(() => {
         const loadData = async () => {
-        let users = [...members];
-        
+    let users = members.filter(user => !user.user_metadata?.ambassador);
+
             if (requests) {
                 for (const request of requests) {
                     try {
@@ -31,10 +32,13 @@ function MemberScreen() {
                     }
                 }
                 setAllUsers(users);
+                setUserCount(dataList.length);
             } else if (dataList) {
                 setAllUsers(dataList);
+                setUserCount(dataList.length);
             } else {
                 setAllUsers(members);
+                setUserCount(members.length);
             }
         
         };
@@ -49,7 +53,13 @@ function MemberScreen() {
             <View style={styles.middle}>
                 <FlatList 
                     data={allUsers}
-                    renderItem={({item}) => <MemberWidget user={item} requests={item.request}/>} // and then after that for the reuqests part now the user wich is requesting is in the datalist irght, so then i want to send the request which is in the datalist
+                    renderItem={({item}) => 
+                        <MemberWidget 
+                            user={item} 
+                            requests={item.request}
+                            memberCount={userCount}
+                        />
+                    } // and then after that for the reuqests part now the user wich is requesting is in the datalist irght, so then i want to send the request which is in the datalist
                     keyExtractor={item => item.id}
                 />
             </View>
