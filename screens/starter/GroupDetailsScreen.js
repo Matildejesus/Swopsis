@@ -26,20 +26,45 @@ function GroupDetailsScreen({ route }) {
 
     const { user } = useUser();
 
+    // useEffect(() => {
+    //     if (members){
+    //         setAmbassadorData(members.find(member => member.id === group.ambassadorId));
+    //     } else {
+    //         const fetchAmbassador = async () => {
+    //             try {
+    //                 const data = await findUserById({ id: group.ambassadorId });
+    //                 setAmbassadorData(data);
+    //             } catch (error) {
+    //                 console.error("Error fetching data: ", error);
+    //             }
+    //         }
+    //     fetchAmbassador();
+    //     }; 
+    // }, [members]);
     useEffect(() => {
-        setAmbassadorData(members.find(member => member.id === group.ambassadorId));
-        // const fetchAmbassador = async () => {
-        //     try {
-        //         const data = await findUserById({ id: group.ambassadorId });
-        //         setAmbassadorData(data);
-        //     } catch (error) {
-        //         console.error("Error fetching data: ", error);
-        //     }
-        // };
+        const fetchAmbassador = async () => {
+            try {
+                const data = await findUserById({ id: group.ambassadorId });
+                setAmbassadorData(data);
+            } catch (error) {
+                console.error("Error fetching data: ", error);
+            }
+        };
 
-        // fetchAmbassador();
-
-    }, []);
+        // FIRST check if members exists and has data
+        if (members && members.length > 0) {
+            const ambassador = members.find(member => member.id === group.ambassadorId);
+            if (ambassador) {
+                setAmbassadorData(ambassador);
+            } else {
+                // ONLY fetch if ambassador not found in existing members
+                fetchAmbassador();
+            }
+        } else {
+            // If no members data exists at all, then fetch
+            fetchAmbassador();
+        }
+    }, [members, group.ambassadorId]);
 
     const submitHandler = async () => {
         if (!message) {
@@ -82,6 +107,11 @@ function GroupDetailsScreen({ route }) {
                 updateGroupStatus({ id: group.id, status: action });
                 navigation.goBack();
                 
+            } else if (action == "reject") {
+                console.log("rejected");
+                updateGroupStatus({ id: group.id, status: action });
+                const data = await updateUserMetadata({ id: ambassadorData.id, groupId: null, ambassador: false});
+                navigation.goBack();
             }
         } catch(error) {
             console.error("Erron handling press: ", error);

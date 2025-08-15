@@ -48,6 +48,7 @@ export async function getAllUsers() {
     }
     const filteredUsers = data.users.filter(user => !user.user_metadata?.is_super_admin);
 
+    // console.log("FILTERED USERS: ", filteredUsers);
     return filteredUsers;
 }
 
@@ -104,6 +105,25 @@ export async function updateUserMetadata({ id, groupId, ambassador }) {
     return data;
 }
 
+export async function updateUserCoin({ id, coins }) {
+    try {
+        const { data, error } = await supabaseAdmin.auth.admin.updateUserById(
+            id,
+            { 
+                user_metadata: { coins: Number(coins) } 
+            }
+        );
+
+        if (error) {
+            throw error;
+        }
+
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function updateUserImpactData({
     id, newCoins, totalLitres, totalCarbon, totalWeight, itemsSwapped }) {
     let user_metadata = {};
@@ -114,20 +134,17 @@ export async function updateUserImpactData({
         totalCarbon,
         itemsSwapped,
     };
-    console.log("UPDATE DATA: ", user_metadata);
 
     const { data, error } = await supabaseAdmin.auth.admin.updateUserById(id, {
         user_metadata,
     });
     if (error) throw new Error(error.message);
 
-    console.log("Data: ", data);
     return data;
 }
 
-export async function getAllItems(members) {
+export async function getAllItems(members, itemConversions) { 
     try {
-        console.log("Members in getAllItems: ", members);
         const { data, error } = await supabaseAdmin
             .from("Items")
             .select(`
@@ -137,35 +154,49 @@ export async function getAllItems(members) {
                 Accessories!itemId (*)`)
             .order("created_at", { ascending: false });
 
-        if (error) {
-            throw new Error(error.message);
-        }
+        if (error) throw new Error(error.message);
 
-        // console.log("NOW TRANSFORMING DATA");
         const transformedData = data.map(item => {
-
             const itemOwner = members.find(member => member.id === item.userId);
-            console.log("Item Owner: ", itemOwner.user_metadata);
-            const extraInfo = 
+            
+            const extraInfo =
                 item.category === 'Shoes' ? item.Shoes[0] :
                 item.category === 'Clothing' ? item.Clothing[0] :
                 item.category === 'Accessories' ? item.Accessories[0] :
                 null;
-            // console.log("Extra Info: ", extraInfo);
-            
+
+            const conversion = itemConversions?.find(c => c.name === extraInfo?.subcategory);
+            // const weight = parseFloat(extraInfo?.weight || 0);
+            const litres = conversion?.litres;
+            let carbon;
+
+            if (conversion?.scalable) {
+                carbon = conversion?.carbon * extraInfo?.weight;
+            } else {
+                carbon = conversion?.carbon;
+            }
+            // const carbon = conversion?.scalable ? conversion.carbon * weight : conversion?.carbon || 0;
+
             return {
-            ...item,
-            userName: itemOwner?.user_metadata?.userName || '',
-            avatar: itemOwner?.user_metadata?.avatar || '',
-            email: itemOwner?.user_metadata?.email || '',
-            extraInfo,
-            users: undefined,
+                ...item,
+                userName: itemOwner?.user_metadata?.userName || '',
+                avatar: itemOwner?.user_metadata?.avatar || '',
+                email: itemOwner?.user_metadata?.email || '',
+                extraInfo,
+                users: undefined,
+                carbon,
+                litres
             };
         });
 
         return transformedData;
     } catch (error) {
         console.error("Error fetching items:", error);
-        throw error; // Propagate the error
-    } 
+        throw error;
+    }
+}
+
+
+export async function getGroupRequests() {
+    
 }

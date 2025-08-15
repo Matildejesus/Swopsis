@@ -38,7 +38,6 @@ import ItemsScreen from "./screens/admin/ItemsScreen.js";
 import LmsScreen from "./screens/admin/LmsScreen.js";
 import MemberScreen from "./screens/admin/MemberScreen.js";
 import FeedbacksScreen from "./screens/admin/FeedbacksScreen.js";
-import CoinsScreen from "./screens/admin/CoinsScreen.js";
 import WishListScreen from "./screens/WishListScreen.js";
 import ChatScreen from "./screens/ChatScreen.js";
 
@@ -318,14 +317,6 @@ function DrawerNavigator() {
                 options={{
                     drawerLabel: "Members",
                     drawerIcon: () => <MemberIcon />,
-                }}
-            />
-            <Drawer.Screen
-                name="Coins"
-                component={CoinsScreen}
-                options={{
-                    drawerLabel: "Total Coins",
-                    drawerIcon: () => <CoinIcon />,
                 }}
             />
         </Drawer.Navigator>

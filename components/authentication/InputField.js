@@ -1,7 +1,6 @@
 import { Text, View, TextInput, StyleSheet } from "react-native";
 import Colors from "../../constants/colors";
 import ErrorMessage from "../ErrorMessage";
-import { inlineStyles } from "react-native-svg";
 
 function InputField({
     placeholder,
@@ -49,7 +48,6 @@ const styles = StyleSheet.create({
     text: {
         color: Colors.primary2,
         fontSize: 15,
-        // alignSelf: "flex-end",
         marginRight: 20,
         fontFamily: "Raleway_500Medium",
     },

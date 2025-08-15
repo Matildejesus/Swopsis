@@ -14,20 +14,16 @@ import DashboardIcon from "../../components/icons/DashboardIcon";
 import { getAllJoinRequests, getJoinRequests } from "../../services/apiJoinRequests";
 import CoinIcon from "../../components/icons/adminicons/CoinIcon";
 import NewsIcon from "../../components/icons/adminicons/NewsIcon";
-import { getAllUsers, getGroupMembers, subscribeNewGroups } from "../../services/apiAdmin";
 import { useLogout } from "../../hooks/auth/useLogout";
 import MainButton from "../../components/MainButton";
 import { useUser } from "../../hooks/auth/useUser";
 import { useAllGroups } from "../../hooks/useAllGroups";
 import { useAllMembers } from "../../hooks/useAllMembers";
 import { useAllItems } from "../../hooks/useAllItems";
+import { useRequests } from "../../hooks/useRequests";
 
 function AdminProfileScreen({ navigation }) {
-    const [pendingReq, setPendingReq] = useState([]);
-    const [acceptedReq, setAcceptedReq] = useState([]);
-    const [rejectedReq, setRejectedReq] = useState([]);
-    // const [members, setMembers] = useState([]);
-    const [membersCount, setMembersCount] = useState();
+
     const { user } = useUser();
     const [userName, setUsername] = useState("");
     const [avatar, setAvatar] = useState("");
@@ -39,13 +35,14 @@ function AdminProfileScreen({ navigation }) {
     const { groups, isLoading: groupsLoading } = useAllGroups();
     const { members, isLoading: membersLoading } = useAllMembers();
     const { items, isLoading: itemsLoading } = useAllItems();
+    const { accepted: acceptedReq, pending: pendingReq, rejected: rejectedReq, isLoading: requestsLoading } = useRequests();
+    console.log("Accepted: ",acceptedReq);
+    console.log("Pending: ",pendingReq);
+    console.log("Rejected: ", rejectedReq);
 
     useEffect(() => {
-        if (!user) return;
+        if (!user || !items ) return;
 
-        if (items) {
-            console.log("Items: ", items);
-        }
         if (user.user.app_metadata.role == "super-admin") {
             console.log("USER: ", user);
             setUsername("Super Admin");
@@ -58,53 +55,15 @@ function AdminProfileScreen({ navigation }) {
         }
         setEmail(user.user.email);
 
-        // if (group) {
-        //     const fetchRequests = async () => {
-        //         try {
-        //             const { accepted, rejected, pending } =
-        //                 await getJoinRequests({
-        //                     groupId: group,
-        //                 });
-        //             const fetchedMembers = await getGroupMembers({
-        //                 groupId: group,
-        //                 id: user.user.id,
-        //             });
-        //             setAcceptedReq(accepted);
-        //             setRejectedReq(rejected);
-        //             setPendingReq(pending);
-        //             setMembers(fetchedMembers);
-        //             console.log("FETCHED MEMBERS: ", fetchedMembers);
-        //             setMembersCount(fetchedMembers.length);
-        //         } catch (error) {
-        //             console.error("Error fetching requests: ", error);
-        //         }
-        //     };
-        //     fetchRequests();
-        // } else {
-        //     console.log("ran second loop");
-        //     const fetchRequests = async () => {
-        //         try {
-        //             const { accepted, rejected, pending } =
-        //                 await getAllJoinRequests();
-        //             const fetchedMembers = await getAllUsers();
-        //             setAcceptedReq(accepted);
-        //             setRejectedReq(rejected);
-        //             setPendingReq(pending);
-        //             setMembers(fetchedMembers);
-        //             setMembersCount(fetchedMembers.users ? fetchedMembers.users.length : 0);
-
-        //         } catch (error) {
-        //             console.error("Error fetching requests: ", error);
-        //         }
-        //     };
-        //     fetchRequests();
-        // }
-    }, [user, group]);
+    }, [user, items]);
 
     const handleAddIconPress = () => {
         setModalVisible(true);
     };
 
+    if (itemsLoading || membersLoading || groupsLoading || requestsLoading) {
+        return <Text>Loading admin data...</Text>
+    }
     
     return (
         <View style={styles.container}>
@@ -142,12 +101,33 @@ function AdminProfileScreen({ navigation }) {
                     <Text style={styles.notificationText}>!</Text>
                 </View>
             )}
+            <View>
+                <Text style={styles.title}>Overall Statistics</Text>
+                <Text style={styles.subtitle}>
+                    Daily information about statistics in system
+                </Text>
+                <View style={styles.layout}>
+                    <RequestStatistic
+                        number={acceptedReq.length}
+                        text="Accepted Requests"
+                    />
+                    <RequestStatistic
+                        number={pendingReq.length}
+                        text="Pending Requests"
+                    />
+                    <RequestStatistic
+                        number={rejectedReq.length}
+                        text="Rejected Requests"
+                    />
+                </View>
+                <Line style={styles.line} />
+            </View>
             <View style={styles.iconContainer}>
-                <RectangleButton
+               <RectangleButton
                     icon={<ItemIcon />}
                     text="Total Items"
                     color="#FB5099"
-                    number={!itemsLoading && items.length}
+                    number={items.length ?? 0}
                     location="Items"
                     data={items}
                 />
@@ -158,31 +138,24 @@ function AdminProfileScreen({ navigation }) {
                     number={!membersLoading && members.length}
                     location="Members"
                     data={members}
-                    // requests={pendingReq}
+                    requests={pendingReq}
                 />
-                <RectangleButton
+                {/* <RectangleButton
                     icon={<FeedbackIcon />}
                     text="Feedback"
                     color="#F25961"
                     number="0"
                     location="Feedback"
-                />
+                /> */}
                 {ambassador ? (
                     <>
-                        <RectangleButton
-                            icon={<CoinIcon />}
-                            text="Total Coins"
-                            color="#357738"
-                            number="0"
-                            location="Coins"
-                        />
-                        <RectangleButton
+                        {/* <RectangleButton
                             icon={<NewsIcon />}
                             text="News"
                             color="#FFAD46"
                             number="0"
                             location="News"
-                        />
+                        /> */}
                     </>
                 ) : (
                     <>
@@ -194,38 +167,22 @@ function AdminProfileScreen({ navigation }) {
                             location="Groups"
                             // data={groups}
                         />
-                        <RectangleButton
+                        {/* <RectangleButton
                             icon={<LmsIcon />}
                             text="LMS"
                             color="#357738"
                             number="0"
                             location="Lms"
-                        />
+                        /> */}
                     </>
                 )}
             </View>
-            <Text style={styles.title}>Overall Statistics</Text>
-            <Text style={styles.subtitle}>
-                Daily information about statistics in system
-            </Text>
-            <Line style={styles.line} />
-            <View style={styles.layout}>
-                <RequestStatistic
-                    number={acceptedReq.length}
-                    text="Accepted Requests"
-                />
-                <RequestStatistic
-                    number={pendingReq.length}
-                    text="Pending Requests"
-                />
-                <RequestStatistic
-                    number={rejectedReq.length}
-                    text="Rejected Requests"
-                />
-            </View>
+            
         </View>
     );
 }
+
+
 
 export default AdminProfileScreen;
 
@@ -233,13 +190,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "white",
+        // paddingTop: 24,
         // alignItems: "center",
-        justifyContent: "center",
+        // justifyContent: "center",
     },
     headerContainer: {
         flexDirection: "row",
-        marginTop: 24,
-        marginLeft: 44,
+        marginTop: 77,
+        marginLeft: 44
     },
     userInfo: {
         marginLeft: 16,
@@ -282,9 +240,10 @@ const styles = StyleSheet.create({
         marginLeft: 25,
     },
     iconContainer: {
-        alignItems: "center",
+        // alignItems: "center",
         gap: 10,
         marginTop: 23,
+        marginLeft: 44,
     },
     title: {
         fontFamily: "Raleway_700Bold",
@@ -307,6 +266,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         gap: 40,
         marginTop: 20,
+        marginBottom: 20,
     },
     logoutButton: {
         width: 100,

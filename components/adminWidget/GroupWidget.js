@@ -8,10 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useAllMembers } from "../../hooks/useAllMembers";
 
 function GroupWidget({ group }) {
-    // console.log("GROUP: ",group);
     const formattedDate = format(new Date(group.created_at), 'yyyy-MM-dd');
-    // console.log(formattedDate);
-    // console.log(group.status);
     console.log("GROUP WIDGET: ", group.status);
     const navigation = useNavigation();
     const { members, isLoading } = useAllMembers();
@@ -23,27 +20,39 @@ function GroupWidget({ group }) {
     };
     return(
         <>
-            <View style={styles.container}>
+            <View style={group.status == "reject" ? styles.rejectedContainer : styles.container}>
                 <Image
-                    style={styles.image}
+                    style={group.status == "reject" ? styles.rejectedImage : styles.image}
                     source={{ uri: group.avatar }}
                 />
                 <View style={styles.textContainer}>
-                    <Text style={[styles.text, {fontFamily: "RalewayBold"}]}>{group.name}</Text>
-                    <Text style={styles.text}>{group.numberOfMem}{" "}Members</Text>
-                    <Text style={styles.text}>{formattedDate}</Text>
+                    <Text style={group.status == "reject" ? styles.rejectedTitle : styles.title}>{group.name}</Text>
+                    <Text style={group.status == "reject" ? styles.rejectedText : styles.text}>{group.numberOfMem}{" "}Members</Text>
+                    <Text style={group.status == "reject" ? styles.rejectedText : styles.text}>{formattedDate}</Text>
                 </View>
                 <View style={styles.iconContainers}>
-                    <TouchableOpacity onPress={handleNavigate}>
-                        <MemberIcon />
-                    </TouchableOpacity>
-                <ViewIcon onPress={() => navigation.navigate("GroupDetails", {group})} />
-                    <TrashIcon width={24} height={24}/>
+                    {group.status == "reject" ? (
+                        <>
+                            <MemberIcon color="#656464"/>
+                            <ViewIcon color="#656464"/>
+                            <TrashIcon width={24} height={24} color="#656464"/>
+                        </>
+                    ) : (
+                        <>
+                        <TouchableOpacity onPress={handleNavigate}>
+                            <MemberIcon />
+                        </TouchableOpacity>
+                        <ViewIcon onPress={() => navigation.navigate("GroupDetails", {group})} />
+                            <TrashIcon width={24} height={24}/>
+                       
+                        </>
+                    )} 
                 </View>
             </View>
             {group.status === "pending" && (
                 <Text style={styles.pendingBadge}>Pending</Text>
             )}
+            
         </>
     )
 }
@@ -69,6 +78,24 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
     },
+    rejectedContainer: {
+        width: 310,
+        height: 70,
+        backgroundColor: "#A9A7A7",
+        marginTop: 16,
+        marginLeft: 40,
+        marginRight: 44.5,
+        borderRadius: 10,
+        shadowColor: "#00000040",
+        shadowOpacity: 0.3,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
+        elevation: 4,
+        flexDirection: "row",
+        alignItems: "center",
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
     image: {
         width: 60,
         height: 60,
@@ -76,12 +103,31 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         marginRight: 20,
     },
+    rejectedImage: {
+        width: 60,
+        height: 60,
+        backgroundColor: "#A9A7A7",
+        borderRadius: 30,
+        marginRight: 20,
+    },
     textContainer: {
         flex: 1,
     },
     text: {
-        fontFamily: "RalewayMedium",
+        fontFamily: "Raleway_500Medium",
         color: Colors.primary1
+    },
+    rejectedText: {
+        fontFamily: "Raleway_500Medium",
+        color: "#656464"
+    },
+    title: {
+        fontFamily: "Raleway_700Bold",
+        color: Colors.primary1
+    },
+    rejectedTitle: {
+        fontFamily: "Raleway_700Bold",
+        color: "#656464"
     },
     navbar: {
         flex: 1,
@@ -109,8 +155,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: "RalewayBold",
         opacity: 0.8, 
-        width: 284,
-        marginLeft: 47,
+        width: 310,
+        marginLeft: 40,
         marginRight: 44.5,
         borderBottomLeftRadius: 10,
         borderBottomEndRadius: 10,

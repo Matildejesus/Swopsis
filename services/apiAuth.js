@@ -99,20 +99,21 @@ export async function updateUserData({
     return data;
 }
 
-export async function updateUser({ userName, avatar }, userId) {
+export async function updateUser({ userName, avatar, password }, userId) {
     try {
         let updateData = {};
         let updatedUser = null;
 
-        // Handle username update
         if (userName) {
             updateData.data = { ...updateData.data, userName };
             const { data, error } = await supabase.auth.updateUser(updateData);
             if (error) throw new Error(error.message);
             updatedUser = data.user;
         }
+        if (password) {
+            const { data: passwordUpdate, error } = await supabase.auth.updateUser({ password });
+        }
 
-        // Handle avatar update if provided
         if (avatar) {
             console.log("Updating user avatar for user ID:", userId);
             const fileExt = avatar.split(".").pop();
@@ -125,7 +126,6 @@ export async function updateUser({ userName, avatar }, userId) {
                 type: `image/${fileExt}`,
             });
 
-            // Upload new avatar
             const { error: storageError } = await supabase.storage
                 .from("avatars")
                 .upload(fileName, formData, {
@@ -135,12 +135,10 @@ export async function updateUser({ userName, avatar }, userId) {
 
             if (storageError) throw new Error(storageError.message);
 
-            // Get public URL
             const { data: urlData } = supabase.storage
                 .from('avatars')
                 .getPublicUrl(fileName);
 
-            // Update user with new avatar URL
             const { data: userWithAvatar, error: updateError } = await supabase.auth.updateUser({
                 data: { avatar: urlData.publicUrl }
             });
@@ -149,7 +147,6 @@ export async function updateUser({ userName, avatar }, userId) {
             updatedUser = userWithAvatar.user;
         }
         console.log("Updated User:", updatedUser);
-        // Return the updated user in the same structure as getUser()
         return updatedUser;
         
     } catch (error) {

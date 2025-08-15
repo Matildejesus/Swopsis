@@ -80,8 +80,6 @@ export async function addItem({ item, itemDetails }) {
         ])
         .select();
 
-    console.log("insertedItemDetails: ", insertedItemDetails);
-
     if (errorItemDetails || errorItem) {
         throw new Error(errorItemDetails.message);
     }
@@ -127,9 +125,7 @@ return data[0];
 }
 
 export async function getGroupItems({ groupId, groupMembers }) {
-    // const { members: groupMembers } = useMembers(groupId);
     const memberIds = groupMembers.map((member) => member.userId);
-    //  console.log("Member IDs: ", memberIds);
     const { data, error } = await supabase
         .from("Items")
         .select(`
@@ -143,18 +139,14 @@ export async function getGroupItems({ groupId, groupMembers }) {
     if (error) {
         throw new Error(error.message);
     }
-
-    // console.log("NOW TRANSFORMING DATA");
     const transformedData = data.map(item => {
 
         const itemOwner = groupMembers.find(member => member.userId === item.userId);
-        // console.log("Item Owner: ", itemOwner);
         const extraInfo = 
             item.category === 'Shoes' ? item.Shoes[0] :
             item.category === 'Clothing' ? item.Clothing[0] :
             item.category === 'Accessories' ? item.Accessories[0] :
             null;
-        // console.log("Extra Info: ", extraInfo);
         
         return {
         ...item,

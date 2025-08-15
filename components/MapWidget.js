@@ -3,6 +3,7 @@ import Map from "./Map";
 import MainButton from "./MainButton";
 import { useNavigation } from "@react-navigation/native";
 import InputField from "./authentication/InputField";
+import Colors from "../constants/colors";
 
 function MapWidget({ postcode, onChangeText, value, onPress, error }) {
     const navigation = useNavigation();
@@ -13,7 +14,10 @@ function MapWidget({ postcode, onChangeText, value, onPress, error }) {
                 apikey={"FjRYhw4teVr0pkKgzacHIVAyEXKoDe_G4jBNQhILcsQ"}
                 postcode={postcode}
             />
-            <TouchableOpacity onPress={() => navigation.navigate("AmbassadorRequest")}>
+            <TouchableOpacity 
+                onPress={() => navigation.navigate("AmbassadorRequest")}
+                style={styles.ambassadorLink}
+            >
                 <Text style={styles.link}>
                     Be an{" "}
                     <Text style={styles.register}>Ambassador</Text>
@@ -65,6 +69,24 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 18,
-        fontFamily: "RalewayBold"
+        fontFamily: "Raleway_700Bold",
     },
+    ambassadorLink: {
+        position: "absolute",
+        top: 40, 
+        left: 15, // distance from left of screen
+        zIndex: 2, // ensure it's above the map
+        backgroundColor: Colors.impact, // optional for readability
+        fontFamily: "Raleway_700Bold",
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 6,
+    },
+    link: {
+        fontFamily: "Raleway_500Medium",
+        color: Colors.primary2
+    },
+    register: {
+        fontFamily: "Raleway_700Bold"
+    }
 })

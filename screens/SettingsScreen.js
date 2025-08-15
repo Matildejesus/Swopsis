@@ -1,24 +1,24 @@
 import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
 import PicturePicker from "../components/PicturePicker";
 import SettingsInputField from "../components/SettingsInputField";
-
 import Colors from "../constants/colors";
 import Line from "../components/Line";
-
 import { useState } from "react";
-
 import MainButton from "../components/MainButton";
-
 import { horizontalScale as hs, verticalScale as vs, moderateScale as ms } from "../utils/responsive";
 import { useUser } from "../hooks/auth/useUser";
 import { useUpdateUser } from "../hooks/auth/useUpdateUser";
 import { useLogout } from "../hooks/auth/useLogout";
+import supabase from "../services/supabase";
+import ErrorMessage from "../components/ErrorMessage";
 
 function SettingsScreen() {
     const { logout, isLoading } = useLogout();
     const { user, isLoading: isUserLoading } = useUser();
 
     const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+    const { updateUser, isUpdating } = useUpdateUser();
+    const { inputError, setInputError} = useState("");
 
     const profileHeight = screenHeight * 0.15;
     const profileWidth = screenWidth * 0.3;
@@ -37,11 +37,12 @@ function SettingsScreen() {
         } = {}
     } = user.user || {};
 
-    const { updateUser, isUpdating } = useUpdateUser();
-
     const [userName, setUserName] = useState(currentUserName);
     const [userEmail, setUserEmail] = useState(email);
     const [userAvatar, setUserAvatar] = useState(currentAvatar);
+    const [newPassword, setNewPassword] = useState("");
+    const [oldPassword, setOldPassword] = useState("");
+    const [verifyPassword, setVerifyPassword] = useState("");
 
     const handleImageSelected = (newAvatarUri) => {
         setUserAvatar(newAvatarUri);
@@ -55,12 +56,49 @@ function SettingsScreen() {
     function updateEmailHandler(enteredEmail) {
         setUserEmail(enteredEmail);
     }
-
-    function handleSubmit() {
-        console.log("Submitting user data:",  userName );
-        if (!userName) return;
-        updateUser({ updateData: { userName }, userId: id });
+    
+    function updateOldPassword(enteredOldPassword) {
+        setOldPassword(enteredOldPassword);
     }
+
+    function updateNewPassword(enteredNewPassword) {
+        setNewPassword(enteredNewPassword);
+    }
+    
+    function updateVerifyPassword(enteredVerifyPassword) {
+        setVerifyPassword(enteredVerifyPassword);
+    }
+
+    async function handleSubmit() {
+        console.log("Submitting user data:", userName);
+        if (!userName) return;
+
+        if (oldPassword || newPassword || verifyPassword) {
+            if (!oldPassword || !newPassword || !verifyPassword) {
+                setInputError("Missing input for password change.")
+                return;
+            } 
+
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+                email: userEmail,
+                password: oldPassword,
+            });
+
+
+            if (signInError) {
+                setInputError("Current password does not match")
+                return;
+            } 
+
+            if (newPassword !== verifyPassword) {
+                setInputError("Re-entered password does not match.")
+                return;
+            } 
+
+            updateUser({ updateData: { userName, password: newPassword }, userId: id });
+        }
+    }
+
 
     return (
         <View style={styles.container}>
@@ -78,7 +116,6 @@ function SettingsScreen() {
                     text={"Username"}
                     onChangeText={updateUserNameHandler}
                     editable={true}
-                    // value={userName}
                 />
                 <SettingsInputField
                     placeholder={email}
@@ -93,20 +130,33 @@ function SettingsScreen() {
                 <SettingsInputField
                     placeholder={"**********"}
                     text={"Current Password"}
+                    onChangeText={updateOldPassword}
                     secureTextEntry={true}
+                    editable={true}
+                    value={oldPassword}
                 />
                 <SettingsInputField
                     placeholder={"**********"}
                     text={"New Password"}
+                    onChangeText={updateNewPassword}
                     secureTextEntry={true}
+                    editable={true}
+                    value={newPassword}
+
                 />
                 <SettingsInputField
                     placeholder={"**********"}
                     text={"Confirm Password"}
+                    onChangeText={updateVerifyPassword}
                     secureTextEntry={true}
+                    editable={true}
+                    value={verifyPassword}
                 />
             </View>
             <Line />
+            <View style={styles.error}>
+                <ErrorMessage error={inputError} />
+            </View>
             <View style={styles.buttonContainer}>
                 <MainButton
                     title="LOG OUT"

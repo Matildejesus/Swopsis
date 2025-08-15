@@ -9,9 +9,7 @@ import { useAllMembers } from "../../hooks/useAllMembers";
 function MemberScreen() {
     const navigation = useNavigation();
     const route = useRoute();
-    // const { dataList, dataCount, requests } = route?.params;
-    const { dataList = null, dataCount = null} = route?.params || {};
-    // console.log("Data List: ", dataList);
+    const { dataList = null, dataCount = null, requests = null} = route?.params || {};
     const { members} = useAllMembers();
     return (
         <View style={styles.container}>
@@ -19,18 +17,9 @@ function MemberScreen() {
                 <SideBarNav navigation={navigation} />
             </View>
             <View style={styles.middle}>
-                {/* {requests && (
-                    <FlatList
-                        data={requests}
-                        renderItem={({ item }) => (
-                            <MemberWidget requests={item} />
-                        )}
-                        keyExtractor={(item) => item.id}
-                    />
-                )} */}
                 <FlatList 
                     data={dataList ? dataList: members}
-                    renderItem={({item}) => <MemberWidget user={item}/>}
+                    renderItem={({item}) => <MemberWidget user={item} requests={requests}/>}
                     keyExtractor={item => item.id}
                 />
             </View>

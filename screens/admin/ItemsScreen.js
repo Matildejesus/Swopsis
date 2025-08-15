@@ -5,6 +5,8 @@ import Colors from "../../constants/colors";
 import { useAllItems } from "../../hooks/useAllItems";
 import ItemReviewWidget from "../../components/ItemWidgets/ItemReviewWidget";
 import ItemWidget from "../../components/adminWidget/ItemWidget";
+import RectangleButton from "../../components/RectangleButton";
+import ItemIcon from "../../components/icons/adminicons/ItemIcon";
 
 function ItemsScreen() {
     const route = useRoute();
@@ -28,37 +30,14 @@ function ItemsScreen() {
                  showsVerticalScrollIndicator={false}
                  bounce={false}
              />
-{/* 
-        //<View style={styles.container}>
-        //     <View style={styles.header}>
-                 <View style={styles.navbar}>
-                    <SideBarNav navigation={navigation} />
-                 </View>
-        //         <MainButton
-        //             title="Create Group"
-        //             textStyle={styles.button}
-        //             style={styles.buttonSpot}
-        //             onPress={() => navigation.navigate("GroupCreate")}
-        //             variant="primary"
-        //         />
-        //     </View>
-        //     <FlatList
-        //         data={items}
-        //         renderItem={({ item }) => (
-        //             < group={item} />
-        //         )}
-        //         keyExtractor={(item) => item.id}
-        //         showsVerticalScrollIndicator={false}
-        //         bounce={false}
-        //     />
-        //     <View style={styles.bottom}>
-        //         <RectangleButton
-        //             icon={<GroupIcon />}
-        //             text="Groups"
-        //             color="#FFAD46"
-        //             number={groups.length}
-        //         />
-        //     </View> */}
+             <View style={styles.bottom}>
+                <RectangleButton
+                    icon={<ItemIcon />}
+                    text="Total Items"
+                    color="#FB5099"
+                    number={items.length}
+                />
+            </View>
          </View>
     );
 }

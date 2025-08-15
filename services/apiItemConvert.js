@@ -14,7 +14,6 @@ export async function getItemsNames({ category }) {
 }
 
 export async function getSubcategoryDetails({ item }) {
-    console.log("item", item);
     const { data: items, error: fetchError } = await supabase
         .from("ItemConversions")
         .select("*")
@@ -24,4 +23,15 @@ export async function getSubcategoryDetails({ item }) {
         throw new Error(fetchError.message);
     }
     return items[0];
+}
+
+export async function getAllConversions() {
+    const { data: conversions, error } = await supabase
+        .from("ItemConversions")
+        .select("*");
+
+    if (error) {
+        throw new Error(error.message);
+    }
+    return conversions;
 }

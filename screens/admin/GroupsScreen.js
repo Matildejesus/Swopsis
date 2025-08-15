@@ -1,4 +1,4 @@
-import { Text, View, Image, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import Colors from "../../constants/colors";
 import { useEffect, useState } from "react";
 import RectangleButton from "../../components/RectangleButton";
@@ -14,10 +14,23 @@ import { useAllGroups } from "../../hooks/useAllGroups";
 function GroupsScreen() {
     const navigation = useNavigation();
     const { groups } = useAllGroups();
+    const [combinedGroups, setCombinedGroups] = useState([]);
 
     function addSearch(newSearch) {
         setSearch(newSearch);
     }
+
+    useEffect(() => {
+        if (groups) {
+            // Combine all groups with their status for filtering
+            const combined = [
+                ...groups.filter(g => g.status === "pending").map(g => ({...g, section: 'pending'})),
+                ...groups.filter(g => g.status === "approve").map(g => ({...g, section: 'approved'})),
+                ...groups.filter(g => g.status === "reject").map(g => ({...g, section: 'rejected'}))
+            ];
+            setCombinedGroups(combined);
+        }
+    }, [groups]);
 
     return (
         <View style={styles.container}>
@@ -33,8 +46,9 @@ function GroupsScreen() {
                     variant="primary"
                 />
             </View>
+            
             <FlatList
-                data={groups}
+                data={combinedGroups}
                 renderItem={({ item }) => (
                     <GroupWidget group={item} />
                 )}
@@ -42,6 +56,7 @@ function GroupsScreen() {
                 showsVerticalScrollIndicator={false}
                 bounce={false}
             />
+           
             <View style={styles.bottom}>
                 <RectangleButton
                     icon={<GroupIcon />}

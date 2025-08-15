@@ -20,19 +20,19 @@ function MessageModal({
     return (
         <Portal>
             <Modal visible={visible} onDismiss={onBackdropPress}>
-                <View style={styles.container}>
-                    <View style={styles.content}>
+                <View style={!joinRequest ? styles.container: styles.joinRequestContainer}>
                     {!joinRequest && (
                         method === "swap" ? (
-                        <Text style={styles.title}>For Swap</Text>
+                            <View style={styles.content}>
+                            <   Text style={styles.title}>For Swap</Text>
+                            </View>
                         ) : (
-                        <>
-                            <Text style={styles.title}>For Loan</Text>
-                            <CalendarWidget markedDates={markedDates} toggleDate={toggleDate} />
-                        </>
+                            <View style={styles.content}>
+                                <Text style={styles.title}>For Loan</Text>
+                                <CalendarWidget markedDates={markedDates} toggleDate={toggleDate} />
+                            </View>
                         )
                     )}
-                    </View>
                     <InputField
                         placeholder="Write your message..."
                         onChangeText={onMessageChange}
@@ -66,6 +66,17 @@ const styles = StyleSheet.create({
         paddingTop: 35,
         borderRadius: 20,
     },
+    joinRequestContainer: {
+        flex: 1,
+        backgroundColor: "#DACFD4",
+        position: "absolute",
+        bottom: -40,
+        left: 20,
+        width: 340,
+        height: 200,
+        paddingTop: 35,
+        borderRadius: 20,
+    },
     content: {
         height: 169,
     },
@@ -82,14 +93,15 @@ const styles = StyleSheet.create({
         alignSelf: "center",
     },
     button: {
-        width: "100%",
+        width: "80%",
         height: 40,
         borderRadius: 20,
         backgroundColor: "#D0ADBD",
+        alignSelf: "center",
         alignItems: "center",
         justifyContent: "center",
     },
-    inputFieldContainer: {
+    inputField: {
         height: 100,
         backgroundColor: "white",
         marginHorizontal: 10,
@@ -101,5 +113,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 13,
         paddingVertical: 8,
         marginTop: 20,
+        alignSelf: "center",
+        alignItems: "center",
+        justifyContent: "center",
     },
 });

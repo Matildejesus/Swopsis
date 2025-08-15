@@ -1,28 +1,24 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllUsers } from "../services/apiAdmin";
-import { useUser } from "./auth/useUser";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-export function useAllMembers(groupId) {
+import { useUser } from "./auth/useUser";
+import { getAllUsers } from "../services/apiAdmin";
+
+export function useAllMembers() {
     const { user } = useUser();
-    // if (user?.user?.is_super_admin) {
-    //     // all Member
-    //     // the function will be getAllUsers()
-    // } else if (user?.user?.user_metadata?.ambassador
-    //     // sees all member info that is in the group
-    //     // the function will be getGroupMembers({ groupId })
-    // )
+    const queryClient = useQueryClient();
 
     const {data: members, isLoading, isFetching } = useQuery({
         queryKey: ["allMembers",],
         queryFn: async () => {
-            // console.log("Fetching all members for group:", groupId);
+        
             const data = await getAllUsers();
             return data;
         },
         onSuccess: (membersData) => {
-            // console.log("Members Data: ", membersData);
+            console.log("Members Data: ", membersData);
             queryClient.setQueryData(["allMembers"], membersData);
-        }
+        },
     });
+    // console.log("members: ", members);
     return { members, isLoading, isFetching };        
 }

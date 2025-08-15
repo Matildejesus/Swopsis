@@ -23,7 +23,8 @@ function BulletPointWidget({pointsList, setPointsList}) {
                     onChangeText={(text) => setInput(text)}
                     placeholder={"Enter rules..."}
                     text="Rules"
-                    containerStyle={styles.inputContainer}/>
+                    containerStyle={styles.inputContainer}
+                />
                 <AddIcon onPress={addBulletPoint} buttonStyle={styles.addButton} />
             </View>            
             <FlatList

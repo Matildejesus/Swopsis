@@ -1,8 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateStatus } from "../../services/apiGroups";
 
-// updateStatus({id, status})
-
 export function useUpdateGroupStatus() {
     const queryClient = useQueryClient();
 
@@ -23,6 +21,21 @@ export function useUpdateGroupStatus() {
                 console.log('Updated groups data:', update);
                 return update;
             });
+
+            queryClient.setQueryData(["requests"], (old) => {
+                return {
+                    accepted: old.accepted.map(group => 
+                        group.id === id ? { ...group, status } : group
+                    ),
+                    pending: old.pending.map(group => 
+                        group.id === id ? { ...group, status } : group
+                    ),
+                    rejected: old.rejected.map(group => 
+                        group.id === id ? { ...group, status } : group
+                    )
+                };
+            });
+    
             console.log('Current groups data after update:', queryClient.getQueryData(["allGroups"]));
         },
         onError: (err) => {

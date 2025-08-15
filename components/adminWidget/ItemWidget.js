@@ -4,11 +4,35 @@ import TrashIcon from "../icons/TrashIcon";
 import Colors from "../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 import { useAllMembers } from "../../hooks/useAllMembers";
+import { useAllItemConversions } from "../../hooks/useAllItemConversions";
+import { useEffect, useState } from "react";
 
 function ItemWidget({ item }) {
    
     const navigation = useNavigation();
-    const { members, isLoading } = useAllMembers();
+    const { itemConversions, isLoading: conversionsLoading } = useAllItemConversions();
+    
+
+    useEffect(() => {
+        if (!itemConversions || !item) return; 
+//         const conversion = itemConversions.find(c => c.subcategory === item.subcategory);
+//         setLitres(conversion.litres);
+//         if (conversion.scalable) {
+//             const categoryArray = item[conversion.category];
+//             // if (categoryArray) {
+//             //     const weight = parseFloat(categoryArray[0].weight);
+//             // }
+//             console.log(item);
+//             console.log(conversion.carbon);
+//             console.log(Object.keys(categoryArray[0]));
+// ;
+//             // setCarbon(conversion.carbon * item[conversion.category][0].weight);
+
+//         } else {
+//             setCarbon(conversion.carbon);
+//         }
+
+    }, [item, itemConversions]);
 
     return(
         <View style={styles.container}>
@@ -19,7 +43,8 @@ function ItemWidget({ item }) {
             <View style={styles.textContainer}>
                 <Text style={[styles.name, {fontFamily: "RalewayBold"}]}>{item.title}</Text>
                 <Text style={styles.middleText}>{item.category}</Text>
-                {/* <Text style={styles.middleText}>{formattedDate}</Text> */}
+                <Text style={styles.middleText}>{item.carbon} Tonnes of CO2</Text>
+                <Text style={styles.middleText}>{item.litres} Litres of Water</Text>
             </View>
             <View style={styles.icons}>
                 <ViewIcon onPress={() => navigation.navigate("ProfileItem", { itemData:item })}/>

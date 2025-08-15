@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MapView, { Marker, Callout } from "react-native-maps";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { getGroups } from "../services/apiGroups";
 import PinIcon from "../components/icons/PinIcon";
 import Colors from "../constants/colors";
@@ -24,11 +24,11 @@ const Map = ({ apikey, postcode }) => {
 
                 const locations = await Promise.all(
                     fetchedGroups
-                    .filter(group => group.status !== 'pending')
+                    .filter(group => group.status == "approve")
                     .map(async (group) => {
                         const groupLocation = group.location.split(', ').pop();
                         const response = await fetch(
-                            `https://geocode.search.hereapi.com/v1/geocode?q=$Australia+${groupLocation}&apiKey=${apikey}`,
+                            `https://geocode.search.hereapi.com/v1/geocode?q=${groupLocation}, Victoria, Australia&apiKey=${apikey}`
                         );
                         const data = await response.json();
                         if (data.items && data.items.length > 0) {
@@ -49,7 +49,18 @@ const Map = ({ apikey, postcode }) => {
                         return null;
                     }),
                 );
-                setGroupLocations(locations.filter((loc) => loc !== null)); // Remove nulls
+                const groupedByPostcode = locations
+                .filter(loc => loc !== null)
+                .reduce((acc, group) => {
+                    const postcode = group.location.split(',').pop().trim();
+                    if (!acc[postcode]) {
+                        acc[postcode] = [];
+                    }
+                    acc[postcode].push(group);
+                    return acc;
+                }, {});
+                // console.log("GROUPED BY POSTCODE: ", groupedByPostcode);
+                setGroupLocations(groupedByPostcode);
             } catch (error) {
                 console.error("Error fetching groups or geocoding: ", error);
             } finally {
@@ -64,6 +75,7 @@ const Map = ({ apikey, postcode }) => {
         if (!postcode) return;
         const fetchGeocode = async () => {
             try {
+                console.log("postcode: ", postcode);
                 const response = await fetch(
                     `https://geocode.search.hereapi.com/v1/geocode?q=$Australia+Victoria+${postcode}&apiKey=${apikey}`,
                 );
@@ -88,7 +100,7 @@ const Map = ({ apikey, postcode }) => {
 
     useEffect(() => {
         if (region) {
-            console.log("Region updated:", region); // Debugging log
+            console.log("Region updated:", region); 
         }
     }, [region]);
 
@@ -106,36 +118,44 @@ const Map = ({ apikey, postcode }) => {
                 <MapView
                     style={styles.map}
                     initialRegion={region} 
+                    region={region}
                     onRegionChangeComplete={onRegionChangeComplete}
                     showsUserLocation={true} 
                 >
-                    {/* Render markers for group locations */}
-                    {groupLocations.map((group) => (
-                        <Marker
-                            key={group.id}
+                    {Object.entries(groupLocations).map(([postcode, groups]) => {
+                        console.log("Rendering marker for postcode:", postcode, groups);
+                        return (<Marker
+                            key={postcode}
                             coordinate={{
-                                latitude: group.latitude,
-                                longitude: group.longitude,
+                                latitude: groups[0].latitude,
+                                longitude: groups[0].longitude,
                             }}
                         >
                             <PinIcon />
                             <Callout
-                                tooltip
-                                style={styles.bubble}
-                                onPress={() => handlePress(group)}
-                            >
+                                tooltip={true}
+                                onPress={(e) => {
+                                    const y = e.nativeEvent.point.y;
+                                    const rowHeight = 40; 
+                                    const tappedIndex = Math.floor(y / rowHeight);
+                                    if (groups[tappedIndex]) {
+                                        handlePress(groups[tappedIndex]);
+                                    }
+                                }}
+                                >
                                 <View style={styles.calloutContainer}>
-                                    <Text style={styles.calloutTitle}>
-                                        {group.name}
-                                    </Text>
-                                    <View style={styles.arrowContainer}>
-                                        <ArrowNext />
+                                    {groups.map((group) => (
+                                    <View key={group.id} style={styles.bubble}>
+                                        <Text style={styles.calloutTitle}>{group.name}</Text>
+                                        <View style={styles.arrowContainer}>
+                                            <ArrowNext />
+                                        </View>
                                     </View>
+                                    ))}
                                 </View>
                             </Callout>
-                        </Marker>
-                        // icon={<PinIcon />}
-                    ))}
+                        </Marker>)
+})}
                 </MapView>
             )}
         </View>
@@ -159,6 +179,7 @@ const styles = StyleSheet.create({
         height: 40,
         alignItems: "center",
         paddingHorizontal: 5,
+        
         // gap: 7,
     },
     calloutTitle: {
@@ -181,9 +202,15 @@ const styles = StyleSheet.create({
         color: Colors.primary1, // Arrow color matches primary theme
     },
     calloutContainer: {
-        flexDirection: "row",
-        // marginLeft: 20,
-        // justifyContent: "center"
-        alignItems: "center",
+        flexDirection: "column",
+        // alignItems: "center",
+        gap: 7,
     },
+    groupItem: {
+        paddingVertical: 8,
+        paddingHorizontal: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    }
 });
