@@ -24,6 +24,8 @@ function MemberWidget({ user, requests }) {
     const { user: onScreenUser} = useUser();
     const { updateUserCoins, isLoading: coinsLoading, isSuccess} = useUpdateUserCoins();
 
+    console.log("MEMBER WIDGET --- THE USER: ", user);
+    console.log("MEMBER WIDGET ---THE REQUEST: ", requests);
     if (user?.app_metadata?.role == "super-admin") return;
 
     useEffect(() => {
@@ -34,19 +36,6 @@ function MemberWidget({ user, requests }) {
     useEffect(() => {
         if (user) {
             setCurrentUser(user);
-        }
-        if (requests && onScreenUser.user.app_metadata.role !== "super-admin") {
-            const fetchUser = async () => {
-                try {
-                    const pendingUser = await findUserById({
-                        id: requests.userId,
-                    });
-                    setCurrentUser(pendingUser);
-                } catch (error) {
-                    console.error("Error fetching requests: ", error);
-                }
-            };
-            fetchUser();
         }
     }, [user, requests]);
 
@@ -129,12 +118,15 @@ function MemberWidget({ user, requests }) {
                 <EditIcon onPress={handleEditIcon} />
                 <TrashIcon width="18" height="20"/>
             </View>
-            <RequestModal
-                visible={isModalVisible}
-                onRequestClose={onModalClose}
-                name={user.user_metadata.userName}
-                message={requests.message}
-            />
+            {requests && 
+                <RequestModal
+                    visible={isModalVisible}
+                    onRequestClose={onModalClose}
+                    name={user.user_metadata.userName}
+                    message={requests.message}
+                />
+            }
+            
             <DataDisplayModal
                 visible={isCoinModalVisible}
                 onRequestClose={onCoinModalClose}

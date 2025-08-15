@@ -1,17 +1,20 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getJoinRequests } from "../services/apiJoinRequests";
 import { useAllGroups } from "./useAllGroups";
+import { useUser } from "./auth/useUser";
 
-export function useRequests(groupId) {
+export function useRequests() {
     const queryClient = useQueryClient();
+    const { user } = useUser();
     const { groups, isLoading: groupsLoading} = useAllGroups();
-    console.log("GROUPS: ", groups);
+    // console.log("GROUPS: ", groups);
     const { data: requests, isLoading } = useQuery({
         queryKey: ["requests" || "allGroups"],
         queryFn: async () => {
             console.log("use req running");
-            if (groupId) {
-                const data = await getJoinRequests({groupId});
+            if (user?.user?.user_metadata?.group) {
+                const data = await getJoinRequests({groupId: user.user.user_metadata.group});
+                console.log("JOIN REQUEST DATA: ", data);
                 return data;
             } else {
                 const accepted = [];
@@ -31,7 +34,7 @@ export function useRequests(groupId) {
                 return { accepted, rejected, pending };
             }
         },
-        enabled: !!groupId || !groupsLoading,
+        enabled: !groupsLoading || !!user,
         onSuccess: (requestsData) => {
             queryClient.setQueryData(["requests"], requestsData);
         }

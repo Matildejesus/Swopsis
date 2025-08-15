@@ -9,6 +9,7 @@ export async function findUserByEmail(email) {
 }
 
 export async function findUserById(id) {
+    console.log("THE ID THAT IS BEING QUERIED: ", id)
     try {
         const { data, error } = await supabaseAdmin.auth.admin.getUserById(
             id.id,
@@ -96,7 +97,7 @@ export async function updateUserMetadata({ id, groupId, ambassador }) {
         user_metadata,
     });
 
-    console.log("Data: ", data);
+    // console.log("Data: ", data);
     if (error) {
         console.error("Error updating user metadata:", error);
         throw error; // Propagate the error
@@ -198,5 +199,5 @@ export async function getAllItems(members, itemConversions) {
 
 
 export async function getGroupRequests() {
-    
+
 }

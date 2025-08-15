@@ -83,7 +83,7 @@ function GroupDetailsScreen({ route }) {
                 message,
             });
             console.log("yes");
-            console.log("DATA: ", data);
+            // console.log("DATA: ", data);
             navigation.reset({
                 index: 0,
                 routes: [

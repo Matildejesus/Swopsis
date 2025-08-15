@@ -77,7 +77,7 @@ export async function getGroups() {
     if (fetchError) {
         throw new Error(fetchError.message);
     }
-    console.log("data: ", groups);
+    // console.log("data: ", groups);
     return groups;
 }
 

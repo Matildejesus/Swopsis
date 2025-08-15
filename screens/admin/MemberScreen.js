@@ -5,12 +5,42 @@ import MemberIcon from "../../components/icons/adminicons/MemberIcon";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import MemberWidget from "../../components/MemberWidget";
 import { useAllMembers } from "../../hooks/useAllMembers";
+import { useEffect, useState } from "react";
+import { findUserById } from "../../services/apiAdmin";
 
 function MemberScreen() {
     const navigation = useNavigation();
     const route = useRoute();
     const { dataList = null, dataCount = null, requests = null} = route?.params || {};
-    const { members} = useAllMembers();
+    const { members } = useAllMembers();
+    const [allUsers, setAllUsers] = useState([]);
+   
+    useEffect(() => {
+        const loadData = async () => {
+        let users = [...members];
+        
+            if (requests) {
+                for (const request of requests) {
+                    try {
+                        const user = await findUserById({id: request.userId}); // Pass just the ID string
+                        if (user) {
+                            users.unshift({ ...user, request}); // Add to beginning
+                        }
+                    } catch (error) {
+                        console.error(`Failed to fetch user ${request.userId}:`, error);
+                    }
+                }
+                setAllUsers(users);
+            } else if (dataList) {
+                setAllUsers(dataList);
+            } else {
+                setAllUsers(members);
+            }
+        
+        };
+        loadData();
+    }, [members, requests]);
+
     return (
         <View style={styles.container}>
             <View style={styles.navbar}>
@@ -18,8 +48,8 @@ function MemberScreen() {
             </View>
             <View style={styles.middle}>
                 <FlatList 
-                    data={dataList ? dataList: members}
-                    renderItem={({item}) => <MemberWidget user={item} requests={requests}/>}
+                    data={allUsers}
+                    renderItem={({item}) => <MemberWidget user={item} requests={item.request}/>} // and then after that for the reuqests part now the user wich is requesting is in the datalist irght, so then i want to send the request which is in the datalist
                     keyExtractor={item => item.id}
                 />
             </View>

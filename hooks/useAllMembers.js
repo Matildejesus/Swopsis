@@ -1,19 +1,26 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { useUser } from "./auth/useUser";
-import { getAllUsers } from "../services/apiAdmin";
+import { getAllUsers, getGroupMembers } from "../services/apiAdmin";
 
 export function useAllMembers() {
     const { user } = useUser();
     const queryClient = useQueryClient();
+    // console.log("user: ", user.user.user_metadata);
+    const groupId = user?.user?.user_metadata?.group;
 
     const {data: members, isLoading, isFetching } = useQuery({
-        queryKey: ["allMembers",],
+        queryKey: ["allMembers"],
         queryFn: async () => {
-        
-            const data = await getAllUsers();
-            return data;
+            if (user.user.user_metadata.ambassador && groupId){
+                console.log("thsi is an ambassador");
+                return await getGroupMembers({ groupId });
+            } else {
+                const data = await getAllUsers();
+                return data;
+            }
         },
+        enabled: !!user,
         onSuccess: (membersData) => {
             console.log("Members Data: ", membersData);
             queryClient.setQueryData(["allMembers"], membersData);
