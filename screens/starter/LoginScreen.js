@@ -11,8 +11,8 @@ import { useLogin } from "../../hooks/auth/useLogin.js";
 
 function LoginScreen({ navigation }) {
 
-    const [email, setEmail] = useState("admin@gmail.com");
-    const [password, setPassword] = useState("admin");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState(null);
     const [passwordError, setPasswordError] = useState(null);
     const [loginError, setLoginError] = useState(null);

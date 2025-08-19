@@ -11,7 +11,7 @@ function MapWidget({ postcode, onChangeText, value, onPress, error }) {
     return (
         <View style={{flex: 1,}}>
             <Map
-                apikey={"FjRYhw4teVr0pkKgzacHIVAyEXKoDe_G4jBNQhILcsQ"}
+                apikey={"AIzaSyAUVZblxClNYeMChsYyN9dyVNLUU1T9Ezk"}
                 postcode={postcode}
             />
             <TouchableOpacity 

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import MapView, { Marker, Callout } from "react-native-maps";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { getGroups } from "../services/apiGroups";
 import PinIcon from "../components/icons/PinIcon";
 import Colors from "../constants/colors";
@@ -8,7 +8,12 @@ import ArrowNext from "../components/icons/ArrowNext";
 import { useNavigation } from "@react-navigation/native";
 
 const Map = ({ apikey, postcode }) => {
-    const [region, setRegion] = useState(null);
+    const [region, setRegion] = useState({
+        latitude: -37.8136,
+        longitude: 144.9631,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+    });
     const [groups, setGroups] = useState();
     const [loading, setLoading] = useState();
     const [groupLocations, setGroupLocations] = useState([]);
@@ -27,12 +32,13 @@ const Map = ({ apikey, postcode }) => {
                     .filter(group => group.status == "approve")
                     .map(async (group) => {
                         const groupLocation = group.location.split(', ').pop();
+                        console.log("grouploaciton: ", groupLocation);
                         const response = await fetch(
-                            `https://geocode.search.hereapi.com/v1/geocode?q=${groupLocation}, Victoria, Australia&apiKey=${apikey}`
+                            `https://maps.googleapis.com/maps/api/geocode/json?address=${groupLocation},Victoria,Australia&key=${apikey}`
                         );
                         const data = await response.json();
-                        if (data.items && data.items.length > 0) {
-                            const position = data.items[0].position;
+                        if (data.results && data.results.length > 0) {
+                            const position = data.results[0].geometry.location;
                             return {
                                 id: group.id,
                                 name: group.name,
@@ -73,30 +79,38 @@ const Map = ({ apikey, postcode }) => {
 
     useEffect(() => {
         if (!postcode) return;
+
         const fetchGeocode = async () => {
             try {
-                console.log("postcode: ", postcode);
+                console.log("Fetching for postcode:", postcode);
+                
+                // PROPERLY formatted API request
                 const response = await fetch(
-                    `https://geocode.search.hereapi.com/v1/geocode?q=$Australia+Victoria+${postcode}&apiKey=${apikey}`,
+                    `https://maps.googleapis.com/maps/api/geocode/json?address=Australia,Victoria,${postcode}&key=${apikey}`
                 );
+                
                 const data = await response.json();
-                if (data.items && data.items.length > 0) {
-                    const position = data.items[0].position;
+                console.log("Geocoding response:", data);
+                
+                if (data.results && data.results.length > 0) {
+                    const location = data.results[0].geometry.location;
                     setRegion({
-                        latitude: position.lat,
-                        longitude: position.lng,
+                        latitude: location.lat,
+                        longitude: location.lng,
                         latitudeDelta: 0.03,
-                        longitudeDelta: 0.005, 
+                        longitudeDelta: 0.005,
                     });
+                } else {
+                    console.warn("No results found for postcode:", postcode);
+                    // Keep existing region
                 }
             } catch (error) {
-                console.error("Error fetching geocode data:", error);
+                console.error("Geocoding failed:", error);
             }
         };
 
         fetchGeocode();
-
-    }, [ postcode]);
+    }, [postcode, apikey]);
 
     useEffect(() => {
         if (region) {
@@ -104,13 +118,24 @@ const Map = ({ apikey, postcode }) => {
         }
     }, [region]);
 
-    const handlePress = (group) => {
+    const handlePress = useCallback((group) => {
         navigation.navigate("GroupDetails", { group });
-    };
+    }, [navigation]);
 
-    const onRegionChangeComplete = (newRegion) => {
-        setRegion(newRegion);
-    };
+    const onRegionChangeComplete = useCallback((newRegion) => {
+        if (!sameRegion(region, newRegion)) {
+            setRegion(newRegion);
+        }
+    }, [region]);
+
+    const almostEqual = (a, b, eps = 0.0001) => Math.abs(a - b) < eps;
+    const sameRegion = (r1, r2) => (
+        r1 && r2 &&
+        almostEqual(r1.latitude, r2.latitude) &&
+        almostEqual(r1.longitude, r2.longitude) &&
+        almostEqual(r1.latitudeDelta, r2.latitudeDelta) &&
+        almostEqual(r1.longitudeDelta, r2.longitudeDelta)
+    );
 
     return (
         <View style={styles.container}>
@@ -119,43 +144,27 @@ const Map = ({ apikey, postcode }) => {
                     style={styles.map}
                     initialRegion={region} 
                     region={region}
-                    onRegionChangeComplete={onRegionChangeComplete}
                     showsUserLocation={true} 
                 >
-                    {Object.entries(groupLocations).map(([postcode, groups]) => {
-                        console.log("Rendering marker for postcode:", postcode, groups);
-                        return (<Marker
-                            key={postcode}
+                    {Object.entries(groupLocations).map(([postcode, groups]) => (
+                    groups.map((group, index) => (
+                        <Marker
+                            key={`${postcode}-${group.id}`}
                             coordinate={{
-                                latitude: groups[0].latitude,
-                                longitude: groups[0].longitude,
+                                latitude: group.latitude + (index * 0.002), // Slightly offset markers
+                                longitude: group.longitude ,
                             }}
+                            onPress={() => handlePress(group)}
                         >
-                            <PinIcon />
-                            <Callout
-                                tooltip={true}
-                                onPress={(e) => {
-                                    const y = e.nativeEvent.point.y;
-                                    const rowHeight = 40; 
-                                    const tappedIndex = Math.floor(y / rowHeight);
-                                    if (groups[tappedIndex]) {
-                                        handlePress(groups[tappedIndex]);
-                                    }
-                                }}
-                                >
-                                <View style={styles.calloutContainer}>
-                                    {groups.map((group) => (
-                                    <View key={group.id} style={styles.bubble}>
-                                        <Text style={styles.calloutTitle}>{group.name}</Text>
-                                        <View style={styles.arrowContainer}>
-                                            <ArrowNext />
-                                        </View>
-                                    </View>
-                                    ))}
+                            <View style={styles.bubble}>
+                                <Text style={styles.calloutTitle}>{group.name}</Text>
+                                <View style={styles.arrowContainer}>
+                                    <ArrowNext style={styles.arrow} />
                                 </View>
-                            </Callout>
-                        </Marker>)
-})}
+                            </View>
+                        </Marker>
+                    ))
+                ))}
                 </MapView>
             )}
         </View>
