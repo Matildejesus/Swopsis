@@ -29,32 +29,31 @@ const Map = ({ apikey, postcode }) => {
 
                 const locations = await Promise.all(
                     fetchedGroups
-                    .filter(group => group.status == "approve")
-                    .map(async (group) => {
+                        .filter(group => group.status == "approve")
+                        .map(async (group) => {
                         const groupLocation = group.location.split(', ').pop();
-                        console.log("grouploaciton: ", groupLocation);
                         const response = await fetch(
                             `https://maps.googleapis.com/maps/api/geocode/json?address=${groupLocation},Victoria,Australia&key=${apikey}`
                         );
                         const data = await response.json();
-                        if (data.results && data.results.length > 0) {
-                            const position = data.results[0].geometry.location;
+                        
+                        if (data.results?.[0]?.geometry?.location) {
+                            const lat = Number(data.results[0].geometry.location.lat);
+                            const lng = Number(data.results[0].geometry.location.lng);
+                            
+                            // Validate coordinates
+                            if (Math.abs(lat) <= 90 && Math.abs(lng) <= 180) {
                             return {
-                                id: group.id,
-                                name: group.name,
-                                description: group.description,
-                                latitude: position.lat,
-                                longitude: position.lng,
-                                rules: group.rules,
-                                numberOfMem: group.numberOfMem,
-                                avatar: group.avatar,
-                                ambassadorId: group.ambassadorId,
-                                location: group.location,
+                                ...group,
+                                latitude: lat,
+                                longitude: lng
                             };
-                        } 
+                            }
+                        }
+                        console.warn('Invalid coordinates for:', group.id, groupLocation);
                         return null;
-                    }),
-                );
+                        })
+                    );
                 const groupedByPostcode = locations
                 .filter(loc => loc !== null)
                 .reduce((acc, group) => {
@@ -85,8 +84,12 @@ const Map = ({ apikey, postcode }) => {
                 console.log("Fetching for postcode:", postcode);
                 
                 // PROPERLY formatted API request
-                const response = await fetch(
-                    `https://maps.googleapis.com/maps/api/geocode/json?address=Australia,Victoria,${postcode}&key=${apikey}`
+                const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(postcode)},Australia&key=${apikey}`,
+                    {
+                        headers: {
+                        'User-Agent': 'com.anonymous.swopsis' 
+                        }
+                    }
                 );
                 
                 const data = await response.json();
@@ -146,25 +149,30 @@ const Map = ({ apikey, postcode }) => {
                     region={region}
                     showsUserLocation={true} 
                 >
+                    {/* <Marker
+                        coordinate={{ latitude: -37.8136, longitude: 144.9631 }}
+                        title="TEST MARKER"
+                    /> */}
+
                     {Object.entries(groupLocations).map(([postcode, groups]) => (
-                    groups.map((group, index) => (
-                        <Marker
+                        groups
+                        .filter(group => group.latitude && group.longitude)
+                        .map((group) => (
+                            <Marker
                             key={`${postcode}-${group.id}`}
                             coordinate={{
-                                latitude: group.latitude + (index * 0.002), // Slightly offset markers
-                                longitude: group.longitude ,
+                                latitude: group.latitude,
+                                longitude: group.longitude // Remove offset
                             }}
                             onPress={() => handlePress(group)}
-                        >
+                            >
                             <View style={styles.bubble}>
                                 <Text style={styles.calloutTitle}>{group.name}</Text>
-                                <View style={styles.arrowContainer}>
-                                    <ArrowNext style={styles.arrow} />
-                                </View>
+                                <ArrowNext style={styles.arrow} />
                             </View>
-                        </Marker>
-                    ))
-                ))}
+                            </Marker>
+                        ))
+                    ))}
                 </MapView>
             )}
         </View>
