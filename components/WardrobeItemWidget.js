@@ -10,9 +10,6 @@ import dateFormatting from "./dateFormatting";
 function WardrobeitemWidget({ item }) {
     const navigation = useNavigation();
 
-    // console.log("ITEM: ", item.available);
-    // console.log("ITEM: ", item.wishlist);
-
     const date = dateFormatting(item.created_at);
 
     const handleContactPress = () => {

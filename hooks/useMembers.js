@@ -17,7 +17,7 @@ export function useMembers(groupId) {
             queryClient.setQueryData(["members"], membersData);
         }
     });   
-        console.log("Members data:", members);
+        // console.log("Members data:", members);
     console.log("Is loading:", isLoading);
     return { members, isLoading };
 

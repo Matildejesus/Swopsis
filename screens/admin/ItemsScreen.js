@@ -3,7 +3,6 @@ import SideBarNav from "../../components/SideBarNav";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Colors from "../../constants/colors";
 import { useAllItems } from "../../hooks/useAllItems";
-import ItemReviewWidget from "../../components/ItemWidgets/ItemReviewWidget";
 import ItemWidget from "../../components/adminWidget/ItemWidget";
 import RectangleButton from "../../components/RectangleButton";
 import ItemIcon from "../../components/icons/adminicons/ItemIcon";

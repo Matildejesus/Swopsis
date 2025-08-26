@@ -12,9 +12,10 @@ function WardrobeScreen() {
     const [showWishlist, setShowWishlist] = useState(false);
     const navigation = useNavigation();
     const [ groupItems, setGroupItems] = useState([]);
-    const { groupWardrobe, isLoading } = useGroupWardrobe();
+    const { groupWardrobe, isLoading, refetchNew } = useGroupWardrobe();
     const { user } = useUser();
 
+    console.log(groupWardrobe[0])
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -44,6 +45,20 @@ function WardrobeScreen() {
         ? groupItems.filter(item => item.wishlist)
         : groupItems; 
 
+    
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await refetchNew(); 
+    } catch (err) {
+      console.warn("Refresh failed:", err);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refetchNew]);
+
     return (
         <View style={styles.container}>
             <FlatList
@@ -53,6 +68,8 @@ function WardrobeScreen() {
                 keyExtractor={(item) => item.id}
                 showsVerticalScrollIndicator={false}
                 bounce={false}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
 
             />
     </View>

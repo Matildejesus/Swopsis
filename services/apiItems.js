@@ -124,18 +124,37 @@ return data[0];
 
 }
 
-export async function getGroupItems({ groupId, groupMembers, itemConversions }) {
-    console.log(groupId, groupMembers, itemConversions);
+
+export async function getGroupItems({ groupId, groupMembers, itemConversions, after }) {
+        console.log("[getGroupItems] groupId:", groupId, "members:", groupMembers?.length, "after:", after);
+
     const memberIds = groupMembers.map((member) => member.userId);
-    const { data, error } = await supabase
-        .from("Items")
-        .select(`
-            id, created_at, userId, category, image, title, description, method, available, tradeCount, unavailableDates,
-            Shoes!itemId (*),
-             Clothing!itemId (*),
-             Accessories!itemId (*)`)
-        .in('userId', memberIds)
-        .order("created_at", { ascending: false });
+    let data;
+    let error;
+    if (!after) {
+         console.log("[getGroupItems] No 'after' provided, fetching full wardrobe");
+        ({ data, error } = await supabase
+            .from("Items")
+            .select(`
+                id, created_at, userId, category, image, title, description, method, available, tradeCount, unavailableDates,
+                Shoes!itemId (*),
+                Clothing!itemId (*),
+                Accessories!itemId (*)`)
+            .in('userId', memberIds)
+            .order("created_at", { ascending: false }));
+    } else {
+        ({ data, error } = await supabase
+            .from("Items")
+            .select(`
+                id, created_at, userId, category, image, title, description, method, available, tradeCount, unavailableDates,
+                Shoes!itemId (*),
+                Clothing!itemId (*),
+                Accessories!itemId (*)`)
+            .in('userId', memberIds)
+            .gt("created_at", after)
+            .order("created_at", { ascending: false }));
+    }
+    
 
     if (error) {
         throw new Error(error.message);

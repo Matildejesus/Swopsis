@@ -22,7 +22,7 @@ export function useAllMembers() {
         },
         enabled: !!user,
         onSuccess: (membersData) => {
-            console.log("Members Data: ", membersData);
+            console.log(" ", membersData);
             queryClient.setQueryData(["allMembers"], membersData);
         },
     });

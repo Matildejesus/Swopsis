@@ -3,7 +3,7 @@ import Colors from "../../constants/colors";
 import ContactIcon from "../icons/ContactIcon";
 
 function ContactButton({ handleContact, display }) {
-    console.log("handleContact prop:", handleContact);
+    // console.log("handleContact prop:", handleContact);
 
     return (
         <TouchableOpacity onPress={handleContact}>
