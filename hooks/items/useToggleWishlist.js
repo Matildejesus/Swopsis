@@ -6,14 +6,14 @@ export function useToggleWishlist() {
     const queryClient = useQueryClient();
 
     const { mutate: toggleWishlist, isLoading: isDeleting } = useMutation({
-        mutationFn: async ({ userId, itemId, wishlist }) => {
+        mutationFn: async ({ userId, itemId, wishlist, groupId }) => {
             const data = await toggleWishlistApi({ userId, itemId, wishlist});
-            return { data, itemId, wishlist };
+            return { data, itemId, wishlist, groupId };
         },
-        onSuccess: ({data, itemId, wishlist}) => {
+        onSuccess: ({data, itemId, wishlist, groupId}) => {
             // const previousWardrobe = queryClient.getQueryData(['groupWardrobe']);
             console.log("THERE IS SUCCESS");
-            queryClient.setQueryData(['groupWardrobe'], (old) => {
+            queryClient.setQueryData(['groupWardrobe', groupId], (old) => {
                 const updated = old?.map(item => 
                     item.id === itemId 
                         ? { ...item, wishlist: !wishlist } 
@@ -23,8 +23,8 @@ export function useToggleWishlist() {
                 return updated;
             });
     
-    const current = queryClient.getQueryData(['groupWardrobe']);
-    console.log('Current data after update:', current);
+            const current = queryClient.getQueryData(['groupWardrobe', groupId]);
+            console.log('Current data after update:', current);
 
             Toast.show({
                 type: 'success',

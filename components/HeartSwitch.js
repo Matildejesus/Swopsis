@@ -11,10 +11,8 @@ function HeartSwitch({ isWishListItem, itemId }) {
     const [ isFilled, setIsFilled ] = useState(isWishListItem);
 
     const handleToggle = async () => {
-      //  const newIsFilled = !isFilled;  // New state after toggle
-      //  setIsFilled(newIsFilled);
         try {
-            await toggleWishlist({ userId: user.user.id, itemId, wishlist: isWishListItem});
+            await toggleWishlist({ userId: user.user.id, itemId, wishlist: isWishListItem, groupId: user.user.user_metadata.group});
             setIsFilled(!isFilled);
             console.log("Item is now in wishlist: ", !isFilled);
         } catch (error) {
@@ -24,7 +22,7 @@ function HeartSwitch({ isWishListItem, itemId }) {
 
     return (
         <TouchableOpacity onPress={handleToggle}>
-            {!isWishListItem ? <HeartIcon /> : <FilledHeartIcon />}
+            {!isFilled ? <HeartIcon /> : <FilledHeartIcon />}
         </TouchableOpacity>
     );
 }

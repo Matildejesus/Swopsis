@@ -13,7 +13,7 @@ function WishList() {
         if (user) {
             const fetchWishlist = async () => {
                 try {
-                    const wishlist = await getWishlist({ userId: user.id });
+                    const wishlist = await getWishlist({ userId: user.user.id });
                     setWishList(wishlist);
                 } catch (error) {
                     console.error("Error fetching wishlist: ", error);
