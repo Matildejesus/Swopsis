@@ -15,6 +15,7 @@ import CalendarIcon from "../components/icons/CalendarIcon";
 import { useMessages } from "../hooks/conversations/useMessage";
 import { useGroupWardrobe } from "../hooks/useGroupWardrobe";
 import { useConversationSubscription } from "../hooks/conversations/useConversationSubscription";
+import { useQueryClient } from "@tanstack/react-query";
 
 function ChatScreen() {
     const route = useRoute();
@@ -26,8 +27,14 @@ function ChatScreen() {
     const [ decision, setDecision ] = useState(null);
     const { groupWardrobe } = useGroupWardrobe();
     useConversationSubscription(thread.id);
+    const queryClient = useQueryClient();
 
-    const { messages, isSending } = useMessages( thread.id);
+    const { messages, isSending } = useMessages(thread.id);
+
+    useEffect(() => {
+        queryClient.setQueryData(["unread", thread.id], 0);
+    }, [thread.id]);
+
 
     useLayoutEffect(() => {
         if (thread?.userName) {
@@ -74,9 +81,7 @@ function ChatScreen() {
                         return;
                     }
     
-                    await updateDecision({ id: selectedItem.id, decision });
-    
-                    
+                    await updateDecision({ id: selectedItem.id, decision }); 
                     await updateAvailability({ available: false, itemId: selectedItem.itemId });
                     
                     const item = groupWardrobe.find(item => item.id === selectedItem.itemId);

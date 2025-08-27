@@ -14,14 +14,14 @@ function InboxScreen() {
     return (
             <View style={styles.container}>
                 <FlatList
-                data={conversations}
-                renderItem={({ item }) => (
-                    <InboxUserWidget thread={item}/>
-                )}
-                keyExtractor={(item) => item.id}
-                showsVerticalScrollIndicator={false}
-                bounce={false}
-            />
+                    data={conversations}
+                    renderItem={({ item }) => (
+                        <InboxUserWidget thread={item}/>
+                    )}
+                    keyExtractor={(item) => item.id}
+                    showsVerticalScrollIndicator={false}
+                    bounce={false}
+                />
             </View>
     );
 }
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "white",
-        paddingLeft: 40,
+        // paddingLeft: 40,
     },
     title: {
         fontSize: 20,

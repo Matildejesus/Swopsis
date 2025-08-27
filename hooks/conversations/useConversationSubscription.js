@@ -22,9 +22,11 @@ export function useConversationSubscription(conversationId) {
             (payload) => {
                 console.log('New message in conversation: ', conversationId)
                 queryClient.setQueryData(["messages", conversationId], (old = []) => [
-                payload.new,           // put new first
+                payload.new,         
                 ...old
                 ]);
+                queryClient.setQueryData(["unread", conversationId], (count = 0) => count + 1);
+
 
             }
         )
