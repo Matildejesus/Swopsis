@@ -14,6 +14,7 @@ import { findUserById, updateUserImpactData } from "../services/apiAdmin";
 import CalendarIcon from "../components/icons/CalendarIcon";
 import { useMessages } from "../hooks/conversations/useMessage";
 import { useGroupWardrobe } from "../hooks/useGroupWardrobe";
+import { useConversationSubscription } from "../hooks/conversations/useConversationSubscription";
 
 function ChatScreen() {
     const route = useRoute();
@@ -21,12 +22,12 @@ function ChatScreen() {
     const { thread } = route.params;
     const navigation = useNavigation();
     const [newMessage, setNewMessage] = useState("");
-    const [message, setMessages] = useState([]);
     const [selectedItem, setSelectedItem]= useState([]);
     const [ decision, setDecision ] = useState(null);
     const { groupWardrobe } = useGroupWardrobe();
+    useConversationSubscription(thread.id);
 
-    const { messages, isSending } = useMessages({conversationId: thread.id});
+    const { messages, isSending } = useMessages( thread.id);
 
     useLayoutEffect(() => {
         if (thread?.userName) {
@@ -49,8 +50,6 @@ function ChatScreen() {
             createdAt: new Date().toISOString(), 
         };
     
-        setMessages((prevMessages) => [newMessageObj, ...prevMessages]);
-    
         setNewMessage(""); 
     
         try {
@@ -61,7 +60,6 @@ function ChatScreen() {
             });
     
             const updatedMessages = await getMessagesForConvo({ conversationId: thread.id });
-            setMessages(updatedMessages);
         } catch (error) {
             console.error("Error sending message:", error);
         }

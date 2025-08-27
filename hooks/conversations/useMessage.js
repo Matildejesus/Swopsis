@@ -1,16 +1,15 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMessagesForConvo } from "../../services/apiChat";
-import Toast from "react-native-toast-message";
 
 export function useMessages(conversationId) {
     const queryClient = useQueryClient();
-    console.log("Setting up useMessages hook");
+    console.log("Setting up useMessages hook: ",conversationId);
     
     const { data: messages, isLoading } = useQuery({
         queryKey: ["messages", conversationId],
         queryFn: async () => {
             console.log("Fetching messages for conversation:", conversationId);
-            const messagesData = await getMessagesForConvo( conversationId );
+            const messagesData = await getMessagesForConvo( {conversationId} );
             if (messagesData) {
                 console.log("Messages fetched successfully:", messagesData);
                 return messagesData;
