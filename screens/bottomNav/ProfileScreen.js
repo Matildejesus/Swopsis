@@ -72,22 +72,21 @@ function ProfileScreen() {
                         <CoinIcon />
                         <Text style={styles.coinsText}>{coins}</Text>
                     </View>
-                    <View style={{paddingLeft: 100}}>
-                        {ambassador && (
-                                <DashboardIcon
-                                    text="Dashboard"
-                                    location={{
-                                        stack: "AdminApp",
-                                    }}
-                                />
-                            )
-                        }
-                    </View>
                 </View>
             </View>
             <View style={styles.iconsContainer}>
                 <ImpactIcon />
-                <CalendarIcon />
+                {/* <CalendarIcon /> */}
+                {ambassador ? (
+                    <DashboardIcon
+                        text="Dashboard"
+                        location={{
+                            stack: "AdminApp",
+                        }}
+                    />
+                ) : (
+                    <View style={{width: 75}}></View>
+                )}
                 <SettingsIcon />
             </View>
             <Line style={styles.line} />
