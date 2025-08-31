@@ -3,9 +3,12 @@ import Colors from "../constants/colors";
 import MainButton from "./MainButton";
 import ErrorMessage from "./ErrorMessage";
 import Logo from "./icons/Logo";
+import { useNavigation } from "@react-navigation/native";
 
 
-function InputTemplateWidget({content, title, handleSearch, link, linkText, anotherLink, submitError, page}) {
+function InputTemplateWidget({content, title, handleSearch, link, linkText, anotherLink, submitError, page, groups, loading}) {
+    const navigation = useNavigation();
+    console.log("GROUPS: ", groups);
     return (
         <View style={styles.container}>
             { page !== "postcode" &&
@@ -15,6 +18,14 @@ function InputTemplateWidget({content, title, handleSearch, link, linkText, anot
                 <View style={styles.loginError}>
                     <ErrorMessage error={submitError} />
                 </View>
+                {page === "postcode" && (
+                    <MainButton
+                        title={loading ? "Loading…" : "View Groups"}
+                        style={{ width: 150, opacity: loading || groups.length === 0 ? 0.5 : 1 }}
+                        disabled={loading || groups.length === 0}
+                        onPress={() => navigation.navigate("GroupsList", { groups })}
+                    />
+                )}
                 <View>
                     {anotherLink && anotherLink()}
                     <TouchableOpacity onPress={link}>

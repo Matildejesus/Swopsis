@@ -80,6 +80,7 @@ import { Raleway_600SemiBold_Italic } from '@expo-google-fonts/raleway/600SemiBo
 import { Raleway_700Bold_Italic } from '@expo-google-fonts/raleway/700Bold_Italic';
 import { useUser } from "./hooks/auth/useUser.js";
 import { SubscriptionProvider } from "./SubscriptionProvider.js";
+import GroupsListScreen from "./screens/starter/GroupsListScreen.js";
 
 AppRegistry.registerComponent("main", () => App);
 
@@ -411,6 +412,11 @@ function AppContent( ) {
                 <Stack.Screen
                     name="Welcome"
                     component={WelcomeScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="GroupsList"
+                    component={GroupsListScreen}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen

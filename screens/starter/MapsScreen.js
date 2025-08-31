@@ -5,6 +5,8 @@ import MapWidget from "../../components/MapWidget";
 function MapsScreen({ route }) {
     const [newPostcode, setNewPostcode] = useState("");
     const [postcode, setPostcode] = useState(route.params.postcode);
+    const groups = route.params.groups;
+
     const [error, setError ] = useState("");
 
     const handleSearch = () => {
@@ -26,7 +28,7 @@ function MapsScreen({ route }) {
 
     return (
         <View style={styles.container}>
-            <MapWidget postcode={postcode} onChangeText={setNewPostcode} value={newPostcode} onPress={handleSearch} error={error} />
+            <MapWidget postcode={postcode} onChangeText={setNewPostcode} value={newPostcode} onPress={handleSearch} error={error} groups={groups} />
             
         </View>
     );

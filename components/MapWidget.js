@@ -5,14 +5,15 @@ import { useNavigation } from "@react-navigation/native";
 import InputField from "./authentication/InputField";
 import Colors from "../constants/colors";
 
-function MapWidget({ postcode, onChangeText, value, onPress, error }) {
+function MapWidget({ postcode, onChangeText, value, onPress, error, groups }) {
     const navigation = useNavigation();
-
+    console.log("GROUPS ON MAPWIDGET: ", groups);
     return (
         <View style={{flex: 1,}}>
             <Map
                 apikey={"AIzaSyAUVZblxClNYeMChsYyN9dyVNLUU1T9Ezk"}
                 postcode={postcode}
+                groups={groups}
             />
             <TouchableOpacity 
                 onPress={() => navigation.navigate("AmbassadorRequest")}

@@ -7,7 +7,6 @@ export function useRequests() {
     const queryClient = useQueryClient();
     const { user } = useUser();
     const { groups, isLoading: groupsLoading} = useAllGroups();
-    console.log("GROUPS: ", groups);
     const { data: requests, isLoading } = useQuery({
         queryKey: ["requests" || "allGroups"],
         queryFn: async () => {

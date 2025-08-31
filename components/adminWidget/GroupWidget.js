@@ -7,7 +7,7 @@ import MemberIcon from "../icons/MemberIcon";
 import { useNavigation } from "@react-navigation/native";
 import { useAllMembers } from "../../hooks/useAllMembers";
 
-function GroupWidget({ group }) {
+function GroupWidget({ group, screen }) {
     const formattedDate = format(new Date(group.created_at), 'yyyy-MM-dd');
     console.log("GROUP WIDGET: ", group.status);
     const navigation = useNavigation();
@@ -31,7 +31,11 @@ function GroupWidget({ group }) {
                     <Text style={group.status == "reject" ? styles.rejectedText : styles.text}>{formattedDate}</Text>
                 </View>
                 <View style={styles.iconContainers}>
-                    {group.status == "reject" ? (
+                    { screen === "maps" ? (
+                        <>
+                        <ViewIcon onPress={() => navigation.navigate("GroupDetails", { group })} />
+                        </>
+                    ): group.status == "reject" ? (
                         <>
                             <MemberIcon color="#656464"/>
                             <ViewIcon color="#656464"/>

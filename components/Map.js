@@ -7,28 +7,26 @@ import Colors from "../constants/colors";
 import ArrowNext from "../components/icons/ArrowNext";
 import { useNavigation } from "@react-navigation/native";
 
-const Map = ({ apikey, postcode }) => {
+const Map = ({ apikey, postcode, groups }) => {
     const [region, setRegion] = useState({
         latitude: -37.8136,
         longitude: 144.9631,
         latitudeDelta: 0.1,
         longitudeDelta: 0.1,
     });
-    const [groups, setGroups] = useState();
-    const [loading, setLoading] = useState();
-    const [groupLocations, setGroupLocations] = useState([]);
+    const [allGroups, setAllGroups] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [groupLocations, setGroupLocations] = useState({});
 
     const navigation = useNavigation();
 
     useEffect(() => {
         const fetchGroups = async () => {
             try {
-                setLoading(true);
-                const fetchedGroups = await getGroups();
-                setGroups(fetchedGroups);
+                setAllGroups(groups);
 
                 const locations = await Promise.all(
-                    fetchedGroups
+                    groups
                         .filter(group => group.status == "approve")
                         .map(async (group) => {
                         const groupLocation = group.location.split(', ').pop();
@@ -74,7 +72,7 @@ const Map = ({ apikey, postcode }) => {
         };
 
         fetchGroups();
-    }, [apikey]);
+    }, [apikey, groups]);
 
     useEffect(() => {
         if (!postcode) return;
@@ -154,8 +152,8 @@ const Map = ({ apikey, postcode }) => {
                         title="TEST MARKER"
                     /> */}
 
-                    {Object.entries(groupLocations).map(([postcode, groups]) => (
-                        groups
+                    {Object.entries(groupLocations).map(([postcode, allGroups]) => (
+                        allGroups
                         .filter(group => group.latitude && group.longitude)
                         .map((group) => (
                             <Marker
