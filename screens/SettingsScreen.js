@@ -11,10 +11,16 @@ import { useUpdateUser } from "../hooks/auth/useUpdateUser";
 import { useLogout } from "../hooks/auth/useLogout";
 import supabase from "../services/supabase";
 import ErrorMessage from "../components/ErrorMessage";
+import { useNavigation } from "@react-navigation/native";
+import ModalListWidget from "../components/modals/ModalLIstWidget";
+import { useBlocked } from "../hooks/useBlocked";
 
 function SettingsScreen() {
     const { logout, isLoading } = useLogout();
     const { user, isLoading: isUserLoading } = useUser();
+    // const { deleteAccount } = useDeleteAccount();
+    const { blocked } = useBlocked();
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const { width: screenWidth, height: screenHeight } = useWindowDimensions();
     const { updateUser, isUpdating } = useUpdateUser();
@@ -69,6 +75,9 @@ function SettingsScreen() {
         setVerifyPassword(enteredVerifyPassword);
     }
 
+    const openModal = () => setIsModalVisible(true);
+    const closeModal = () => setIsModalVisible(false);
+
     async function handleSubmit() {
         console.log("Submitting user data:", userName);
         if (!userName) return;
@@ -108,6 +117,7 @@ function SettingsScreen() {
                     onImageSelected={handleImageSelected}
                     imageStyle={styles.profileImage}
                 />
+                
             </View>
             <View style={styles.groupContainer}>
                 <Text style={styles.header}>Info</Text>
@@ -166,7 +176,30 @@ function SettingsScreen() {
                 <MainButton
                     title="UPDATE"
                     onPress={handleSubmit}
+                    style={{width: 120}}
+                    variant="second"
+                />
+            </View>
+            <View style={styles.buttonContainer}>
+                <MainButton
+                    title="DELETE"
+                    // onPress={deleteAccount}
                     variant="primary"
+                     style={{width: 120}}
+                    // textStyle={{fontSize: 17}}
+                />
+             <MainButton
+                    title="BLOCKED"
+                    onPress={openModal}
+                    variant="second"
+                     style={{width: 120}}
+                    // style={{borderRadius: 0, borderWidth: 0, marginLeft: 20}}
+                    textStyle={{fontSize: 17}}
+                />
+                <ModalListWidget
+                    visible={isModalVisible}
+                    onRequestClose={closeModal}
+                    blocked={blocked}
                 />
             </View>
         </View>
@@ -178,7 +211,7 @@ export default SettingsScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: vs(20),
+        paddingTop: vs(10),
         justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "white",
@@ -191,7 +224,7 @@ const styles = StyleSheet.create({
     },
     groupContainer: {
         marginLeft: 43,
-        marginBottom: 35,
+        marginBottom: 10,
     },
     buttonContainer: {
         marginTop: 18,

@@ -19,7 +19,7 @@ export async function createConversation({ user1, user2 }) {
 }
 
 export async function getAllConversation({ userId, groupMembers}) {
-    console.log("Userid: ", userId);
+
     const { data, error } = await supabase
         .from("Conversations")
         .select("*")
@@ -42,7 +42,6 @@ export async function getAllConversation({ userId, groupMembers}) {
             email: otherUserData?.email || ''
         };
     });
-    console.log("Conversations: ", transformedData);
     return transformedData;
 }
 

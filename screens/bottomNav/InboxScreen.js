@@ -9,8 +9,7 @@ function InboxScreen() {
     const { user } = useUser(); 
     const route = useRoute();
     const { conversations, isLoading } = useConversations();
-    console.log("Conversations in InboxScreen: ", conversations);
-
+    
     return (
             <View style={styles.container}>
                 <FlatList

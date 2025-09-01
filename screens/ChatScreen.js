@@ -17,6 +17,8 @@ import { useGroupWardrobe } from "../hooks/useGroupWardrobe";
 import { useConversationSubscription } from "../hooks/conversations/useConversationSubscription";
 import { useQueryClient } from "@tanstack/react-query";
 import DashboardIcon from "../components/icons/DashboardIcon";
+import { useBlocked } from "../hooks/useBlocked";
+import { unblockUser } from "../services/apiBlocked";
 
 function ChatScreen() {
     const route = useRoute();
@@ -29,13 +31,28 @@ function ChatScreen() {
     const { groupWardrobe } = useGroupWardrobe();
     useConversationSubscription(thread.id);
     const queryClient = useQueryClient();
+    const { blocked, beingBlocked } = useBlocked();
+    const [blockedMessage, setBlockedMessage] = useState("");
+    const [userBlocked, setUserBlocked] = useState(false);
 
     const { messages, isSending } = useMessages(thread.id);
 
+    const otherUserId = user?.user?.id === thread?.userId_1 ? thread?.userId_2 : thread?.userId_1;
+
     useEffect(() => {
         queryClient.setQueryData(["unread", thread.id], 0);
-    }, [thread.id]);
 
+        if (Array.isArray(blocked) && blocked.includes(thread.userId_1)) {
+            setBlockedMessage(`You blocked ${thread.userName}.`);
+            setUserBlocked(true);     
+        } else if (Array.isArray(beingBlocked) && beingBlocked.includes(thread.userId_2)) {
+            setBlockedMessage(`You have been blocked by ${thread.userName}.`);
+            setUserBlocked(false);   
+        } else {
+            setBlockedMessage("");
+            setUserBlocked(false);
+        }
+    }, [thread, blocked, beingBlocked]);
 
     useLayoutEffect(() => {
         if (thread?.userName) {
@@ -54,6 +71,20 @@ function ChatScreen() {
             });
         }
     }, [navigation, thread]);
+
+    const unblock = async () => {
+        try {
+            await unblockUser({ user1: user.user.id, user2: otherUserId });
+            queryClient.setQueryData(["blocked"], (prev) =>
+            Array.isArray(prev) ? prev.filter((id) => id !== otherUserId) : prev
+            );
+            setBlockedMessage("");   
+            setUserBlocked(false);   
+        } catch (e) {
+            console.error("Unblock failed:", e?.message || e);
+        }
+    };
+
 
     const handleText = async () => {
         if (!newMessage.trim()) return; 
@@ -205,8 +236,14 @@ function ChatScreen() {
                                 {item.loanDates && 
                                     (  
                                         <View style={styles.calenderContainer}>
-                                      
-                                       {!decision || !item.decision &&  <CalendarIcon calendarDates={item.loanDates} itemId={item.itemId} owner={false}/> }
+                                            {(!decision || !item.decision) && (
+                                                <CalendarIcon 
+                                                    calendarDates={item.loanDates} 
+                                                    itemId={item.itemId} 
+                                                    owner={false} 
+                                                />
+                                            )}
+
                                         </View>
                                    
                                     ) 
@@ -222,8 +259,20 @@ function ChatScreen() {
                 showsVerticalScrollIndicator={false}
                 bounces={false}
             />
-
-            <View style={styles.inputContainer}>
+            {blockedMessage != "" ? (
+                <View style={styles.blockedContainer}>
+                    <Text style={styles.blocked}>{blockedMessage}</Text>
+                    {userBlocked && 
+                        <MainButton 
+                            title="Unblock"
+                            textStyle={{fontSize: 14}}
+                            style={{width: 240}}
+                            onPress={unblockUser}
+                        />
+                    }
+                </View>
+            ): (
+                <View style={styles.inputContainer}>
                 <InputField
                     placeholder="Type your message here..."
                     inputStyle={styles.inputStyle}
@@ -242,6 +291,9 @@ function ChatScreen() {
                     variant="primary"  
                 />
             </View>
+            )}
+
+            
         </View>
     );
 }
@@ -280,20 +332,8 @@ const styles = StyleSheet.create({
         width: 231
     }, 
     fieldContainer: {
-        // borderColor: Colors.primary2,
-        // borderWidth: 1,
-        // borderRadius: 10, 
-        // opacity: 0.76,
-        // paddingVertical: 3,
-        // marginLeft: 30,
-        // paddingHorizontal: 13,
-        // borderRadius: 10,
-        // opacity: 0.76,
         minHeight: 40, 
         maxHeight: 120,
-        // width: "80%", 
-        // alignSelf: "center",
-        // height:"20%"
     },
     textContainer: {
         width: 231,
@@ -319,7 +359,6 @@ const styles = StyleSheet.create({
         marginLeft: 16,
     },
     imageContainer: {
-       // paddingHorizontal: 16,
         paddingVertical: 7,
         borderTopEndRadius: 20,
         borderTopLeftRadius: 20,
@@ -373,5 +412,17 @@ const styles = StyleSheet.create({
     rowContainer: {
         flexDirection: "row",
         gap: 10,
+    },
+    blocked: {
+        marginBottom: 20,
+        alignSelf: "center",
+        color: Colors.primary1
+    },
+    blockedContainer: {
+        // flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 20,
+        marginTop: 22,
+        // width: 231
     }
 })
