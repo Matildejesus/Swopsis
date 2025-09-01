@@ -31,6 +31,7 @@ export async function login({ email, password }) {
     });
 
     if (error) {
+        console.log("SUPABASE LOGIN ERROR:", error.message);
         throw new Error(error.message);
     }
     return data;

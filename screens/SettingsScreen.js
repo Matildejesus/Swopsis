@@ -11,7 +11,6 @@ import { useUpdateUser } from "../hooks/auth/useUpdateUser";
 import { useLogout } from "../hooks/auth/useLogout";
 import supabase from "../services/supabase";
 import ErrorMessage from "../components/ErrorMessage";
-import { useNavigation } from "@react-navigation/native";
 import ModalListWidget from "../components/modals/ModalLIstWidget";
 import { useBlocked } from "../hooks/useBlocked";
 
