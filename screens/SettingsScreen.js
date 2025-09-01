@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
+import { View, Text, StyleSheet, useWindowDimensions, Alert, Linking } from "react-native";
 import PicturePicker from "../components/PicturePicker";
 import SettingsInputField from "../components/SettingsInputField";
 import Colors from "../constants/colors";
@@ -13,17 +13,17 @@ import supabase from "../services/supabase";
 import ErrorMessage from "../components/ErrorMessage";
 import ModalListWidget from "../components/modals/ModalLIstWidget";
 import { useBlocked } from "../hooks/useBlocked";
+import { deleteMyAccount } from "../services/apiDeleteUser";
 
 function SettingsScreen() {
-    const { logout, isLoading } = useLogout();
-    const { user, isLoading: isUserLoading } = useUser();
-    // const { deleteAccount } = useDeleteAccount();
+    const { logout } = useLogout();
+    const { user} = useUser();
     const { blocked } = useBlocked();
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const { width: screenWidth, height: screenHeight } = useWindowDimensions();
     const { updateUser, isUpdating } = useUpdateUser();
-    const { inputError, setInputError} = useState("");
+    const [ inputError, setInputError ] = useState("");
 
     const profileHeight = screenHeight * 0.15;
     const profileWidth = screenWidth * 0.3;
@@ -77,6 +77,47 @@ function SettingsScreen() {
     const openModal = () => setIsModalVisible(true);
     const closeModal = () => setIsModalVisible(false);
 
+    const onPressDelete = () => {
+        console.log(user?.user?.user_metadata?.ambassador);
+        if (user?.user?.user_metadata?.ambassador) {
+            // Ambassadors → just open mail
+            const subject = "Delete my account";
+            const body =
+            `Please delete my Swopsis account.\n` +
+            `Registered email: ${user.user.email}\n` +
+            `Reason (optional): _____\n` +
+            `Ambassador account? Yes\n` +
+            `If Ambassador: proposed new ambassador email: _____`;
+            const url = `mailto:swopsisters@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            Linking.openURL(url).catch(() => {
+            setInputError("Could not open email app.");
+            });
+            return;
+        }
+
+        // Normal users → proceed with delete flow
+        Alert.alert(
+            "Delete account?",
+            "This will permanently delete your account, items, and images.",
+            [
+            { text: "Cancel", style: "cancel" },
+            {
+                text: "Delete",
+                style: "destructive",
+                onPress: async () => {
+                try {
+                    await deleteMyAccount();
+                    logout();
+                } catch (e) {
+                    setInputError(e?.message || "Delete failed");
+                }
+                },
+            },
+            ]
+        );
+    };
+
+
     async function handleSubmit() {
         console.log("Submitting user data:", userName);
         if (!userName) return;
@@ -102,9 +143,10 @@ function SettingsScreen() {
                 setInputError("Re-entered password does not match.")
                 return;
             } 
-
-            updateUser({ updateData: { userName, password: newPassword }, userId: id });
         }
+
+        console.log("gonna update now");
+        updateUser({ updateData: { userName, password: newPassword }, userId: id });
     }
 
 
@@ -182,12 +224,11 @@ function SettingsScreen() {
             <View style={styles.buttonContainer}>
                 <MainButton
                     title="DELETE"
-                    // onPress={deleteAccount}
+                    onPress={onPressDelete}
                     variant="primary"
-                     style={{width: 120}}
-                    // textStyle={{fontSize: 17}}
+                    style={{ width: 120 }}
                 />
-             <MainButton
+                <MainButton
                     title="BLOCKED"
                     onPress={openModal}
                     variant="second"
