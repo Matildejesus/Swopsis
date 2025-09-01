@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         // opacity: 0.76,
         // paddingHorizontal: 13,
-        paddingVertical: 16,
+        paddingVertical: 6,
     },
     inputText: {
         color: Colors.primary2,

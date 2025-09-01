@@ -59,14 +59,19 @@ function ChatScreen() {
             console.log("thread: ", thread);
             navigation.setOptions({
                 headerTitle: (props) => (
-                    <>
-                    <Title title={thread.userName} goBack={true} avatar={thread.avatar} {...props}  />
-                    <DashboardIcon 
-                        screen="chat" 
-                        meId={thread?.userId_2}
-                        themId={thread?.userId_1}/>
-                    </>
-
+                    <Title
+                    title={thread.userName}
+                    goBack={true}
+                    avatar={thread.avatar}
+                    {...props}
+                    />
+                ),
+                headerRight: () => (
+                    <DashboardIcon
+                    screen="chat"
+                    meId={thread?.userId_2}
+                    themId={thread?.userId_1}
+                    />
                 ),
             });
         }
@@ -267,7 +272,7 @@ function ChatScreen() {
                             title="Unblock"
                             textStyle={{fontSize: 14}}
                             style={{width: 240}}
-                            onPress={unblockUser}
+                            onPress={unblock}
                         />
                     }
                 </View>

@@ -78,22 +78,17 @@ function CreateItemScreen() {
                     secureTextEntry={false}
                 />
             </View>
-            {/* <View> */}
-                {/* <View style={styles.view2}> */}
-                    <InputField
-                        text="Description"
-                        textStyle={styles.label}
-                        containerStyle={styles.descriptionField}
-                        multiline={true}
-                        placeholder="Tell us the brand and more..."
-                        inputStyle={styles.text}
-                        onChangeText={setDescription}
-                        value={description}
-                        secureTextEntry={false}
-                    />
-                {/* </View> */}
-            {/* </View> */}
-            {/* <View style={styles.row}> */}
+                <InputField
+                    text="Description"
+                    textStyle={styles.label}
+                    containerStyle={styles.descriptionField}
+                    multiline={true}
+                    placeholder="Tell us the brand and more..."
+                    inputStyle={styles.text}
+                    onChangeText={setDescription}
+                    value={description}
+                    secureTextEntry={false}
+                />
                 <DropDownMenu
                     value={category}
                     data={Object.keys(Categories)}
@@ -129,8 +124,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "white",
         alignItems: "center",
-        paddingTop: 30,
-        gap: 15,
+        paddingTop: 20,
+        gap: 10,
     },
     picturePicker: {
         width: 240,

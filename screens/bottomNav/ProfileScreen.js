@@ -1,9 +1,8 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import Colors from "../../constants/colors";
 import CoinIcon from "../../components/icons/CoinIcon";
 import SettingsIcon from "../../components/icons/SettingsIcon";
-import CalendarIcon from "../../components/icons/CalendarIcon";
 import ImpactIcon from "../../components/icons/ImpactIcon";
 import AddIcon from "../../components/icons/AddIcon";
 import { useUser } from "../../hooks/auth/useUser";
@@ -28,7 +27,7 @@ function ProfileScreen() {
     const user = userData?.user;
 
     useEffect(() => {
-        if (user?.user_metadata) { // Only proceed if metadata exists
+        if (user?.user_metadata) { 
             const metadata = user.user_metadata;
 
             setUserName(metadata.userName);
@@ -39,11 +38,10 @@ function ProfileScreen() {
             setEmail(user.email);
             console.log("User Metadata: ", metadata);
         }
-    }, [user?.user_metadata]); // Only re-run when metadata changes
+    }, [user?.user_metadata]); 
 
     useEffect(() => {
         if (!userData?.user?.id || !groupWardrobe) return;
-        // console.log("User ID: ", user);
         const items = groupWardrobe.filter(item => item.userId === user.id);
         setUserItems(items);
 
@@ -102,11 +100,6 @@ function ProfileScreen() {
             ) : (
                 <>
                     <ProfileItemWidget items={userItems} />
-                    <TouchableOpacity
-                        style={styles.addIconContainer}
-                    >
-                        <AddIcon navigateLocal="CreateItem" />
-                    </TouchableOpacity>
                 </>
             )}
         </View>

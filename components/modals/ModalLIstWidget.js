@@ -53,7 +53,7 @@ function ModalListWidget({ visible, onRequestClose, blocked }) {
                             data={blockedMembers}
                             keyExtractor={(item) => item.userId}
                             renderItem={({item}) => (
-                                <View style={styles.container}>
+                                <View style={styles.itemContainer}>
                                     <View style={styles.imageContainer}>
                                         <Image source={{ uri: item.avatar }} style={styles.imageContainer}/>
                                     </View>
@@ -101,23 +101,18 @@ const styles = StyleSheet.create({
         fontSize: 18, 
         marginBottom: 10 
     },
-    // container: {
-    //     flex: 1,
-    //     flexDirection: "row",
-    //     marginTop: 25,
-    //     borderRadius: 10,
-    //     borderColor: Colors.primary1,
-    //     backgroundColor: "#fff",
-    //     borderRadius: 12,
-    //     padding: 12,
-    //     shadowColor: "#000",
-    //     shadowOffset: { width: 0, height: 4 },
-    //     shadowOpacity: 0.1,
-    //     shadowRadius: 4,
-
-    //     // Android shadow
-    //     elevation: 3,
-    // },
+    itemContainer: {
+        flex: 1,
+        flexDirection: "row",
+        borderRadius: 10,
+        borderColor: Colors.primary1,
+        backgroundColor: "#fff",
+        borderRadius: 12,
+        padding: 12,
+        shadowColor: "#000",
+        // Android shadow
+        elevation: 3,
+    },
     name: {
         fontFamily: "Raleway_700Bold",
         fontSize: 15,
