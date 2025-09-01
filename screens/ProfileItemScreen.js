@@ -110,20 +110,20 @@ function ProfileItemScreen() {
 
     return (
         <View style={styles.container}>
-            {selectedOption === 0 ? (
+            {/* {selectedOption === 0 ? (
                 <ProfileItemDetails itemData={itemData} />
             ) : (
                 <ProfileItemReviews user={user} />
-            )}
-
-            <View style={styles.column2}>
+            )} */}
+            <ProfileItemDetails itemData={itemData} />
+            {/* <View style={styles.column2}>
                 <SegmentedBar
                     option1="Details"
                     option2="Reviews"
                     selectedIndex={selectedOption}
                     onChange={handleChange}
                 />
-            </View>
+            </View> */}
             {!owner && currentUser.user.app_metadata.role != "super-admin" ? (
                 <>
                     <View style={styles.button}>

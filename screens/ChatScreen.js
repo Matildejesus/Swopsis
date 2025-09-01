@@ -16,6 +16,7 @@ import { useMessages } from "../hooks/conversations/useMessage";
 import { useGroupWardrobe } from "../hooks/useGroupWardrobe";
 import { useConversationSubscription } from "../hooks/conversations/useConversationSubscription";
 import { useQueryClient } from "@tanstack/react-query";
+import DashboardIcon from "../components/icons/DashboardIcon";
 
 function ChatScreen() {
     const route = useRoute();
@@ -38,9 +39,17 @@ function ChatScreen() {
 
     useLayoutEffect(() => {
         if (thread?.userName) {
+            console.log("thread: ", thread);
             navigation.setOptions({
                 headerTitle: (props) => (
+                    <>
                     <Title title={thread.userName} goBack={true} avatar={thread.avatar} {...props}  />
+                    <DashboardIcon 
+                        screen="chat" 
+                        meId={thread?.userId_2}
+                        themId={thread?.userId_1}/>
+                    </>
+
                 ),
             });
         }
@@ -155,7 +164,6 @@ function ChatScreen() {
             <FlatList
                 data={messages}
                 renderItem={({ item }) => {
-                    console.log("Rendering item:", item);
                     return (
                     item.text ? (
                         <View style={item.senderId === user.user.id
