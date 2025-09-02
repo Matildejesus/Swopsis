@@ -1,7 +1,9 @@
-import supabase, { supabaseAdmin } from "./supabase";
+import supabase from "./supabase";
 
 export async function findUserByEmail(email) {
-    const { data, error } = await supabaseAdmin.auth.admin.listUsers();
+    
+    const { data, error } = await supabase.functions.invoke("list-users");
+    if (error) throw error;
 
     const user = data.users.find((u) => u.email === email);
 
@@ -9,18 +11,12 @@ export async function findUserByEmail(email) {
 }
 
 export async function findUserById(id) {
-    console.log("THE ID THAT IS BEING QUERIED: ", id)
     try {
-        const { data, error } = await supabaseAdmin.auth.admin.getUserById(
-            id.id,
-        );
-        console.log("Fetching user with ID:", id);
-        console.log("Response Data:", data);
-        console.log("Error:", error);
+        const { data, error } = await supabase.functions.invoke("get-user-by-id", {
+        body: { id: id.id },
+        });
 
-        if (error) {
-            throw new Error(error.message);
-        }
+        if (error) throw error;
 
         return data?.user || null;
     } catch (err) {
@@ -29,33 +25,22 @@ export async function findUserById(id) {
     }
 }
 
-export async function findUserByIdforInbox( id ) {
-    const { data, error } = await supabaseAdmin.auth.admin.getUserById(
-        id.id,
-    );
-
-    if (error) {
-        throw new Error(error.message);
-    }
-
-    return data;
-}
 
 export async function getAllUsers() {
-    const { data, error } = await supabaseAdmin.auth.admin.listUsers();
+    
+    const { data, error } = await supabase.functions.invoke("list-users");
 
     if (error) {
         console.error("Error fetching user:", error);
     }
     const filteredUsers = data.users.filter(user => !user.user_metadata?.is_super_admin);
 
-    // console.log("FILTERED USERS: ", filteredUsers);
     return filteredUsers;
 }
 
 export async function getGroupMembers({ groupId}) {
     console.log("yes");
-    const { data, error } = await supabaseAdmin.auth.admin.listUsers();
+    const { data, error } = await supabase.functions.invoke("list-users");
     console.log(data.users[0].user_metadata.group);
     const membersList = data.users.filter(
         (u) => u.user_metadata.group === groupId,
@@ -66,7 +51,7 @@ export async function getGroupMembers({ groupId}) {
 
 export async function getFilteredGroupMember({ groupId }) {
 
-    const { data, error } = await supabaseAdmin.auth.admin.listUsers();
+    const { data, error } = await supabase.functions.invoke("list-users");
 
     if (error) {
         console.error("Error retrieving members", error);
@@ -89,18 +74,14 @@ export async function getFilteredGroupMember({ groupId }) {
 
 export async function updateUserMetadata({ id, groupId, ambassador }) {
     console.log(id, groupId, ambassador);
-    const user_metadata = ambassador
-        ? { group: groupId, ambassador }
-        : { group: groupId };
 
-    const { data, error } = await supabaseAdmin.auth.admin.updateUserById(id, {
-        user_metadata,
+    const { data, error } = await supabase.functions.invoke("get-user-by-id", {
+        body: { id, groupId, ambassador },
     });
 
-    // console.log("Data: ", data);
     if (error) {
         console.error("Error updating user metadata:", error);
-        throw error; // Propagate the error
+        throw error;
     }
 
     return data;
@@ -108,12 +89,10 @@ export async function updateUserMetadata({ id, groupId, ambassador }) {
 
 export async function updateUserCoin({ id, coins }) {
     try {
-        const { data, error } = await supabaseAdmin.auth.admin.updateUserById(
-            id,
-            { 
-                user_metadata: { coins: Number(coins) } 
-            }
-        );
+
+        const { data, error } = await supabase.functions.invoke("get-user-by-id", {
+            body: { id, coins: Number(coins) },
+        });
 
         if (error) {
             throw error;
@@ -127,18 +106,11 @@ export async function updateUserCoin({ id, coins }) {
 
 export async function updateUserImpactData({
     id, newCoins, totalLitres, totalCarbon, totalWeight, itemsSwapped }) {
-    let user_metadata = {};
-    user_metadata = {
-        coins: newCoins,
-        totalWeight,
-        totalLitres,
-        totalCarbon,
-        itemsSwapped,
-    };
 
-    const { data, error } = await supabaseAdmin.auth.admin.updateUserById(id, {
-        user_metadata,
+    const { data, error } = await supabase.functions.invoke("get-user-by-id", {
+        body: { id, coins: newCoins, totalWeight, totalCarbon, totalLitres, itemsSwapped },
     });
+
     if (error) throw new Error(error.message);
 
     return data;
@@ -146,16 +118,7 @@ export async function updateUserImpactData({
 
 export async function getAllItems(members, itemConversions) { 
     try {
-        const { data, error } = await supabaseAdmin
-            .from("Items")
-            .select(`
-                id, created_at, userId, category, image, title, description, method, available, tradeCount, unavailableDates,
-                Shoes!itemId (*),
-                Clothing!itemId (*),
-                Accessories!itemId (*)`)
-            .order("created_at", { ascending: false });
-
-        if (error) throw new Error(error.message);
+        const { data, error } = await supabase.functions.invoke("get-all-items");
 
         const transformedData = data.map(item => {
             const itemOwner = members.find(member => member.id === item.userId);
@@ -195,9 +158,4 @@ export async function getAllItems(members, itemConversions) {
         console.error("Error fetching items:", error);
         throw error;
     }
-}
-
-
-export async function getGroupRequests() {
-
 }

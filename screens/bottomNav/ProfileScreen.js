@@ -11,6 +11,7 @@ import ProfileItemWidget from "../../components/ProfileItemWidget";
 import AnimatedEnvelope from "../../components/AnimatedEnvelope";
 import DashboardIcon from "../../components/icons/DashboardIcon";
 import { useGroupWardrobe } from "../../hooks/useGroupWardrobe";
+import { findUserById } from "../../services/apiAdmin";
 
 function ProfileScreen() {
     const { user: userData, isLoading: isUserLoading } = useUser();
@@ -26,6 +27,8 @@ function ProfileScreen() {
 
     const user = userData?.user;
 
+    const TESTINg = findUserById({ id: user.id});
+    console.log("TESTING THE USER FETCH FUNCTION: ", TESTINg);
     useEffect(() => {
         if (user?.user_metadata) { 
             const metadata = user.user_metadata;

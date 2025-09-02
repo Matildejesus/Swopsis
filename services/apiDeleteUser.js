@@ -1,4 +1,4 @@
-import supabase, { supabaseAdmin } from "./supabase";
+import supabase from "./supabase";
 
 function buildDeletionMailto(email) {
     const subject = "Delete my account";
@@ -92,8 +92,7 @@ export async function deleteMyAccount() {
   }
 
   // 2) delete the auth user ⇒ cascades DB rows
-  const { error: adminErr } = await supabaseAdmin.auth.admin.deleteUser(uid);
-  if (adminErr) throw new Error(`Delete user failed: ${adminErr.message}`);
+  await supabase.functions.invoke("delete-user", {body: { uid }});
 
   console.log("DELETED USER");
 }

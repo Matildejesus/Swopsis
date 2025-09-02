@@ -1,0 +1,81 @@
+export default {
+  expo: {
+    name: "swopsis",
+    slug: "swopsis",
+    version: "2.0.0",
+    orientation: "portrait",
+    updates: { fallbackToCacheTimeout: 0 },
+    icon: "./assets/images/logo.png",
+    userInterfaceStyle: "light",
+    jsEngine: "hermes",
+    splash: {
+      image: "./assets/images/logo.png",
+      resizeMode: "contain",
+      backgroundColor: "#ffffff"
+    },
+    assetBundlePatterns: ["**/*"],
+    ios: {
+      supportsTablet: true,
+      bundleIdentifier: "com.anonymous.swopsis",
+      config: {
+        googleMapsApiKey: "AIzaSyDsuQsscuJJ5wqftyf8G-p6O6xL4s6Zoaw"
+      },
+      newArchEnabled: true
+    },
+    android: {
+      adaptiveIcon: {
+        foregroundImage: "./assets/images/logo.png",
+        backgroundColor: "#ffffff"
+      },
+      permissions: ["android.permission.RECORD_AUDIO"],
+      package: "com.anonymous.swopsis",
+      versionCode: 22,
+      config: {
+        googleMaps: {
+          apiKey: "AIzaSyAUVZblxClNYeMChsYyN9dyVNLUU1T9Ezk"
+        }
+      },
+      newArchEnabled: true
+    },
+    plugins: [
+      [
+        "expo-image-picker",
+        { photosPermission: "The app needs access to your photos to upload images." }
+      ],
+      ["expo-document-picker", { iCloudContainerEnvironment: "Production" }],
+      [
+        "expo-font",
+        {
+          fonts: [
+            "./assets/fonts/Raleway-Bold.ttf",
+            "./assets/fonts/Raleway-Regular.ttf",
+            "./assets/fonts/Raleway-Light.ttf",
+            "./assets/fonts/Raleway-Medium.ttf",
+            "./assets/fonts/Raleway-Regular.ttf",
+            "./assets/fonts/Raleway-SemiBold.ttf",
+            "./assets/fonts/Raleway-Thin.ttf",
+            "./assets/fonts/Inter-Bold.ttf",
+            "./assets/fonts/Inter-Regular.ttf",
+            "./assets/fonts/Inter-SemiBold.ttf",
+          ]
+        }
+      ],
+      "expo-asset",
+      [
+        "expo-build-properties",
+        {
+          android: {
+            compileSdkVersion: 35,
+            targetSdkVersion: 35,
+            minSdkVersion: 24
+          }
+        }
+      ]
+    ],
+    extra: {
+      eas: { projectId: "7b040ed1-7073-41c5-81d0-1cc3cd1343f3" },
+      EXPO_PUBLIC_SUPABASE_URL: "https://ojtjdcpqkljyiralrflf.supabase.co",
+      EXPO_PUBLIC_SUPABASE_ANON_KEY: "sb_publishable_MtG-AX6nsuE7GgT8-PtYOg_a-7KIYEu"
+    }
+  }
+};

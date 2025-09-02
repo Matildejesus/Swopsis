@@ -83,13 +83,10 @@ export async function getGroups() {
 
 
 export async function updateStatus({ id, status }) {
-        console.log("Updating status for request ID:", id, "to", status);
-    const { data, error } = await supabaseAdmin
-        .from("Groups")
-        .update({ "status": status })
-        .eq("id", id)
-        .select();
-        
+    console.log("Updating status for request ID:", id, "to", status);
+    
+    const { data } = await supabase.functions.invoke("update-group", { body: { id, status: "approved" } });
+
     if (error) {
         throw new Error(error.message);
     }
@@ -99,12 +96,7 @@ export async function updateStatus({ id, status }) {
 
 export async function updateMemberCount({ id, count}) {
     const numberOfMem = count++;
-    const { data, error } = await supabaseAdmin
-        .from("Groups")
-        .update({ "numberOfMem": numberOfMem})
-        .eq("id", id)
-        .select();
-
+    const { data, error } = await supabase.functions.invoke("update-group", { body: { id, numberOfMem } });
     if (error) {
         throw new Error(error.message);
     }
