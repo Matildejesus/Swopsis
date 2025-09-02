@@ -74,8 +74,7 @@ export default {
     ],
     extra: {
       eas: { projectId: "7b040ed1-7073-41c5-81d0-1cc3cd1343f3" },
-      EXPO_PUBLIC_SUPABASE_URL: "https://ojtjdcpqkljyiralrflf.supabase.co",
-      EXPO_PUBLIC_SUPABASE_ANON_KEY: "sb_publishable_MtG-AX6nsuE7GgT8-PtYOg_a-7KIYEu"
+
     }
   }
 };

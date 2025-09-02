@@ -52,7 +52,7 @@ export async function getGroupMembers({ groupId}) {
 export async function getFilteredGroupMember({ groupId }) {
 
     const { data, error } = await supabase.functions.invoke("list-users");
-
+    console.log("all members: ", data);
     if (error) {
         console.error("Error retrieving members", error);
         throw error;
