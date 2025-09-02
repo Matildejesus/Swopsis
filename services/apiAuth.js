@@ -105,6 +105,7 @@ export async function updateUser({ userName, avatar, password }, userId) {
         let updateData = {};
         let updatedUser = null;
         console.log("USERNAME: ", userName);
+        console.log("AVATAR: ", avatar);
 
         if (userName) {
             updateData.data = { ...updateData.data, userName };

@@ -51,7 +51,9 @@ function SettingsScreen() {
 
     const handleImageSelected = (newAvatarUri) => {
         setUserAvatar(newAvatarUri);
-        updateUser({ avatar: newAvatarUri}, user.id);
+        console.log("New avatar URI:", newAvatarUri);
+        updateUser({ updateData: { avatar: newAvatarUri}, userId: id});
+        //  updateUser({ updateData: { userName, password: newPassword }, userId: id });
     };
 
     function updateUserNameHandler(enteredUserName) {

@@ -60,24 +60,10 @@ import CoinIcon from "./components/icons/adminicons/CoinIcon.js";
 import AmbassadorRequestScreen from "./screens/starter/AmbassadorRequestScreen.js";
 import Toast from "react-native-toast-message";
 
-import { Inter_100Thin } from '@expo-google-fonts/inter/100Thin';
-import { Inter_300Light } from '@expo-google-fonts/inter/300Light';
-import { Inter_400Regular } from '@expo-google-fonts/inter/400Regular';
-import { Inter_500Medium } from '@expo-google-fonts/inter/500Medium';
-import { Inter_600SemiBold } from '@expo-google-fonts/inter/600SemiBold';
-import { Inter_700Bold } from '@expo-google-fonts/inter/700Bold';
-import { Raleway_100Thin } from '@expo-google-fonts/raleway/100Thin';
-import { Raleway_300Light } from '@expo-google-fonts/raleway/300Light';
 import { Raleway_400Regular } from '@expo-google-fonts/raleway/400Regular';
 import { Raleway_500Medium } from '@expo-google-fonts/raleway/500Medium';
 import { Raleway_600SemiBold } from '@expo-google-fonts/raleway/600SemiBold';
 import { Raleway_700Bold } from '@expo-google-fonts/raleway/700Bold';
-import { Raleway_100Thin_Italic } from '@expo-google-fonts/raleway/100Thin_Italic';
-import { Raleway_300Light_Italic } from '@expo-google-fonts/raleway/300Light_Italic';
-import { Raleway_400Regular_Italic } from '@expo-google-fonts/raleway/400Regular_Italic';
-import { Raleway_500Medium_Italic } from '@expo-google-fonts/raleway/500Medium_Italic';
-import { Raleway_600SemiBold_Italic } from '@expo-google-fonts/raleway/600SemiBold_Italic';
-import { Raleway_700Bold_Italic } from '@expo-google-fonts/raleway/700Bold_Italic';
 import { useUser } from "./hooks/auth/useUser.js";
 import { SubscriptionProvider } from "./SubscriptionProvider.js";
 import GroupsListScreen from "./screens/starter/GroupsListScreen.js";
@@ -87,6 +73,10 @@ AppRegistry.registerComponent("main", () => App);
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
+SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient(); 
+
 
 function BottomTabNavigator() {
     return (
@@ -342,49 +332,38 @@ function DrawerNavigator() {
     );
 }
 
-SplashScreen.preventAutoHideAsync();
-
 export default function App() {
     const [fontsLoaded, fontError] = useFonts({
-        Inter_100Thin, 
-        Inter_300Light, 
-        Inter_400Regular, 
-        Inter_500Medium, 
-        Inter_600SemiBold, 
-        Inter_700Bold,
-        Raleway_100Thin, 
-        Raleway_300Light, 
         Raleway_400Regular, 
         Raleway_500Medium, 
         Raleway_600SemiBold, 
         Raleway_700Bold, 
-        Raleway_100Thin_Italic, 
-        Raleway_300Light_Italic, 
-        Raleway_400Regular_Italic, 
-        Raleway_500Medium_Italic, 
-        Raleway_600SemiBold_Italic, 
-        Raleway_700Bold_Italic, 
     });
 
-    const queryClient = new QueryClient();
+    const [assetsReady, setAssetsReady] = React.useState(false);
 
     React.useEffect(() => {
-    if (fontError) {
-        console.error('Font loading error:', fontError);
-    }
-    }, [fontError]);
-
-    if (!fontsLoaded)
-    {
-        return null;
-    }
-
-    console.log("Fonts loaded, hiding splash screen");
-    SplashScreen.hideAsync();
+        (async () => {
+            try {
+                // Preload heavy assets used on first screen (logo, etc.)
+                const { Asset } = await import("expo-asset");
+                await Asset.fromModule(require("./assets/images/logo.png")).downloadAsync();
+            } catch {}
+            setAssetsReady(true);
+        })();
+    }, []);
+    
+    const onLayoutRootView = React.useCallback(async () => {
+        if (fontsLoaded && assetsReady) {
+            await SplashScreen.hideAsync();
+        }
+    }, [fontsLoaded, assetsReady]);
+    
+    if (!fontsLoaded || !assetsReady) return null;
 
     return (
         <RootSiblingParent>
-            <SafeAreaProvider>
+            <SafeAreaProvider onLayout={onLayoutRootView}>
                 <QueryClientProvider client={queryClient}>
                     <PaperProvider>
                         <StatusBar />

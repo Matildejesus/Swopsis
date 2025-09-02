@@ -15,7 +15,6 @@ function WardrobeScreen() {
     const { user } = useUser();
     const { blocked, beingBlocked } = useBlocked();
 
-    console.log(groupWardrobe[0])
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
