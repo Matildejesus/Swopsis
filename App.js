@@ -7,7 +7,6 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import "react-native-gesture-handler";
 import 'react-native-get-random-values';
 
-import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { Text, Image, View } from "react-native";
@@ -60,10 +59,7 @@ import CoinIcon from "./components/icons/adminicons/CoinIcon.js";
 import AmbassadorRequestScreen from "./screens/starter/AmbassadorRequestScreen.js";
 import Toast from "react-native-toast-message";
 
-import { Raleway_400Regular } from '@expo-google-fonts/raleway/400Regular';
-import { Raleway_500Medium } from '@expo-google-fonts/raleway/500Medium';
-import { Raleway_600SemiBold } from '@expo-google-fonts/raleway/600SemiBold';
-import { Raleway_700Bold } from '@expo-google-fonts/raleway/700Bold';
+import { useFonts } from "expo-font";
 import { useUser } from "./hooks/auth/useUser.js";
 import { SubscriptionProvider } from "./SubscriptionProvider.js";
 import GroupsListScreen from "./screens/starter/GroupsListScreen.js";
@@ -333,13 +329,23 @@ function DrawerNavigator() {
 }
 
 export default function App() {
-    const [fontsLoaded, fontError] = useFonts({
-        Raleway_400Regular, 
-        Raleway_500Medium, 
-        Raleway_600SemiBold, 
-        Raleway_700Bold, 
-    });
+    // const [fontsLoaded, fontError] = useFonts({
+    //     Raleway_400Regular, 
+    //     Raleway_500Medium, 
+    //     Raleway_600SemiBold, 
+    //     Raleway_700Bold, 
+    // });
 
+    const [fontsLoaded] = useFonts({
+        Raleway_400Regular: require("./assets/fonts/Raleway-Regular.ttf"),
+        Raleway_500Medium:  require("./assets/fonts/Raleway-Medium.ttf"),
+        Raleway_600SemiBold:require("./assets/fonts/Raleway-SemiBold.ttf"),
+        Raleway_700Bold:    require("./assets/fonts/Raleway-Bold.ttf"),
+        InterBold: require("./assets/fonts/Inter-Bold.ttf"),
+        InterRegular: require("./assets/fonts/Inter-Regular.ttf"),
+        InterSemiBold: require("./assets/fonts/Inter-SemiBold.ttf"),
+        
+    });
     const [assetsReady, setAssetsReady] = React.useState(false);
 
     React.useEffect(() => {
@@ -367,9 +373,7 @@ export default function App() {
                 <QueryClientProvider client={queryClient}>
                     <PaperProvider>
                         <StatusBar />
-                        <SubscriptionProvider >
                             <AppContent />
-                        </SubscriptionProvider>
                         <Toast />
                     </PaperProvider>
                 </QueryClientProvider>
@@ -380,225 +384,226 @@ export default function App() {
 
 function AppContent( ) {
     const { user } = useUser(); 
-    const groupId = user?.user?.user_metadata?.group;
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator
-                initialRouteName={user ? "InApp" : "Welcome"}
-                screenOptions={{ headerStyle: { height: 200 }, }}
-            >
-                <Stack.Screen
-                    name="Welcome"
-                    component={WelcomeScreen}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    name="GroupsList"
-                    component={GroupsListScreen}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    name="InApp"
-                    component={BottomTabNavigator}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    name="AdminApp"
-                    component={DrawerNavigator}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    name="Register"
-                    component={RegisterScreen}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    name="Maps"
-                    component={MapsScreen}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    name="Login"
-                    component={LoginScreen}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    name="ResetPassword"
-                    component={ResetPasswordScreen}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    name="Postcode"
-                    component={PostcodeScreen}
-                    options={{ headerShown: false }}
-                />
+        <SubscriptionProvider enabled={!!user}>
+            <NavigationContainer>
+                <Stack.Navigator
+                    initialRouteName={user ? "InApp" : "Welcome"}
+                    screenOptions={{ headerStyle: { height: 200 }, }}
+                >
                     <Stack.Screen
-                    name="AmbassadorRequest"
-                    component={AmbassadorRequestScreen}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    name="Settings"
-                    component={SettingsScreen}
-                    options={{
-                        headerTitleAlign: "left",
-                        // headerTransparent: true,
-                        headerBackVisible: false,
-                        headerTitle: (props) => (
-                            <Title
-                                title="SETTINGS"
-                                goBack="true"
-                                {...props}
-                            />
-                        ),
-                        headerRight: (props) => (
-                            <Logo {...props} />
-                        ),
-                    }}
-                />
-                <Stack.Screen
-                    name="Impact"
-                    component={ImpactScreen}
-                    options={{
-                        headerTitleAlign: "left",
-                        headerStyle: {
-                            backgroundColor: Colors.impact,
-                        },
-                        // headerTransparent: true,
-                        headerBackVisible: false,
-                        headerTitle: (props) => (
-                            <Title
-                                title="IMPACT"
-                                goBack="true"
-                                {...props}
-                            />
-                        ),
-                        headerRight: (props) => (
-                            <Logo {...props} />
-                        ),
-                    }}
-                />
-                <Stack.Screen
-                    name="Calendar"
-                    component={CalendarScreen}
-                    options={{
-                        headerTitleAlign: "left",
-                        // headerTransparent: true,
-                        headerBackVisible: false,
-                        headerTitle: (props) => (
-                            <Title
-                                title=""
-                                goBack="true"
-                                {...props}
-                            />
-                        ),
-                        headerRight: (props) => (
-                            <Logo {...props} />
-                        ),
-                    }}
-                />
-                <Stack.Screen
-                    name="GroupCreate"
-                    component={GroupCreateScreen}
-                    options={{
-                        headerTitleAlign: "left",
-                        headerBackVisible: false,
-                        headerTitle: (props) => (
-                            <Title
-                                title=""
-                                goBack="true"
-                                {...props}
-                            />
-                        ),
-                    }}
-                />
-                <Stack.Screen
-                    name="ProfileItem"
-                    component={ProfileItemScreen}
-                    options={{
-                        headerBackVisible: false,
-                        headerTitle: (props) => (
-                            <Title goBack="true" {...props} />
-                        ),
-                        headerRight: (props) => (
-                            <Logo {...props} />
-                        ),
-                    }}
-                />
-                <Stack.Screen
-                    name="CreateItem"
-                    component={CreateItemScreen}
-                    options={{
-                        headerTitleAlign: "left",
-                        headerBackVisible: false,
-                        headerTitle: (props) => (
-                            <Title
-                                title=""
-                                goBack="true"
-                                {...props}
-                            />
-                        ),
-                    }}
-                />
-                <Stack.Screen
-                    name="ItemDescriptionInput"
-                    component={ItemDescriptionInputScreen}
-                    options={{
-                        headerTitleAlign: "left",
-                        headerBackVisible: false,
-                        headerTitle: (props) => (
-                            <Title
-                                title=""
-                                goBack="true"
-                                {...props}
-                            />
-                        ),
-                    }}
-                />
-                <Stack.Screen
-                    name="GroupDetails"
-                    component={GroupDetailsScreen}
-                    options={{
-                        headerTitleAlign: "left",
-                        headerBackVisible: false,
-                        headerTitle: (props) => (
-                            <Title
-                                title=""
-                                goBack="true"
-                                {...props}
-                            />
-                        ),
-                    }}
-                />
-                <Stack.Screen
-                    name="WishList"
-                    component={WishListScreen}
-                    options={{
-                        headerTitleAlign: "left",
-                        headerBackVisible: false,
-                        headerTitle: (props) => (
-                            <Title
-                                title="WISHLIST"
-                                goBack="true"
-                                {...props}
-                            />
-                        ),
-                        headerRight: (props) => (
-                            <Logo {...props} />
-                        ),
-                    }}
-                    
-                />
-                <Stack.Screen
-                    name="Chat"
-                    component={ChatScreen}
-                    options={{
-                        headerTitleAlign: "left",
-                        headerBackVisible: false,
-                    }}
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
+                        name="Welcome"
+                        component={WelcomeScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="GroupsList"
+                        component={GroupsListScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="InApp"
+                        component={BottomTabNavigator}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="AdminApp"
+                        component={DrawerNavigator}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Register"
+                        component={RegisterScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Maps"
+                        component={MapsScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Login"
+                        component={LoginScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="ResetPassword"
+                        component={ResetPasswordScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Postcode"
+                        component={PostcodeScreen}
+                        options={{ headerShown: false }}
+                    />
+                        <Stack.Screen
+                        name="AmbassadorRequest"
+                        component={AmbassadorRequestScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Settings"
+                        component={SettingsScreen}
+                        options={{
+                            headerTitleAlign: "left",
+                            // headerTransparent: true,
+                            headerBackVisible: false,
+                            headerTitle: (props) => (
+                                <Title
+                                    title="SETTINGS"
+                                    goBack="true"
+                                    {...props}
+                                />
+                            ),
+                            headerRight: (props) => (
+                                <Logo {...props} />
+                            ),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Impact"
+                        component={ImpactScreen}
+                        options={{
+                            headerTitleAlign: "left",
+                            headerStyle: {
+                                backgroundColor: Colors.impact,
+                            },
+                            // headerTransparent: true,
+                            headerBackVisible: false,
+                            headerTitle: (props) => (
+                                <Title
+                                    title="IMPACT"
+                                    goBack="true"
+                                    {...props}
+                                />
+                            ),
+                            headerRight: (props) => (
+                                <Logo {...props} />
+                            ),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Calendar"
+                        component={CalendarScreen}
+                        options={{
+                            headerTitleAlign: "left",
+                            // headerTransparent: true,
+                            headerBackVisible: false,
+                            headerTitle: (props) => (
+                                <Title
+                                    title=""
+                                    goBack="true"
+                                    {...props}
+                                />
+                            ),
+                            headerRight: (props) => (
+                                <Logo {...props} />
+                            ),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="GroupCreate"
+                        component={GroupCreateScreen}
+                        options={{
+                            headerTitleAlign: "left",
+                            headerBackVisible: false,
+                            headerTitle: (props) => (
+                                <Title
+                                    title=""
+                                    goBack="true"
+                                    {...props}
+                                />
+                            ),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="ProfileItem"
+                        component={ProfileItemScreen}
+                        options={{
+                            headerBackVisible: false,
+                            headerTitle: (props) => (
+                                <Title goBack="true" {...props} />
+                            ),
+                            headerRight: (props) => (
+                                <Logo {...props} />
+                            ),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="CreateItem"
+                        component={CreateItemScreen}
+                        options={{
+                            headerTitleAlign: "left",
+                            headerBackVisible: false,
+                            headerTitle: (props) => (
+                                <Title
+                                    title=""
+                                    goBack="true"
+                                    {...props}
+                                />
+                            ),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="ItemDescriptionInput"
+                        component={ItemDescriptionInputScreen}
+                        options={{
+                            headerTitleAlign: "left",
+                            headerBackVisible: false,
+                            headerTitle: (props) => (
+                                <Title
+                                    title=""
+                                    goBack="true"
+                                    {...props}
+                                />
+                            ),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="GroupDetails"
+                        component={GroupDetailsScreen}
+                        options={{
+                            headerTitleAlign: "left",
+                            headerBackVisible: false,
+                            headerTitle: (props) => (
+                                <Title
+                                    title=""
+                                    goBack="true"
+                                    {...props}
+                                />
+                            ),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="WishList"
+                        component={WishListScreen}
+                        options={{
+                            headerTitleAlign: "left",
+                            headerBackVisible: false,
+                            headerTitle: (props) => (
+                                <Title
+                                    title="WISHLIST"
+                                    goBack="true"
+                                    {...props}
+                                />
+                            ),
+                            headerRight: (props) => (
+                                <Logo {...props} />
+                            ),
+                        }}
+                        
+                    />
+                    <Stack.Screen
+                        name="Chat"
+                        component={ChatScreen}
+                        options={{
+                            headerTitleAlign: "left",
+                            headerBackVisible: false,
+                        }}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </SubscriptionProvider>
     );
 }
