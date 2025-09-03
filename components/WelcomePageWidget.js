@@ -1,11 +1,13 @@
-import { View, Image, Text, StyleSheet, ScrollView, useWindowDimensions } from "react-native";
+import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from "react-native";
 import Svg, { Circle } from "react-native-svg";
+import { Image } from 'expo-image';
 import { useState } from "react";
 import MainButton from "./MainButton.js";
 import Colors from "../constants/colors.js";
 import { horizontalScale as hs, verticalScale as vs, moderateScale as ms } from "../utils/responsive";
+// TOP OF FILE — static imports (case-sensitive paths)
 
-function WelcomePageWidget({ content, image1, image2, onRegister, onLogin, page, handleScroll }) {
+function WelcomePageWidget({ onRegister, onLogin, page, handleScroll }) {
     const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
     const imageHeight = screenHeight * 0.65;
@@ -16,6 +18,12 @@ function WelcomePageWidget({ content, image1, image2, onRegister, onLogin, page,
         // resizeMode: 'contain'
     }
 
+    // console.log('DIRECT girls:',
+    // Image.resolveAssetSource(images.girls));
+    // console.log('DIRECT img4:',
+    // Image.resolveAssetSource(images.img4));
+
+
     return (
         <View style={styles.container}>
             <ScrollView
@@ -24,13 +32,11 @@ function WelcomePageWidget({ content, image1, image2, onRegister, onLogin, page,
                 showsHorizontalScrollIndicator={false}
                 onMomentumScrollEnd={handleScroll}
                 decelerationRate="fast"
-                snapToInterval={screenWidth}
-                snapToAlignment="center"
-                disableIntervalMomentum
             >
-                <Image source={image1} style={imageStyle} resizeMode="contain" />
-                <Image source={image2} style={imageStyle} resizeMode="contain"/>
-            </ScrollView>
+                <Image source="https://ojtjdcpqkljyiralrflf.supabase.co/storage/v1/object/public/public%20assets/girls.png"  style={imageStyle} />
+                <Image source="https://ojtjdcpqkljyiralrflf.supabase.co/storage/v1/object/public/public%20assets/img4.png" style={imageStyle} />
+            </ScrollView> 
+            
             <View style={styles.navbar}>
                 {page === 0 ? (
                     <>

@@ -46,12 +46,17 @@ export async function addItem({ item, itemDetails }) {
         .from('item-images')
         .getPublicUrl(fileName);   
 
+    console.log("Public URL:", urlData.publicUrl);
+    console.log("Item ID:", itemId);
+    
     const { data: updatedItem, error: updateError } = await supabase
         .from("Items")
         .update({ image: urlData.publicUrl })
         .eq("id", itemId)
         .select();
 
+    console.log("Updated item with image URL:", updatedItem);
+    
     if (updateError) {
         throw new Error(updateError.message);
     }

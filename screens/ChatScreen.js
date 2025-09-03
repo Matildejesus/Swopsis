@@ -238,7 +238,7 @@ function ChatScreen() {
                             }>
                                 <View style={styles.rowContainer}>
                                 <ChatItemWidget itemId={item.itemId} currentUser={user}/>
-                                {item.loanDates && 
+                                {Object.keys(item.loanDates).length > 0  && 
                                     (  
                                         <View style={styles.calenderContainer}>
                                             {(!decision || !item.decision) && (
@@ -417,6 +417,7 @@ const styles = StyleSheet.create({
     rowContainer: {
         flexDirection: "row",
         gap: 10,
+        height: 73,
     },
     blocked: {
         marginBottom: 20,

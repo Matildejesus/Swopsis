@@ -17,8 +17,6 @@ function WelcomeScreen({ navigation }) {
 
     return (
         <WelcomePageWidget
-            image1={require("../../assets/images/girls.png")}
-            image2={require("../../assets/images/img4.png")}
             onRegister={() => navigation.navigate("Register")}
             onLogin={() => navigation.navigate("Login")}
             page={page}

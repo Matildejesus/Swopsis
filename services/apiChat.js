@@ -1,6 +1,7 @@
 import supabase from "./supabase";
 
 export async function createConversation({ user1, user2 }) {
+    console.log("Creating conversation between:", user1, "and", user2);
     const { data, error } = await supabase
         .from("Conversations")
         .insert([

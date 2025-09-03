@@ -36,7 +36,7 @@ function ImpactScreen() {
         <ScrollView bounces={false}>
             <View style={styles.container}>
                 <Image
-                    source={require("../assets/images/swap.png")}
+                    source={{ uri: "https://ojtjdcpqkljyiralrflf.supabase.co/storage/v1/object/public/public%20assets/swap.png" }}
                     style={styles.mainImage}
                 />
                 <Text style={styles.mainText}>
@@ -52,21 +52,21 @@ function ImpactScreen() {
                     <ImpactWidget
                         number={parseFloat(totalWeight.toFixed(2))}
                         label={"KG OF TEXTILE OUT OF LANDFILL"}
-                        source={require("../assets/images/garb.png")}
+                        source={{ uri: "https://ojtjdcpqkljyiralrflf.supabase.co/storage/v1/object/public/public%20assets/garb.png"}}
                         color={"#00CCCB"}
                         count={1}
                     />
                     <ImpactWidget
                         number={totalLitres}
                         label={"L OF FRESH WATER SAVE"}
-                        source={require("../assets/images/water.png")}
+                        source={{ uri: "https://ojtjdcpqkljyiralrflf.supabase.co/storage/v1/object/public/public%20assets/water.png"}}
                         color={"#0080FB"}
                         count={2}
                     />
                     <ImpactWidget
                         number={totalCarbon.toFixed(2)}
                         label={"TONNES OF CO2 EMMISSIONS SAVED"}
-                        source={require("../assets/images/gas.png")}
+                        source={{ uri: "https://ojtjdcpqkljyiralrflf.supabase.co/storage/v1/object/public/public%20assets/gas.png"}}
                         color={"#FFA330"}
                         count={3}
                     />
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     numberText: {
         fontSize: 20,
         fontFamily: "Raleway_400Regular",
-        paddingBottom: 10,
+        // paddingBottom: 10,
     },
     widget: {
         marginBottom: 37,

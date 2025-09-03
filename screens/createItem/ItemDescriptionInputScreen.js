@@ -345,6 +345,7 @@ const styles = StyleSheet.create({
     },
     weightField: {
         width: 110,
+        height: 60,
     },
     input: {
         flexDirection: "row",
@@ -372,7 +373,7 @@ const styles = StyleSheet.create({
     },
     button: {
         width: 141,
-        height: 49,
+        height: 52,
     },
     buttonContainer: {
         alignSelf: "flex-end",
