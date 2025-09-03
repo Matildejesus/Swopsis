@@ -87,9 +87,6 @@ export async function updateStatus({ id, status }) {
     
     const { data } = await supabase.functions.invoke("update-group", { body: { id, status: "approved" } });
 
-    if (error) {
-        throw new Error(error.message);
-    }
     console.log("Status updated:", data);
     return data;
 }

@@ -24,9 +24,12 @@ function WelcomePageWidget({ content, image1, image2, onRegister, onLogin, page,
                 showsHorizontalScrollIndicator={false}
                 onMomentumScrollEnd={handleScroll}
                 decelerationRate="fast"
+                snapToInterval={screenWidth}
+                snapToAlignment="center"
+                disableIntervalMomentum
             >
-                <Image source={image1} style={imageStyle} />
-                <Image source={image2} style={imageStyle} />
+                <Image source={image1} style={imageStyle} resizeMode="contain" />
+                <Image source={image2} style={imageStyle} resizeMode="contain"/>
             </ScrollView>
             <View style={styles.navbar}>
                 {page === 0 ? (

@@ -33,9 +33,14 @@ serve(async (req) => {
     if (totalWeight !== undefined) user_metadata.totalWeight = totalWeight;
     if (itemsSwapped !== undefined) user_metadata.itemsSwapped = itemsSwapped;
 
+    console.log("Updating user:", id, user_metadata);
+    console.log("Full payload:", user_metadata);
+  
     const { data, error } = await supabaseAdmin.auth.admin.updateUserById(id, {
       user_metadata,
     });
+
+    console.log("Update result:", { data, error });
 
     if (error) throw error;
 

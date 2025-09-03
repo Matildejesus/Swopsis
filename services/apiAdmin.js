@@ -75,9 +75,11 @@ export async function getFilteredGroupMember({ groupId }) {
 export async function updateUserMetadata({ id, groupId, ambassador }) {
     console.log(id, groupId, ambassador);
 
-    const { data, error } = await supabase.functions.invoke("get-user-by-id", {
+    const { data, error } = await supabase.functions.invoke("update-user", {
         body: { id, groupId, ambassador },
     });
+
+    console.log("Updated user metadata:", data, error);
 
     if (error) {
         console.error("Error updating user metadata:", error);
@@ -90,7 +92,7 @@ export async function updateUserMetadata({ id, groupId, ambassador }) {
 export async function updateUserCoin({ id, coins }) {
     try {
 
-        const { data, error } = await supabase.functions.invoke("get-user-by-id", {
+        const { data, error } = await supabase.functions.invoke("update-user", {
             body: { id, coins: Number(coins) },
         });
 
@@ -107,7 +109,7 @@ export async function updateUserCoin({ id, coins }) {
 export async function updateUserImpactData({
     id, newCoins, totalLitres, totalCarbon, totalWeight, itemsSwapped }) {
 
-    const { data, error } = await supabase.functions.invoke("get-user-by-id", {
+    const { data, error } = await supabase.functions.invoke("update-user", {
         body: { id, coins: newCoins, totalWeight, totalCarbon, totalLitres, itemsSwapped },
     });
 

@@ -100,7 +100,7 @@ function GroupDetailsScreen({ route }) {
     const handlePress = async (action) => {
         try {
             if (action == "approve") {
-                // console.log(ambassadorData.id);
+                console.log(ambassadorData.id);
                 const data = await updateUserMetadata({ id: ambassadorData.id, groupId: group.id, ambassador: true});
                 console.log("group data: ", data);
                 // await updateStatus({ id: group.id, status: action });
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: "bold",
-        marginBottom: 10,
+        // marginBottom: 10,
         textTransform: "uppercase",
         alignSelf: "center",
         fontFamily: "Raleway_700Bold",
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
         marginBottom: 80,
     },
     image: {
-        height: "38%",
+        height: "30%",
         width: "100%",
     },
     header: {
@@ -236,18 +236,18 @@ const styles = StyleSheet.create({
         marginRight: 4,
     },
     buttonContainer: {
-        alignItems: "flex-end",
+        alignSelf: "flex-end",
         marginRight: 30,
-        position: "absolute",
+        // position: "absolute",
         flexDirection: "row",
         gap: 10,
-        bottom: 30,
-        right: 0,
+        // bottom: -20,
+        // right: 0,
     },
     infoContainer: {
         flexDirection: "column",
         position: "absolute",
-        top: 340,
+        top: 280,
         left: 227,
         width: 108,
         // zIndex: 5,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     },
     ambassadorContainer: {
         position: "absolute",
-        top: 340,
+        top: 280,
         left: 30,
       //  left: 227,
         flexDirection: "row",

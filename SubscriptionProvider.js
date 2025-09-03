@@ -5,7 +5,7 @@ import { useConversationSubscription } from './hooks/conversations/useConversati
 import { useMessageBroadcast } from './hooks/conversations/useMessageBroadcast';
 import { useItemSubscription } from './hooks/items/useItemSubscription';
 
-export function SubscriptionProvider({ children, enabled = true }) {
+export function SubscriptionProvider({ children }) {
     const { user } = useUser();
     const groupId = user?.user?.user_metadata?.group;
     const userId = user?.user?.id;
@@ -16,7 +16,7 @@ export function SubscriptionProvider({ children, enabled = true }) {
 
     return (
         <>
-        {enabled && conversations?.map((c) => (
+        {conversations?.map((c) => (
             <ConversationSubscription key={c.id} id={c.id} />
         ))}
         {children}

@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 
 function GroupsListScreen({ route }) {
     const navigation = useNavigation();
-    const allGroups = route.params.groups.filter(groups => groups.status == "approve");
+    const allGroups = route.params.groups.filter(groups => groups.status == "approved");
     console.log("FINAL GROUPS: ", allGroups);
     return (
         <View style={styles.container}>
@@ -41,11 +41,11 @@ const styles = StyleSheet.create({
         color: Colors.primary2,
         fontSize: 15,
         fontFamily: "Raleway_500Medium",
-        paddingBottom: 15,
+        // paddingBottom: 15,
         marginTop: 10,
         marginLeft: 20,
         width: 200,
-        height: 20,
+        // height: 40,
         paddingLeft: 5,
         backgroundColor: Colors.impact
     },

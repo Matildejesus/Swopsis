@@ -13,7 +13,7 @@ export async function addJoinRequest({ userId, groupId, message }) {
             },
         ])
         .select();
-
+    console.log("REQUEST DATA: ", data, error);
     if (error) {
         throw new Error(error.message);
     }
