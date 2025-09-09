@@ -1,7 +1,6 @@
 import supabase, {supabaseAdmin} from "./supabase";
 
 export async function addGroup({ group }) {
-    console.log("group data for data:", group);
 
     try {
         const { data, error } = await supabase
@@ -20,7 +19,6 @@ export async function addGroup({ group }) {
         ])
         .select();
 
-        console.log("Group created:", data[0].id);
         const fileExt = group.avatar.split(".").pop();
         const fileName = `${data[0].id}/groupAvatar.${fileExt}`;
 
@@ -46,19 +44,15 @@ export async function addGroup({ group }) {
             .from('group-avatars')
             .getPublicUrl(fileName);
 
-        console.log("Public URL for group avatar:", urlData.publicUrl);
-
         const { data: groupWithAvatar, error: updateError } = await supabase
             .from("Groups")
             .update({ avatar: urlData.publicUrl })
             .eq("id", data[0].id)
             .select();
 
-        // console.log("THE ERROR: ", updateError);
         if (updateError) {
             throw new Error(updateError.message);
         }
-        console.log("Group created with avatar:", groupWithAvatar);
         return groupWithAvatar[0];
     } catch (error) {   
         console.error("Error creating group:", error);
@@ -68,7 +62,6 @@ export async function addGroup({ group }) {
 }
 
 export async function getGroups() {
-    console.log("running");
     const { data: groups, error: fetchError } = await supabase
         .from("Groups")
         .select("*")
@@ -77,17 +70,13 @@ export async function getGroups() {
     if (fetchError) {
         throw new Error(fetchError.message);
     }
-    // console.log("data: ", groups);
     return groups;
 }
 
 
 export async function updateStatus({ id, status }) {
-    console.log("Updating status for request ID:", id, "to", status);
-    
     const { data } = await supabase.functions.invoke("update-group", { body: { id, status: "approved" } });
 
-    console.log("Status updated:", data);
     return data;
 }
 

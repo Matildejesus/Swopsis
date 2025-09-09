@@ -16,10 +16,8 @@ import { useQueryClient } from "@tanstack/react-query";
 
 function ProfileItemDetails({ itemData }) {
     const { user: currentUser } = useUser();
-    console.log("Current User: ", currentUser.user.app_metadata);
 
     const queryClient = useQueryClient();
-    console.log("itemData: ", itemData);
 
     const [isOwner, setIsOwner] = useState(false);
     const [ownerData, setOwnerData] = useState({

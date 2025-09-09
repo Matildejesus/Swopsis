@@ -76,14 +76,11 @@ function GroupDetailsScreen({ route }) {
             setErrorMessage("");
             setIsModalVisible(false);
             await updateGroup({ group: "Pending" });
-            console.log(user.user.id, group.id, message);
             const data = await addJoinRequest({
                 userId: user.user.id,
                 groupId: group.id,
                 message,
             });
-            console.log("yes");
-            // console.log("DATA: ", data);
             navigation.reset({
                 index: 0,
                 routes: [
@@ -100,15 +97,12 @@ function GroupDetailsScreen({ route }) {
     const handlePress = async (action) => {
         try {
             if (action == "approve") {
-                console.log(ambassadorData.id);
                 const data = await updateUserMetadata({ id: ambassadorData.id, groupId: group.id, ambassador: true});
-                console.log("group data: ", data);
                 // await updateStatus({ id: group.id, status: action });
                 updateGroupStatus({ id: group.id, status: action });
                 navigation.goBack();
                 
             } else if (action == "reject") {
-                console.log("rejected");
                 updateGroupStatus({ id: group.id, status: action });
                 const data = await updateUserMetadata({ id: ambassadorData.id, groupId: null, ambassador: false});
                 navigation.goBack();

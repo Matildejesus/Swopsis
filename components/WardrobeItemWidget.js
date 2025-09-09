@@ -13,8 +13,6 @@ function WardrobeitemWidget({ item }) {
     const date = dateFormatting(item.created_at);
 
     const handleContactPress = () => {
-
-        console.log("Attempting navigation to ProfileItem");
         navigation.navigate("ProfileItem", { 
             itemData: item,
             showModal: true 

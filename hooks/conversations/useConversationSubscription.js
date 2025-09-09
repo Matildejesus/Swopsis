@@ -7,7 +7,6 @@ export function useConversationSubscription(conversationId) {
 
     useEffect(() => {
         if (!conversationId) return;
-        console.log("[conv] subscribe", conversationId);
 
         const channel = supabase
         .channel(`conv-${conversationId}`)
@@ -20,7 +19,6 @@ export function useConversationSubscription(conversationId) {
                 filter: `conversationId=eq.${conversationId}`
             },
             (payload) => {
-                console.log('New message in conversation: ', conversationId)
                 queryClient.setQueryData(["messages", conversationId], (old = []) => [
                 payload.new,         
                 ...old
@@ -33,7 +31,6 @@ export function useConversationSubscription(conversationId) {
         .subscribe();
 
         return () => {
-            console.log("Unsubscribing from channel");
             supabase.removeChannel(channel);
         };
     }, [conversationId, queryClient]);

@@ -10,7 +10,6 @@ serve(async (req) => {
 		);
 
 		const { id } = await req.json();
-		console.log("Fetching user with ID INSIDE THE EDGE FUNCTION:", id);
 		const { data, error } = await supabaseAdmin.auth.admin.getUserById(id);
 
 		if (error) throw error;

@@ -41,7 +41,6 @@ function ProfileItemScreen() {
 
     const route = useRoute();
     const { itemData, showModal, owner, user } = route.params;
-    console.log("ITEM DATA: ", itemData);
 
     useEffect(() => {
         if (showModal) {
@@ -89,9 +88,7 @@ function ProfileItemScreen() {
                 pendingConversation = addConversation({ user1: itemData.userId, user2: currentUser.user.id });
 
             }
-            console.log("Pending Conversation: ", pendingConversation);
             if (selectedDates) {
-                console.log("selectedDates: ", selectedDates);
                 await sendMessage({ senderId: currentUser.user.id, itemId: itemData.id, loanDates: selectedDates, conversationId: pendingConversation.id});
             } else {
                 await sendMessage({ senderId: currentUser.user.id, itemId: itemData.id, conversationId: pendingConversation.id });

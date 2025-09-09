@@ -12,19 +12,16 @@ export function useToggleWishlist() {
         },
         onSuccess: ({data, itemId, wishlist, groupId}) => {
             // const previousWardrobe = queryClient.getQueryData(['groupWardrobe']);
-            console.log("THERE IS SUCCESS");
             queryClient.setQueryData(['groupWardrobe', groupId], (old) => {
                 const updated = old?.map(item => 
                     item.id === itemId 
                         ? { ...item, wishlist: !wishlist } 
                         : item
                 );
-                console.log('Updated data:', updated);
                 return updated;
             });
     
             const current = queryClient.getQueryData(['groupWardrobe', groupId]);
-            console.log('Current data after update:', current);
 
             Toast.show({
                 type: 'success',

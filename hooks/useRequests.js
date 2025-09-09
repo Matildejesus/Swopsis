@@ -10,16 +10,13 @@ export function useRequests() {
     const { data: requests, isLoading } = useQuery({
         queryKey: ["requests" || "allGroups"],
         queryFn: async () => {
-            console.log("use req running");
             if (user?.user?.user_metadata?.group) {
                 const data = await getJoinRequests({groupId: user.user.user_metadata.group});
-                console.log("JOIN REQUEST DATA: ", data);
                 return data;
             } else {
                 const accepted = [];
                 const rejected = [];
                 const pending = [];
-                console.log("no group ID so grouping the groups");
                 groups?.forEach((group) => {
                     if (group.status === "approve") {
                         accepted.push(group);

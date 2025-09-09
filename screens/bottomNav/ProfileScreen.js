@@ -28,7 +28,6 @@ function ProfileScreen() {
     const user = userData?.user;
 
     const TESTINg = findUserById({ id: user.id});
-    console.log("TESTING THE USER FETCH FUNCTION: ", TESTINg);
     useEffect(() => {
         if (user?.user_metadata) { 
             const metadata = user.user_metadata;
@@ -39,7 +38,6 @@ function ProfileScreen() {
             setGroup(metadata.group);
             setAmbassador(metadata.ambassador);
             setEmail(user.email);
-            console.log("User Metadata: ", metadata);
         }
     }, [user?.user_metadata]); 
 

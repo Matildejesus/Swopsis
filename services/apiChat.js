@@ -1,7 +1,6 @@
 import supabase from "./supabase";
 
 export async function createConversation({ user1, user2 }) {
-    console.log("Creating conversation between:", user1, "and", user2);
     const { data, error } = await supabase
         .from("Conversations")
         .insert([
@@ -55,16 +54,12 @@ export async function getConversation({userId_1, userId_2}) {
         if (error) {
             throw new Error(error.message);
         }
-        console.log("Conversations: ", data);
         return data[0];
 
 }
 
 export async function sendMessage({ senderId, text, itemId, loanDates, conversationId }) {
     const messageType = text ? "text" : loanDates ? "calendar" : "item";
-    console.log("messageType", messageType);
-    console.log("text", text);
-    console.log("itemid", itemId);
 
     const { data, error } = await supabase
         .from("Messages")
@@ -89,14 +84,11 @@ export async function sendMessage({ senderId, text, itemId, loanDates, conversat
 }
 
 export async function getMessagesForConvo({ conversationId }) {
-    console.log("Fetching messages for conversation ID:", conversationId);
     const { data, error } = await supabase
         .from("Messages")
         .select("*")
         .eq("conversationId", conversationId)
         .order("created_at", {ascending: false });
-
-        console.log("Messages: ", data);
 
     if (error) {
         throw new Error(error.message);
@@ -106,8 +98,6 @@ export async function getMessagesForConvo({ conversationId }) {
 }
 
 export async function updateDecision({ id, decision }) {
-    console.log(id);
-    console.log(decision);
     const {data, error } = await supabase
         .from("Messages")
         .update({ "decision": decision })
@@ -115,7 +105,6 @@ export async function updateDecision({ id, decision }) {
         .select();
 
     if (error) {
-        console.log("thisi is the problem");
         throw new Error(error.message);
     }
 

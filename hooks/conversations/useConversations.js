@@ -12,7 +12,6 @@ export function useConversations() {
         queryKey: ["conversations"],
         queryFn: async () => {
             const data = await getAllConversation({ userId: user?.user?.id, groupMembers });
-            console.log("Conversations fetched:", data);
             return data;
         },
         enabled: !!user?.user?.id,

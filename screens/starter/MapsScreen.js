@@ -23,7 +23,6 @@ function MapsScreen({ route }) {
         setPostcode(newPostcode);
         setNewPostcode(""); 
         setError("");
-        console.log("New postcode set: " + newPostcode);
     };
 
     return (

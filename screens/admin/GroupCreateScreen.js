@@ -26,7 +26,6 @@ function GroupCreateScreen() {
     };
 
     const submitHandler = async () => {
-        console.log("submitting!!!");
         if (
             !name ||
             !description ||
@@ -36,12 +35,9 @@ function GroupCreateScreen() {
             !ambassadorEmail
         ) {
             setInputError("Missing inputs");
-            console.log(inputError);
         } else {
             try {
-                console.log(ambassadorEmail);
                 const ambassador = await findUserByEmail(ambassadorEmail);
-                console.log("THIS IS THE AMBASSADOR: ", ambassador.id);
                 const groupData = await addGroup({
                     group: {
                         name,
@@ -53,7 +49,6 @@ function GroupCreateScreen() {
                         ambassador: ambassador.id,
                     },
                 });
-                console.log("GROUPDATA: ", groupData.id);
                 await updateUserMetadata(ambassador.id, groupData.id, true);
 
                 navigation.navigate("Groups");

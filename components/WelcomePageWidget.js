@@ -15,14 +15,7 @@ function WelcomePageWidget({ onRegister, onLogin, page, handleScroll }) {
     const imageStyle = {
         width: screenWidth,
         height: imageHeight,
-        // resizeMode: 'contain'
     }
-
-    // console.log('DIRECT girls:',
-    // Image.resolveAssetSource(images.girls));
-    // console.log('DIRECT img4:',
-    // Image.resolveAssetSource(images.img4));
-
 
     return (
         <View style={styles.container}>
@@ -36,7 +29,7 @@ function WelcomePageWidget({ onRegister, onLogin, page, handleScroll }) {
                 <Image source="https://ojtjdcpqkljyiralrflf.supabase.co/storage/v1/object/public/public%20assets/girls.png"  style={imageStyle} />
                 <Image source="https://ojtjdcpqkljyiralrflf.supabase.co/storage/v1/object/public/public%20assets/img4.png" style={imageStyle} />
             </ScrollView> 
-            
+
             <View style={styles.navbar}>
                 {page === 0 ? (
                     <>

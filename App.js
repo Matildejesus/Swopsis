@@ -366,7 +366,6 @@ export default function App() {
         return null;
     }
 
-    console.log("Fonts loaded, hiding splash screen");
     SplashScreen.hideAsync();
 
     return (

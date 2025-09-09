@@ -56,7 +56,6 @@ function ChatScreen() {
 
     useLayoutEffect(() => {
         if (thread?.userName) {
-            console.log("thread: ", thread);
             navigation.setOptions({
                 headerTitle: (props) => (
                     <Title
@@ -130,15 +129,10 @@ function ChatScreen() {
                     await updateAvailability({ available: false, itemId: selectedItem.itemId });
                     
                     const item = groupWardrobe.find(item => item.id === selectedItem.itemId);
-                    console.log("get item: ", item);
                     const newCount = await updateTradeCount({ id: item.id, count: item.tradeCount});
-                    console.log("trade count", newCount);
     
                     const itemInfo = await getItemsInfo({ category: item.category, itemId: item.id });
-                    console.log("items info: ", itemInfo);
                     const categoryData = await get({ item: itemInfo.subcategory });
-    
-                    console.log("SENDERID: ", selectedItem.senderId);
     
                     const mergedDates = { ...item.unavailableDates };
 
@@ -148,13 +142,10 @@ function ChatScreen() {
                             ...selectedItem.loanDates[date], // Add new properties
                         };
                     }
-                    
-                    console.log("Updated unavailable dates:", mergedDates);
     
                     await updateUnavailability({ id: selectedItem.itemId, dates: mergedDates });
     
                     const receiverUser = await findUserById({ id: selectedItem.senderId });
-                    // console.log("RECEIVER USER: ", receiverUser.user_metadata);
     
                     const updatedCoins = receiverUser.user_metadata.coins - 1;
                     const updatedLitres = receiverUser.user_metadata.totalLitres + categoryData.litres;
@@ -168,8 +159,6 @@ function ChatScreen() {
                         updatedCarbon = categoryData.carbon;
                     }
     
-                    console.log("Impact data:", updatedCarbon, updatedLitres, updatedWeight, updatedSwapped);
-    
                     await updateUserImpactData({
                         id: selectedItem.senderId,
                         newCoins: updatedCoins,
@@ -180,7 +169,6 @@ function ChatScreen() {
                     });
     
                 } else if (decision === "reject") {
-                    console.log("SELECTED ITEM ID: ", selectedItem);
                     await updateDecision({ id: selectedItem.id, decision });
                 }
             } catch (error) {

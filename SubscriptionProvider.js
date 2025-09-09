@@ -10,7 +10,6 @@ export function SubscriptionProvider({ children }) {
     const groupId = user?.user?.user_metadata?.group;
     const userId = user?.user?.id;
     const { conversations } = useConversations();
-    // console.log("SubscriptionProvider: Group ID: ", user?.user?.app_metadata);
     useItemSubscription(groupId);
     useMessageBroadcast(userId);
 

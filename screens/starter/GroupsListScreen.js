@@ -9,7 +9,6 @@ import { useNavigation } from "@react-navigation/native";
 function GroupsListScreen({ route }) {
     const navigation = useNavigation();
     const allGroups = route.params.groups.filter(groups => groups.status == "approved");
-    console.log("FINAL GROUPS: ", allGroups);
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.navigate("AmbassadorRequest")}>

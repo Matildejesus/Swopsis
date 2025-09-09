@@ -17,8 +17,6 @@ function ResetPasswordScreen() {
     function handlePasswordReset() {
         if (email) {
             changePassword(email);
-            console.log(email);
-            console.log("email sent");
             setTimeout(() => {
                 navigation.goBack("Login");
             }, 4000);

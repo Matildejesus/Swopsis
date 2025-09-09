@@ -8,7 +8,6 @@ import { useNavigation } from "@react-navigation/native";
 
 function InputTemplateWidget({content, title, handleSearch, link, linkText, anotherLink, submitError, page, groups, loading}) {
     const navigation = useNavigation();
-    console.log("GROUPS: ", groups);
     return (
         <View style={styles.container}>
             { page !== "postcode" &&

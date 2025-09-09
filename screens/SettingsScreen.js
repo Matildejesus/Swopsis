@@ -51,7 +51,6 @@ function SettingsScreen() {
 
     const handleImageSelected = (newAvatarUri) => {
         setUserAvatar(newAvatarUri);
-        console.log("New avatar URI:", newAvatarUri);
         updateUser({ updateData: { avatar: newAvatarUri}, userId: id});
         //  updateUser({ updateData: { userName, password: newPassword }, userId: id });
     };
@@ -80,7 +79,6 @@ function SettingsScreen() {
     const closeModal = () => setIsModalVisible(false);
 
     const onPressDelete = () => {
-        console.log(user?.user?.user_metadata?.ambassador);
         if (user?.user?.user_metadata?.ambassador) {
             // Ambassadors → just open mail
             const subject = "Delete my account";
@@ -121,7 +119,6 @@ function SettingsScreen() {
 
 
     async function handleSubmit() {
-        console.log("Submitting user data:", userName);
         if (!userName) return;
 
         if (oldPassword || newPassword || verifyPassword) {
@@ -147,7 +144,6 @@ function SettingsScreen() {
             } 
         }
 
-        console.log("gonna update now");
         updateUser({ updateData: { userName, password: newPassword }, userId: id });
     }
 

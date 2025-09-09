@@ -15,9 +15,6 @@ export function useLogin() {
         },
         onSuccess: (user) => {
             queryClient.setQueryData(["user"], user);
-            
-            
-            console.log("User logged in:", user.user);
 
             if (user.user.user_metadata.group) {
                 navigation.reset({

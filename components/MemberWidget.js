@@ -54,12 +54,8 @@ function MemberWidget({ user, requests, memberCount }) {
             newStatus = "Rejected";
         }
 
-        console.log("status of joining: ", newStatus);
         
         try {
-            console.log("status: ", newStatus);
-            console.log("id: ", requests.id);
-            console.log("currentuser: ", currentUser.id);
             await updateStatus({ newStatus: newStatus, id: requests.id });
             if (newStatus == "Accepted") {
                 await updateUserMetadata({ id: currentUser.id, groupId: newGroup, ambassador: false });
@@ -80,7 +76,6 @@ function MemberWidget({ user, requests, memberCount }) {
         setIsCoinModalVisible(false);
         
         if (action === "Update" && newCoins !== undefined) {
-            console.log("updated: ", newCoins);
             updateUserCoins({ id: user.id , coins: newCoins});
         }
     };

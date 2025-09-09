@@ -7,7 +7,6 @@ import Colors from "../constants/colors";
 
 function MapWidget({ postcode, onChangeText, value, onPress, error, groups }) {
     const navigation = useNavigation();
-    console.log("GROUPS ON MAPWIDGET: ", groups);
     return (
         <View style={{flex: 1,}}>
             <Map

@@ -19,7 +19,6 @@ export function useAddConversation() {
                 text1: 'Error',
                 text2: err.message
             });
-            console.log("Error creating conversation:", err.message);
         }
     });
     return { addConversation, isLoading };

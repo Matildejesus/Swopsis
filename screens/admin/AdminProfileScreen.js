@@ -36,15 +36,11 @@ function AdminProfileScreen({ navigation }) {
     const { members, isLoading: membersLoading } = useAllMembers();
     const { items, isLoading: itemsLoading } = useAllItems();
     const { accepted: acceptedReq, pending: pendingReq, rejected: rejectedReq, isLoading: requestsLoading } = useRequests();
-    console.log("Accepted: ",acceptedReq);
-    console.log("Pending: ",pendingReq);
-    console.log("Rejected: ", rejectedReq);
 
     useEffect(() => {
         if (!user || !items ) return;
 
         if (user.user.app_metadata.role == "super-admin") {
-            console.log("USER: ", user);
             setUsername("Super Admin");
 
         } else {

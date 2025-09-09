@@ -9,13 +9,11 @@ import { useAllMembers } from "../../hooks/useAllMembers";
 
 function GroupWidget({ group, screen }) {
     const formattedDate = format(new Date(group.created_at), 'yyyy-MM-dd');
-    console.log("GROUP WIDGET: ", group.status);
     const navigation = useNavigation();
     const { members, isLoading } = useAllMembers();
 
     const handleNavigate = () => {
         const membersList = members.filter(member => member.user_metadata.group === group.id);
-        console.log("Members List: ", membersList);
         navigation.navigate("Members", { dataList: membersList, dataCount: membersList.length });
     };
     return(

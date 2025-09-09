@@ -12,7 +12,6 @@ function CalendarScreen() {
     const { dates, itemId, owner } = route.params;
     const [markedDates, setMarkedDates] = useState(dates || {});
     const [isEditing, setIsEditing] = useState(false);
-    console.log("Dates: ", dates);
 
     const toggleDate = (day) => {
         if (!isEditing) return;
@@ -30,11 +29,9 @@ function CalendarScreen() {
         }
 
         setMarkedDates(newMarkedDates);
-        console.log("newMarkedDates: ", newMarkedDates);
     };
     
     const onUpdate = async() => {
-        console.log("updated");
         try {
             await updateUnavailability({ dates: markedDates, id: itemId});
             setIsEditing(false);
@@ -43,7 +40,6 @@ function CalendarScreen() {
         }
     }
 
-    console.log("MARKED DATES: ", markedDates);
     return (
         <View style={styles.container}>
            <CalendarWidget markedDates={markedDates} toggleDate={toggleDate} />
@@ -60,7 +56,6 @@ function CalendarScreen() {
                 <MainButton 
                     title="Update"  
                     onPress={() => {
-                        console.log("Update button pressed");
                         onUpdate();
                     }}
                     style={styles.buttonContainer} 

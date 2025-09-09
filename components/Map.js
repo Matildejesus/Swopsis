@@ -62,7 +62,6 @@ const Map = ({ apikey, postcode, groups }) => {
                     acc[postcode].push(group);
                     return acc;
                 }, {});
-                // console.log("GROUPED BY POSTCODE: ", groupedByPostcode);
                 setGroupLocations(groupedByPostcode);
             } catch (error) {
                 console.error("Error fetching groups or geocoding: ", error);
@@ -79,7 +78,6 @@ const Map = ({ apikey, postcode, groups }) => {
 
         const fetchGeocode = async () => {
             try {
-                console.log("Fetching for postcode:", postcode);
                 
                 // PROPERLY formatted API request
                 const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(postcode)},Australia&key=${apikey}`,
@@ -91,7 +89,6 @@ const Map = ({ apikey, postcode, groups }) => {
                 );
                 
                 const data = await response.json();
-                console.log("Geocoding response:", data);
                 
                 if (data.results && data.results.length > 0) {
                     const location = data.results[0].geometry.location;
@@ -115,7 +112,6 @@ const Map = ({ apikey, postcode, groups }) => {
 
     useEffect(() => {
         if (region) {
-            console.log("Region updated:", region); 
         }
     }, [region]);
 

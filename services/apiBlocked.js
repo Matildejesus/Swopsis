@@ -1,7 +1,6 @@
 import supabase from "./supabase";
 
 export async function addBlocked({ user1, user2 }) {
-    console.log(user1, user2);
     const { data, error } = await supabase
     .from("Blocks")
     .insert([
@@ -12,7 +11,6 @@ export async function addBlocked({ user1, user2 }) {
     ])
     .select();
 
-    console.log("BLOCKED: ", data[0]);
     if (error) {
         throw new Error(error.message);
     }

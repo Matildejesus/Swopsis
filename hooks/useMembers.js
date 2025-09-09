@@ -4,11 +4,9 @@ import { getFilteredGroupMember } from "../services/apiAdmin";
 
 export function useMembers(groupId) {
     const queryClient = useQueryClient();
-    console.log("Setting up useMembers hook for group:", groupId);
     const {data: members, isLoading} = useQuery({
         queryKey: ["members"],
         queryFn: async () => {
-            console.log("Fetching members for group:", groupId);
             const data = getFilteredGroupMember({groupId});
             return data;
         },
@@ -17,8 +15,7 @@ export function useMembers(groupId) {
             queryClient.setQueryData(["members"], membersData);
         }
     });   
-        // console.log("Members data:", members);
-    console.log("Is loading:", isLoading);
+    
     return { members, isLoading };
 
 }

@@ -31,7 +31,6 @@ export async function login({ email, password }) {
     });
 
     if (error) {
-        console.log("SUPABASE LOGIN ERROR:", error.message);
         throw new Error(error.message);
     }
     return data;
@@ -57,10 +56,8 @@ export async function getUser() {
 }
 
 export async function updateGroup({ group }) {
-    console.log("Group to update:", group);
     let updateData = {};
     if (group) updateData.data = { group };
-    console.log(updateData);
 
     const { data, error } = await supabase.auth.updateUser(updateData);
     if (error) throw new Error(error.message);
@@ -75,13 +72,6 @@ export async function updateUserData({
     totalWeight,
     itemsSwapped,
 }) {
-    console.log("Starting updateUserData with:", {
-        newCoins,
-        totalLitres,
-        totalCarbon,
-        totalWeight,
-        itemsSwapped,
-    });
     let updateData = {
         data: {
             coins: newCoins,
@@ -91,10 +81,8 @@ export async function updateUserData({
             itemsSwapped,
         }
     };
-    console.log("Full updatedata : ", updateData);
 
     const { data, error } = await supabase.auth.updateUser(updateData);
-    console.log("Update response data:", data);
     if (error) throw new Error(error.message);
 
     return data;
@@ -104,8 +92,6 @@ export async function updateUser({ userName, avatar, password }, userId) {
     try {
         let updateData = {};
         let updatedUser = null;
-        console.log("USERNAME: ", userName);
-        console.log("AVATAR: ", avatar);
 
         if (userName) {
             updateData.data = { ...updateData.data, userName };
@@ -114,11 +100,10 @@ export async function updateUser({ userName, avatar, password }, userId) {
             updatedUser = data.user;
         }
         if (password) {
-            const { data: passwordUpdate, error } = await supabase.auth.updateUser({ password });
+            await supabase.auth.updateUser({ password });
         }
 
         if (avatar) {
-            console.log("Updating user avatar for user ID:", userId);
             const fileExt = avatar.split(".").pop();
             const fileName = `${userId}/avatar.${fileExt}`;
 
@@ -149,7 +134,6 @@ export async function updateUser({ userName, avatar, password }, userId) {
             if (updateError) throw new Error(updateError.message);
             updatedUser = userWithAvatar.user;
         }
-        console.log("Updated User:", updatedUser);
         return updatedUser;
         
     } catch (error) {

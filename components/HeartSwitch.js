@@ -14,7 +14,6 @@ function HeartSwitch({ isWishListItem, itemId }) {
         try {
             await toggleWishlist({ userId: user.user.id, itemId, wishlist: isWishListItem, groupId: user.user.user_metadata.group});
             setIsFilled(!isFilled);
-            console.log("Item is now in wishlist: ", !isFilled);
         } catch (error) {
             console.error("Wishlist toggle failed:", error);
         }

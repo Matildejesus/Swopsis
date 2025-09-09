@@ -8,8 +8,7 @@ import Colors from "../constants/colors";
 function ProfileItemWidget({ items }) {
     const navigation = useNavigation();
     const dataWithAdd = [{ id: "add"}, ...(items || [])];
-    console.log("ProfileItemWidget items:", items[0].avatar);
-
+    
     return (
         <View style={styles.container}>
             <FlatList

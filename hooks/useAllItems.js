@@ -17,10 +17,8 @@ export function useAllItems() {
         queryKey: ["allItems", members?.length ?? 0, itemConversions?.length ?? 0],
         queryFn: async () => {
             if (user.user.user_metadata.ambassador) {
-                console.log("THIS IS AN AMBASDSADOR");
                 return await getGroupItems({groupId: user.user.user_metadata.group, groupMembers: members, itemConversions })
             } else {
-                console.log("THIS IS AN ADMIN");
                 const items = await getAllItems(members, itemConversions);
                 return items;
             }

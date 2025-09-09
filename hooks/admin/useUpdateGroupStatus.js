@@ -6,9 +6,7 @@ export function useUpdateGroupStatus() {
 
     const { mutate: updateGroupStatus, isLoading } = useMutation({
         mutationFn: async ({ id, status }) => {
-            console.log("Updating group status with id:", id, "and status:", status);
             const data = await updateStatus({ id, status });
-            console.log("Updating group status with data:", data);
             return {groupData: data[0], id, status};
         },
         onSuccess: ({groupData, id, status }) => {
@@ -18,7 +16,6 @@ export function useUpdateGroupStatus() {
                         ? {...group, status }
                         : group
                 );
-                console.log('Updated groups data:', update);
                 return update;
             });
 
@@ -35,8 +32,6 @@ export function useUpdateGroupStatus() {
                     )
                 };
             });
-    
-            console.log('Current groups data after update:', queryClient.getQueryData(["allGroups"]));
         },
         onError: (err) => {
             console.error("Error updating group status:", err.message);

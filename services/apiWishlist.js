@@ -58,14 +58,12 @@ export async function toggleWishlist({ userId, itemId, wishlist }) {
 }
 
 export async function getWishlist({ userId }) {
-    console.log("Fetching wishlist for userId: ", userId);
     const { data, error } = await supabase
         .from("Wishlist")
         .select("*")
         .eq("userId", userId)
         .order("created_at", { ascending: false });
 
-    console.log("Wishlist data: ", data);
     if (error) {
         throw new Error(error.message);
     }

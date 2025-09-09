@@ -93,6 +93,4 @@ export async function deleteMyAccount() {
 
   // 2) delete the auth user ⇒ cascades DB rows
   await supabase.functions.invoke("delete-user", {body: { uid }});
-
-  console.log("DELETED USER");
 }

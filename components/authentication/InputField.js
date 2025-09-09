@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
         opacity: 0.76,
         paddingHorizontal: 13,
         paddingTop: 13,
+        height: 60,
     },
      container: {
         //flex: 1,

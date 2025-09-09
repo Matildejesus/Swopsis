@@ -7,13 +7,7 @@ import { useUser } from "../hooks/auth/useUser";
 function ImpactScreen() {
 
     const { user } = useUser();
-    console.log("User Data on Impact screen: ", user.user);
-    console.log("UserMeTADATA on Impact screen: ", user.user.user_metadata);
-    
-    // const { itemsSwapped, totalCarbon, totalLitres, totalWeight } = user.user.user_metadata;
-    if (user?.user?.user_metadata) { 
-        console.log("there is metadata: ", user.user.user_metadata); 
-    }
+
     const metadata = user?.user?.user_metadata || {};
     
      // 1. Handle loading state

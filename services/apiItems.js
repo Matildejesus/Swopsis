@@ -46,16 +46,11 @@ export async function addItem({ item, itemDetails }) {
         .from('item-images')
         .getPublicUrl(fileName);   
 
-    console.log("Public URL:", urlData.publicUrl);
-    console.log("Item ID:", itemId);
-    
     const { data: updatedItem, error: updateError } = await supabase
         .from("Items")
         .update({ image: urlData.publicUrl })
         .eq("id", itemId)
         .select();
-
-    console.log("Updated item with image URL:", updatedItem);
     
     if (updateError) {
         throw new Error(updateError.message);
@@ -129,13 +124,11 @@ return data[0];
 
 
 export async function getGroupItems({ groupId, groupMembers, itemConversions, after }) {
-        console.log("[getGroupItems] groupId:", groupId, "members:", groupMembers?.length, "after:", after);
 
     const memberIds = groupMembers.map((member) => member.userId);
     let data;
     let error;
     if (!after) {
-         console.log("[getGroupItems] No 'after' provided, fetching full wardrobe");
         ({ data, error } = await supabase
             .from("Items")
             .select(`
@@ -203,7 +196,6 @@ export async function updateAvailability({ available, itemId }) {
         .eq("id", itemId)
         .select();
 
-    // console.log("Updateing availability: ", data);
     if (error) {
         throw new Error(error.message);
     }
@@ -212,7 +204,6 @@ export async function updateAvailability({ available, itemId }) {
 }
 
 export async function updateUnavailability ({ dates, id }) {
-    console.log("DATES IN THE FUNCTION: ", dates);
     const {data, error} = await supabase
         .from("Items")
         .update({"unavailableDates": dates })
@@ -222,13 +213,10 @@ export async function updateUnavailability ({ dates, id }) {
     if (error) {
         throw new Error(error.message);
     }
-
-    // console.log("data: ", data);
     return data;
 }
 
 export async function updateTradeCount({ id, count }) {
-    console.log(count);
     const newCoins = count + 1;
     const { data, error } = await supabase
         .from("Items")

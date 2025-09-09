@@ -39,20 +39,16 @@ export async function getAllUsers() {
 }
 
 export async function getGroupMembers({ groupId}) {
-    console.log("yes");
     const { data, error } = await supabase.functions.invoke("list-users");
-    console.log(data.users[0].user_metadata.group);
     const membersList = data.users.filter(
         (u) => u.user_metadata.group === groupId,
     );
-    console.log(membersList);
     return membersList;
 }
 
 export async function getFilteredGroupMember({ groupId }) {
 
     const { data, error } = await supabase.functions.invoke("list-users");
-    console.log("all members: ", data);
     if (error) {
         console.error("Error retrieving members", error);
         throw error;
@@ -68,18 +64,14 @@ export async function getFilteredGroupMember({ groupId }) {
         }))
         .filter((u) => u.groupId === groupId); 
 
-    // console.log("Filtered Members:", membersList);
     return membersList;
 }
 
 export async function updateUserMetadata({ id, groupId, ambassador }) {
-    console.log(id, groupId, ambassador);
 
     const { data, error } = await supabase.functions.invoke("update-user", {
         body: { id, groupId, ambassador },
     });
-
-    console.log("Updated user metadata:", data, error);
 
     if (error) {
         console.error("Error updating user metadata:", error);

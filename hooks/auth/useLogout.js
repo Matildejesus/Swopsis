@@ -19,6 +19,5 @@ export function useLogout() {
             console.error("Logout error:", error);
         },
     });
-    console.log("logout");
     return { logout, isLoading };
 }

@@ -18,7 +18,6 @@ function AmbassadorRequestScreen({ navigation }) {
     const [ pointsList, setPointsList ] = useState([]); 
     const [ requestError, setRequestError ] = useState(null);
     const user = useUser();
-    console.log(user.user.user.id);
 
     function addNameHandler(enteredName) {
         setGroupName(enteredName);
@@ -38,10 +37,8 @@ function AmbassadorRequestScreen({ navigation }) {
 
     const submitHandler = async () => {
         const addressPattern = /^[\w\s]+,\s*\d{4}$/;
-        console.log(groupName, description, address, pointsList.length, profileImage);
         if (!groupName || !address || !profileImage || pointsList.length === 0 || !description) {
             setRequestError("Invalid or Missing details. Please try again.");
-            console.log("1");
             return
         } 
         
@@ -49,8 +46,6 @@ function AmbassadorRequestScreen({ navigation }) {
             setRequestError("Enter a valid address in 'Street, Postcode' format.");
             return;
         }
-
-        console.log("success");
        
         try {
             const newGroup = {

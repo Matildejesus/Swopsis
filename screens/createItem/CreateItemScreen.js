@@ -35,10 +35,8 @@ function CreateItemScreen() {
     const navigation = useNavigation();
 
     const submitHandler = () => {
-        console.log("submitting!!!");
         if (!title || !description || !category || !avatar || !selectedId) {
             setInputError("Missing inputs");
-            console.log(inputError);
         } else {
             {
                 if (selectedId == 1) {

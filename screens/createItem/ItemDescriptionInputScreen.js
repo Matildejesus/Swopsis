@@ -43,8 +43,6 @@ function ItemDescriptionInputScreen() {
 
     const user = userData?.user;
 
-    console.log("User Data: ", user);
-
     const {
         group,
         coins,
@@ -99,11 +97,9 @@ function ItemDescriptionInputScreen() {
             const itemConversion = await getSubcategoryDetails({
                 item: subcategory,
             });
-            console.log('Item conversion data:', itemConversion);
             setSubcategoryDetails(itemConversion);
 
             // Once details are retrieved, perform calculations
-            console.log("itemconversion: ", itemConversion.carbon);
             const litresSaved = totalLitres + itemConversion.litres;
 
             let carbonSaved = totalCarbon;
@@ -115,14 +111,9 @@ function ItemDescriptionInputScreen() {
             }
 
             const weightSaved = totalWeight + parseFloat(weight);
-            console.log("totalWeight: ", totalWeight);
-            console.log("weight: ", weight);
-            console.log("Weight saved: ", weightSaved);
 
             const itemsSaved = itemsSwapped + 1;
             const newCoins = coins + 1;
-            console.log(newCoins);
-            console.log(weightSaved.toFixed(2), itemsSaved, carbonSaved, litresSaved);
 
             // Update user data after calculations
             await updateUserMetadata({
@@ -152,7 +143,6 @@ function ItemDescriptionInputScreen() {
     };
 
     const submitHandler = async () => {
-        console.log("submitting");
         if (
             !subcategory ||
             !weight ||
@@ -166,9 +156,7 @@ function ItemDescriptionInputScreen() {
             setInputError("Weight must be in numbers.");
         }
         else {
-            console.log("item method is: ", method);
             if (method == "loan") { 
-                console.log("opening modal");
                 setIsModalVisible(true);
 
             } else {
