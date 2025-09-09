@@ -25,6 +25,6 @@ const styles = StyleSheet.create({
         borderWidth: 2,
     },
     container: {
-        margin: 12,
+        margin: 10,
     },
 });

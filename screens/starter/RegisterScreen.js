@@ -118,6 +118,7 @@ function RegisterScreen({ navigation }) {
             handleSearch={submitHandler}
             content={content} 
             link={() => navigation.navigate("Login")}
+            spacingStyle={{marginTop: 5}}
             linkText={
             <Text>
                 Already a user? <Text style={{ fontFamily: "Raleway_700Bold" }}>SignIn</Text>

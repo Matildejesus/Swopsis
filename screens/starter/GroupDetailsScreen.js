@@ -9,7 +9,6 @@ import MessageModal from "../../components/MessageModal";
 import { addJoinRequest } from "../../services/apiJoinRequests";
 import { useUser } from "../../hooks/auth/useUser";
 import { findUserById, updateUserMetadata } from "../../services/apiAdmin";
-// import { updateStatus } from "../../services/apiGroups";
 import MainButton from "../../components/MainButton";
 import { useUpdateGroupStatus } from "../../hooks/admin/useUpdateGroupStatus";
 import { useAllMembers } from "../../hooks/useAllMembers";
@@ -26,21 +25,6 @@ function GroupDetailsScreen({ route }) {
 
     const { user } = useUser();
 
-    // useEffect(() => {
-    //     if (members){
-    //         setAmbassadorData(members.find(member => member.id === group.ambassadorId));
-    //     } else {
-    //         const fetchAmbassador = async () => {
-    //             try {
-    //                 const data = await findUserById({ id: group.ambassadorId });
-    //                 setAmbassadorData(data);
-    //             } catch (error) {
-    //                 console.error("Error fetching data: ", error);
-    //             }
-    //         }
-    //     fetchAmbassador();
-    //     }; 
-    // }, [members]);
     useEffect(() => {
         const fetchAmbassador = async () => {
             try {
@@ -120,10 +104,9 @@ function GroupDetailsScreen({ route }) {
         <View style={styles.container}>
             <Image style={styles.image} source={{ uri: group.avatar }} />
             <Text style={styles.title}>{group.name}</Text>
-            <Text style={styles.header}>Description</Text>
-            <View style={{ height: 270 }}>
+            <View style={{ height: 290 }}>
                 <Text style={styles.content}>{group.description}</Text>
-                <Text style={[styles.header, { marginTop: 10 }]}>Rules</Text>
+                {/* <Text style={[styles.header, { marginTop: 10 }]}>Rules</Text> */}
                 <ScrollView>
                     {group.rules.map((rule, index) => (
                         <Text key={index} style={[styles.content]}>
@@ -164,7 +147,7 @@ function GroupDetailsScreen({ route }) {
                     <Image source={{ uri: ambassadorData.user_metadata.avatar }} style={styles.profileImage}/>
                     <View>
                         <Text style={styles.name}>{ambassadorData.user_metadata.userName}</Text>
-                        <Text style={styles.info}>{ambassadorData.email}</Text>
+                        
                     </View>
                     
                 </View>
@@ -235,13 +218,14 @@ const styles = StyleSheet.create({
         // position: "absolute",
         flexDirection: "row",
         gap: 10,
+        paddingBottom: 10,
         // bottom: -20,
         // right: 0,
     },
     infoContainer: {
         flexDirection: "column",
         position: "absolute",
-        top: 280,
+        top: 320,
         left: 227,
         width: 108,
         // zIndex: 5,
@@ -249,7 +233,7 @@ const styles = StyleSheet.create({
     },
     ambassadorContainer: {
         position: "absolute",
-        top: 280,
+        top: 320,
         left: 30,
       //  left: 227,
         flexDirection: "row",
@@ -266,6 +250,8 @@ const styles = StyleSheet.create({
         fontFamily: "Raleway_700Bold",
         fontSize: 15, 
         color: Colors.primary2,
+        paddingLeft: 10,
+        paddingTop: 5,
     },
     row: {
         flexDirection: "row",

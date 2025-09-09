@@ -8,9 +8,9 @@ function BulletPointWidget({pointsList, setPointsList}) {
     const [ input, setInput ] = useState("");
 
      const addBulletPoint = () => {
-        if (input.trim()) {  // Avoid adding empty bullet points
+        if (input.trim()) {  
             setPointsList([...pointsList, input.trim()]);
-            setInput("");  // Clear input field after adding
+            setInput("");  
         }
     };
 
@@ -63,18 +63,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     inputContainer: {
-        marginRight: 10,
-        borderRadius: 10,
-        borderColor: Colors.primary2,
-        borderWidth: 1,
-        width: 195,
-        backgroundColor: "white",
-        opacity: 0.76,
-        paddingHorizontal: 13,
-        paddingVertical: 16,
+        marginRight: 7,
+       height: 100,
     }, 
     addButton: {
-        marginTop: 20,
+        marginTop: 25,
     },
     bulletPointText: {
         fontFamily: "Raleway_400Regular",

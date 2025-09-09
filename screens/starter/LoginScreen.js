@@ -1,11 +1,10 @@
 import { useState } from "react";
-
 import { validate } from "validate.js";
 import { useDebounce } from "use-debounce";
 import constraints from "../../constraints.js";
 import InputField from "../../components/authentication/InputField.js";
 import InputTemplateWidget from "../../components/InputTemplateWidget.js";
-import { Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import Colors from "../../constants/colors.js";
 import { useLogin } from "../../hooks/auth/useLogin.js";
 
@@ -20,7 +19,7 @@ function LoginScreen({ navigation }) {
     const [debouncedEmail] = useDebounce(email, 500);
     const [debouncedPassword] = useDebounce(password, 500);
 
-    const { login, error } = useLogin();
+    const { login } = useLogin();
 
     function addEmailHandler(enteredEmail) {
         setEmail(enteredEmail);
@@ -80,6 +79,7 @@ function LoginScreen({ navigation }) {
                 onChangeText={addEmailHandler}
                 value={email}
                 error={emailError}
+                containerStyle={styles.containerStyle}
             />
             <InputField
                 placeholder="password"
@@ -88,6 +88,7 @@ function LoginScreen({ navigation }) {
                 value={password}
                 secureTextEntry={true}
                 error={passwordError}
+                containerStyle={styles.containerStyle}
             />
             </>
 
@@ -122,3 +123,17 @@ function LoginScreen({ navigation }) {
 }
 
 export default LoginScreen;
+
+const styles = StyleSheet.create({
+    containerStyle: {
+        // //  marginHorizontal: 20,
+        // // borderRadius: 10,
+        // // borderColor: Colors.primary2,
+        // // borderWidth: 1,
+        // width: 243,
+        // backgroundColor: "white",
+        // opacity: 0.76,
+        // paddingHorizontal: 13,
+        // paddingVertical: 16,
+    }
+})

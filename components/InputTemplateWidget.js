@@ -6,7 +6,7 @@ import Logo from "./icons/Logo";
 import { useNavigation } from "@react-navigation/native";
 
 
-function InputTemplateWidget({content, title, handleSearch, link, linkText, anotherLink, submitError, page, groups, loading}) {
+function InputTemplateWidget({content, title, handleSearch, link, linkText, anotherLink, submitError, page, groups, loading, spacingStyle}) {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
@@ -20,7 +20,7 @@ function InputTemplateWidget({content, title, handleSearch, link, linkText, anot
                 {page === "postcode" && (
                     <MainButton
                         title={loading ? "Loading…" : "View Groups"}
-                        style={{ width: 150, opacity: loading || groups.length === 0 ? 0.5 : 1 }}
+                        style={{ width: 150, opacity: loading || groups.length === 0 ? 0.5 : 1, paddingTop: 5}}
                         disabled={loading || groups.length === 0}
                         onPress={() => navigation.navigate("GroupsList", { groups })}
                     />
@@ -28,7 +28,7 @@ function InputTemplateWidget({content, title, handleSearch, link, linkText, anot
                 <View>
                     {anotherLink && anotherLink()}
                     <TouchableOpacity onPress={link}>
-                        <Text style={styles.link}>
+                        <Text style={[styles.link, spacingStyle]}>
                             {linkText}
                         </Text>
                     </TouchableOpacity>

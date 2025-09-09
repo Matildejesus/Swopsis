@@ -44,6 +44,7 @@ export async function addGroup({ group }) {
             .from('group-avatars')
             .getPublicUrl(fileName);
 
+        // idk what the issue is 
         const { data: groupWithAvatar, error: updateError } = await supabase
             .from("Groups")
             .update({ avatar: urlData.publicUrl })

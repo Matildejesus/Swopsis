@@ -1,10 +1,9 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
-function PinkBackArrow({ onPress }) {
+function PinkBackArrow() {
     return (
         <View style={styles.container}>
-        <TouchableOpacity onPress={onPress}>
             <Svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -17,7 +16,6 @@ function PinkBackArrow({ onPress }) {
                     fill="#8E0040"
                 />
             </Svg>
-        </TouchableOpacity>
         </View>
     );
 }

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View, ScrollView, KeyboardAvoidingView, SafeAreaView } from "react-native";
 import PicturePicker from "../../components/PicturePicker";
 import Colors from "../../constants/colors";
 import MainButton from "../../components/MainButton.js";
@@ -57,43 +57,41 @@ function CreateItemScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView> <View style={styles.container}>
+           
             <PicturePicker
                 onImageSelected={handleImageSelected}
                 imageStyle={styles.imageStyle}
                 userPicture={avatar}
                 style={styles.picturePicker}
             />
-            <View style={styles.row}>
-                <InputField
-                    text="Title"
-                    textStyle={styles.label}
-                    containerStyle={styles.titleField}
-                    placeholder="Write a post caption..."
-                    inputStyle={styles.text}
-                    onChangeText={setTitle}
-                    value={title}
-                    secureTextEntry={false}
-                />
-            </View>
-                <InputField
-                    text="Description"
-                    textStyle={styles.label}
-                    containerStyle={styles.descriptionField}
-                    multiline={true}
-                    placeholder="Tell us the brand and more..."
-                    inputStyle={styles.text}
-                    onChangeText={setDescription}
-                    value={description}
-                    secureTextEntry={false}
-                />
-                <DropDownMenu
-                    value={category}
-                    data={Object.keys(Categories)}
-                    addCategoryHandler={setCategory}
-                    title="Category"
-                />
-            {/* </View> */}
+            <InputField
+                text="Title"
+                textStyle={styles.label}
+                containerStyle={styles.titleField}
+                placeholder="Write a post caption..."
+                inputStyle={styles.text}
+                onChangeText={setTitle}
+                value={title}
+                secureTextEntry={false}
+            />
+            <InputField
+                text="Description"
+                textStyle={styles.label}
+                containerStyle={styles.descriptionField}
+                multiline={true}
+                placeholder="Tell us the brand and more..."
+                inputStyle={styles.text}
+                onChangeText={setDescription}
+                value={description}
+                secureTextEntry={false}
+            />
+            <DropDownMenu
+                value={category}
+                data={Object.keys(Categories)}
+                addCategoryHandler={setCategory}
+                title="Category"
+            />
             <RadioGroup
                 radioButtons={radioButtons}
                 onPress={setSelectedId}
@@ -111,7 +109,8 @@ function CreateItemScreen() {
                     variant="secon"
                 />
             </View>
-        </View>
+            
+        </View></ScrollView>
     );
 }
 
@@ -142,6 +141,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         alignSelf: "flex-end",
         paddingRight: 70,
+        paddingBottom: 15
     },
     label: {
         color: Colors.primary1,
@@ -151,6 +151,6 @@ const styles = StyleSheet.create({
     },
     descriptionField: {
         width: 243,
-        height: 75,
+        height: 150,
     },
 });

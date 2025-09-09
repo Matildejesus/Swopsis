@@ -242,21 +242,20 @@ function ItemDescriptionInputScreen() {
                 />
             )}
             <Text style={styles.colorStyle}>Color</Text>
+            <View style={{height: 90}}>
             <FlatList
                 data={ColorsList}
                 numColumns={7}
                 renderItem={({ item }) => (
-                    <>
-                        {/* <Text>{item.hex}</Text> */}
-                        <ColorSwitch
-                            color={item.hex}
-                            isSelected={selectedColor === item.hex}
-                            onPress={setSelectedColor}
-                        />
-                    </>
+                    <ColorSwitch
+                        color={item.hex}
+                        isSelected={selectedColor === item.hex}
+                        onPress={setSelectedColor}
+                    />
                 )}
                 keyExtractor={(item) => item.name}
             />
+            </View>
             <View style={styles.error}>
                 <ErrorMessage error={inputError} />
             </View>
@@ -329,11 +328,12 @@ const styles = StyleSheet.create({
     },
     inputField: {
         width: 170,
+        height: 50
 
     },
     weightField: {
         width: 110,
-        height: 60,
+        height: 50,
     },
     input: {
         flexDirection: "row",
@@ -362,11 +362,13 @@ const styles = StyleSheet.create({
     button: {
         width: 141,
         height: 52,
+        paddingTop: 10
     },
     buttonContainer: {
         alignSelf: "flex-end",
-        paddingBottom: 48,
+        paddingBottom: 20,
         paddingRight: 20,
+
     },
     error: {
         height: 20,
