@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WelcomePageWidget from "../../components/WelcomePageWidget";
+import { useUser } from "../../hooks/auth/useUser";
 
 function WelcomeScreen({ navigation }) {
     const [page, setPage] = useState(0);
+    const { isAuthenticated, isLoading } = useUser();
 
     const handlePageChange = (newPage) => {
         setPage(newPage);
@@ -15,14 +17,22 @@ function WelcomeScreen({ navigation }) {
         handlePageChange(newPage);
     };
 
-    return (
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigation.reset({ index: 0, routes: [{ name: 'InApp' }] });
+        } 
+    }, [isAuthenticated, navigation]);
+
+    if (isLoading) return null;
+
+    return !isAuthenticated ? (
         <WelcomePageWidget
             onRegister={() => navigation.navigate("Register")}
             onLogin={() => navigation.navigate("Login")}
             page={page}
             handleScroll={handleScroll}
         />
-    );
+        ) : null;
 }
 
 export default WelcomeScreen;

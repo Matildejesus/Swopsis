@@ -10,7 +10,7 @@ import 'react-native-get-random-values';
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { RootSiblingParent } from "react-native-root-siblings";
-import { Text, Image, View } from "react-native";
+import { Text, Image, View, AppState } from "react-native";
 import Svg, { G, Path, Circle } from "react-native-svg";
 
 import WelcomeScreen from "./screens/starter/WelcomeScreen.js";
@@ -77,8 +77,22 @@ import { SubscriptionProvider } from "./SubscriptionProvider.js";
 import GroupsListScreen from "./screens/starter/GroupsListScreen.js";
 import ProfileIcon from "./components/icons/ProfileIcon.js";
 import EventIcon from "./components/icons/EventIcon.js";
+import supabase from "./services/supabase.js";
 
 AppRegistry.registerComponent("main", () => App);
+
+function AppAuthRefresher() {
+    React.useEffect(() => {
+        const sub = AppState.addEventListener("change", (state) => {
+        if (state === "active") supabase.auth.startAutoRefresh();
+        else supabase.auth.stopAutoRefresh();
+        });
+        supabase.auth.startAutoRefresh();
+        return () => sub.remove();
+    }, []);
+    return null;
+}
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -375,6 +389,7 @@ export default function App() {
                     <PaperProvider>
                         <StatusBar />
                         <SubscriptionProvider >
+                             <AppAuthRefresher />
                             <AppContent />
                         </SubscriptionProvider>
                         <Toast />
