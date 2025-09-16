@@ -123,17 +123,6 @@ function ItemDescriptionInputScreen() {
                 totalWeight: parseFloat(weightSaved.toFixed(2)),
                 itemsSwapped: itemsSaved,
             });
-            // await queryClient.invalidateQueries(["user"]); 
-            
-            // Navigate to Profile after update
-            // navigation.reset({
-            //     index: 0,
-            //     routes: [
-            //         {
-            //             name: "InApp",
-            //         },
-            //     ],
-            // });
             navigation.replace("InApp");
             
         } catch (error) {

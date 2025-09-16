@@ -16,7 +16,7 @@ export function useLogin() {
         onSuccess: (user) => {
             queryClient.setQueryData(["user"], user);
 
-            const role = user?.user?.app_metadata?.role ?? null;
+            const role = user?.user?.app_metadata?.role ?? user?.user?.user_metadata?.ambassador ?? "user";
             const group = user?.user?.user_metadata?.group ?? null;
             console.log("session login success. role =", role, "group =", group);
 

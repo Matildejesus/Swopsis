@@ -46,7 +46,6 @@ function ProfileItemDetails({ itemData }) {
         const owner = currentUser?.user?.id === itemData.userId;
         setIsOwner(owner);
 
-        // Set owner data - if owner, use current user data, otherwise use itemData.user info
         if (owner) {
             setOwnerData({
                 userName: currentUser.user.user_metadata.userName,
@@ -55,7 +54,6 @@ function ProfileItemDetails({ itemData }) {
                 id: currentUser.user.id
             });
         } else {
-            // Assuming itemData contains user information when the item belongs to someone else
             setOwnerData({
                 userName: itemData.userName || "",
                 avatar: itemData.avatar || "",

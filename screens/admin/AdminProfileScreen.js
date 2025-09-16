@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
 import Colors from "../../constants/colors";
 import Line from "../../components/Line";
 import { useEffect } from "react";
@@ -58,7 +58,7 @@ function AdminProfileScreen({ navigation }) {
     };
 
     if (itemsLoading || membersLoading || groupsLoading || requestsLoading) {
-        return <Text>Loading admin data...</Text>
+        return <ActivityIndicator />;
     }
     
     return (

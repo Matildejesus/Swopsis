@@ -4,7 +4,7 @@ import supabase from '../../services/supabase';
 
 export function useItemSubscription(groupId) {
     const queryClient = useQueryClient();
-
+    console.log("subscribe to item subscription");
     useEffect(() => {
         if (!groupId) return;
         
@@ -19,6 +19,7 @@ export function useItemSubscription(groupId) {
             filter: `group=eq.${groupId}`
             },
             (payload) => {
+            console.log("we are inserting");
             queryClient.setQueryData(["groupWardrobe", groupId], (old) => 
                 [...(old || []), {...payload.new, wishlist: false }]
             );
@@ -68,6 +69,7 @@ export function useItemSubscription(groupId) {
         .subscribe();
 
         return () => {
+            console.log("removed channel");
             supabase.removeChannel(channel);
         };
     }, [groupId, queryClient]);

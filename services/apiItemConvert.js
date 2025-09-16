@@ -18,6 +18,8 @@ export async function getSubcategoryDetails({ item }) {
         .from("ItemConversions")
         .select("*")
         .eq("name", item);
+        
+    console.log("item: ", items[0]);
 
     if (fetchError) {
         throw new Error(fetchError.message);

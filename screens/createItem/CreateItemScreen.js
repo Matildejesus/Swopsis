@@ -57,8 +57,8 @@ function CreateItemScreen() {
     };
 
     return (
-        <ScrollView> <View style={styles.container}>
-           
+        <ScrollView> 
+            <View style={styles.container}>
             <PicturePicker
                 onImageSelected={handleImageSelected}
                 imageStyle={styles.imageStyle}
@@ -110,7 +110,8 @@ function CreateItemScreen() {
                 />
             </View>
             
-        </View></ScrollView>
+        </View>
+    </ScrollView>
     );
 }
 

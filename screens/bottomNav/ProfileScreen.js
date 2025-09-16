@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import Colors from "../../constants/colors";
 import CoinIcon from "../../components/icons/CoinIcon";
 import SettingsIcon from "../../components/icons/SettingsIcon";
@@ -48,7 +48,7 @@ function ProfileScreen() {
     }, [groupWardrobe, user]);
 
     if (isUserLoading || isGroupLoading) {
-        return <Text>Loading user data...</Text>;
+        return <ActivityIndicator />;
     }
 
     if (!user) {

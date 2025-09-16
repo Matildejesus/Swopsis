@@ -6,9 +6,10 @@ import { useUser } from "./auth/useUser";
 export function useRequests() {
     const queryClient = useQueryClient();
     const { user } = useUser();
+    const groupId = user?.user?.user_metadata?.group;
     const { groups, isLoading: groupsLoading} = useAllGroups();
     const { data: requests, isLoading } = useQuery({
-        queryKey: ["requests" || "allGroups"],
+        queryKey: ["requests", groupId ?? "all"],
         queryFn: async () => {
             if (user?.user?.user_metadata?.group) {
                 const data = await getJoinRequests({groupId: user.user.user_metadata.group});
@@ -18,9 +19,9 @@ export function useRequests() {
                 const rejected = [];
                 const pending = [];
                 groups?.forEach((group) => {
-                    if (group.status === "approve") {
+                    if (group.status === "Approved") {
                         accepted.push(group);
-                    } else if (group.status === "reject") {
+                    } else if (group.status === "Rejected") {
                         rejected.push(group);
                     } else {
                         pending.push(group);

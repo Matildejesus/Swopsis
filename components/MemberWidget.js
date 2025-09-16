@@ -23,7 +23,7 @@ function MemberWidget({ user, requests, memberCount, setMemberCount }) {
     const { user: onScreenUser} = useUser();
     const { updateUserCoins, isLoading: coinsLoading, isSuccess} = useUpdateUserCoins();
 
-    if (user?.app_metadata?.role == "super-admin") return;
+    if (user?.app_metadata?.role == "super-admin") return null;
 
     useEffect(() => {
         const groupData = groups.find((group) => group.id === user.user_metadata.group);
@@ -81,7 +81,7 @@ function MemberWidget({ user, requests, memberCount, setMemberCount }) {
     };
 
     const handleEditIcon = () => {
-        if (onScreenUser.user.app_metadata.role == "super-admin" || onScreenUser.user.user_metadata.ambassador && user.user_metadata.group !== "Pending"){
+        if (onScreenUser?.user?.app_metadata?.role == "super-admin" || onScreenUser?.user?.user_metadata?.ambassador && user?.user_metadata?.group !== "Pending"){
             setIsCoinModalVisible(true);
         } else {
             setIsModalVisible(true);
@@ -94,8 +94,8 @@ function MemberWidget({ user, requests, memberCount, setMemberCount }) {
             <Image
                 style={styles.image}
                 source={
-                    user.user_metadata.avatar
-                        ? { uri: user.user_metadata.avatar }
+                    user?.user_metadata?.avatar
+                        ? { uri: user?.user_metadata?.avatar }
                         : null
                 }
             />
