@@ -15,8 +15,8 @@ export function useUpdateUserMetadata() {
                 user: {
                     ...old?.user,  
                     user_metadata: {
-                        ...old?.user?.user_metadata,  // ← Keep old metadata
-                        ...updatedUser.user.user_metadata  // ← Merge new metadata
+                        ...old?.user?.user_metadata, 
+                        ...updatedUser.user.user_metadata 
                     }
                 }
             }));

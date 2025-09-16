@@ -14,12 +14,10 @@ import DataDisplayModal from "./adminWidget/modals/DataDIsplayModal";
 import { useUpdateUserCoins } from "../hooks/admin/useUpdateUserCoins";
 import { updateMemberCount } from "../services/apiGroups";
 
-function MemberWidget({ user, requests, memberCount }) {
+function MemberWidget({ user, requests, memberCount, setMemberCount }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isCoinModalVisible, setIsCoinModalVisible] = useState(false); 
     const [currentUser, setCurrentUser] = useState(null);
-    const [group, setGroup] = useState();
-    const [status, setStatus] = useState();
     const {groups, isLoading} = useAllGroups();
     const [groupName, setGroupName] = useState("");
     const { user: onScreenUser} = useUser();
@@ -59,10 +57,12 @@ function MemberWidget({ user, requests, memberCount }) {
             await updateStatus({ newStatus: newStatus, id: requests.id });
             if (newStatus == "Accepted") {
                 await updateUserMetadata({ id: currentUser.id, groupId: newGroup, ambassador: false });
-                await updateMemberCount({id: requests.id, count: memberCount});
+                await updateMemberCount({id: requests.id, count: memberCount + 1});
+                setMemberCount(memberCount);
             } else {
                 await updateUserMetadata({ id: currentUser.id, groupId: "", ambassador: false });
             }
+            
             setStatus(newStatus);
             setGroup(newGroup);
         } catch (error) {

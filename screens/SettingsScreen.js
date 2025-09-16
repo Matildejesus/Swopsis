@@ -40,7 +40,7 @@ function SettingsScreen() {
             userName: currentUserName = '', 
             avatar: currentAvatar = null 
         } = {}
-    } = user.user || {};
+    } = user?.user || {};
 
     const [userName, setUserName] = useState(currentUserName);
     const [userEmail, setUserEmail] = useState(email);

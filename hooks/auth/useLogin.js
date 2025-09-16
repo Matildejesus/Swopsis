@@ -16,16 +16,11 @@ export function useLogin() {
         onSuccess: (user) => {
             queryClient.setQueryData(["user"], user);
 
-            if (user.user.user_metadata.group) {
-                navigation.reset({
-                    index: 0,
-                    routes: [
-                        {
-                            name: "InApp",
-                        },
-                    ],
-                });
-            } else if (user.user.app_metadata.role === "super-admin") {
+            const role = user?.user?.app_metadata?.role ?? null;
+            const group = user?.user?.user_metadata?.group ?? null;
+            console.log("session login success. role =", role, "group =", group);
+
+            if (role === "super-admin") {
                 navigation.reset({
                     index: 0,
                     routes: [
@@ -34,9 +29,10 @@ export function useLogin() {
                         },
                     ],
                 });
-            } else if (!user.user.user_metadata.group) {
-                navigation.navigate("Postcode");
-            } else {
+                return;
+            };
+
+            if (group) {
                 navigation.reset({
                     index: 0,
                     routes: [
@@ -45,6 +41,12 @@ export function useLogin() {
                         },
                     ],
                 });
+                return;
+            } 
+            if (!user.user.user_metadata.group) {
+                console.log("no group");
+                navigation.reset({ index: 0, routes: [{ name: "Postcode" }] });
+                return;
             }
         },
         onError: (err) => {

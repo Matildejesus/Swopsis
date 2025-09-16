@@ -27,7 +27,6 @@ function ProfileScreen() {
 
     const user = userData?.user;
 
-    const TESTINg = findUserById({ id: user.id});
     useEffect(() => {
         if (user?.user_metadata) { 
             const metadata = user.user_metadata;

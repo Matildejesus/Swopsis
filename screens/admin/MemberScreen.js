@@ -23,9 +23,9 @@ function MemberScreen() {
             if (requests) {
                 for (const request of requests) {
                     try {
-                        const user = await findUserById({id: request.userId}); // Pass just the ID string
+                        const user = await findUserById({id: request.userId}); 
                         if (user) {
-                            users.unshift({ ...user, request}); // Add to beginning
+                            users.unshift({ ...user, request}); 
                         }
                     } catch (error) {
                         console.error(`Failed to fetch user ${request.userId}:`, error);
@@ -58,6 +58,7 @@ function MemberScreen() {
                             user={item} 
                             requests={item.request}
                             memberCount={userCount}
+                            setMemberCount={setUserCount}
                         />
                     } // and then after that for the reuqests part now the user wich is requesting is in the datalist irght, so then i want to send the request which is in the datalist
                     keyExtractor={item => item.id}

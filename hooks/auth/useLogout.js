@@ -9,6 +9,7 @@ export function useLogout() {
     const { mutate: logout, isLoading } = useMutation({
         mutationFn: logoutApi,
         onSuccess: () => {
+            queryClient.setQueryData(["user"], null);
             queryClient.removeQueries();
             navigation.reset({
                 index: 0,
