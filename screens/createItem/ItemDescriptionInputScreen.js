@@ -94,6 +94,7 @@ function ItemDescriptionInputScreen() {
             },
         });
 
+
         try {
             const itemConversion = await getSubcategoryDetails({
                 item: subcategory,
@@ -170,7 +171,7 @@ function ItemDescriptionInputScreen() {
                     <DropDownMenu
                         value={subcategory}
                         category={category}
-                        addCategoryHandler={setSubcategory}
+                        addCategoryHandler={(opt) => setSubcategory(opt?.value ?? opt)}
                         dropDownStyle={styles.dropDownStyle}
                         title="Subcategory"
                     />
@@ -185,6 +186,8 @@ function ItemDescriptionInputScreen() {
                         inputStyle={styles.text}
                         onChangeText={setWeight}
                         value={weight}
+                        keyboardType="decimal-pad"   
+                        inputMode="decimal"  
                         secureTextEntry={false}
                     />
                     {category != "Accessories" && (

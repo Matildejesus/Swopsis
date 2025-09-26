@@ -13,7 +13,8 @@ function InputField({
     textStyle,
     numberOfLines,
     maxLength,
-    error
+    error,
+    keyboardType, inputMode
 }) {
     return (
         <>
@@ -34,6 +35,8 @@ function InputField({
                     numberOfLines={numberOfLines}
                     maxLength={maxLength}
                     scrollEnabled={false}
+                    keyboardType={keyboardType}
+                    inputMode={inputMode}
                 />
             </View>
         </View>

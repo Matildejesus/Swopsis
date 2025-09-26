@@ -26,13 +26,13 @@ function ProfileItemDetails({ itemData }) {
         email: "",
         id: ""
     });
-
+    console.log("item Data: ", itemData);
     
     const { deleteItem } = useDeleteItem();
     const { updateUserMetadata } = useUpdateUserMetadata();
 
     const { width: screenWidth, height: screenHeight } = useWindowDimensions();
-    const imageHeight = screenHeight * 0.3;
+    const imageHeight = screenHeight * 0.5;
 
     const imageStyle = {
         width: screenWidth,
@@ -69,13 +69,13 @@ function ProfileItemDetails({ itemData }) {
     const handleDeletion = async () => {
         let { totalLitres, totalCarbon, totalWeight, itemsSwapped, coins } = currentUser.user.user_metadata;
         try {
-            await deleteItem({ itemId: itemData.id });
             if (itemData.tradeCount == 0) {
                 itemsSwapped -= 1;
                 try {
                     const itemConversion = await getSubcategoryDetails({
                         item: itemData.extraInfo.subcategory,
                     });
+                    console.log("ITEM CONVERSION: ", itemConversion);
                     totalLitres -= itemConversion.litres;
                     if (itemConversion.scalable === "true") {
                         totalCarbon -= itemConversion.carbon * itemData.extraInfo.weight;
@@ -85,6 +85,7 @@ function ProfileItemDetails({ itemData }) {
                     coins -= 1;
                     totalWeight -= itemData.extraInfo.weight;
                     await updateUserMetadata({ newCoins: coins, totalLitres, totalCarbon, totalWeight, itemsSwapped});
+                    await deleteItem({ itemId: itemData.id });
                 } catch (error) {
                     console.error("Error fetching conversion details: ", error);
                 }
@@ -106,7 +107,7 @@ function ProfileItemDetails({ itemData }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.imageStyle}>
+            <View style={styles.imageContainer}>
                 <Image source={{ uri: itemData.image }} style={styles.image} />
             </View>
             <View style={styles.header}>
@@ -228,8 +229,8 @@ const styles = StyleSheet.create({
         width: 300,
     },
     image: {
-        width: 240,
-        height: 240,
+        width: "90%",
+        aspectRatio: 1,
         marginBottom: 20,
     },
     divider: {
@@ -246,7 +247,9 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     imageContainer: {
-        height: 300,
+        width: "90%",
+        aspectRatio: 1,
+        alignItems: "center"
 
     },
 });
