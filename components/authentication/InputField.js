@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     },
     inputText: {
         color: Colors.primary2,
+        paddingTop: 8,
         fontFamily: "RalewayRegular",
     },
 });

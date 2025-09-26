@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { View, Text, Image, StyleSheet, FlatList } from "react-native";
+import { View, Text, Image, StyleSheet, FlatList, ScrollView } from "react-native";
 import InputField from "../../components/authentication/InputField.js";
 import { useState } from "react";
 import DropDownMenu from "../../components/DropDownMenu.js";
@@ -19,7 +19,7 @@ import { useUpdateUserMetadata } from "../../hooks/auth/useUpdateUserMetadata.js
 
 function ItemDescriptionInputScreen() {
     const route = useRoute();
-    const { title, description, category, avatar, method } = route.params;
+    const { title, category, avatar, method } = route.params;
     const [size, setSize] = useState();
     const [weight, setWeight] = useState();
     const [fabric, setFabric] = useState("");
@@ -32,6 +32,7 @@ function ItemDescriptionInputScreen() {
     const [subcategoryDetails, setSubcategoryDetails] = useState();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [unavailableDates, setUnavailableDates] = useState({});
+    const [description, setDescription] = useState("");
 
     const navigation = useNavigation();
     const { addItem, isLoading: isAddingItem } = useAddItem();
@@ -135,6 +136,7 @@ function ItemDescriptionInputScreen() {
         if (
             !subcategory ||
             !weight ||
+            !description ||
             !condition ||
             !selectedColor ||
             (category !== "Accessories" ? !size || !fabric : !material) ||
@@ -155,113 +157,126 @@ function ItemDescriptionInputScreen() {
     };
     
     return (
-        <View style={styles.container}>
-            <View style={styles.titleContainer}>
-                <Image style={styles.image} source={{ uri: avatar }} />
-                <View style={styles.textContainer}>
-                    <Text style={styles.title}>{title}</Text>
-                    <Text style={styles.description}>{description}</Text>
+        <ScrollView>
+            <View style={styles.container}>
+                <View style={styles.titleContainer}>
+                    <Image style={styles.image} source={{ uri: avatar }} />
+                    <View style={styles.textContainer}>
+                        <Text style={styles.title}>{title}</Text>
+                        <Text style={styles.description}>{description}</Text>
+                    </View>
                 </View>
-            </View>
-            <View style={styles.row}>
-                <DropDownMenu
-                    value={subcategory}
-                    category={category}
-                    addCategoryHandler={setSubcategory}
-                    dropDownStyle={styles.dropDownStyle}
-                    title="Subcategory"
-                />
-            </View>
-            {/* <View style={styles.rowContainer}> */}
-            <View style={styles.input}>
-                <InputField
-                    text="Weight(kg)"
-                    textStyle={styles.inputTextStyle}
-                    containerStyle={styles.weightField}
-                    placeholder="1.5"
-                    inputStyle={styles.text}
-                    onChangeText={setWeight}
-                    value={weight}
-                    secureTextEntry={false}
-                />
-                {category != "Accessories" && (
-                <DropDownMenu
-                    value={size}
-                    data={sizeList}
-                    addCategoryHandler={setSize}
-                    dropDownStyle={styles.sizeStyle}
-                    title="Size"
-                />
-            )}
-            </View>
-            <View style={{flexDirection: "row"}}>
-            <DropDownMenu
-                value={condition}
-                data={Conditions}
-                addCategoryHandler={setCondition}
-                dropDownStyle={styles.conditionStyle}
-                title="Condition"
-            />
-            <InputField
-                text={fields[0] &&
-                    fields[0].charAt(0).toUpperCase() + fields[0].slice(1)
-                }
-                textStyle={styles.inputTextStyle}
-                containerStyle={styles.inputField}
-                placeholder="made of"
-                inputStyle={styles.text}
-                onChangeText={
-                    fields[0] == "fabric" ? setFabric : setMaterial
-                }
-                value={fields[0] === "fabric" ? fabric : material}
-                secureTextEntry={false}
-            />
-            </View>
-            {category == "Shoes" && (
-                <InputField
-                    text="Length"
-                    textStyle={styles.inputTextStyle}
-                    containerStyle={styles.inputField}
-                    placeholder="short"
-                    inputStyle={styles.text}
-                    onChangeText={setLength}
-                    value={length}
-                    secureTextEntry={false}
-                />
-            )}
-            <Text style={styles.colorStyle}>Color</Text>
-            <View style={{height: 90}}>
-            <FlatList
-                data={ColorsList}
-                numColumns={7}
-                renderItem={({ item }) => (
-                    <ColorSwitch
-                        color={item.hex}
-                        isSelected={selectedColor === item.hex}
-                        onPress={setSelectedColor}
+                <View style={styles.row}>
+                    <DropDownMenu
+                        value={subcategory}
+                        category={category}
+                        addCategoryHandler={setSubcategory}
+                        dropDownStyle={styles.dropDownStyle}
+                        title="Subcategory"
+                    />
+                </View>
+                {/* <View style={styles.rowContainer}> */}
+                <View style={styles.input}>
+                    <InputField
+                        text="Weight(kg)"
+                        textStyle={styles.inputTextStyle}
+                        containerStyle={styles.weightField}
+                        placeholder="1.5"
+                        inputStyle={styles.text}
+                        onChangeText={setWeight}
+                        value={weight}
+                        secureTextEntry={false}
+                    />
+                    {category != "Accessories" && (
+                    <DropDownMenu
+                        value={size}
+                        data={sizeList}
+                        addCategoryHandler={setSize}
+                        dropDownStyle={styles.sizeStyle}
+                        title="Size"
                     />
                 )}
-                keyExtractor={(item) => item.name}
-            />
-            </View>
-            <View style={styles.error}>
-                <ErrorMessage error={inputError} />
-            </View>
-            <View style={styles.buttonContainer}>
-                <MainButton
-                    title={"UPLOAD"}
-                    style={styles.button}
-                    onPress={submitHandler}
-                    variant="primary"
+                </View>
+                <View style={{flexDirection: "row"}}>
+                <DropDownMenu
+                    value={condition}
+                    data={Conditions}
+                    addCategoryHandler={setCondition}
+                    dropDownStyle={styles.conditionStyle}
+                    title="Condition"
                 />
+                <InputField
+                    text={fields[0] &&
+                        fields[0].charAt(0).toUpperCase() + fields[0].slice(1)
+                    }
+                    textStyle={styles.inputTextStyle}
+                    containerStyle={styles.inputField}
+                    placeholder="made of"
+                    inputStyle={styles.text}
+                    onChangeText={
+                        fields[0] == "fabric" ? setFabric : setMaterial
+                    }
+                    value={fields[0] === "fabric" ? fabric : material}
+                    secureTextEntry={false}
+                />
+                </View>
+                {category == "Shoes" && (
+                    <InputField
+                        text="Length"
+                        textStyle={styles.inputTextStyle}
+                        containerStyle={styles.inputField}
+                        placeholder="short"
+                        inputStyle={styles.text}
+                        onChangeText={setLength}
+                        value={length}
+                        secureTextEntry={false}
+                    />
+                )}
+                <Text style={styles.colorStyle}>Color</Text>
+                <View style={{height: 90}}>
+                    <FlatList
+                        data={ColorsList}
+                        numColumns={7}
+                        renderItem={({ item }) => (
+                            <ColorSwitch
+                                color={item.hex}
+                                isSelected={selectedColor === item.hex}
+                                onPress={setSelectedColor}
+                            />
+                        )}
+                        keyExtractor={(item) => item.name}
+                    />
+                </View>
+                <InputField
+                    text="Description"
+                    textStyle={styles.label}
+                    containerStyle={styles.descriptionField}
+                    multiline={true}
+                    placeholder="Tell us the brand and more..."
+                    inputStyle={styles.text}
+                    onChangeText={setDescription}
+                    value={description}
+                    secureTextEntry={false}
+                />
+                <View style={styles.error}>
+                    <ErrorMessage error={inputError} />
+                </View>
+                <View style={styles.buttonContainer}>
+                    <MainButton
+                        title={"UPLOAD"}
+                        style={styles.button}
+                        onPress={submitHandler}
+                        variant="primary"
+                    />
+                </View>
+                {method == "loan" && 
+                <CalendarModal 
+                    visible={isModalVisible}
+                    onSave={handleSaveDates}
+                    onBackdropPress={() => setIsModalVisible(false)}
+                />}
             </View>
-            {method == "loan" && 
-            <CalendarModal 
-                visible={isModalVisible}
-                onSave={handleSaveDates}
-                onBackdropPress={() => setIsModalVisible(false)}
-            />}
-        </View>
+        </ScrollView>
     );
 }
 
@@ -372,5 +387,9 @@ const styles = StyleSheet.create({
         fontFamily: "Raleway_700Bold",
         fontSize: 15,
         color: Colors.primary1,
+    },
+    descriptionField: {
+        width: 243,
+        height: 150,
     },
 });

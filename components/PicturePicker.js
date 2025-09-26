@@ -26,7 +26,7 @@ function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ['images'],
-            allowsEditing: true,
+            allowsEditing: false,
             // aspect: [4, 3],
             quality: 1,
         });
@@ -42,7 +42,7 @@ function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
         console.log("takeImage tapped");
         let result = await ImagePicker.launchCameraAsync({ 
             mediaTypes: ['images'],
-            allowsEditing: true,
+            allowsEditing: false,
             // aspect: [4, 3],
             quality: 1,
         });
@@ -61,7 +61,11 @@ function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
     return (
         <View>
             {avatar ? (
-                <Image key={avatar} source={{ uri: avatar }} style={imageStyle} />
+                <Image key={avatar} 
+                    source={{ uri: avatar }} 
+                    style={imageStyle ?? StyleSheet.absoluteFillObject} 
+                    resizeMode="contain"
+                />
             ) : (
                 <View style={style ? style : styles.imageContainer} />
             )}

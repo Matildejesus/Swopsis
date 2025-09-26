@@ -13,7 +13,6 @@ import ErrorMessage from "../../components/ErrorMessage.js";
 
 function CreateItemScreen() {
     const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
     const [category, setCategory] = useState(null);
     const [avatar, setAvatar] = useState("");
     const [selectedId, setSelectedId] = useState();
@@ -35,7 +34,7 @@ function CreateItemScreen() {
     const navigation = useNavigation();
 
     const submitHandler = () => {
-        if (!title || !description || !category || !avatar || !selectedId) {
+        if (!title || !category || !avatar || !selectedId) {
             setInputError("Missing inputs");
         } else {
             {
@@ -48,7 +47,6 @@ function CreateItemScreen() {
 
             navigation.navigate("ItemDescriptionInput", {
                 title: title,
-                description: description,
                 category: category,
                 avatar: avatar,
                 method: method,
@@ -57,7 +55,7 @@ function CreateItemScreen() {
     };
 
     return (
-        <ScrollView> 
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}> 
             <View style={styles.container}>
             <PicturePicker
                 onImageSelected={handleImageSelected}
@@ -73,17 +71,6 @@ function CreateItemScreen() {
                 inputStyle={styles.text}
                 onChangeText={setTitle}
                 value={title}
-                secureTextEntry={false}
-            />
-            <InputField
-                text="Description"
-                textStyle={styles.label}
-                containerStyle={styles.descriptionField}
-                multiline={true}
-                placeholder="Tell us the brand and more..."
-                inputStyle={styles.text}
-                onChangeText={setDescription}
-                value={description}
                 secureTextEntry={false}
             />
             <DropDownMenu
@@ -126,15 +113,18 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     picturePicker: {
-        width: 240,
-        height: 244,
+        width: "85%",
         backgroundColor: Colors.secondary2,
+        aspectRatio: 1,
         borderRadius: 21,
     },
     imageStyle: {
-        width: 245,
-        height: 244,
+        width: "85%",
+        // height: 244,
+        alignSelf: "center",
         borderRadius: 21,
+        aspectRatio: 1,
+        position: "relative"
     },
     button: {
         width: 141,
@@ -142,16 +132,12 @@ const styles = StyleSheet.create({
     buttonContainer: {
         alignSelf: "flex-end",
         paddingRight: 70,
-        paddingBottom: 15
+        marginBottom: 40
     },
     label: {
         color: Colors.primary1,
         fontSize: 15,
         fontFamily: "Raleway_700Bold",
         marginRight: 20,
-    },
-    descriptionField: {
-        width: 243,
-        height: 150,
     },
 });

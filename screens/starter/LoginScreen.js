@@ -128,13 +128,14 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
     containerStyle: {
-        // //  marginHorizontal: 20,
+        //  marginHorizontal: 20,
         // // borderRadius: 10,
         // // borderColor: Colors.primary2,
         // // borderWidth: 1,
         // width: 243,
         // backgroundColor: "white",
         // opacity: 0.76,
+        // marginTop: 20,
         // paddingHorizontal: 13,
         // paddingVertical: 16,
     }
