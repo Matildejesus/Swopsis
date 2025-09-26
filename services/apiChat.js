@@ -98,6 +98,7 @@ export async function getMessagesForConvo({ conversationId }) {
 }
 
 export async function updateDecision({ id, decision }) {
+    console.log("uPDATE DECISION: ", id, decision);
     const {data, error } = await supabase
         .from("Messages")
         .update({ "decision": decision })

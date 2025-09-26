@@ -7,7 +7,7 @@ import InputField from "../components/authentication/InputField";
 import Colors from "../constants/colors";
 import MainButton from "../components/MainButton";
 import { useUser } from "../hooks/auth/useUser";
-import { getItemsInfo, updateAvailability, updateTradeCount, updateUnavailability } from "../services/apiItems";
+import { updateAvailability, updateTradeCount, updateUnavailability } from "../services/apiItems";
 import ChatItemWidget from "../components/ChatItemWidget";
 import DecisionMakingWidget from "../components/DecisionMakingWidget";
 import { findUserById, updateUserImpactData } from "../services/apiAdmin";
@@ -19,6 +19,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import DashboardIcon from "../components/icons/DashboardIcon";
 import { useBlocked } from "../hooks/useBlocked";
 import { unblockUser } from "../services/apiBlocked";
+import { getSubcategoryDetails } from "../services/apiItemConvert";
+import { useUpdateUserMetadata } from "../hooks/auth/useUpdateUserMetadata";
 
 function ChatScreen() {
     const route = useRoute();
@@ -29,13 +31,16 @@ function ChatScreen() {
     const [selectedItem, setSelectedItem]= useState([]);
     const [ decision, setDecision ] = useState(null);
     const { groupWardrobe } = useGroupWardrobe();
-    useConversationSubscription(thread.id);
+    console.log("USER: ", user.user.id);
+    useConversationSubscription(thread.id, user.user.id);
     const queryClient = useQueryClient();
     const { blocked, beingBlocked } = useBlocked();
     const [blockedMessage, setBlockedMessage] = useState("");
     const [userBlocked, setUserBlocked] = useState(false);
 
     const { messages, isSending } = useMessages(thread.id);
+
+    const { updateUserMetadata } = useUpdateUserMetadata();
 
     const otherUserId = user?.user?.id === thread?.userId_1 ? thread?.userId_2 : thread?.userId_1;
 
@@ -116,6 +121,13 @@ function ChatScreen() {
         }
     };
 
+    const applyDecisionLocal = (id, choice) => {
+        queryClient.setQueryData(["messages", thread.id], (old = []) =>
+            old.map(m => (m.id === id ? { ...m, decision: choice } : m))
+        );
+    };
+
+
     useEffect(() => {
         const makeDecision = async () => {
             try {
@@ -129,10 +141,12 @@ function ChatScreen() {
                     await updateAvailability({ available: false, itemId: selectedItem.itemId });
                     
                     const item = groupWardrobe.find(item => item.id === selectedItem.itemId);
+
                     const newCount = await updateTradeCount({ id: item.id, count: item.tradeCount});
-    
-                    const itemInfo = await getItemsInfo({ category: item.category, itemId: item.id });
-                    const categoryData = await get({ item: itemInfo.subcategory });
+                    console.log(newCount);
+
+                    const itemInfo = item.extraInfo;
+                    const categoryData = await getSubcategoryDetails({ item: itemInfo.subcategory });
     
                     const mergedDates = { ...item.unavailableDates };
 
@@ -151,12 +165,24 @@ function ChatScreen() {
                     const updatedLitres = receiverUser.user_metadata.totalLitres + categoryData.litres;
                     const updatedWeight = receiverUser.user_metadata.totalWeight + parseFloat(itemInfo.weight);
                     const updatedSwapped = receiverUser.user_metadata.itemsSwapped + 1;
+                    
+                    const currUser = user.user.user_metadata;
+                    let currUserUpdatedLitres, currUserUpdatedWeight;
+                    if (selectedItem.loanDates) {
+                        currUserUpdatedLitres = currUser.totalLitres + categoryData.litres;
+                        currUserUpdatedWeight = currUser.totalWeight + parseFloat(itemInfo.weight);
+                    }
+
+                    const currUserUpdatedCoins = currUser.coins + 1;
+                    const currUserUpdatedSwapped = currUser.itemsSwapped + 1;
     
-                    let updatedCarbon;
+                    let updatedCarbon, currUserUpdatedCarbon;
                     if (categoryData.scalable) {
                         updatedCarbon = itemInfo.weight * categoryData.carbon;
+                        if (selectedItem.loanDates) currUserUpdatedCarbon = itemInfo.weight * categoryData.carbon;
                     } else {
                         updatedCarbon = categoryData.carbon;
+                        if (selectedItem.loanDates) currUserUpdatedCarbon = categoryData.carbon;
                     }
     
                     await updateUserImpactData({
@@ -167,6 +193,18 @@ function ChatScreen() {
                         totalWeight: updatedWeight,
                         itemsSwapped: updatedSwapped,
                     });
+                    
+                    const ownerUpdate = {
+                        id: user.user.id,
+                        newCoins: currUserUpdatedCoins,
+                        itemsSwapped: currUserUpdatedSwapped,
+                    };
+                    if (currUserUpdatedLitres != null)  ownerUpdate.totalLitres  = currUserUpdatedLitres;
+                    if (currUserUpdatedCarbon != null) ownerUpdate.totalCarbon  = currUserUpdatedCarbon;
+                    if (currUserUpdatedWeight != null) ownerUpdate.totalWeight  = currUserUpdatedWeight;
+
+                    // await updateUserImpactData(ownerUpdate);
+                    await updateUserMetadata(ownerUpdate);
     
                 } else if (decision === "reject") {
                     await updateDecision({ id: selectedItem.id, decision });
@@ -198,15 +236,19 @@ function ChatScreen() {
                         </View>
                     ) : (
                         <>
-                        {item.senderId != user.user.id && !item.decision && 
+                        {item.senderId != user.user.id && !item.decision &&
                                 ( <DecisionMakingWidget 
                                     accept={()=> { 
                                         setDecision("accept");  
-                                        setSelectedItem(item);} 
+                                        setSelectedItem(item);
+                                        applyDecisionLocal(item.id, "accept");
+                                    } 
                                     }
                                     reject={() => {
                                         setDecision("reject");
-                                        setSelectedItem(item);}
+                                        setSelectedItem(item);
+                                        applyDecisionLocal(item.id, "reject");
+                                    }
                                     }
                                 /> 
                             )}

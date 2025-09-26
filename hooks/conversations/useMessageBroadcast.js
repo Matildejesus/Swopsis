@@ -26,6 +26,23 @@ export function useMessageBroadcast(userId) {
                     );
                 }
             )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: "Messages",
+                },
+                (payload) => {
+                    const convId = payload.new.conversationId;
+                    const convs = (queryClient.getQueryData(['conversations']) || []);
+                    if (!convs.some((c) => c.id === convId)) return;
+
+                    queryClient.setQueryData(["messages", convId], (old = []) =>
+                        old.map((m) => (m.id === updated.id ? { ...m, ...updated } : m))
+                    );
+                }
+            )
             .subscribe();
             
         return () => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity, useWindowDimensions } from "react-native";
 import HeartSwitch from "../HeartSwitch";
 import PinkNextArrow from "../icons/PinkNextArrow";
@@ -12,12 +12,9 @@ import CalendarIcon from "../icons/CalendarIcon";
 import { useDeleteItem } from "../../hooks/items/useDeleteItem";
 import { useUpdateUserMetadata } from "../../hooks/auth/useUpdateUserMetadata";
 import { getSubcategoryDetails } from "../../services/apiItemConvert";
-import { useQueryClient } from "@tanstack/react-query";
 
 function ProfileItemDetails({ itemData }) {
     const { user: currentUser } = useUser();
-
-    const queryClient = useQueryClient();
 
     const [isOwner, setIsOwner] = useState(false);
     const [ownerData, setOwnerData] = useState({
@@ -108,7 +105,11 @@ function ProfileItemDetails({ itemData }) {
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
-                <Image source={{ uri: itemData.image }} style={styles.image} />
+                <Image 
+                    source={{ uri: itemData.image }} 
+                    style={styles.image} 
+                    resizeMode="contain"
+                />
             </View>
             <View style={styles.header}>
                 <Text style={styles.itemName}>{itemData.title}</Text>
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         width: "90%",
-        aspectRatio: 1,
+        // aspectRatio: 1,
         alignItems: "center"
 
     },

@@ -6,13 +6,23 @@ import HeartSwitch from "./HeartSwitch";
 import ContactButton from "./ItemWidgets/ContactButton";
 import ContactIcon from "./icons/ContactIcon";
 import dateFormatting from "./dateFormatting";
+import { useUser } from "../hooks/auth/useUser";
+import Toast from "react-native-toast-message";
 
 function WardrobeitemWidget({ item }) {
     const navigation = useNavigation();
+    const { user } = useUser();
 
     const date = dateFormatting(item.created_at);
 
     const handleContactPress = () => {
+        if (user.user.user_metadata.coins === 0) {
+            Toast.show({
+                type: 'error',
+                text1: "Not enough coins.",
+                text2: 'Swap your own items to get coins ❌',
+            });
+        }
         navigation.navigate("ProfileItem", { 
             itemData: item,
             showModal: true 

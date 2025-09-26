@@ -79,29 +79,43 @@ function ProfileItemScreen() {
         }
         try {
             setErrorMessage("");
+            //  i need to check if userId_1 is userId or currUser and vice versa for userId_2
             let pendingConversation = conversations.find(
-                (conv) => conv.userId_1 === itemData.userId && conv.userId_2 === currentUser.user.id
+                c => (c.userId_1 === itemData.userId && c.userId_2 === currentUser.user.id ) ||
+                    ( c.userId_1 === currentUser.user.id && c.userId_2 === itemData.userId)
             );
+
             // let pendingConversation = await getConversation({ userId_1: itemData.userId, userId_2: currentUser.user.id});
             if (!pendingConversation) {
                 // pendingConversation = await createConversation({user1: itemData.userId, user2: currentUser.user.id});
                 pendingConversation = addConversation({ user1: itemData.userId, user2: currentUser.user.id });
-
             }
+
+            const conversationId = pendingConversation?.id ?? pendingConversation?.data?.id;
+            console.log("conversation ID: ", conversationId);
+            if (!conversationId) throw new Error("Conversation ID missing");
+
             if (selectedDates) {
                 await sendMessage({ senderId: currentUser.user.id, itemId: itemData.id, loanDates: selectedDates, conversationId: pendingConversation.id});
             } else {
                 await sendMessage({ senderId: currentUser.user.id, itemId: itemData.id, conversationId: pendingConversation.id });
             }
-            await sendMessage({ senderId: currentUser.user.id, text: message, conversationId: pendingConversation.id});
+            await sendMessage({ senderId: currentUser.user.id, text: message, conversationId: conversationId});
           
             setIsModalVisible(false);
-            navigation.navigate('InApp', {
-                screen: 'Inbox',
-                params: { conversationId: 'conversation.id' },
-              })
+
+            const thread = {
+                id: conversationId,
+                userId_1: itemData.userId,
+                userId_2: currentUser.user.id,
+                userName: itemData.userName,     
+                avatar: itemData.avatar,        
+            };
+
+            navigation.navigate("Chat", { thread });
         } catch (error) {
             console.error("Error creating conversation: ", error);
+            setErrorMessage("Failed to send. Please try again.");
         }
     }
 

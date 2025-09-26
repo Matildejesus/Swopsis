@@ -9,7 +9,6 @@ export function useUser() {
         queryKey: ["user"],
         queryFn: getUser,
         cacheTime: 24 * 60 * 60 * 1000,
-        // staleTime: Infinity,
     });
 
     useEffect(() => {

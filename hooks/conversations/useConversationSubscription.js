@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import supabase from "../../services/supabase";
 import { useEffect } from "react";
 
-export function useConversationSubscription(conversationId) {
+export function useConversationSubscription(conversationId, currUserId) {
     const queryClient = useQueryClient();
 
     useEffect(() => {
@@ -20,12 +20,13 @@ export function useConversationSubscription(conversationId) {
             },
             (payload) => {
                 queryClient.setQueryData(["messages", conversationId], (old = []) => [
-                payload.new,         
-                ...old
+                    payload.new,         
+                    ...old
                 ]);
-                queryClient.setQueryData(["unread", conversationId], (count = 0) => count + 1);
-
-
+                console.log(currUserId);
+                if (payload.new?.senderId && String(payload.new.senderId) !== String(currUserId)) {
+                    queryClient.setQueryData(["unread", conversationId], (count = 0) => count + 1);
+                }
             }
         )
         .subscribe();
@@ -33,5 +34,5 @@ export function useConversationSubscription(conversationId) {
         return () => {
             supabase.removeChannel(channel);
         };
-    }, [conversationId, queryClient]);
+    }, [conversationId, currUserId, queryClient]);
 }
