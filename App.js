@@ -408,7 +408,7 @@ function AppContent( ) {
         <NavigationContainer>
             <Stack.Navigator
                 initialRouteName={user ? "InApp" : "Welcome"}
-                screenOptions={{ headerStyle: { height: 200 }, }}
+                screenOptions={{ headerStyle: { height: 200 }, headerTitleAlign: "left" }}
             >
                 <Stack.Screen
                     name="Welcome"

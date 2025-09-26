@@ -13,11 +13,11 @@ function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
         const lib = await ImagePicker.requestMediaLibraryPermissionsAsync();
         const cam = await ImagePicker.requestCameraPermissionsAsync();
         if (cam.status !== "granted") {
-            alert("Sorry, we need camera roll permissions to make this work.");
+            alert("Sorry, we need camera permissions to make this work.");
             return;
         }
         if (lib.status !== "granted") {
-            alert("Sorry, we need camera permissions to make this work.");
+            alert("Sorry, we need camera roll permissions to make this work.");
         } 
         setIsModalVisible(true);
     };
@@ -27,7 +27,7 @@ function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ['images'],
             allowsEditing: true,
-            aspect: [4, 3],
+            // aspect: [4, 3],
             quality: 1,
         });
 
@@ -43,7 +43,7 @@ function PicturePicker({ userPicture, style, onImageSelected, imageStyle }) {
         let result = await ImagePicker.launchCameraAsync({ 
             mediaTypes: ['images'],
             allowsEditing: true,
-            aspect: [4, 3],
+            // aspect: [4, 3],
             quality: 1,
         });
         console.log("takeImage result:", result);

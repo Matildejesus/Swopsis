@@ -7,26 +7,31 @@ function Title(props) {
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-            <View style={styles.container}>
-                
-                    {props.goBack ? (
-                        <PinkBackArrow />
-                    ) : null}
-                    {props.avatar && (
-                        <View style={styles.imageStyle}>
-                            <Image source={{ uri: props.avatar }} style={styles.image} />
-                        </View>
-                    )}
-            
-                    <Text
-                        style={{ fontWeight: "bold", fontSize: 20, color: "#8E0040" }}
-                    >
-                        {props.title}
-                    </Text>
-            
-            </View>
-        </TouchableOpacity>
+        // <TouchableOpacity onPress={() => navigation.goBack()}>
+        <View style={styles.container}>
+            {props.goBack ? (
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}
+                    style={styles.backBtn}
+                >
+                    <PinkBackArrow />
+                </TouchableOpacity>
+            ) : null}
+            {props.avatar && (
+                <View style={styles.imageStyle}>
+                    <Image source={{ uri: props.avatar }} style={styles.image} />
+                </View>
+            )}
+    
+            <Text
+                style={{ fontWeight: "bold", fontSize: 20, color: "#8E0040" }}
+            >
+                {props.title}
+            </Text>
+        
+        </View>
+        // </TouchableOpacity>
     );
 }
 
@@ -40,6 +45,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         alignItems: "center",
+        justifyContent: "flex-start"
        // gap: 27,
     },
     imageStyle: {
@@ -51,6 +57,10 @@ const styles = StyleSheet.create({
         overflow: "hidden"
         
     }, 
+    backBtn: {
+        padding: 4, 
+        marginRight: 6,
+    },
     image: {
         width: "100%",
         height: "100%",
