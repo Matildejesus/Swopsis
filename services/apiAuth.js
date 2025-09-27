@@ -44,15 +44,14 @@ export async function logout() {
 }
 
 export async function getUser() {
-    const [{ data: session }, { data: userData }] = await Promise.all([
-        supabase.auth.getSession(),
+    const [{ data: userData }] = await Promise.all([
         supabase.auth.getUser()
     ]);
 
     if (error) {
         throw new Error(error.message);
     }
-    return userData?.user;
+    return userData.user;
 }
 
 export async function updateGroup({ group }) {

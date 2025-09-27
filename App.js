@@ -49,7 +49,7 @@ import { AppRegistry } from "react-native";
 import Colors from "./constants/colors.js";
 import { Provider as PaperProvider } from 'react-native-paper';
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import GroupIcon from "./components/icons/adminicons/GroupIcon.js";
 import ItemIcon from "./components/icons/adminicons/ItemIcon.js";
@@ -82,14 +82,25 @@ import supabase from "./services/supabase.js";
 AppRegistry.registerComponent("main", () => App);
 
 function AppAuthRefresher() {
+    const qc = useQueryClient();
+
     React.useEffect(() => {
+        const refresh = async () => {
+            try { 
+                await supabase.auth.refreshSession(); 
+            } catch {}
+            qc.invalidateQueries({ queryKey: ["user"] }); 
+        };
+
+        refresh();
+
         const sub = AppState.addEventListener("change", (state) => {
-        if (state === "active") supabase.auth.startAutoRefresh();
-        else supabase.auth.stopAutoRefresh();
+        if (state === "active") refresh();
         });
-        supabase.auth.startAutoRefresh();
+
         return () => sub.remove();
-    }, []);
+    }, [qc]);
+
     return null;
 }
 
@@ -383,9 +394,9 @@ export default function App() {
     SplashScreen.hideAsync();
 
     return (
-        <RootSiblingParent>
-            <SafeAreaProvider>
-                <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
+            <RootSiblingParent>
+                <SafeAreaProvider>
                     <PaperProvider>
                         <StatusBar />
                         <SubscriptionProvider >
@@ -394,9 +405,9 @@ export default function App() {
                         </SubscriptionProvider>
                         <Toast />
                     </PaperProvider>
-                </QueryClientProvider>
-            </SafeAreaProvider>
-        </RootSiblingParent>
+                </SafeAreaProvider>
+            </RootSiblingParent>
+        </QueryClientProvider>
     );
 }
 

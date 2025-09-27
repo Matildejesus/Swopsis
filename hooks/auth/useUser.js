@@ -8,7 +8,9 @@ export function useUser() {
     const { data: user, isLoading, error } = useQuery({
         queryKey: ["user"],
         queryFn: getUser,
-        cacheTime: 24 * 60 * 60 * 1000,
+        staleTime: 0,                 
+        refetchOnReconnect: true,
+        refetchOnMount: "always",
     });
 
     useEffect(() => {
