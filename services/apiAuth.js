@@ -22,6 +22,8 @@ export async function register({ userName, email, password }) {
     if (error) {
         throw new Error(error.message);
     }
+    
+    if (data?.session) await supabase.auth.signOut();
 }
 
 export async function login({ email, password }) {

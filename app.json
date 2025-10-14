@@ -85,7 +85,8 @@
             "ndkVersion": "27.1.12297006"
           }
         }
-      ]
+      ],
+      "./plugins/empty-android-label"
     ],
     "extra": {
       "eas": {
