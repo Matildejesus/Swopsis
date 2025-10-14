@@ -1,7 +1,8 @@
+import supabaseStateless from "./statelessSupabase";
 import supabase from "./supabase";
 
 export async function register({ userName, email, password }) {
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabaseStateless.auth.signUp({
         email,
         password,
         options: {
@@ -22,8 +23,7 @@ export async function register({ userName, email, password }) {
     if (error) {
         throw new Error(error.message);
     }
-    
-    if (data?.session) await supabase.auth.signOut();
+    return data?.user ?? null;
 }
 
 export async function login({ email, password }) {

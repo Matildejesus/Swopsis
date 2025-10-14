@@ -69,6 +69,11 @@ function RegisterScreen({ navigation }) {
     }, [debouncedUserName]);
 
     const submitHandler = () => {
+        const v = validate({ emailAddress: email, password, userName }, constraints) || {};
+        setEmailError(v.emailAddress?.[0] ?? null);
+        setPasswordError(v.password?.[0] ?? null);
+        setUserNameError(v.userName?.[0] ?? null);
+        if (v.emailAddress || v.password || v.userName) return;
         if (!emailError && !userNameError && !passwordError) {
             register(
                 { userName, email, password },
