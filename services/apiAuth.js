@@ -10,7 +10,7 @@ export async function register({ userName, email, password }) {
                 userName,
                 avatar: "",
                 group: "",
-                coins: 10,
+                coins: 1,
                 ambassador: false,
                 totalWeight: 0,
                 totalLitres: 0,

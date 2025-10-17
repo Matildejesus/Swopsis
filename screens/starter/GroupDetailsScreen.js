@@ -3,7 +3,7 @@ import Colors from "../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 import MemberIcon from "../../components/icons/MemberIcon";
 import SmallPinIcon from "../../components/icons/SmallPinIcon";
-import { updateGroup } from "../../services/apiAuth";
+import { updateGroup, updateUser } from "../../services/apiAuth";
 import { useEffect, useState } from "react";
 import MessageModal from "../../components/MessageModal";
 import { addJoinRequest } from "../../services/apiJoinRequests";
@@ -12,6 +12,10 @@ import { findUserById, updateUserMetadata } from "../../services/apiAdmin";
 import MainButton from "../../components/MainButton";
 import { useUpdateGroupStatus } from "../../hooks/admin/useUpdateGroupStatus";
 import { useAllMembers } from "../../hooks/useAllMembers";
+import { updateMemberCount } from "../../services/apiGroups";
+import { useQueryClient } from "@tanstack/react-query";
+import { useUpdateUser } from "../../hooks/auth/useUpdateUser";
+import { useUpdateUserGroup } from "../../hooks/auth/useUpdateUserGroup";
 
 function GroupDetailsScreen({ route }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -24,7 +28,7 @@ function GroupDetailsScreen({ route }) {
     const { members, isLoading: membersLoading } = useAllMembers();
 
     const { user } = useUser();
-
+    const { updateGroup } = useUpdateUserGroup();
     useEffect(() => {
         const fetchAmbassador = async () => {
             try {
@@ -51,20 +55,29 @@ function GroupDetailsScreen({ route }) {
     }, [members, group.ambassadorId]);
 
     const submitHandler = async () => {
-        if (!message) {
-            setErrorMessage("Please write a message to introduce yourself.");
-            return;
-        }
+        // if (!message) {
+        //     setErrorMessage("Please write a message to introduce yourself.");
+        //     return;
+        // }
 
         try {
-            setErrorMessage("");
-            setIsModalVisible(false);
-            await updateGroup({ group: "Pending" });
-            const data = await addJoinRequest({
-                userId: user.user.id,
-                groupId: group.id,
-                message,
-            });
+            // setErrorMessage("");
+            // setIsModalVisible(false);
+            // do not delete this code this is the actual logic, that i want to skip for now
+            // await updateGroup({ group: "Pending" });
+            // const data = await addJoinRequest({
+            //     userId: user.user.id,
+            //     groupId: group.id,
+            //     message,
+            // });
+
+            // here we need to update group and user data
+            await updateUserMetadata({ id: user.user.id, groupId: group.id, ambassador: false });
+
+            // updateGroup({ group: group.id });
+
+            await updateMemberCount({ id: group.id, count: group.numberOfMem + 1 });
+
             navigation.reset({
                 index: 0,
                 routes: [
@@ -135,8 +148,10 @@ function GroupDetailsScreen({ route }) {
                 }
                 {user.user.app_metadata.role != "super-admin" && (
                         <MainButton
-                            title="REQUEST TO JOIN"
-                            onPress={() => setIsModalVisible(true)}
+                            title="JOIN"
+                            // title="REQUEST TO JOIN"
+                            onPress={submitHandler}
+                            // onPress={() => setIsModalVisible(true)}
                             variant="primary"
                         />
                     )
@@ -164,14 +179,14 @@ function GroupDetailsScreen({ route }) {
                     <Text style={styles.info}>{group.numberOfMem}</Text>
                 </View>
             </View>
-            <MessageModal
+            {/* <MessageModal
                 visible={isModalVisible}
                 onRequestClose={submitHandler}
                 errorMessage={errorMessage}
                 onBackdropPress={closeModal}
                 onMessageChange={setMessage}
                 joinRequest={true}
-            />
+            /> */}
         </View>
     );
 }
