@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import MapView, { Marker, Callout } from "react-native-maps";
 import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { getGroups } from "../services/apiGroups";
-import PinIcon from "../components/icons/PinIcon";
+import PinIcon from "./icons/PinIcon";
 import Colors from "../constants/colors";
-import ArrowNext from "../components/icons/ArrowNext";
+import ArrowNext from "./icons/ArrowNext";
 import { useNavigation } from "@react-navigation/native";
 
 const Map = ({ apikey, postcode, groups }) => {

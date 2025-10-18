@@ -23,6 +23,10 @@
       },
       "newArchEnabled": true
     },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/images/logo.png"
+    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
