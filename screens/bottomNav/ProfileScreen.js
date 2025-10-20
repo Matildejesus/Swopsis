@@ -58,7 +58,7 @@ function ProfileScreen() {
     }
 
     return (
-        <Screen>
+        // <Screen>
             <View>
                 <View style={styles.headerContainer}>
                     {avatar ? (
@@ -106,7 +106,7 @@ function ProfileScreen() {
                     </>
                 )}
             </View>
-        </Screen>
+        // </Screen>
     );
 }
 

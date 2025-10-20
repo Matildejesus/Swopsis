@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import MemberIcon from "../../components/icons/MemberIcon";
 import SmallPinIcon from "../../components/icons/SmallPinIcon";
 import { updateGroup, updateUser } from "../../services/apiAuth";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import MessageModal from "../../components/MessageModal";
 import { addJoinRequest } from "../../services/apiJoinRequests";
 import { useUser } from "../../hooks/auth/useUser";
@@ -16,8 +16,104 @@ import { updateMemberCount } from "../../services/apiGroups";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUpdateUser } from "../../hooks/auth/useUpdateUser";
 import { useUpdateUserGroup } from "../../hooks/auth/useUpdateUserGroup";
+import { useResponsive } from "../../utils/responsive";
+import { TouchableOpacity, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import PinkBackArrow from "../../components/icons/PinkBackArrow"; // adjust path if needed
+
 
 function GroupDetailsScreen({ route }) {
+    const insets = useSafeAreaInsets(); // near top, after hooks
+
+    const { width, height, isTablet, isWeb, horizontalScale: hs, verticalScale: vs, moderateScale: ms, scaleFont } = useResponsive();
+
+    const dynamicStyles = useMemo(() => {
+        return StyleSheet.create({
+            container: {
+                flex: 1,
+                backgroundColor: "white",
+            },
+            title: {
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                alignSelf: "center",
+                fontFamily: "Raleway_700Bold",
+                fontSize: 24,
+                color: Colors.primary1,
+                marginTop: vs(10),
+                // marginBottom: vs(80),
+            },
+            image: {
+                height: isWeb ? Math.round(height * 0.5) : vs(350),
+                width: isWeb ? Math.round(width * 0.7) : Math.round(width),
+                resizeMode: "cover",
+                alignSelf: "center"
+            },
+            header: {
+                fontFamily: "Raleway_700Bold",
+                fontSize: scaleFont(18),
+                color: Colors.primary2,
+                marginLeft: hs(23),
+            },
+            content: {
+                fontFamily: "Raleway_400Regular",
+                fontSize: 15,
+                color: Colors.primary2,
+                paddingTop: vs(14),
+                marginLeft: hs(33),
+                marginRight: hs(4),
+            },
+            buttonContainer: {
+                alignSelf: "flex-end",
+                marginRight: hs(33),
+                flexDirection: "row",
+                gap: hs(10),
+                paddingBottom: vs(10),
+            },
+            infoContainer: {
+                flexDirection: "row",
+                // position: "absolute",
+                // top: 320,
+                // left: 227,
+                // width: 108,
+                gap: hs(50),
+                paddingLeft: hs(10)
+            },
+            ambassadorContainer: {
+                // position: "absolute",
+                // top: 320,
+                // left: 30,
+                flexDirection: "row",
+                paddingTop: 5,
+                gap: 5,
+                paddingLeft: hs(10)
+            },
+            info: {
+                fontFamily: "Raleway_400Regular",
+                fontSize: 15,
+                color: Colors.primary2,
+                alignSelf: "center"
+            },
+            name: {
+                fontFamily: "Raleway_700Bold",
+                fontSize: 15, 
+                color: Colors.primary2,
+                paddingLeft: 10,
+                paddingTop: 5,
+            },
+            row: {
+                flexDirection: "row",
+                gap: 20,
+            },
+            profileImage: {
+                width: 40,
+                height: 40,
+                backgroundColor: Colors.primary1,
+                borderRadius: 21,
+            }
+        }, [width, height, isTablet, hs, vs, ms, scaleFont]);
+    })
+
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [message, setMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -114,21 +210,56 @@ function GroupDetailsScreen({ route }) {
     };
 
     return (
-        <View style={styles.container}>
-            <Image style={styles.image} source={{ uri: group.avatar }} />
-            <Text style={styles.title}>{group.name}</Text>
-            <View style={{ height: 290 }}>
-                <Text style={styles.content}>{group.description}</Text>
+        <ScrollView style={dynamicStyles.container}>
+            <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}
+                style={{
+                    position: "absolute",
+                    left: 12,
+                    top: Platform.OS === "android" ? 12 + insets.top : 12 + insets.top, // safe for web/ios/android
+                    zIndex: 20,
+                    padding: 6,
+                }}
+            >
+                <PinkBackArrow />
+            </TouchableOpacity>
+            <Image style={dynamicStyles.image} source={{ uri: group.avatar }} />
+            <Text style={dynamicStyles.title}>{group.name}</Text>
+            {ambassadorData && 
+                <View style={dynamicStyles.ambassadorContainer}>
+                    <Image source={{ uri: ambassadorData.user_metadata.avatar }} style={dynamicStyles.profileImage}/>
+                    <View>
+                        <Text style={dynamicStyles.name}>{ambassadorData.user_metadata.userName}</Text>
+                        
+                    </View>
+                    
+                </View>
+            }
+            <View style={dynamicStyles.infoContainer}>
+                <View style={dynamicStyles.row}>
+                    <View style={{ marginTop: 10 }}>
+                        <SmallPinIcon />
+                    </View>
+                    <Text style={dynamicStyles.info}>{group.location}</Text>
+                </View>
+                <View style={dynamicStyles.row}>
+                    <MemberIcon />
+                    <Text style={dynamicStyles.info}>{group.numberOfMem}</Text>
+                </View>
+            </View>
+             <View>
+                <Text style={dynamicStyles.content}>{group.description}</Text>
                 {/* <Text style={[styles.header, { marginTop: 10 }]}>Rules</Text> */}
                 <ScrollView>
                     {group.rules.map((rule, index) => (
-                        <Text key={index} style={[styles.content]}>
+                        <Text key={index} style={[dynamicStyles.content]}>
                             • {rule}
                         </Text>
                     ))}
                 </ScrollView>
             </View>
-            <View style={styles.buttonContainer}>
+            <View style={dynamicStyles.buttonContainer}>
                 {group.status == "pending" &&
                     (
                         <>
@@ -157,28 +288,7 @@ function GroupDetailsScreen({ route }) {
                     )
                 }
             </View> 
-            {ambassadorData && 
-                <View style={styles.ambassadorContainer}>
-                    <Image source={{ uri: ambassadorData.user_metadata.avatar }} style={styles.profileImage}/>
-                    <View>
-                        <Text style={styles.name}>{ambassadorData.user_metadata.userName}</Text>
-                        
-                    </View>
-                    
-                </View>
-            }
-            <View style={styles.infoContainer}>
-                <View style={styles.row}>
-                    <View style={{ marginTop: 10 }}>
-                        <SmallPinIcon />
-                    </View>
-                    <Text style={styles.info}>{group.location}</Text>
-                </View>
-                <View style={styles.row}>
-                    <MemberIcon />
-                    <Text style={styles.info}>{group.numberOfMem}</Text>
-                </View>
-            </View>
+    
             {/* <MessageModal
                 visible={isModalVisible}
                 onRequestClose={submitHandler}
@@ -187,95 +297,8 @@ function GroupDetailsScreen({ route }) {
                 onMessageChange={setMessage}
                 joinRequest={true}
             /> */}
-        </View>
+        </ScrollView>
     );
 }
 
 export default GroupDetailsScreen;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "white",
-    },
-    title: {
-        fontWeight: "bold",
-        // marginBottom: 10,
-        textTransform: "uppercase",
-        alignSelf: "center",
-        fontFamily: "Raleway_700Bold",
-        fontSize: 30,
-        color: Colors.primary1,
-        marginTop: 10,
-        marginBottom: 80,
-    },
-    image: {
-        height: "30%",
-        width: "100%",
-    },
-    header: {
-        fontFamily: "Raleway_700Bold",
-        fontSize: 18,
-        color: Colors.primary2,
-        marginLeft: 23,
-    },
-    content: {
-        fontFamily: "Raleway_400Regular",
-        fontSize: 15,
-        color: Colors.primary2,
-        paddingTop: 14,
-        marginLeft: 33,
-        marginRight: 4,
-    },
-    buttonContainer: {
-        alignSelf: "flex-end",
-        marginRight: 30,
-        // position: "absolute",
-        flexDirection: "row",
-        gap: 10,
-        paddingBottom: 10,
-        // bottom: -20,
-        // right: 0,
-    },
-    infoContainer: {
-        flexDirection: "column",
-        position: "absolute",
-        top: 320,
-        left: 227,
-        width: 108,
-        // zIndex: 5,
-        gap: 10,
-    },
-    ambassadorContainer: {
-        position: "absolute",
-        top: 320,
-        left: 30,
-      //  left: 227,
-        flexDirection: "row",
-        paddingTop: 5,
-        gap: 5,
-    },
-    info: {
-        fontFamily: "Raleway_400Regular",
-        fontSize: 15,
-        color: Colors.primary2,
-        alignSelf: "center"
-    },
-    name: {
-        fontFamily: "Raleway_700Bold",
-        fontSize: 15, 
-        color: Colors.primary2,
-        paddingLeft: 10,
-        paddingTop: 5,
-    },
-    row: {
-        flexDirection: "row",
-        gap: 20,
-    },
-    profileImage: {
-        width: 40,
-        height: 40,
-        backgroundColor: Colors.primary1,
-        borderRadius: 21,
-    }
-});

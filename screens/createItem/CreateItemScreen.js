@@ -1,4 +1,4 @@
-import { StyleSheet, View, ScrollView, KeyboardAvoidingView, SafeAreaView } from "react-native";
+import { StyleSheet, View, ScrollView, KeyboardAvoidingView } from "react-native";
 import PicturePicker from "../../components/PicturePicker";
 import Colors from "../../constants/colors";
 import MainButton from "../../components/MainButton.js";

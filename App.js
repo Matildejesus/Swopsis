@@ -10,7 +10,7 @@ import 'react-native-get-random-values';
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { RootSiblingParent } from "react-native-root-siblings";
-import { Text, Image, View, AppState } from "react-native";
+import { Text, Image, View, AppState, Platform } from "react-native";
 import Svg, { G, Path, Circle } from "react-native-svg";
 
 import WelcomeScreen from "./screens/starter/WelcomeScreen.js";
@@ -414,12 +414,21 @@ export default function App() {
 function AppContent( ) {
     const { user } = useUser(); 
     const groupId = user?.user?.user_metadata?.group;
-
+    console.log("GROUP ID: ", groupId)
     return (
         <NavigationContainer>
             <Stack.Navigator
-                initialRouteName={user ? "InApp" : "Welcome"}
-                screenOptions={{ headerStyle: { height: 200 }, headerTitleAlign: "left" }}
+                initialRouteName={groupId === undefined 
+    ? "Postcode"
+    : user
+      ? "InApp"
+      : "Welcome"}
+                screenOptions={{ 
+                    headerStyle: { height: Platform.OS === "web" ? 88 : 56 }, 
+                    headerTitleAlign: "left",
+                    headerBackVisible: false
+                }}
+                
             >
                 <Stack.Screen
                     name="Welcome"
@@ -592,17 +601,7 @@ function AppContent( ) {
                 <Stack.Screen
                     name="GroupDetails"
                     component={GroupDetailsScreen}
-                    options={{
-                        headerTitleAlign: "left",
-                        headerBackVisible: false,
-                        headerTitle: (props) => (
-                            <Title
-                                title=""
-                                goBack="true"
-                                {...props}
-                            />
-                        ),
-                    }}
+                    options={{ headerShown: false }}
                 />
                 <Stack.Screen
                     name="WishList"

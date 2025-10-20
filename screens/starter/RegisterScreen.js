@@ -8,6 +8,7 @@ import constraints from "../../constraints.js";
 import { useRegister } from "../../hooks/auth/useRegister.js";
 import InputTemplateWidget from "../../components/InputTemplateWidget.js";
 import InputField from "../../components/authentication/InputField.js";
+import Screen from "../../components/Screen.js";
 
 function RegisterScreen({ navigation }) {
     const { register, isLoading } = useRegister();

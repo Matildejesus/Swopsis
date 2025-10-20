@@ -81,7 +81,6 @@ function LoginScreen({ navigation }) {
                 onChangeText={addEmailHandler}
                 value={email}
                 error={emailError}
-                containerStyle={styles.containerStyle}
             />
             <InputField
                 placeholder="password"
@@ -90,7 +89,6 @@ function LoginScreen({ navigation }) {
                 value={password}
                 secureTextEntry={true}
                 error={passwordError}
-                containerStyle={styles.containerStyle}
             />
             </>
 
@@ -125,18 +123,3 @@ function LoginScreen({ navigation }) {
 }
 
 export default LoginScreen;
-
-const styles = StyleSheet.create({
-    containerStyle: {
-        //  marginHorizontal: 20,
-        // // borderRadius: 10,
-        // // borderColor: Colors.primary2,
-        // // borderWidth: 1,
-        // width: 243,
-        // backgroundColor: "white",
-        // opacity: 0.76,
-        // marginTop: 20,
-        // paddingHorizontal: 13,
-        // paddingVertical: 16,
-    }
-})

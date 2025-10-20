@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Platform } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 import { Image } from 'expo-image';
 import { useMemo, useState } from "react";
@@ -10,9 +10,11 @@ import Screen from "./Screen.js";
 function WelcomePageWidget({ onRegister, onLogin, page, handleScroll }) {
     const { width, height, isTablet, horizontalScale: hs, verticalScale: vs, moderateScale: ms, scaleFont } = useResponsive();
 
+    const containerWidth = isTablet || Platform.OS === "web" ? Math.min(width, 900) : width;
+
     const imageStyle = {
-        width,
-        height: Math.max(height * 0.55, isTablet ? 420 : 360),
+        width: containerWidth,
+        height: Math.max(height * 0.66, isTablet ? 420 : 360),
         resizeMode: "cover",
     };
 
@@ -37,27 +39,29 @@ function WelcomePageWidget({ onRegister, onLogin, page, handleScroll }) {
             text: {
                 color: Colors.primary1,
                 textAlign: "center",
-                fontSize: ms(25),
+                fontSize: scaleFont(18),
                 // fontWeight: "bold",
-                marginVertical: vs(30),
+                marginVertical: vs(54),
+                height: vs(50),
+                // width: Math.min(width * 0.88, 900),
                 fontFamily: "Raleway_700Bold",
             },
             bulletItem: {
                 textAlign: "center",
                 color: Colors.primary1,
-                fontSize: ms(25),
+                fontSize: scaleFont(25),
                 fontWeight: "700",
             },
             bulletList: {
                 flexDirection: "column",
-                marginVertical: vs(30)
+                marginVertical: vs(54),
+                height: vs(50)
             },
         }, [width, height, isTablet, hs, vs, ms, scaleFont]);
     })
 
-
     return (
-        <Screen>
+        // <Screen>
             <View style={dynamicStyles.container}>
                 <ScrollView
                     horizontal={true}
@@ -65,16 +69,15 @@ function WelcomePageWidget({ onRegister, onLogin, page, handleScroll }) {
                     showsHorizontalScrollIndicator={false}
                     onMomentumScrollEnd={handleScroll}
                     decelerationRate="fast"
+                    onScroll={handleScroll}
                 >
                     <Image 
                         source="https://ojtjdcpqkljyiralrflf.supabase.co/storage/v1/object/public/public%20assets/girls.png"  
-                        style={imageStyle}
-                        contentFit="cover"     
+                        style={imageStyle}     
                     />
                     <Image 
                         source="https://ojtjdcpqkljyiralrflf.supabase.co/storage/v1/object/public/public%20assets/img4.png" 
                         style={imageStyle} 
-                        contentFit="cover"
                     />
                 </ScrollView> 
 
@@ -101,13 +104,13 @@ function WelcomePageWidget({ onRegister, onLogin, page, handleScroll }) {
                 </View>
 
                 {page === 0 ? (
-                    <Text style={[dynamicStyles.text, {fontSize: scaleFont(18)}]}>
+                    <Text style={[dynamicStyles.text, {fontSize: 18}]}>
                         SWAP AND INSPIRED WITH A SHARED COMMUNITY WARDROBE
                     </Text>
                 ) : (
                     <View style={dynamicStyles.bulletList}>
                         {["Swap", "Impact", "BE YOU"].map((item, index) => (
-                            <Text key={index} style={[dynamicStyles.bulletItem, {fontSize: scaleFont(18)}]}>• {item}</Text>
+                            <Text key={index} style={[dynamicStyles.bulletItem, {fontSize: 18}]}>• {item}</Text>
                         ))}
                     </View>
                 )
@@ -128,7 +131,7 @@ function WelcomePageWidget({ onRegister, onLogin, page, handleScroll }) {
                     />
                 </View>
             </View>
-        </Screen>
+        //  </Screen>
     );
 }
 

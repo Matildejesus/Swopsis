@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PinkBackArrow from "./icons/PinkBackArrow";
 import Colors from "../constants/colors";
@@ -40,13 +40,10 @@ export default Title;
 
 const styles = StyleSheet.create({
     container: {
-        // marginLeft: 20,
-      //  marginTop: 10,
-        flex: 1,
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "flex-start"
-       // gap: 27,
+        justifyContent: "flex-start",
+        paddingVertical: Platform.OS === "web" ? 8 : 0,
     },
     imageStyle: {
         width: 40,

@@ -52,7 +52,9 @@ function PostcodeScreen({ navigation }) {
         return (
             <>
             <PinIcon />
-            <Text style={styles.title}> Find groups near you!</Text>
+            <Text style={{ fontSize: 18, fontFamily: "Raleway_700Bold", paddingBottom: 10, color: Colors.primary2,}}> 
+                Find groups near you!
+            </Text>
             <InputField
                 placeholder={"Enter your postcode"}
                 onChangeText={handleChange}
@@ -78,12 +80,3 @@ function PostcodeScreen({ navigation }) {
 }
 
 export default PostcodeScreen;
-
-const styles = StyleSheet.create({
-    title: {
-        fontSize: 18,
-        fontFamily: "Raleway_700Bold",
-        paddingBottom: 10,
-        color: Colors.primary2,
-    },
-});
