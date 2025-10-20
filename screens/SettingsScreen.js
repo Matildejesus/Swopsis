@@ -5,7 +5,7 @@ import Colors from "../constants/colors";
 import Line from "../components/Line";
 import { useState } from "react";
 import MainButton from "../components/MainButton";
-import { horizontalScale as hs, verticalScale as vs, moderateScale as ms } from "../utils/responsive";
+// import { horizontalScale as hs, verticalScale as vs, moderateScale as ms } from "../utils/responsive";
 import { useUser } from "../hooks/auth/useUser";
 import { useUpdateUser } from "../hooks/auth/useUpdateUser";
 import { useLogout } from "../hooks/auth/useLogout";
@@ -249,7 +249,7 @@ export default SettingsScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: vs(10),
+        paddingTop: 10,
         justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "white",

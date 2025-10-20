@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import WelcomePageWidget from "../../components/WelcomePageWidget";
 import { useUser } from "../../hooks/auth/useUser";
+import { useResponsive } from "../../utils/responsive";
 
 function WelcomeScreen({ navigation }) {
+    const { scaleFont } = useResponsive();
     const [page, setPage] = useState(0);
     const { isAuthenticated, isLoading } = useUser();
 

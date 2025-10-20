@@ -13,7 +13,6 @@ function PostcodeScreen({ navigation }) {
     const [ allGroups, setAllGroups ] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    print("in postcode screen");
     useEffect(() => {
         const fetchData = async () => {
             try {

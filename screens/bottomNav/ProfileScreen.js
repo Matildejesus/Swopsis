@@ -12,6 +12,8 @@ import AnimatedEnvelope from "../../components/AnimatedEnvelope";
 import DashboardIcon from "../../components/icons/DashboardIcon";
 import { useGroupWardrobe } from "../../hooks/useGroupWardrobe";
 import { findUserById } from "../../services/apiAdmin";
+import { useResponsive } from "../../utils/responsive";
+import Screen from "../../components/Screen";
 
 function ProfileScreen() {
     const { user: userData, isLoading: isUserLoading } = useUser();
@@ -56,63 +58,61 @@ function ProfileScreen() {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.headerContainer}>
-                 {avatar ? (
-                    <Image source={{ uri: avatar }} style={styles.image} />
-                ) : (
-                    <View style={styles.imageContainer} />
-                )}
-                <View style={styles.userInfo}>
-                    <Text style={styles.userName}>{userName}</Text>
-                    <Text style={styles.userEmail}>{email}</Text>
-                    <View style={styles.coins}>
-                        <CoinIcon />
-                        <Text style={styles.coinsText}>{coins}</Text>
+        <Screen>
+            <View>
+                <View style={styles.headerContainer}>
+                    {avatar ? (
+                        <Image source={{ uri: avatar }} style={styles.image} />
+                    ) : (
+                        <View style={styles.imageContainer} />
+                    )}
+                    <View style={styles.userInfo}>
+                        <Text style={styles.userName}>{userName}</Text>
+                        <Text style={styles.userEmail}>{email}</Text>
+                        <View style={styles.coins}>
+                            <CoinIcon />
+                            <Text style={styles.coinsText}>{coins}</Text>
+                        </View>
                     </View>
                 </View>
-            </View>
-            <View style={styles.iconsContainer}>
-                <ImpactIcon />
-                {/* <CalendarIcon /> */}
-                {ambassador ? (
-                    <DashboardIcon
-                        text="Dashboard"
-                        location={{
-                            stack: "AdminApp",
-                        }}
-                    />
-                ) : (
-                    <View style={{width: 75}}></View>
-                )}
-                <SettingsIcon />
-            </View>
-            <Line style={styles.line} />
-            {!group || group === "Pending" ? (
-                <View style={styles.pendingContainer}>
-                    <AnimatedEnvelope />
-                    <View style={styles.textPendingContainer}>
-                        <Text style={styles.userName}>
-                            WAITING TO BE ACCEPTED...
-                        </Text>
-                    </View>
+                <View style={styles.iconsContainer}>
+                    <ImpactIcon />
+                    {/* <CalendarIcon /> */}
+                    {ambassador ? (
+                        <DashboardIcon
+                            text="Dashboard"
+                            location={{
+                                stack: "AdminApp",
+                            }}
+                        />
+                    ) : (
+                        <View style={{width: 75}}></View>
+                    )}
+                    <SettingsIcon />
                 </View>
-            ) : (
-                <>
-                    <ProfileItemWidget items={userItems} />
-                </>
-            )}
-        </View>
+                <Line style={styles.line} />
+                {!group || group === "Pending" ? (
+                    <View style={styles.pendingContainer}>
+                        <AnimatedEnvelope />
+                        <View style={styles.textPendingContainer}>
+                            <Text style={styles.userName}>
+                                WAITING TO BE ACCEPTED...
+                            </Text>
+                        </View>
+                    </View>
+                ) : (
+                    <>
+                        <ProfileItemWidget items={userItems} />
+                    </>
+                )}
+            </View>
+        </Screen>
     );
 }
 
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "white",
-    },
     pendingContainer: {
         gap: 56,
         alignItems: "center",
