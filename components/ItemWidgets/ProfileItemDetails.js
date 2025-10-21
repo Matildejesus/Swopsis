@@ -150,13 +150,15 @@ function ProfileItemDetails({ itemData }) {
             </View>
             <Text style={styles.text6}>{itemData.description}</Text>
             {itemData.extraInfo && (
-                <DescriptionDisplay
-                    visible={isModalVisible}
-                    onRequestClose={() => setIsModalVisible(false)}
-                    data={itemData.extraInfo}
-                    category={itemData.category}
-                
-                />
+                <View style={{alignItems: "center"}}>
+                    <DescriptionDisplay
+                        visible={isModalVisible}
+                        onRequestClose={() => setIsModalVisible(false)}
+                        data={itemData.extraInfo}
+                        category={itemData.category}
+                    
+                    />
+                </View>
             )}
         </View>
     );

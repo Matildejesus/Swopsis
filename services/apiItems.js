@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import supabase from "./supabase";
 
 export async function addItem({ item, itemDetails }) {
@@ -24,13 +25,20 @@ export async function addItem({ item, itemDetails }) {
     const fileExt = item.image.split(".").pop();
     const fileName = `${insertedItem[0].userId}/${itemId}.${fileExt}`;
 
-    let formData = new FormData();
-    formData.append("file", {
-        uri: item.image,
-        name: fileName,
-        type: `image/${fileExt}`,
-    });
-
+    let formData;
+    if (Platform.OS === "web") {
+        const response = await fetch(item.image); // avatar is a data: URL or blob URL
+        const blob = await response.blob();
+        formData = new File([blob], fileName, { type: `image/${fileExt}` });
+    } else {
+        formData = new FormData();
+        formData.append("file", {
+            uri: item.image,
+            name: fileName,
+            type: `image/${fileExt}`,
+        });
+    }
+    console.log("FORM DATA: ", formData);
     const { error: uploadError } = await supabase.storage
         .from("item-images")
         .upload(fileName, formData, {

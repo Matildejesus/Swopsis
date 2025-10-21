@@ -62,7 +62,7 @@ function ChatScreen() {
     useLayoutEffect(() => {
         if (thread?.userName) {
             navigation.setOptions({
-                headerTitle: (props) => (
+                headerLeft: (props) => (
                     <Title
                     title={thread.userName}
                     goBack={true}
@@ -77,6 +77,7 @@ function ChatScreen() {
                     themId={thread?.userId_1}
                     />
                 ),
+                headerTitle: ""
             });
         }
     }, [navigation, thread]);
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         flexDirection: "row",
-        alignItems: "flex-end",
+        alignItems: "center",
         marginBottom: 20,
         marginTop: 22,
         width: 231

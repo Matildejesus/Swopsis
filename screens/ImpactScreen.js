@@ -3,9 +3,7 @@ import { Text, View, StyleSheet, Image, ScrollView, ActivityIndicator } from "re
 import ImpactWidget from "../components/ImpactWidget";
 import { useUser } from "../hooks/auth/useUser";
 
-
 function ImpactScreen() {
-
     const { user } = useUser();
 
     const metadata = user?.user?.user_metadata || {};
@@ -76,6 +74,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#FFE6EA",
+        alignItems: "center"
     },
     mainImage: {
         alignSelf: "flex-end",

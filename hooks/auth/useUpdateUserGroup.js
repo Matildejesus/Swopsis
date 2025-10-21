@@ -5,8 +5,8 @@ export function useUpdateUserGroup() {
     const queryClient = useQueryClient();
 
     const { mutate: updateGroup, isLoading: isUpdating } = useMutation({
-        mutationFn: async ({ group }) => {
-            const updatedUser = await updateGroupApi(group);
+        mutationFn: async ({ group, userId }) => {
+            const updatedUser = await updateGroupApi(group, userId);
             return updatedUser;
         },
         onSuccess: (updatedUser) => {

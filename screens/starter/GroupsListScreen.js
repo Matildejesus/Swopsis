@@ -19,7 +19,6 @@ function GroupsListScreen({ route }) {
                 backgroundColor: Colors.impact,
                 alignItems: "center",
                 justifyContent: "center",
-
             },
             link: {
                 color: Colors.primary1,

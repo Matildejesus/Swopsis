@@ -418,11 +418,9 @@ function AppContent( ) {
     return (
         <NavigationContainer>
             <Stack.Navigator
-                initialRouteName={groupId === undefined 
-    ? "Postcode"
-    : user
-      ? "InApp"
-      : "Welcome"}
+                initialRouteName={groupId === undefined || groupId === null 
+    ? "Welcome"
+    :  "InApp"}
                 screenOptions={{ 
                     headerStyle: { height: Platform.OS === "web" ? 88 : 56 }, 
                     headerTitleAlign: "left",
@@ -484,10 +482,8 @@ function AppContent( ) {
                     name="Settings"
                     component={SettingsScreen}
                     options={{
-                        headerTitleAlign: "left",
-                        // headerTransparent: true,
                         headerBackVisible: false,
-                        headerTitle: (props) => (
+                        headerLeft: (props) => (
                             <Title
                                 title="SETTINGS"
                                 goBack="true"
@@ -497,19 +493,19 @@ function AppContent( ) {
                         headerRight: (props) => (
                             <Logo {...props} />
                         ),
+                        headerTitle: "", 
                     }}
                 />
                 <Stack.Screen
                     name="Impact"
                     component={ImpactScreen}
                     options={{
-                        headerTitleAlign: "left",
                         headerStyle: {
                             backgroundColor: Colors.impact,
                         },
                         // headerTransparent: true,
                         headerBackVisible: false,
-                        headerTitle: (props) => (
+                        headerLeft: (props) => (
                             <Title
                                 title="IMPACT"
                                 goBack="true"
@@ -519,16 +515,16 @@ function AppContent( ) {
                         headerRight: (props) => (
                             <Logo {...props} />
                         ),
+                        headerTitle: "", 
                     }}
                 />
                 <Stack.Screen
                     name="Calendar"
                     component={CalendarScreen}
                     options={{
-                        headerTitleAlign: "left",
                         // headerTransparent: true,
                         headerBackVisible: false,
-                        headerTitle: (props) => (
+                        headerLeft: (props) => (
                             <Title
                                 title=""
                                 goBack="true"
@@ -538,13 +534,13 @@ function AppContent( ) {
                         headerRight: (props) => (
                             <Logo {...props} />
                         ),
+                        headerTitle: "",
                     }}
                 />
                 <Stack.Screen
                     name="GroupCreate"
                     component={GroupCreateScreen}
                     options={{
-                        headerTitleAlign: "left",
                         headerBackVisible: false,
                         headerTitle: (props) => (
                             <Title
@@ -560,42 +556,43 @@ function AppContent( ) {
                     component={ProfileItemScreen}
                     options={{
                         headerBackVisible: false,
-                        headerTitle: (props) => (
+                        headerLeft: (props) => (
                             <Title goBack="true" {...props} />
                         ),
                         headerRight: (props) => (
                             <Logo {...props} />
                         ),
+                        headerTitle: "",
                     }}
                 />
                 <Stack.Screen
                     name="CreateItem"
                     component={CreateItemScreen}
                     options={{
-                        headerTitleAlign: "left",
                         headerBackVisible: false,
-                        headerTitle: (props) => (
+                        headerLeft: (props) => (
                             <Title
                                 title=""
                                 goBack="true"
                                 {...props}
                             />
                         ),
+                        headerTitle: ""
                     }}
                 />
                 <Stack.Screen
                     name="ItemDescriptionInput"
                     component={ItemDescriptionInputScreen}
                     options={{
-                        headerTitleAlign: "left",
                         headerBackVisible: false,
-                        headerTitle: (props) => (
+                        headerLeft: (props) => (
                             <Title
                                 title=""
                                 goBack="true"
                                 {...props}
                             />
                         ),
+                        headerTitle: ""
                     }}
                 />
                 <Stack.Screen
@@ -607,9 +604,8 @@ function AppContent( ) {
                     name="WishList"
                     component={WishListScreen}
                     options={{
-                        headerTitleAlign: "left",
                         headerBackVisible: false,
-                        headerTitle: (props) => (
+                        headerLeft: (props) => (
                             <Title
                                 title="WISHLIST"
                                 goBack="true"
@@ -619,6 +615,7 @@ function AppContent( ) {
                         headerRight: (props) => (
                             <Logo {...props} />
                         ),
+                        headerTitle: ""
                     }}
                     
                 />

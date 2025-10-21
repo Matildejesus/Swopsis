@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import supabaseStateless from "./statelessSupabase";
 import supabase from "./supabase";
 
@@ -56,14 +57,14 @@ export async function getUser() {
     return userData.user;
 }
 
-export async function updateGroup({ group }) {
+export async function updateGroup({ group }, userId) {
     let updateData = {};
-    if (group) updateData.data = { group };
+    if (group) updateData.data = {...updatedData.data, group };
 
     const { data, error } = await supabase.auth.updateUser(updateData);
     if (error) throw new Error(error.message);
 
-    return data;
+    return data.user;
 }
 
 export async function updateUserData({
@@ -108,12 +109,19 @@ export async function updateUser({ userName, avatar, password }, userId) {
             const fileExt = avatar.split(".").pop();
             const fileName = `${userId}/avatar.${fileExt}`;
 
-            let formData = new FormData();
-            formData.append("file", {
-                uri: avatar,
-                name: fileName,
-                type: `image/${fileExt}`,
-            });
+            let formData;
+            if (Platform.OS === "web") {
+                const response = await fetch(avatar); // avatar is a data: URL or blob URL
+                const blob = await response.blob();
+                formData = new File([blob], fileName, { type: `image/${fileExt}` });
+            } else {
+                formData = new FormData();
+                formData.append("file", {
+                    uri: avatar,
+                    name: fileName,
+                    type: `image/${fileExt}`,
+                });
+            }
 
             const { error: storageError } = await supabase.storage
                 .from("avatars")

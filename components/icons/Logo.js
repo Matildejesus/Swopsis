@@ -432,6 +432,6 @@ const styles = StyleSheet.create({
     smallerContainer: {
         width: 35,
         height: 41,
-        margin: 10,
+        // margin: 10,
     }
 });

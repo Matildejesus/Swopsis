@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUser as updateUserApi } from "../../services/apiAuth";
+import Toast from "react-native-toast-message";
 
 export function useUpdateUser() {
     const queryClient = useQueryClient();
@@ -16,8 +17,16 @@ export function useUpdateUser() {
                     user: updatedUser
                 };
             });
+            Toast.show({
+                type: 'success',
+                text1: "Update successful"
+            })
         },
-        onError: (err) => toast.error(err.message),
+        onError: (err) => Toast.show({
+                                type: 'error',
+                                text1: "Something went wrong",
+                                text2: "Update was not successful"
+        }),
     });
 
     return { updateUser, isUpdating };

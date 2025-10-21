@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Platform } from "react-native";
 import Colors from "../../constants/colors";
 import CoinIcon from "../../components/icons/CoinIcon";
 import SettingsIcon from "../../components/icons/SettingsIcon";
@@ -16,6 +16,7 @@ import { useResponsive } from "../../utils/responsive";
 import Screen from "../../components/Screen";
 
 function ProfileScreen() {
+    const {height} = useResponsive();
     const { user: userData, isLoading: isUserLoading } = useUser();
     const { groupWardrobe, isLoading: isGroupLoading, isFetching } = useGroupWardrobe();
     const [ userItems, setUserItems ] = useState([]);
@@ -59,7 +60,7 @@ function ProfileScreen() {
 
     return (
         // <Screen>
-            <View>
+            <View style={{backgroundColor: "#fff", height: height, ...(Platform.OS == "web" && {alignItems: "center"})}}>
                 <View style={styles.headerContainer}>
                     {avatar ? (
                         <Image source={{ uri: avatar }} style={styles.image} />

@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     },
     imageStyle: {
         width: "85%",
-        // height: 244,
+        height: 244,
         alignSelf: "center",
         borderRadius: 21,
         aspectRatio: 1,

@@ -145,6 +145,7 @@ function SettingsScreen() {
         }
 
         updateUser({ updateData: { userName, password: newPassword }, userId: id });
+        
     }
 
 

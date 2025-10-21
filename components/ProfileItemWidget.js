@@ -75,6 +75,11 @@ const styles = StyleSheet.create({
         elevation: 4,
     },
     container: {
-        height: "65%",
+        // height: "100%",
+        // justifyContent:"flex-start",
+        // alignSelf: "flex-start",
+        //  marginTop: 24,
+          width: 400,
+        // marginLeft: 44,
     },
 });

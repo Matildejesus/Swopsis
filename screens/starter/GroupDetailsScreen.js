@@ -170,7 +170,7 @@ function GroupDetailsScreen({ route }) {
             // here we need to update group and user data
             await updateUserMetadata({ id: user.user.id, groupId: group.id, ambassador: false });
 
-            // updateGroup({ group: group.id });
+            updateGroup({ group: group.id, userId: user.user.id });
 
             await updateMemberCount({ id: group.id, count: group.numberOfMem + 1 });
 
