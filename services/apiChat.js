@@ -14,7 +14,7 @@ export async function createConversation({ user1, user2 }) {
     if (error) {
         throw new Error(error.message);
     }
-
+    console.log("data:", data[0])
     return data[0];
 }
 

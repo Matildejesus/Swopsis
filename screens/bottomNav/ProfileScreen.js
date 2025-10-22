@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Platform } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Platform, ScrollView } from "react-native";
 import Colors from "../../constants/colors";
 import CoinIcon from "../../components/icons/CoinIcon";
 import SettingsIcon from "../../components/icons/SettingsIcon";
@@ -58,56 +58,60 @@ function ProfileScreen() {
         return <Text>No user data found</Text>;
     }
 
+    const Container = Platform.OS === "web" ? ScrollView : View;
+    const containerProps =
+        Platform.OS === "web"
+        ? { contentContainerStyle: { backgroundColor: "#fff", alignItems: "center" } }
+        : { style: { backgroundColor: "#fff", height: height } };
+
     return (
-        // <Screen>
-            <View style={{backgroundColor: "#fff", height: height, ...(Platform.OS == "web" && {alignItems: "center"})}}>
-                <View style={styles.headerContainer}>
-                    {avatar ? (
-                        <Image source={{ uri: avatar }} style={styles.image} />
-                    ) : (
-                        <View style={styles.imageContainer} />
-                    )}
-                    <View style={styles.userInfo}>
-                        <Text style={styles.userName}>{userName}</Text>
-                        <Text style={styles.userEmail}>{email}</Text>
-                        <View style={styles.coins}>
-                            <CoinIcon />
-                            <Text style={styles.coinsText}>{coins}</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.iconsContainer}>
-                    <ImpactIcon />
-                    {/* <CalendarIcon /> */}
-                    {ambassador ? (
-                        <DashboardIcon
-                            text="Dashboard"
-                            location={{
-                                stack: "AdminApp",
-                            }}
-                        />
-                    ) : (
-                        <View style={{width: 75}}></View>
-                    )}
-                    <SettingsIcon />
-                </View>
-                <Line style={styles.line} />
-                {!group || group === "Pending" ? (
-                    <View style={styles.pendingContainer}>
-                        <AnimatedEnvelope />
-                        <View style={styles.textPendingContainer}>
-                            <Text style={styles.userName}>
-                                WAITING TO BE ACCEPTED...
-                            </Text>
-                        </View>
-                    </View>
+        <View style={{ backgroundColor: "#fff", height: height,...(Platform.OS == "web" && {alignItems: "center"})}}>
+            <View style={styles.headerContainer}>
+                {avatar ? (
+                    <Image source={{ uri: avatar }} style={styles.image} />
                 ) : (
-                    <>
-                        <ProfileItemWidget items={userItems} />
-                    </>
+                    <View style={styles.imageContainer} />
                 )}
+                <View style={styles.userInfo}>
+                    <Text style={styles.userName}>{userName}</Text>
+                    <Text style={styles.userEmail}>{email}</Text>
+                    <View style={styles.coins}>
+                        <CoinIcon />
+                        <Text style={styles.coinsText}>{coins}</Text>
+                    </View>
+                </View>
             </View>
-        // </Screen>
+            <View style={styles.iconsContainer}>
+                <ImpactIcon />
+                {/* <CalendarIcon /> */}
+                {ambassador ? (
+                    <DashboardIcon
+                        text="Dashboard"
+                        location={{
+                            stack: "AdminApp",
+                        }}
+                    />
+                ) : (
+                    <View style={{width: 75}}></View>
+                )}
+                <SettingsIcon />
+            </View>
+            <Line style={styles.line} />
+            {!group || group === "Pending" ? (
+                <View style={styles.pendingContainer}>
+                    <AnimatedEnvelope />
+                    <View style={styles.textPendingContainer}>
+                        <Text style={styles.userName}>
+                            WAITING TO BE ACCEPTED...
+                        </Text>
+                    </View>
+                </View>
+            ) : (
+                <Container>
+                    <ProfileItemWidget items={userItems} />
+                </Container>
+            )}
+        </View>
     );
 }
 

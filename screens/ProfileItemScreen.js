@@ -88,12 +88,12 @@ function ProfileItemScreen() {
             // let pendingConversation = await getConversation({ userId_1: itemData.userId, userId_2: currentUser.user.id});
             if (!pendingConversation) {
                 // pendingConversation = await createConversation({user1: itemData.userId, user2: currentUser.user.id});
-                pendingConversation = addConversation({ user1: itemData.userId, user2: currentUser.user.id });
+                pendingConversation = await addConversation({ user1: itemData.userId, user2: currentUser.user.id });
             }
 
             const conversationId = pendingConversation?.id ?? pendingConversation?.data?.id;
+            if (!conversationId) throw new Error("Conversation ID missing after creation");
             console.log("conversation ID: ", conversationId);
-            if (!conversationId) throw new Error("Conversation ID missing");
 
             if (selectedDates) {
                 await sendMessage({ senderId: currentUser.user.id, itemId: itemData.id, loanDates: selectedDates, conversationId: pendingConversation.id});

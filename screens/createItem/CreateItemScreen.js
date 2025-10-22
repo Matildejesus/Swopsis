@@ -113,7 +113,8 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     picturePicker: {
-        width: "85%",
+        width: "100%",
+        height: 244,
         backgroundColor: Colors.secondary2,
         aspectRatio: 1,
         borderRadius: 21,

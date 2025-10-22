@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
         // alignSelf: "flex-start",
         //  marginTop: 24,
           width: 400,
+          marginBottom: 400
         // marginLeft: 44,
     },
 });
